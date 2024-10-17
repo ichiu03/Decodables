@@ -1,5 +1,5 @@
 from openai import OpenAI
-import requests
+import unicodedata
 from api import apiKey
 
 #Merriam Webster Has Multiple Versions including ones specifically for kids
@@ -22,12 +22,19 @@ childage = str(childage)
 
 messages = [{
     "role": "system",
-    "content": "You are a special needs educator with an emphasis on helping those the age of " + childage + " with dyslexia. Only use the phoentic sounds specified"
+    "content": "You are a writer who creates engaging stories for special needs children of age " + childage + " with dyslexia. Only use the phoentic sounds specified"
      }]
 #Gives Instructions to the system
 
 def dyslexiaTest ():
-    suitSounds = ["a", "e", "i", "u"]#Sounds go hear#
+    suitSounds = [
+    '/s/', '/t/', '/b/', '/m/', '/l/', '/d/', '/n/', '/p/', '/k/', '/ʤ/', '/v/', '/z/', '/f/', '/k/', '/g/', '/r/', '/h/', '/w/', '/ks/', '/j/',
+    '/æ/', '/eɪ/', '/ɪ/', '/aɪ/', '/ɒ/', '/oʊ/', '/ʌ/', '/uː/', '/ɛ/', '/iː/',
+    '/fszl/', '/kw/', '/ʃ/', '/eɪ/', '/sk/', '/bl/', '/kl/', '/br/', '/kr/', '/k/', '/ʧ/', '/ɔː/', '/aɪ/',
+    '/ɪə/', '/ə/', '/ɔː/', '/ɔː/', '/eɪ/', '/iː/', '/ɛ/', '/ɒr/', '/ɑːr/', '/ɜːr/', '/ɔɪ/',
+    '/-li/', '/ɪŋ/', '/ʌŋ/', '/ɪd/', '/bl/', '/gl/', '/kl/',
+    '/θ/', '/ʧ/', '/hw/', '/g/', '/n/', '/r/', '/m/', '/n/', '/aʊ/', '/oʊ/'
+]
     allSounds = ''
     for i in range(len(suitSounds)):
         allSounds = allSounds + suitSounds[i] + ' and '  
@@ -38,7 +45,7 @@ dyslexiaInf = "The story should only include the phoenetic sounds" + dyslexiaTes
 #Here we will intake dyslexia information and create a sort of check system
 
 message = input("What do you want your story to be about: ")
-finalprompt = "Generate me a story about " + message + ". " + dyslexiaInf
+finalprompt = "Generate me an engaging story about " + message + ". " + dyslexiaInf
 messages.append({"role" : "user", "content": finalprompt})
 #Provides the prompt and intakes the input the user provides into the message
 
