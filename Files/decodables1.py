@@ -50,13 +50,8 @@ messages.append({"role" : "user", "content": finalprompt})
 #Provides the prompt and intakes the input the user provides into the message
 
 chat = client.chat.completions.create(
-    messages = [
-        {
-            "role": "user",
-            "content": messages,
-        }
-    ],
-    model = "gpt-3.5-turbo",
+    messages=messages,
+    model="gpt-3.5-turbo",
 )
 reply = chat.choices[0].message.content
 #Selects Chats first response, can be altered if we want to check which is best
