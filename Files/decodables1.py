@@ -22,7 +22,7 @@ childage = str(childage)
 
 messages = [{
     "role": "system",
-    "content": "You are a writer who creates engaging stories for special needs children of age " + childage + " with dyslexia. Only use the phoentic sounds specified"
+    "content": "You are a writer who creates engaging stories for special needs children of age " + childage + " with dyslexia. Only use the phoentic sounds specified."
      }]
 #Gives Instructions to the system
 
