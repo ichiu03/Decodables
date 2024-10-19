@@ -1,10 +1,9 @@
 from openai import OpenAI
 import unicodedata
-from api import apiKey
 
 #Merriam Webster Has Multiple Versions including ones specifically for kids
 client = OpenAI(
-    api_key = apiKey
+    api_key = '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'
 )
 
 
