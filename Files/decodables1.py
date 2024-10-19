@@ -21,7 +21,7 @@ childage = str(childage)
 
 messages = [{
     "role": "system",
-    "content": "You are a writer who creates engaging stories for special needs children of age " + childage + " with dyslexia. Only use the phoentic sounds specified."
+    "content": "You are a writer who creates engaging chapter-book stories for special needs children of age " + childage + " with dyslexia. Write an engaging book that is formatted just like any other chapter book but only uses the phonetic sounds specified."
      }]
 #Gives Instructions to the system
 
@@ -44,7 +44,8 @@ dyslexiaInf = "The story should only include the phoenetic sounds" + dyslexiaTes
 #Here we will intake dyslexia information and create a sort of check system
 
 message = input("What do you want your story to be about: ")
-finalprompt = "Generate me an engaging story about " + message + ". " + dyslexiaInf
+words = input("How many words do you want your story to be:(~70 words a page) ")
+finalprompt = "Generate me an engaging story about " + message + ". " + "The story should be about " + words + " words long." + dyslexiaInf
 messages.append({"role" : "user", "content": finalprompt})
 #Provides the prompt and intakes the input the user provides into the message
 
