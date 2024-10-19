@@ -8,12 +8,12 @@ client = OpenAI(
 )
 
 
-j = 0
-while j < 1: 
-    childage = input("What is the child's age: ")
+
+while True: 
     try:
+        childage = input("What is the child's age: ")
         childage = int(childage)  
-        j += 1  
+        break 
     except ValueError:
         print("Please input a number")
 
