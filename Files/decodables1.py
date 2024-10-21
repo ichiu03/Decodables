@@ -1,12 +1,9 @@
 from openai import OpenAI
 import unicodedata
 
-#Merriam Webster Has Multiple Versions including ones specifically for kids
 client = OpenAI(
     api_key = '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'
 )
-
-
 
 while True: 
     try:
@@ -21,7 +18,7 @@ childage = str(childage)
 
 messages = [{
     "role": "system",
-    "content": "You are a writer who creates engaging chapter-book stories for special needs children of age " + childage + " with dyslexia. Write an engaging book that is formatted just like any other chapter book but only uses the phonetic sounds specified."
+    "content": "You are a writer who creates engaging chapter-book stories for special needs children of age " + childage 
      }]
 #Gives Instructions to the system
 
@@ -34,6 +31,8 @@ def dyslexiaTest ():
     '/-li/', '/ɪŋ/', '/ʌŋ/', '/ɪd/', '/bl/', '/gl/', '/kl/',
     '/θ/', '/ʧ/', '/hw/', '/g/', '/n/', '/r/', '/m/', '/n/', '/aʊ/', '/oʊ/'
 ]
+    #Instead of feeding this to chat, access a dictionary api and collect all possible words that can be used and save as a array
+
     allSounds = ''
     for i in range(len(suitSounds)):
         allSounds = allSounds + suitSounds[i] + ' and '  
@@ -44,20 +43,32 @@ dyslexiaInf = "The story should only include the phoenetic sounds" + dyslexiaTes
 #Here we will intake dyslexia information and create a sort of check system
 
 message = input("What do you want your story to be about: ")
-words = input("How many words do you want your story to be:(~70 words a page) ")
-finalprompt = "Generate me an engaging story about " + message + ". " + "The story should be about " + words + " words long." + dyslexiaInf
+finalprompt = "Generate me a 500 word engaging first part of a story about " + message + ". " + dyslexiaInf
 messages.append({"role" : "user", "content": finalprompt})
 #Provides the prompt and intakes the input the user provides into the message
 
 chat = client.chat.completions.create(
     messages=messages,
-    model="gpt-3.5-turbo",
+    model="gpt-2",
 )
-reply = chat.choices[0].message.content
+reply = chat.choices[0].message.content + " "
 #Selects Chats first response, can be altered if we want to check which is best
+secprompt = "Continue the following story for another 500 words: " + reply
+messages.append({"role": "user", "content": secprompt})
+chat = client.chat.completions.create(
+    messages=messages,
+    model="gpt-2",
+)
+reply2 = reply + chat.choices[0].message.content + " "
 
-print(reply)
-
+thirdprompt = "Continue the following story for another 500 words: " + reply2 + ". Also include an ending."
+messages.append({"role": "user", "content": thirdprompt})
+chat = client.chat.completions.create(
+    messages=messages,
+    model="gpt-2",
+)
+reply3 = reply2 + chat.choices[0].message.content
+print(reply3)
 
 #def story_call(finalprompt):
  #   return 0
