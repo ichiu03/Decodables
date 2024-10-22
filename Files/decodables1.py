@@ -49,7 +49,7 @@ messages.append({"role" : "user", "content": finalprompt})
 
 chat = client.chat.completions.create(
     messages=messages,
-    model="gpt-2",
+    model="gpt-3.5-turbo",
 )
 reply = chat.choices[0].message.content + " "
 #Selects Chats first response, can be altered if we want to check which is best
@@ -57,7 +57,7 @@ secprompt = "Continue the following story for another 500 words: " + reply
 messages.append({"role": "user", "content": secprompt})
 chat = client.chat.completions.create(
     messages=messages,
-    model="gpt-2",
+    model="gpt-3.5-turbo",
 )
 reply2 = reply + chat.choices[0].message.content + " "
 
@@ -65,7 +65,7 @@ thirdprompt = "Continue the following story for another 500 words: " + reply2 + 
 messages.append({"role": "user", "content": thirdprompt})
 chat = client.chat.completions.create(
     messages=messages,
-    model="gpt-2",
+    model="gpt-3.5-turbo",
 )
 reply3 = reply2 + chat.choices[0].message.content
 print(reply3)
