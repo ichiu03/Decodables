@@ -8,11 +8,15 @@ client = OpenAI(
 
 words = {
     'sh': [
-        'cat', 'dog', 'apple', 'tree', 'run', 'bag', 'lamp', 'moon', 'bike', 'cake',
-        'rope', 'fan', 'lock', 'map', 'fork', 'jump', 'peel', 'kite', 'pond', 'bark',
-        'cage', 'fire', 'lap', 'poke', 'yard', 'door', 'pen', 'tap', 'milk', 'foot',
-        'fog', 'ant', 'crop', 'jar', 'kid', 'log', 'pit', 'ram', 'cook', 'mud', 'van',
-        'is', 'it', 'on', 'at', 'in', 'if', 'or', 'by', 'and', 'but', 'for', 'to'
+        "a", "an", "be", "can", "do", "go", "is", "it", "me", "my", "no", "of", "on", "or", "so", 
+    "to", "up", "we", "and", "cat", "dog", "man", "sun", "sea", "day", "big", "run", "see", 
+    "say", "play", "ride", "work", "jump", "red", "blue", "green", "long", "warm", "cool", 
+    "happy", "sad", "sing", "song", "bird", "find", "call", "ask", "fast", "near", "far", 
+    "all", "any", "one", "two", "old", "new", "use", "care", "kind", "hard", "soft", "make",
+    "see", "like", "love", "give", "yes", "no", "good", "bad", "may", "fall", "say", "tell",
+    "few", "many", "high", "low", "who", "whom", "why", "ask", "put", "take", "left", "right",
+    "home", "life", "joy", "rain", "dry", "snow", "end", "goal", "hope", "king", "queen",
+    "land", "sky", "star", "moon", "plan", "near", "row"
     ],
     'ch': [
         'bird', 'fox', 'lamp', 'stone', 'grape', 'mud', 'kite', 'rain', 'book', 'swim',
@@ -22,11 +26,15 @@ words = {
         'do', 'go', 'he', 'me', 'we', 'she', 'my', 'not', 'are', 'was', 'am', 'has'
     ],
     'th': [
-        'lamp', 'rope', 'bird', 'fox', 'map', 'kite', 'pond', 'bike', 'gold', 'soap',
-        'lap', 'mop', 'dark', 'blue', 'door', 'rain', 'cage', 'rod', 'bag', 'pen',
-        'milk', 'fork', 'mud', 'mask', 'fish', 'sail', 'hat', 'bed', 'farm', 'fog',
-        'jog', 'rim', 'cup', 'bark', 'doll', 'wing', 'pint', 'flood', 'corn', 'flag',
-        'is', 'of', 'as', 'in', 'to', 'do', 'go', 'he', 'we', 'so', 'you', 'how'
+        "a", "an", "be", "can", "do", "go", "is", "it", "me", "my", "no", "of", "on", "or", "so", 
+    "to", "up", "we", "and", "cat", "dog", "man", "sun", "sea", "day", "big", "run", "see", 
+    "say", "play", "ride", "work", "jump", "red", "blue", "green", "long", "warm", "cool", 
+    "happy", "sad", "sing", "song", "bird", "fish", "call", "ask", "fast", "near", "far", 
+    "all", "any", "one", "two", "old", "new", "use", "care", "kind", "hard", "soft", "make",
+    "see", "like", "love", "give", "yes", "no", "good", "bad", "may", "find", "say", "tell",
+    "few", "many", "high", "low", "who", "whom", "why", "ask", "put", "take", "left", "right",
+    "home", "life", "joy", "rain", "dry", "snow", "fall", "cool", "cook", "near", "far", "king",
+    "queen", "land", "sky", "star", "moon", "plan", "row", "end", "goal", "hope"
     ],
     'wh': [
         'lamp', 'kite', 'rope', 'blue', 'map', 'dog', 'bird', 'pen', 'mud', 'cage',
@@ -62,7 +70,17 @@ words = {
         'mop', 'fish', 'pen', 'fork', 'light', 'rod', 'blue', 'lane', 'lap', 'dart',
         'rim', 'cup', 'goal', 'bond', 'bell', 'flag', 'corn', 'mist', 'jog', 'wing',
         'is', 'of', 'as', 'to', 'do', 'go', 'he', 'we', 'she', 'me', 'not', 'are'
+    ],
+    's': [
+        "a", "an", "be", "can", "do", "go", "it", "me", "my", "no", "of", "on", "or", "to", 
+        "up", "we", "and", "cat", "dog", "man", "day", "big", "run", "play", "ride", "work", 
+        "jump", "red", "blue", "green", "long", "warm", "cool", "happy", "bad", "find", "call", 
+        "near", "far", "all", "any", "one", "two", "old", "new", "make", "like", "love", "give", 
+        "good", "may", "tell", "few", "many", "high", "low", "who", "whom", "why", "put", "take", 
+        "left", "right", "home", "life", "joy", "rain", "dry", "fall", "end", "goal", "hope", 
+        "king", "queen", "land", "moon", "plan", "row"
     ]
+
 }
 
 def query(prompt):
@@ -92,18 +110,22 @@ def main():
     prompt = f"""
     You are a creative author.
 
-    Create a 300 word children's story about {topic}.
-    The story should be engaging and fun to read.
-
-    You are only allowed to use the following words in your story:
+    This is your language:
 
     {dictionary}
 
-    ONLY USE THE ATTACHED WORDS IN YOUR STORY. DO NOT USE ANY OTHER WORDS.
+    Create a 500 word children's story using only the words in your pre-defined language.
+
+    ONLY THESE WORDS {dictionary} ARE ALLOWED IN YOUR STORY
+
+    If you use any other words, you will be disqualified.
+
+    DO NOT USE THE LETTERS {problems} IN YOUR STORY.
+    
+    DO NOT USE ANY OTHER WORDS.
     """
     story = query(prompt)
     print(story)
 
     return 0
-
 main()
