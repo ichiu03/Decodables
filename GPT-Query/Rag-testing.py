@@ -104,9 +104,7 @@ def get_words(problems):
         words_list.intersection_update(words[problem])
     return list(words_list)
 
-def main():
-    topic, problems = get_input()
-    dictionary = get_words(problems)
+def generate_story(topic, problems, dictionary):
     prompt = f"""
     You are a creative author.
 
@@ -114,9 +112,10 @@ def main():
 
     {dictionary}
 
-    Create a 500 word children's story using only the words in your pre-defined language.
+    Create a 250 word children's story using only the words in your pre-defined language.
 
-    ONLY THESE WORDS {dictionary} ARE ALLOWED IN YOUR STORY
+    ONLY THESE WORDS ARE ALLOWED IN YOUR STORY:
+    {dictionary}
 
     If you use any other words, you will be disqualified.
 
@@ -125,7 +124,34 @@ def main():
     DO NOT USE ANY OTHER WORDS.
     """
     story = query(prompt)
-    print(story)
+    return story
+
+def sentence_check(story, dictionary):
+    new_story = ""
+    sentences = story.split(".")
+    for sentence in sentences:
+        prompt = f"""
+        Verify that the following sentence only contains words from this language: {dictionary}
+
+        If the sentence contains any other words, please rewrite the sentence using only the words from the language and return only the new sentence.
+        Otherwise, return only "yes"
+
+        Here is the sentence: {sentence}
+        """
+        response = query(prompt)
+        print(response)
+        if response != "yes":
+            new_story += response
+    return new_story
+
+def main():
+    topic, problems = get_input()
+    dictionary = get_words(problems)
+    story = generate_story(topic, problems, dictionary)
+    new_story = sentence_check(story, dictionary)
+    print(new_story)
 
     return 0
-main()
+
+if __name__ == "__main__":
+    main()
