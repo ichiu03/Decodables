@@ -6,6 +6,8 @@ client = OpenAI(
     api_key=os.environ.get("OPENAI_API_KEY")
 )
 
+story_length = 250
+
 words = {
     'sh': [
         "a", "an", "be", "can", "do", "go", "is", "it", "me", "my", "no", "of", "on", "or", "so", 
@@ -120,7 +122,7 @@ def generate_story(topic, problems, dictionary):
 
     {dictionary}
 
-    Create a 250 word children's story about {topic} using only the words in your pre-defined language.
+    Create a {story_length} word children's story about {topic} using only the words in your pre-defined language.
 
     ONLY THESE WORDS ARE ALLOWED IN YOUR STORY:
     {dictionary}
