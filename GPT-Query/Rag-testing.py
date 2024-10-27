@@ -83,7 +83,9 @@ words = {
 
 }
 
-def query(prompt):
+### Function to query GPT-3.5
+### This function takes a prompt (string) as input and returns the response from GPT-3.5
+def query(prompt): 
     messages = [
     {"role": "system", "content": prompt},
     ]
@@ -93,17 +95,23 @@ def query(prompt):
     )
     return response.choices[0].message.content
   
+### Function to get user input
+### This function takes no input and returns the topic and problem letters as a tuple
 def get_input():
     topic = input("Enter your story topic: ")
     problems =  (input("Enter the problem letters separated by commas: ")).split(",")
     return topic, problems
 
+### Function to get words
+### This function takes a list of problem letters (list of strings) as input and returns a list of words
 def get_words(problems):
     words_list = set(words[problems[0]]) if problems else set()
     for problem in problems[1:]:
         words_list.intersection_update(words[problem])
     return list(words_list)
 
+### Function to generate a story
+### This function takes the topic (string), problems (list of strings), and dictionary (list of strings) as input and returns a story (string)
 def generate_story(topic, problems, dictionary):
     prompt = f"""
     You are a creative author.
@@ -126,6 +134,8 @@ def generate_story(topic, problems, dictionary):
     story = query(prompt)
     return story
 
+### Function to check sentences
+### This function takes the story (string) and dictionary (list of strings) as input and returns a new story (string)
 def sentence_check(story, dictionary):
     new_story = ""
     sentences = story.split(".")
@@ -157,7 +167,6 @@ def main():
     story = generate_story(topic, problems, dictionary)
     new_story = sentence_check(story, dictionary)
     print(new_story)
-
     return 0
 
 if __name__ == "__main__":
