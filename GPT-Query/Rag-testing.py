@@ -88,7 +88,7 @@ def query(prompt):
     {"role": "system", "content": prompt},
     ]
     response = client.chat.completions.create(
-        model="gpt-4o-mini",
+        model="gpt-3.5-turbo",
         messages=messages,
     )
     return response.choices[0].message.content
@@ -129,14 +129,21 @@ def generate_story(topic, problems, dictionary):
 def sentence_check(story, dictionary):
     new_story = ""
     sentences = story.split(".")
-    for sentence in sentences:
+    for i in range(len(sentences)):
+        previous_sentence = sentences[i-1] + "." if i >0 else sentences[0] + "."
+        next_sentence = sentences[i+1] + "." if i < len(sentences)-1 else sentences[i] + "."
+        sentence = sentences[i] + "."
         prompt = f"""
         Verify that the following sentence only contains words from this language: {dictionary}
 
         If the sentence contains any other words, please rewrite the sentence using only the words from the language and return only the new sentence.
         Otherwise, return only "yes"
 
-        Here is the sentence: {sentence}
+        Here is the sentence to rewrite: {sentence}
+
+        Here is the previous sentence for context: {previous_sentence}
+
+        Here is the next sentence for context: {next_sentence}
         """
         response = query(prompt)
         print(response)
