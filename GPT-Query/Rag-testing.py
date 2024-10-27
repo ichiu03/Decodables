@@ -120,7 +120,7 @@ def generate_story(topic, problems, dictionary):
 
     {dictionary}
 
-    Create a 250 word children's story using only the words in your pre-defined language.
+    Create a 250 word children's story about {topic} using only the words in your pre-defined language.
 
     ONLY THESE WORDS ARE ALLOWED IN YOUR STORY:
     {dictionary}
@@ -161,6 +161,7 @@ def sentence_check(story, dictionary):
             new_story += response
     return new_story
 
+### Main function
 def main():
     topic, problems = get_input()
     dictionary = get_words(problems)
