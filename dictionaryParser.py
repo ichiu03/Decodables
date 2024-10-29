@@ -217,7 +217,16 @@ def vcccv(word):
             word[i+4] in vowels):
             categories["vcccv"].append(word)
 
-
+def syllable_type_check(word, arpabet):
+    # Check for R-Controlled Syllable: presence of "ER", "AR", or "OR" in ARPAbet
+    if any(r_controlled in arpabet for r_controlled in ["ER", "AR", "OR"]):
+        categories["V/R/L syllables"].append(word)
+    # Check for L-Controlled Syllable: Vowel followed by "L" in word spelling
+    if any(l_controlled in arpabet for l_controlled in ["OL", "AL", "UL"]):
+        categories["V/R/L syllables"].append(word)
+    # Check for V-Controlled Syllable: Vowel followed by "V" in word spelling
+    if any(v_controlled in arpabet for v_controlled in ["IV", "AV", "OV", "UV"]):
+        categories["V/R/L syllables"].append(word)
 
 def parse_and_process_words(file_path):
     try:
