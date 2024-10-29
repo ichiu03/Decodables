@@ -178,7 +178,7 @@ def ei_check(word, arpabet):
 
 def ch_check(word, arpabet):
     if "K" in arpabet:
-        categories["ch as in echo"].append(word)
+        categories["ch in echo"].append(word)
 
 def ie_check(word, arpabet):
     if "AY" in arpabet:
@@ -206,9 +206,12 @@ def vccv(word):
 
 def vcv(word):
     for i in range(len(word) - 2):  # Iterate through the word for 3-letter patterns
-        if (word[i] in vowels and word[i+1] in consonants and 
-            word[i+2] in vowels):
+        if (word[i] in vowels and word[i+1] in consonants and word[i+2] in vowels):
             categories["vcv"].append(word)
+            print(f"Added '{word}' to vcv category")
+            return
+    print(f"No vcv pattern found in word '{word}'")
+
 
 def vcccv(word):
     for i in range(len(word) - 4):  # Iterate through the word for 5-letter patterns
@@ -260,7 +263,7 @@ def parse_and_process_words(file_path):
             if "ea" in word:
                 ea_check(word, arpabet)
             if "s" in word and word[1] in consonants:
-                ear_check(word)
+                ear_check(word, arpabet)
             if "s" in word:
                 s_blends(word)
             if "l" in word:
@@ -287,6 +290,7 @@ def parse_and_process_words(file_path):
                 vccv(word)
             if len(word) >= 5:
                 vcccv(word)
+            
             vce_check(word)
             OCE_check(word)
             x_in_word_check(word)
