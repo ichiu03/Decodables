@@ -194,6 +194,31 @@ def sion_check(word, arpabet):
     elif "ZH" in arpabet:
         categories["-sion as in vision"].append(word)
 
+def threel_blends(word):
+    if ("thr" in word or "scr" in word or "spr" in word or "shr" in word or "spl" in word or "str" in word):
+        categories["3-letter beg. blends"].append(word)
+
+def vccv(word):
+    for i in range(len(word) - 3):
+        if (word[i] in vowels and word[i+1] in consonants and 
+            word[i+2] in consonants and word[i+3] in vowels):
+            categories["vccv"].append(word)
+
+def vcv(word):
+    for i in range(len(word) - 2):  # Iterate through the word for 3-letter patterns
+        if (word[i] in vowels and word[i+1] in consonants and 
+            word[i+2] in vowels):
+            categories["vcv"].append(word)
+
+def vcccv(word):
+    for i in range(len(word) - 4):  # Iterate through the word for 5-letter patterns
+        if (word[i] in vowels and word[i+1] in consonants and 
+            word[i+2] in consonants and word[i+3] in consonants and 
+            word[i+4] in vowels):
+            categories["vcccv"].append(word)
+
+
+
 def parse_and_process_words(file_path):
     try:
         with open(file_path, 'r') as file:
@@ -226,10 +251,12 @@ def parse_and_process_words(file_path):
             if "ea" in word:
                 ea_check(word, arpabet)
             if "s" in word and word[1] in consonants:
+                ear_check(word)
+            if "s" in word:
                 s_blends(word)
-            if "l" in word and word[1] in consonants:
+            if "l" in word:
                 l_blends(word)
-            if "r" in word and word[1] in consonants:
+            if "r" in word:
                 r_blends(word)
             if "ew" in word:
                 ew_check(word, arpabet)
@@ -243,7 +270,14 @@ def parse_and_process_words(file_path):
                 ch_check(word, arpabet)
             if "sion" in word:
                 sion_check(word, arpabet)
-
+            if "r" or "l" in word:
+                threel_blends(word)
+            if len(word) >= 3:
+                vcv(word)
+            if len(word) >= 4:
+                vccv(word)
+            if len(word) >= 5:
+                vcccv(word)
             vce_check(word)
             OCE_check(word)
             x_in_word_check(word)
