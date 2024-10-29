@@ -1,89 +1,18 @@
 import openai
 from openai import OpenAI
 import os
+import json
 
 client = OpenAI(
     api_key=os.environ.get("OPENAI_API_KEY")
 )
 
-story_length = 250
+story_length = 1000
 
-words = {
-    'sh': [
-        "a", "an", "be", "can", "do", "go", "is", "it", "me", "my", "no", "of", "on", "or", "so", 
-    "to", "up", "we", "and", "cat", "dog", "man", "sun", "sea", "day", "big", "run", "see", 
-    "say", "play", "ride", "work", "jump", "red", "blue", "green", "long", "warm", "cool", 
-    "happy", "sad", "sing", "song", "bird", "find", "call", "ask", "fast", "near", "far", 
-    "all", "any", "one", "two", "old", "new", "use", "care", "kind", "hard", "soft", "make",
-    "see", "like", "love", "give", "yes", "no", "good", "bad", "may", "fall", "say", "tell",
-    "few", "many", "high", "low", "who", "whom", "why", "ask", "put", "take", "left", "right",
-    "home", "life", "joy", "rain", "dry", "snow", "end", "goal", "hope", "king", "queen",
-    "land", "sky", "star", "moon", "plan", "near", "row"
-    ],
-    'ch': [
-        'bird', 'fox', 'lamp', 'stone', 'grape', 'mud', 'kite', 'rain', 'book', 'swim',
-        'dark', 'fish', 'blue', 'gold', 'milk', 'fork', 'tap', 'pen', 'light', 'moon',
-        'mask', 'farm', 'soap', 'mop', 'rod', 'bed', 'hat', 'lane', 'sail', 'pond',
-        'goal', 'rim', 'dart', 'pint', 'flag', 'worm', 'mist', 'barn', 'golf', 'bond',
-        'do', 'go', 'he', 'me', 'we', 'she', 'my', 'not', 'are', 'was', 'am', 'has'
-    ],
-    'th': [
-        "a", "an", "be", "can", "do", "go", "is", "it", "me", "my", "no", "of", "on", "or", "so", 
-    "to", "up", "we", "and", "cat", "dog", "man", "sun", "sea", "day", "big", "run", "see", 
-    "say", "play", "ride", "work", "jump", "red", "blue", "green", "long", "warm", "cool", 
-    "happy", "sad", "sing", "song", "bird", "fish", "call", "ask", "fast", "near", "far", 
-    "all", "any", "one", "two", "old", "new", "use", "care", "kind", "hard", "soft", "make",
-    "see", "like", "love", "give", "yes", "no", "good", "bad", "may", "find", "say", "tell",
-    "few", "many", "high", "low", "who", "whom", "why", "ask", "put", "take", "left", "right",
-    "home", "life", "joy", "rain", "dry", "snow", "fall", "cool", "cook", "near", "far", "king",
-    "queen", "land", "sky", "star", "moon", "plan", "row", "end", "goal", "hope"
-    ],
-    'wh': [
-        'lamp', 'kite', 'rope', 'blue', 'map', 'dog', 'bird', 'pen', 'mud', 'cage',
-        'milk', 'fox', 'fish', 'tap', 'fork', 'gold', 'rain', 'mop', 'dark', 'pond',
-        'bed', 'mask', 'rod', 'farm', 'bag', 'light', 'hat', 'sail', 'lap', 'dart',
-        'rim', 'fog', 'jog', 'cup', 'golf', 'flag', 'corn', 'bond', 'bell', 'mist',
-        'be', 'is', 'it', 'do', 'go', 'he', 'she', 'we', 'me', 'not', 'are', 'has'
-    ],
-    'ph': [
-        'bird', 'lamp', 'map', 'kite', 'fox', 'gold', 'mud', 'rope', 'milk', 'pond',
-        'blue', 'dark', 'rain', 'bag', 'cage', 'pen', 'tap', 'mop', 'bed', 'mask',
-        'farm', 'hat', 'lane', 'fish', 'fork', 'lap', 'door', 'rod', 'sail', 'light',
-        'bond', 'rim', 'goal', 'dart', 'cup', 'bell', 'flag', 'corn', 'mist', 'jog',
-        'is', 'it', 'of', 'as', 'do', 'go', 'we', 'he', 'she', 'me', 'not', 'was'
-    ],
-    'gh': [
-        'lamp', 'kite', 'map', 'rope', 'mud', 'gold', 'bird', 'fish', 'rain', 'fork',
-        'tap', 'milk', 'pen', 'fox', 'bag', 'bed', 'pond', 'cage', 'blue', 'mask',
-        'farm', 'hat', 'lane', 'sail', 'rod', 'light', 'mop', 'door', 'lap', 'dart',
-        'rim', 'goal', 'cup', 'bond', 'bell', 'flag', 'corn', 'mist', 'jog', 'wing',
-        'be', 'is', 'of', 'to', 'do', 'go', 'he', 'we', 'she', 'me', 'not', 'are'
-    ],
-    'kn': [
-        'fox', 'lamp', 'mud', 'map', 'gold', 'kite', 'rope', 'milk', 'pond', 'rain',
-        'cage', 'bed', 'hat', 'bag', 'rod', 'dark', 'fork', 'blue', 'tap', 'farm',
-        'fish', 'mask', 'mop', 'bird', 'light', 'sail', 'door', 'pen', 'lane', 'lap',
-        'dart', 'rim', 'cup', 'goal', 'bell', 'flag', 'corn', 'bond', 'mist', 'jog',
-        'be', 'is', 'do', 'go', 'we', 'he', 'she', 'me', 'not', 'was', 'are', 'has'
-    ],
-    'wr': [
-        'lamp', 'map', 'mud', 'kite', 'rope', 'gold', 'bird', 'rain', 'milk', 'fox',
-        'bag', 'pond', 'tap', 'cage', 'bed', 'dark', 'mask', 'farm', 'hat', 'sail',
-        'mop', 'fish', 'pen', 'fork', 'light', 'rod', 'blue', 'lane', 'lap', 'dart',
-        'rim', 'cup', 'goal', 'bond', 'bell', 'flag', 'corn', 'mist', 'jog', 'wing',
-        'is', 'of', 'as', 'to', 'do', 'go', 'he', 'we', 'she', 'me', 'not', 'are'
-    ],
-    's': [
-        "a", "an", "be", "can", "do", "go", "it", "me", "my", "no", "of", "on", "or", "to", 
-        "up", "we", "and", "cat", "dog", "man", "day", "big", "run", "play", "ride", "work", 
-        "jump", "red", "blue", "green", "long", "warm", "cool", "happy", "bad", "find", "call", 
-        "near", "far", "all", "any", "one", "two", "old", "new", "make", "like", "love", "give", 
-        "good", "may", "tell", "few", "many", "high", "low", "who", "whom", "why", "put", "take", 
-        "left", "right", "home", "life", "joy", "rain", "dry", "fall", "end", "goal", "hope", 
-        "king", "queen", "land", "moon", "plan", "row"
-    ]
 
-}
+# Opening JSON file
+with open('categorized_words.json') as json_file:
+    words = json.load(json_file)
 
 ### Function to get all words
 ### This function takes no input and returns a list of words
@@ -148,17 +77,20 @@ def generate_story(topic, problems, dictionary):
 
 ### Function to check sentences
 ### This function takes the story (string) and dictionary (list of strings) as input and returns a new story (string)
-def sentence_check(story, dictionary):
+def sentence_check(story, dictionary, problems):
     new_story = ""
     sentences = story.split(".")
     for i in range(len(sentences)):
         previous_sentence = sentences[i-1] + "." if i >0 else sentences[0] + "."
         next_sentence = sentences[i+1] + "." if i < len(sentences)-1 else sentences[i] + "."
         sentence = sentences[i] + "."
-        prompt = f"""
-        Verify that the following sentence only contains words from this language: {dictionary}
+        # Verify that the following sentence only contains words from this language: {dictionary}
 
-        If the sentence contains any other words, please rewrite the sentence using only the words from the language and return only the new sentence.
+        prompt = f"""
+       
+        Remove any words with the following letters: {problems}
+
+        If the sentence contains words with these letters: {problems}, please rewrite the sentence without using those letters and return only the new sentence.
         Otherwise, return only the original sentence
 
         Here is the sentence to rewrite: {sentence}
@@ -199,7 +131,9 @@ def main():
     topic, problems = get_input()
     dictionary = get_words(problems)
     story = generate_story(topic, problems, dictionary)
-    new_story = sentence_check(story, dictionary)
+    new_story = story
+    for problem in problems:
+        new_story = sentence_check(new_story, dictionary, problem)
     new_story = edit(new_story)
     print(new_story)
     return 0
