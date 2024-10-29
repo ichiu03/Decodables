@@ -23,9 +23,9 @@ categories = {
       "dge": [], "y rule suffixes": [], "tion": [], "bein/interm affixes": [], "base/suffix, prefix/base patterns": [], 
     # Column 5
     "au": [], "war": [], "-ey as in monkey": [], "ey as in they": [],  "Interm./adv. affixes": [], "ph": [],
-    "ie in pie": [], "ie in thief": [], "beginning roots": [], "-sion in tension": [], "-sion in vision" : [],
-    "y in gym": [], "wr": [], "eigh": [], "ue in blue": [], "ough": [], "war": [], "ei in recieve": [],
-    "ei in vein": [], "augh": [], "oe": [], "ui": [], "ch in echo": [], "wa": [], "eu": [], "gh": [], "mb": [],
+    "ie as in pie": [], "ie as in thief": [], "beginning roots": [], "-sion as in tension": [], "-sion as in vision" : [],
+    "y as in gym": [], "wr": [], "eigh": [], "ue as in blue": [], "ough": [], "war": [], "ei as in recieve": [],
+    "ei as in vein": [], "augh": [], "oe": [], "ui": [], "ch as in echo": [], "wa": [], "eu": [], "gh": [], "mb": [],
     "mn": [], "que": [], "gn": [], "stle": [],"rh": [], "gue": [], "alk": [], "alt": [], "qua": [], "sc": [], "2 syllable dblg.": [],     
     # Uncategorized
     "fail": []
