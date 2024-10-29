@@ -85,6 +85,12 @@ words = {
 
 }
 
+
+def get_all_words():
+    f = open("WordDatav4.txt", "r")
+    words = f.read().split("\n")
+    return words[:2000]
+
 ### Function to query GPT-3.5
 ### This function takes a prompt (string) as input and returns the response from GPT-3.5
 def query(prompt): 
@@ -109,8 +115,11 @@ def get_input():
 def get_words(problems):
     words_list = set(words[problems[0]]) if problems else set()
     for problem in problems[1:]:
-        words_list.intersection_update(words[problem])
-    return list(words_list)
+        words_list.update(words[problem])
+    all_words = get_all_words()
+    final_words = [word for word in all_words if word not in words_list]
+   
+    return list(final_words)
 
 ### Function to generate a story
 ### This function takes the topic (string), problems (list of strings), and dictionary (list of strings) as input and returns a story (string)
@@ -149,7 +158,7 @@ def sentence_check(story, dictionary):
         Verify that the following sentence only contains words from this language: {dictionary}
 
         If the sentence contains any other words, please rewrite the sentence using only the words from the language and return only the new sentence.
-        Otherwise, return only "yes"
+        Otherwise, return only the original sentence
 
         Here is the sentence to rewrite: {sentence}
 
@@ -158,13 +167,30 @@ def sentence_check(story, dictionary):
         Here is the next sentence for context: {next_sentence}
 
 
-        Return the new sentence or "yes".
+        You will be disqualified if you return any words other than the new sentence or the original sentence.
         """
         response = query(prompt)
-        print(response)
-        if response != "yes":
-            new_story += response
+        #print(response)
+        new_story += response
     return new_story
+
+
+def edit(story):
+    prompt = f"""
+    Edit the following story.
+
+    Make minial changes, only correct blatant errors.
+
+    Make sure all sentences are coherent.
+    
+    Remove sentences that do not make sense or are irrelevant.
+
+    Here is the story to edit: {story}
+
+    Return only the story, no extra words.
+    """
+    response = query(prompt)
+    return response
 
 ### Main function
 def main():
@@ -172,6 +198,7 @@ def main():
     dictionary = get_words(problems)
     story = generate_story(topic, problems, dictionary)
     new_story = sentence_check(story, dictionary)
+    new_story = edit(new_story)
     print(new_story)
     return 0
 
