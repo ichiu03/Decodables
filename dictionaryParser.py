@@ -24,7 +24,7 @@ categories = {
     # Column 5
     "au": [], "war": [], "-ey as in monkey": [], "ey as in they": [],  "Interm./adv. affixes": [], "ph": [],
     "ie as in pie": [], "ie as in thief": [], "beginning roots": [], "-sion as in tension": [], "-sion as in vision" : [],
-    "y as in gym": [], "wr": [], "eigh": [], "ue as in blue": [], "ough": [], "wor": [], "ei as in recieve": [],
+    "y as in gym": [], "wr": [], "eigh": [], "ue as in blue": [], "ough": [], "wor": [], "ei as in receive": [],
     "ei as in vein": [], "augh": [], "oe": [], "ui": [], "ch as in echo": [], "wa": [], "eu": [], "gh": [], "mb": [],
     "mn": [], "que": [], "gn": [], "stle": [],"rh": [], "gue": [], "alk": [], "alt": [], "qua": [], "sc": [], "2 syllable dblg.": [],     
     # Uncategorized
@@ -78,7 +78,7 @@ def yCheck(word, arpabet):
         categories["y as in bumpy"].append(word)
     # "y in gym" (short "i" sound, "IH1" in ARPAbet)
     elif "IH1" in arpabet:
-        categories["y in gym"].append(word) 
+        categories["y as in gym"].append(word) 
     # "-ey as in monkey" (ending with unstressed "IY0")
     elif arpabet.endswith("IY0"):
         categories["-ey as in monkey"].append(word)
@@ -157,10 +157,8 @@ def OCE_check(word):
             return
         
 def ew_check(word, arpabet):
-    if "Y UW" in arpabet:
-        categories["ew as in few"].append(word)
-    elif "UW" in arpabet and "Y UW" not in arpabet:
-        categories["ew as in blew"].append(word)
+    if "UW" in arpabet:
+        categories["ew as in few/blew"]
 
 def ou_check(word, arpabet):
     if "AW" in arpabet:
@@ -238,11 +236,12 @@ def parse_and_process_words(file_path):
             word.lower()
             phones = pronouncing.phones_for_word(word)
             if not phones:
-                print(f"Word '{word}' not found in dictionary.")
+                print(f"'{word}' not found in pronounce library's dictionary.")
                 categories["fail"].append(word)
                 pass
-
-            arpabet = phones[0]
+            else:
+                arpabet = phones[0]
+            
             if "c" in word:
                 hard_vs_soft_C(word, arpabet)
             if "g" in word:
