@@ -85,7 +85,8 @@ words = {
 
 }
 
-
+### Function to get all words
+### This function takes no input and returns a list of words
 def get_all_words():
     f = open("WordDatav4.txt", "r")
     words = f.read().split("\n")
@@ -174,7 +175,8 @@ def sentence_check(story, dictionary):
         new_story += response
     return new_story
 
-
+### Function to edit the story
+### This function takes the story (string) as input and returns the edited story (string)
 def edit(story):
     prompt = f"""
     Edit the following story.
@@ -182,7 +184,7 @@ def edit(story):
     Make minial changes, only correct blatant errors.
 
     Make sure all sentences are coherent.
-    
+
     Remove sentences that do not make sense or are irrelevant.
 
     Here is the story to edit: {story}
