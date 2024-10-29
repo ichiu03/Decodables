@@ -259,7 +259,7 @@ def parse_and_process_words(file_path):
                 ear_check(word, arpabet)
             if "ea" in word:
                 ea_check(word, arpabet)
-            if "s" in word and word[1] in consonants:
+            if "s" in word:
                 ear_check(word, arpabet)
             if "s" in word:
                 s_blends(word)
@@ -292,6 +292,7 @@ def parse_and_process_words(file_path):
             OCE_check(word)
             x_in_word_check(word)
 
+        print(categories["fail"])
         # Write the categorized words to a JSON file
         with open('categorized_words.json', 'w') as json_file:
             json.dump(categories, json_file, indent=4)
