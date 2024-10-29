@@ -197,6 +197,14 @@ def parse_and_process_words(file_path):
                 ow_check(word)
             if "ear" in word:
                 ear_check(word)
+                categorized = True 
+            if "s" in word and word[1] in consonants:
+                s_blends(word)
+            if "l" in word and word[1] in consonants:
+                l_blends(word)
+            if "r" in word and word[1] in consonants:
+                r_blends(word)
+            
             
 
         # Write the categorized words to a JSON file
@@ -209,6 +217,19 @@ def parse_and_process_words(file_path):
         print(f"The file {file_path} was not found.")
     except Exception as e:
         print(f"An error occurred: {e}")
+
+def s_blends(word):
+    if ("sn" in word or "sm" in word or "st" in word or "sw" in word):
+        categories["s blends"].append(word)
+    
+def l_blends(word):
+    if ("bl" in word or "cl" in word or "fl" in word):
+        categories["l blends"].append(word)
+
+def r_blends(word):
+    if ("br" in word or "cr" in word or "dr" in word or "fr" in word or "gr" in word or "pr" in word or "tr" in word):
+        categories["s blends"].append(word)
+
 
 # Call the function with the path to your text file
 def main():
