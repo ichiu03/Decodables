@@ -156,6 +156,9 @@ def sentence_check(story, dictionary):
         Here is the previous sentence for context: {previous_sentence}
 
         Here is the next sentence for context: {next_sentence}
+
+
+        Return the new sentence or "yes".
         """
         response = query(prompt)
         print(response)
