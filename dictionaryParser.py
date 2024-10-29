@@ -182,6 +182,10 @@ def r_blends(word):
     if ("br" in word or "cr" in word or "dr" in word or "fr" in word or "gr" in word or "pr" in word or "tr" in word):
         categories["s blends"].append(word)
 
+def threel_blends(word):
+    if ("thr" in word or "scr" in word or "spr" in word or "shr" in word or "spl" in word or "str" in word):
+        categories["3-letter beg. blends"].append(word)
+
 def parse_and_process_words(file_path):
     try:
         # Read words from the file
@@ -209,13 +213,14 @@ def parse_and_process_words(file_path):
                 ow_check(word)
             if "ear" in word:
                 ear_check(word)
-            if "s" in word and word[1] in consonants:
+            if len(word) > 1 and "s" in word and word[1] in consonants:
                 s_blends(word)
-            if "l" in word and word[1] in consonants:
+            if len(word) > 1 and "l" in word and word[1] in consonants:
                 l_blends(word)
-            if "r" in word and word[1] in consonants:
+            if len(word) > 1 and "r" in word and word[1] in consonants:
                 r_blends(word)
-            
+            if len(word) > 2 and word[0] in consonants and word[1] in consonants and word[2] in consonants:
+                threel_blends(word)
             
 
         # Write the categorized words to a JSON file
