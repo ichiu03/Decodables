@@ -13,7 +13,7 @@ categories = {
     "l blends": [], "r blends": [], "-ing, -ong, -ang, -ung": [], "all": [], "th": [], "oy": [],
     "-ink, -ank, -onk, -unk": [], "-ft, -nd, -st": [], "-sp, -nt, -mp": [], "-sk, -lt, -lk": [], "-ct, -pt": [],
     "y as in dry": [], "ar": [], "wh": [], "oo as school": [], "oo as in book": [], "vce": [],
-    "er": [], "ow as in plow": [], "ow as in snow": [], "vccv": [], "O/C/E syllables": [], "contractions": [], 
+    "er": [], "ow as in plow": [], "ow as in snow": [], "vccv": [], "Open syll.": [], "Closed syll.": [], "contractions": [], 
     # Column 4
     "ear as in hear": [], "ear as in early": [], "y as in bumpy": [], "aw": [], "ly": [], "ea as in eat": [],
     "ea as in bread": [], "3-letter beg. blends": [], "vcv, vcccv patterns": [], "tch": [], "soft c": [], 
@@ -66,62 +66,34 @@ def x_in_word_check(word):
         if key in word:
             categories[key].append(word)
 
-def yCheck(word):    
-    phones = pronouncing.phones_for_word(word)
-    if not phones:
-        print(f"Word '{word}' not found in dictionary.")
-        categories["fail"].append(word)
-        return
-
-    arpabet = phones[0]
-    
+def yCheck(word, arpabet):    
     # "y as in yes" (initial /Y/ sound or /JH/ sound)
     if arpabet.startswith("Y") or arpabet.startswith("JH"):
         categories["y as in yes"].append(word)
-    
     # "y as in dry" (long "i" sound, represented by "AY1" in ARPAbet)
     elif "AY1" in arpabet:
         categories["y as in dry"].append(word)
-    
     # "y as in bumpy" (unstressed "IY0" sound in ARPAbet)
     elif "IY0" in arpabet:
         categories["y as in bumpy"].append(word)
-    
     # "y in gym" (short "i" sound, "IH1" in ARPAbet)
     elif "IH1" in arpabet:
-        categories["y in gym"].append(word)
-    
+        categories["y in gym"].append(word) 
     # "-ey as in monkey" (ending with unstressed "IY0")
     elif arpabet.endswith("IY0"):
         categories["-ey as in monkey"].append(word)
-    
     # "ey as in they" (long "EY1" sound)
     elif "EY1" in arpabet:
         categories["ey as in they"].append(word)
 
-def hard_vs_soft_C(word):
-    phones = pronouncing.phones_for_word(word)
-    if not phones:
-        print(f"Word '{word}' not found in dictionary.")
-        categories["fail"].append(word)
-        return
-        
-    arpabet = phones[0]
+def hard_vs_soft_C(word, arpabet):
     if "K" in arpabet: # Hard C
         categories["hard c"].append(word)
 
     elif "S" in arpabet: # Soft C
         categories["soft c"].append(word)
 
-def hard_vs_soft_G(word):
-    phones = pronouncing.phones_for_word(word)
-    if not phones:
-        print(f"Word '{word}' not found in dictionary.")
-        categories["fail"].append(word)
-        return
-    
-    arpabet = phones[0]
-    
+def hard_vs_soft_G(word, arpabet):
     if "G" in arpabet: # Hard C
         categories["hard g"].append(word)
 
@@ -129,42 +101,21 @@ def hard_vs_soft_G(word):
     elif "JH" in arpabet: # Soft C
         categories["soft g"].append(word)
 
-def oo_check(word):
-    phones = pronouncing.phones_for_word(word)
-    if not phones:
-        print(f"Word '{word}' not found in dictionary.")
-        categories["fail"].append(word)
-        return
-    arpabet = phones[0]
-
+def oo_check(word, arpabet):
     if "UW" in arpabet:
         categories["oo as in school"].append(word)
 
     if "UH" in arpabet:
         categories["oo as in book"].append(word)
 
-def ow_check(word):
-    phones = pronouncing.phones_for_word(word)
-    if not phones:
-        print(f"Word '{word}' not found in dictionary.")
-        categories["fail"].append(word)
-        return
-    arpabet = phones[0]
-
+def ow_check(word, arpabet):
     if "AW" in arpabet:
         categories["ow as in plow"].append(word)
 
     if "OW" in arpabet:
         categories["ow as in snow"].append(word)
 
-def ear_check(word):
-    phones = pronouncing.phones_for_word(word)
-    if not phones:
-        print(f"Word '{word}' not found in dictionary.")
-        categories["fail"].append(word)
-        return
-    arpabet = phones[0]
-
+def ear_check(word, arpabet):
     if "IH" in arpabet and "R" in arpabet or "IY" in arpabet and "R" in arpabet:
         categories["ear as in hear"].append(word)
     if "ER" in arpabet:
@@ -182,41 +133,120 @@ def r_blends(word):
     if ("br" in word or "cr" in word or "dr" in word or "fr" in word or "gr" in word or "pr" in word or "tr" in word):
         categories["s blends"].append(word)
 
+def ea_check(word, arpabet):
+    if "IY" in arpabet:
+        categories["ea as in eat"].append(word)
+    if "EH" in arpabet:
+        categories["ea as in bread"].append(word)
+
+def vce_check(word):
+    for i in range(len(word) - 2):
+        if (word[i].lower() in vowels and
+            word[i + 1].lower() in consonants and
+            word[i + 2].lower() == 'e'):
+            categories["vce"].append(word)
+        
+def OCE_check(word):
+    # Open syllables (ends in hard vowel)
+    if word[-1].lower() in vowels and len(word) > 1:
+        categories["Open syll."].append(word)
+    # Closed syllables (eg cat, man)
+    for i in range(len(word) - 1):
+        if word[i].lower() in vowels and word[i + 1].lower() not in vowels:
+            categories["Closed syll."].append(word)
+            return
+        
+def ew_check(word, arpabet):
+    if "Y UW" in arpabet:
+        categories["ew as in few"].append(word)
+    elif "UW" in arpabet and "Y UW" not in arpabet:
+        categories["ew as in blew"].append(word)
+
+def ou_check(word, arpabet):
+    if "AW" in arpabet:
+        categories["ou as in south"].append(word)
+
+def ue_check(word, arpabet):
+    if "UW" in arpabet:
+        categories["ue as in blue"].append(word)
+
+def ei_check(word, arpabet):
+    if "IY" in arpabet:
+        categories["ei as in receive"].append(word)
+    elif "EY" in arpabet:
+        categories["ei as in vein"].append(word)
+
+def ch_check(word, arpabet):
+    if "K" in arpabet:
+        categories["ch as in echo"].append(word)
+
+def ie_check(word, arpabet):
+    if "AY" in arpabet:
+        categories["ie as in pie"].append(word)
+
+    elif "IY" in arpabet:
+        categories["ie as in thief"].append(word)
+
+def sion_check(word, arpabet):
+    if "SH" in arpabet:
+        categories["-sion as in tension"].append(word)
+
+    elif "ZH" in arpabet:
+        categories["-sion as in vision"].append(word)
+
 def parse_and_process_words(file_path):
     try:
-        # Read words from the file
         with open(file_path, 'r') as file:
             words = file.read().splitlines()
 
-        # Remove duplicates by converting to a set
         unique_words = set(words)
-
-        # Categorize words
         for word in unique_words:
             word.lower()
-            x_in_word_check(word)
+            phones = pronouncing.phones_for_word(word)
+            if not phones:
+                print(f"Word '{word}' not found in dictionary.")
+                categories["fail"].append(word)
+                pass
+
+            arpabet = phones[0]
             if "c" in word:
-                hard_vs_soft_C(word)
+                hard_vs_soft_C(word, arpabet)
             if "g" in word:
-                hard_vs_soft_G(word)
+                hard_vs_soft_G(word, arpabet)
             if "y" in word:
-                yCheck(word)
+                yCheck(word, arpabet)
             if "'" in word:
                 categories["contractions"].append(word)
             if "oo" in word:
-                oo_check(word)
+                oo_check(word, arpabet)
             if "ow" in word:
-                ow_check(word)
+                ow_check(word, arpabet)
             if "ear" in word:
-                ear_check(word)
+                ear_check(word, arpabet)
+            if "ea" in word:
+                ea_check(word, arpabet)
             if "s" in word and word[1] in consonants:
                 s_blends(word)
             if "l" in word and word[1] in consonants:
                 l_blends(word)
             if "r" in word and word[1] in consonants:
                 r_blends(word)
-            
-            
+            if "ew" in word:
+                ew_check(word, arpabet)
+            if "ou" in word:
+                ou_check(word, arpabet)
+            if "ue" in word:
+                ue_check(word, arpabet)
+            if "ei" in word:
+                ei_check(word, arpabet)
+            if "ch" in word:
+                ch_check(word, arpabet)
+            if "sion" in word:
+                sion_check(word, arpabet)
+
+            vce_check(word)
+            OCE_check(word)
+            x_in_word_check(word)
 
         # Write the categorized words to a JSON file
         with open('categorized_words.json', 'w') as json_file:
