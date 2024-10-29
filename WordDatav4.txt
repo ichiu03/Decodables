@@ -2470,7 +2470,6 @@ congrats
 dang
 deary me
 duh
-eek
 gee
 gosh
 ha
@@ -2657,7 +2656,6 @@ be
 of
 I
 not
-n't
 as
 can
 would
