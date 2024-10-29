@@ -83,7 +83,7 @@ def yCheck(word):
     phones = pronouncing.phones_for_word(word)
     if not phones:
         print(f"Word '{word}' not found in dictionary.")
-        return None
+        return False
     
     # Use the first pronunciation in the list
     arpabet = phones[0]
@@ -125,7 +125,7 @@ def hard_vs_soft_C(word):
     phones = pronouncing.phones_for_word(word)
     if not phones:
         print(f"Word '{word}' not found in dictionary.")
-        return None
+        return False
     arpabet = phones[0]
     if "K" in arpabet: # Hard C
         categories["hard c"].append(word)
@@ -140,7 +140,7 @@ def hard_vs_soft_G(word):
     phones = pronouncing.phones_for_word(word)
     if not phones:
         print(f"Word '{word}' not found in dictionary.")
-        return None
+        return False
     
     arpabet = phones[0]
     
@@ -159,7 +159,7 @@ def oo_check(word):
     phones = pronouncing.phones_for_word(word)
     if not phones:
         print(f"Word '{word}' not found in dictionary.")
-        return None
+        return False
     arpabet = phones[0]
 
     if "UW" in arpabet:
@@ -167,6 +167,23 @@ def oo_check(word):
         categorized = True
     if "UH" in arpabet:
         categories["oo as in book"].append(word)
+        categorized = True
+
+    return categorized
+
+def ow_check(word):
+    categorized = False
+    phones = pronouncing.phones_for_word(word)
+    if not phones:
+        print(f"Word '{word}' not found in dictionary.")
+        return False
+    arpabet = phones[0]
+
+    if "AW" in arpabet:
+        categories["ow as in plow"].append(word)
+        categorized = True
+    if "OW" in arpabet:
+        categories["ow as in snow"].append(word)
         categorized = True
 
     return categorized
@@ -193,7 +210,7 @@ def parse_and_process_words(file_path):
             if "'" in word:
                 categories["contractions"].append(word)
                 categorized = True 
-            # elif . . . 
+            
             if not categorized:
                 print(f"Was not able to categorize: {word}. ")
                 categories["Uncategorized"].append(word)
