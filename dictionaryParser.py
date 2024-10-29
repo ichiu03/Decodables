@@ -189,10 +189,14 @@ def parse_and_process_words(file_path):
             if "g" in word:
                 categorized = hard_vs_soft_G(word)
             if "y" in word:
-                yCheck(word)
+                categorized = yCheck(word)
+            if "'" in word:
+                categories["contractions"].append(word)
+                categorized = True 
             # elif . . . 
             if not categorized:
                 print(f"Was not able to categorize: {word}. ")
+                categories["Uncategorized"].append(word)
 
         # Write the categorized words to a JSON file
         with open('categorized_words.json', 'w') as json_file:
@@ -207,7 +211,7 @@ def parse_and_process_words(file_path):
 
 # Call the function with the path to your text file
 def main():
-    #parse_and_process_words('parsed_words.txt')
+    parse_and_process_words('parsed_words.txt')
     word = "bumpy"
     phones = pronouncing.phones_for_word(word)
     print(phones[0])
