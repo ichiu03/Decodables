@@ -293,11 +293,7 @@ def parse_and_process_words(file_path):
     except Exception as e:
         print(f"An error occurred: {e}")
 
-# Call the function with the path to your text file
 def main():
-    parse_and_process_words('parsed_words.txt')
-    word = "bumpy"
-    phones = pronouncing.phones_for_word(word)
-    print(phones[0])
+    parse_and_process_words('WordDatav4.txt')
 
 main()
