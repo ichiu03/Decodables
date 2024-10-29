@@ -1,4 +1,4 @@
-﻿accept
+accept
 achieve
 act
 add
@@ -2410,12 +2410,15 @@ regarding
 throughout
 underneath
 according to
-because of
-in front of
-instead of
-next to
-out of
-prior to
+because
+in
+front
+of
+instead
+next
+to
+out
+prior
 a
 an
 the
@@ -2467,7 +2470,6 @@ congrats
 dang
 deary me
 duh
-eek
 gee
 gosh
 ha
@@ -2491,7 +2493,8 @@ alright
 great
 whew
 hurray
-oh no
+oh
+no
 argh
 oooh
 ugh
@@ -2505,14 +2508,18 @@ while
 if
 unless
 though
-even though
+even
+though
 whereas
 nor
-not only
-but also
+not
+only
+but
+also
 whether
-as soon as
-as long as
+soon
+as
+long
 once
 when
 whenever
@@ -2649,7 +2656,6 @@ be
 of
 I
 not
-n't
 as
 can
 would
