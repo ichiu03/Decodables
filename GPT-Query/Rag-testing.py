@@ -8,16 +8,16 @@ client = OpenAI(
 )
 
 story_length = 1000
-
+chapters = 3
 
 # Opening JSON file
-with open('categorized_words.json') as json_file:
+with open('dictionary-parser\categorized_words.json') as json_file:
     words = json.load(json_file)
 
 ### Function to get all words
 ### This function takes no input and returns a list of words
 def get_all_words():
-    f = open("WordDatav4.txt", "r")
+    f = open("dictionary-parser\WordDatav4.txt", "r")
     words = f.read().split("\n")
     return words[:2000]
 
@@ -75,36 +75,77 @@ def generate_story(topic, problems, dictionary):
     story = query(prompt)
     return story
 
+### Function to generate a chapter
+### This function takes the problems (string), outline (string), dictionary (list of strings), chapter_number (int), length (int), and story (string) as input and returns a chapter (string)
+def generate_chapter(problems, outline, dictionary, chapter_number, length, story):
+    prompt = f"""
+    You are a creative author tasked with writing the {chapter_number} chapter of a children's story (age 10).
+
+    Here is the outline:
+
+    {outline}
+
+    Here is the story so far:
+
+    {story}
+
+    This is your language:
+
+    {dictionary}
+
+    Write a {length} word chapter using only the words in your pre-defined language.
+
+    ONLY THESE WORDS ARE ALLOWED IN YOUR STORY:
+    {dictionary}
+
+    If you use any other words, you will be disqualified.
+
+    DO NOT USE THE LETTERS {problems} IN YOUR STORY.
+    
+    DO NOT USE ANY OTHER WORDS.
+
+    Return only the new chapter.
+    """
+    story = query(prompt)
+    return story
+
 ### Function to check sentences
 ### This function takes the story (string) and dictionary (list of strings) as input and returns a new story (string)
 def sentence_check(story, dictionary, problems):
     new_story = ""
     sentences = story.split(".")
     for i in range(len(sentences)):
-        previous_sentence = sentences[i-1] + "." if i >0 else sentences[0] + "."
-        next_sentence = sentences[i+1] + "." if i < len(sentences)-1 else sentences[i] + "."
-        sentence = sentences[i] + "."
-        # Verify that the following sentence only contains words from this language: {dictionary}
+        check = False
+        for problem in problems:
+            if problem in sentences[i]:
+                check = True
+        if check:
+            previous_sentence = sentences[i-1] + "." if i >0 else sentences[0] + "."
+            next_sentence = sentences[i+1] + "." if i < len(sentences)-1 else sentences[i] + "."
+            sentence = sentences[i] + "."
+            # Verify that the following sentence only contains words from this language: {dictionary}
 
-        prompt = f"""
-       
-        Remove any words with the following letters: {problems}
+            prompt = f"""
+        
+            Remove any words with the following letters: {problems}
 
-        If the sentence contains words with these letters: {problems}, please rewrite the sentence without using those letters and return only the new sentence.
-        Otherwise, return only the original sentence
+            If the sentence contains words with these letters: {problems}, rewrite the sentence without using those letters and return only the new sentence.
+            Otherwise, return only the original sentence
 
-        Here is the sentence to rewrite: {sentence}
+            Here is the sentence to rewrite: {sentence}
 
-        Here is the previous sentence for context: {previous_sentence}
+            Here is the previous sentence for context: {previous_sentence}
 
-        Here is the next sentence for context: {next_sentence}
+            Here is the next sentence for context: {next_sentence}
 
 
-        You will be disqualified if you return any words other than the new sentence or the original sentence.
-        """
-        response = query(prompt)
-        #print(response)
-        new_story += response
+            You will be disqualified if you return any words other than the new sentence or the original sentence.
+            """
+            response = query(prompt)
+            #print(response)
+            new_story += response
+        else:
+            new_story += sentences[i] + "."
     return new_story
 
 ### Function to edit the story
@@ -126,16 +167,40 @@ def edit(story):
     response = query(prompt)
     return response
 
+### Function to generate an outline
+### This function takes the topic (string) as input and returns an outline (string)
+def generate_outline(topic):
+    prompt = f"""
+    You are a creative author.
+
+    Create an outline for a children's story about {topic} (Age 10).
+
+    The story should be about {story_length} words long.
+
+    The story should have a clear beginning, middle, and end and have a lesson.
+
+    The story should be {chapters}  chapters long.
+
+    Return only the outline
+    """
+    outline = query(prompt)
+    return outline
+
 ### Main function
 def main():
     topic, problems = get_input()
     dictionary = get_words(problems)
-    story = generate_story(topic, problems, dictionary)
-    new_story = story
-    for problem in problems:
-        new_story = sentence_check(new_story, dictionary, problem)
-    new_story = edit(new_story)
-    print(new_story)
+    outline = generate_outline(topic)
+    story =""
+    for chapter in range(chapters):
+        print(f"Generating chapter {chapter+1}")
+        new_chapter = generate_chapter(problems, outline, dictionary, chapter+1, story_length//chapters, story)
+        temp_chapter = new_chapter
+        temp_chapter = sentence_check(new_chapter, dictionary, problems)
+        temp_chapter = edit(temp_chapter)
+        story += temp_chapter
+    #story = generate_story(topic, problems, dictionary)
+    print(story)
     return 0
 
 if __name__ == "__main__":
