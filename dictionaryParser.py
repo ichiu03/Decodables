@@ -186,6 +186,12 @@ def threel_blends(word):
     if ("thr" in word or "scr" in word or "spr" in word or "shr" in word or "spl" in word or "str" in word):
         categories["3-letter beg. blends"].append(word)
 
+def vccv(word):
+    for i in range(len(word) - 3):
+        if (word[i] in vowels and word[i+1] in consonants and 
+            word[i+2] in consonants and word[i+3] in vowels):
+            categories["vccv"].append(word)
+
 def parse_and_process_words(file_path):
     try:
         # Read words from the file
@@ -213,15 +219,16 @@ def parse_and_process_words(file_path):
                 ow_check(word)
             if "ear" in word:
                 ear_check(word)
-            if len(word) > 1 and "s" in word and word[1] in consonants:
+            if "s" in word:
                 s_blends(word)
-            if len(word) > 1 and "l" in word and word[1] in consonants:
+            if "l" in word:
                 l_blends(word)
-            if len(word) > 1 and "r" in word and word[1] in consonants:
+            if "r" in word:
                 r_blends(word)
-            if len(word) > 2 and word[0] in consonants and word[1] in consonants and word[2] in consonants:
+            if "r" or "l" in word:
                 threel_blends(word)
             
+            vccv(word)
 
         # Write the categorized words to a JSON file
         with open('categorized_words.json', 'w') as json_file:
