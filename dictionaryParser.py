@@ -178,7 +178,7 @@ def ei_check(word, arpabet):
 
 def ch_check(word, arpabet):
     if "K" in arpabet:
-        categories["ch in echo"].append(word)
+        categories["ch as in echo"].append(word)
 
 def ie_check(word, arpabet):
     if "AY" in arpabet:
@@ -202,15 +202,12 @@ def vccv(word):
     for i in range(len(word) - 3):
         if (word[i] in vowels and word[i+1] in consonants and 
             word[i+2] in consonants and word[i+3] in vowels):
-            categories["vccv"].append(word)
+            categories["vcv, vcccv patterns"].append(word)
 
 def vcv(word):
     for i in range(len(word) - 2):  # Iterate through the word for 3-letter patterns
         if (word[i] in vowels and word[i+1] in consonants and word[i+2] in vowels):
-            categories["vcv"].append(word)
-            print(f"Added '{word}' to vcv category")
-            return
-    print(f"No vcv pattern found in word '{word}'")
+            categories["vcv, vcccv patterns"].append(word)
 
 
 def vcccv(word):
@@ -218,7 +215,7 @@ def vcccv(word):
         if (word[i] in vowels and word[i+1] in consonants and 
             word[i+2] in consonants and word[i+3] in consonants and 
             word[i+4] in vowels):
-            categories["vcccv"].append(word)
+            categories["vccv"].append(word)
 
 def syllable_type_check(word, arpabet):
     # Check for R-Controlled Syllable: presence of "ER", "AR", or "OR" in ARPAbet
