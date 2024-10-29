@@ -192,6 +192,21 @@ def vccv(word):
             word[i+2] in consonants and word[i+3] in vowels):
             categories["vccv"].append(word)
 
+def vcv(word):
+    for i in range(len(word) - 2):  # Iterate through the word for 3-letter patterns
+        if (word[i] in vowels and word[i+1] in consonants and 
+            word[i+2] in vowels):
+            categories["vcv"].append(word)
+
+def vcccv(word):
+    for i in range(len(word) - 4):  # Iterate through the word for 5-letter patterns
+        if (word[i] in vowels and word[i+1] in consonants and 
+            word[i+2] in consonants and word[i+3] in consonants and 
+            word[i+4] in vowels):
+            categories["vcccv"].append(word)
+
+
+
 def parse_and_process_words(file_path):
     try:
         # Read words from the file
@@ -228,7 +243,9 @@ def parse_and_process_words(file_path):
             if "r" or "l" in word:
                 threel_blends(word)
             
+            vcv(word)
             vccv(word)
+            vcccv(word)
 
         # Write the categorized words to a JSON file
         with open('categorized_words.json', 'w') as json_file:
