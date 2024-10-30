@@ -1,94 +1,23 @@
 import openai
 from openai import OpenAI
 import os
+import json
 
 client = OpenAI(
     api_key=os.environ.get("OPENAI_API_KEY")
 )
 
-story_length = 250
+story_length = 1000
+chapters = 3
 
-words = {
-    'sh': [
-        "a", "an", "be", "can", "do", "go", "is", "it", "me", "my", "no", "of", "on", "or", "so", 
-    "to", "up", "we", "and", "cat", "dog", "man", "sun", "sea", "day", "big", "run", "see", 
-    "say", "play", "ride", "work", "jump", "red", "blue", "green", "long", "warm", "cool", 
-    "happy", "sad", "sing", "song", "bird", "find", "call", "ask", "fast", "near", "far", 
-    "all", "any", "one", "two", "old", "new", "use", "care", "kind", "hard", "soft", "make",
-    "see", "like", "love", "give", "yes", "no", "good", "bad", "may", "fall", "say", "tell",
-    "few", "many", "high", "low", "who", "whom", "why", "ask", "put", "take", "left", "right",
-    "home", "life", "joy", "rain", "dry", "snow", "end", "goal", "hope", "king", "queen",
-    "land", "sky", "star", "moon", "plan", "near", "row"
-    ],
-    'ch': [
-        'bird', 'fox', 'lamp', 'stone', 'grape', 'mud', 'kite', 'rain', 'book', 'swim',
-        'dark', 'fish', 'blue', 'gold', 'milk', 'fork', 'tap', 'pen', 'light', 'moon',
-        'mask', 'farm', 'soap', 'mop', 'rod', 'bed', 'hat', 'lane', 'sail', 'pond',
-        'goal', 'rim', 'dart', 'pint', 'flag', 'worm', 'mist', 'barn', 'golf', 'bond',
-        'do', 'go', 'he', 'me', 'we', 'she', 'my', 'not', 'are', 'was', 'am', 'has'
-    ],
-    'th': [
-        "a", "an", "be", "can", "do", "go", "is", "it", "me", "my", "no", "of", "on", "or", "so", 
-    "to", "up", "we", "and", "cat", "dog", "man", "sun", "sea", "day", "big", "run", "see", 
-    "say", "play", "ride", "work", "jump", "red", "blue", "green", "long", "warm", "cool", 
-    "happy", "sad", "sing", "song", "bird", "fish", "call", "ask", "fast", "near", "far", 
-    "all", "any", "one", "two", "old", "new", "use", "care", "kind", "hard", "soft", "make",
-    "see", "like", "love", "give", "yes", "no", "good", "bad", "may", "find", "say", "tell",
-    "few", "many", "high", "low", "who", "whom", "why", "ask", "put", "take", "left", "right",
-    "home", "life", "joy", "rain", "dry", "snow", "fall", "cool", "cook", "near", "far", "king",
-    "queen", "land", "sky", "star", "moon", "plan", "row", "end", "goal", "hope"
-    ],
-    'wh': [
-        'lamp', 'kite', 'rope', 'blue', 'map', 'dog', 'bird', 'pen', 'mud', 'cage',
-        'milk', 'fox', 'fish', 'tap', 'fork', 'gold', 'rain', 'mop', 'dark', 'pond',
-        'bed', 'mask', 'rod', 'farm', 'bag', 'light', 'hat', 'sail', 'lap', 'dart',
-        'rim', 'fog', 'jog', 'cup', 'golf', 'flag', 'corn', 'bond', 'bell', 'mist',
-        'be', 'is', 'it', 'do', 'go', 'he', 'she', 'we', 'me', 'not', 'are', 'has'
-    ],
-    'ph': [
-        'bird', 'lamp', 'map', 'kite', 'fox', 'gold', 'mud', 'rope', 'milk', 'pond',
-        'blue', 'dark', 'rain', 'bag', 'cage', 'pen', 'tap', 'mop', 'bed', 'mask',
-        'farm', 'hat', 'lane', 'fish', 'fork', 'lap', 'door', 'rod', 'sail', 'light',
-        'bond', 'rim', 'goal', 'dart', 'cup', 'bell', 'flag', 'corn', 'mist', 'jog',
-        'is', 'it', 'of', 'as', 'do', 'go', 'we', 'he', 'she', 'me', 'not', 'was'
-    ],
-    'gh': [
-        'lamp', 'kite', 'map', 'rope', 'mud', 'gold', 'bird', 'fish', 'rain', 'fork',
-        'tap', 'milk', 'pen', 'fox', 'bag', 'bed', 'pond', 'cage', 'blue', 'mask',
-        'farm', 'hat', 'lane', 'sail', 'rod', 'light', 'mop', 'door', 'lap', 'dart',
-        'rim', 'goal', 'cup', 'bond', 'bell', 'flag', 'corn', 'mist', 'jog', 'wing',
-        'be', 'is', 'of', 'to', 'do', 'go', 'he', 'we', 'she', 'me', 'not', 'are'
-    ],
-    'kn': [
-        'fox', 'lamp', 'mud', 'map', 'gold', 'kite', 'rope', 'milk', 'pond', 'rain',
-        'cage', 'bed', 'hat', 'bag', 'rod', 'dark', 'fork', 'blue', 'tap', 'farm',
-        'fish', 'mask', 'mop', 'bird', 'light', 'sail', 'door', 'pen', 'lane', 'lap',
-        'dart', 'rim', 'cup', 'goal', 'bell', 'flag', 'corn', 'bond', 'mist', 'jog',
-        'be', 'is', 'do', 'go', 'we', 'he', 'she', 'me', 'not', 'was', 'are', 'has'
-    ],
-    'wr': [
-        'lamp', 'map', 'mud', 'kite', 'rope', 'gold', 'bird', 'rain', 'milk', 'fox',
-        'bag', 'pond', 'tap', 'cage', 'bed', 'dark', 'mask', 'farm', 'hat', 'sail',
-        'mop', 'fish', 'pen', 'fork', 'light', 'rod', 'blue', 'lane', 'lap', 'dart',
-        'rim', 'cup', 'goal', 'bond', 'bell', 'flag', 'corn', 'mist', 'jog', 'wing',
-        'is', 'of', 'as', 'to', 'do', 'go', 'he', 'we', 'she', 'me', 'not', 'are'
-    ],
-    's': [
-        "a", "an", "be", "can", "do", "go", "it", "me", "my", "no", "of", "on", "or", "to", 
-        "up", "we", "and", "cat", "dog", "man", "day", "big", "run", "play", "ride", "work", 
-        "jump", "red", "blue", "green", "long", "warm", "cool", "happy", "bad", "find", "call", 
-        "near", "far", "all", "any", "one", "two", "old", "new", "make", "like", "love", "give", 
-        "good", "may", "tell", "few", "many", "high", "low", "who", "whom", "why", "put", "take", 
-        "left", "right", "home", "life", "joy", "rain", "dry", "fall", "end", "goal", "hope", 
-        "king", "queen", "land", "moon", "plan", "row"
-    ]
-
-}
+# Opening JSON file
+with open('dictionary-parser\categorized_words.json') as json_file:
+    words = json.load(json_file)
 
 ### Function to get all words
 ### This function takes no input and returns a list of words
 def get_all_words():
-    f = open("WordDatav4.txt", "r")
+    f = open("dictionary-parser\WordDatav4.txt", "r")
     words = f.read().split("\n")
     return words[:2000]
 
@@ -146,33 +75,77 @@ def generate_story(topic, problems, dictionary):
     story = query(prompt)
     return story
 
+### Function to generate a chapter
+### This function takes the problems (string), outline (string), dictionary (list of strings), chapter_number (int), length (int), and story (string) as input and returns a chapter (string)
+def generate_chapter(problems, outline, dictionary, chapter_number, length, story):
+    prompt = f"""
+    You are a creative author tasked with writing the {chapter_number} chapter of a children's story (age 10).
+
+    Here is the outline:
+
+    {outline}
+
+    Here is the story so far:
+
+    {story}
+
+    This is your language:
+
+    {dictionary}
+
+    Write a {length} word chapter using only the words in your pre-defined language.
+
+    ONLY THESE WORDS ARE ALLOWED IN YOUR STORY:
+    {dictionary}
+
+    If you use any other words, you will be disqualified.
+
+    DO NOT USE THE LETTERS {problems} IN YOUR STORY.
+    
+    DO NOT USE ANY OTHER WORDS.
+
+    Return only the new chapter.
+    """
+    story = query(prompt)
+    return story
+
 ### Function to check sentences
 ### This function takes the story (string) and dictionary (list of strings) as input and returns a new story (string)
-def sentence_check(story, dictionary):
+def sentence_check(story, dictionary, problems):
     new_story = ""
     sentences = story.split(".")
     for i in range(len(sentences)):
-        previous_sentence = sentences[i-1] + "." if i >0 else sentences[0] + "."
-        next_sentence = sentences[i+1] + "." if i < len(sentences)-1 else sentences[i] + "."
-        sentence = sentences[i] + "."
-        prompt = f"""
-        Verify that the following sentence only contains words from this language: {dictionary}
+        check = False
+        for problem in problems:
+            if problem in sentences[i]:
+                check = True
+        if check:
+            previous_sentence = sentences[i-1] + "." if i >0 else sentences[0] + "."
+            next_sentence = sentences[i+1] + "." if i < len(sentences)-1 else sentences[i] + "."
+            sentence = sentences[i] + "."
+            # Verify that the following sentence only contains words from this language: {dictionary}
 
-        If the sentence contains any other words, please rewrite the sentence using only the words from the language and return only the new sentence.
-        Otherwise, return only the original sentence
+            prompt = f"""
+        
+            Remove any words with the following letters: {problems}
 
-        Here is the sentence to rewrite: {sentence}
+            If the sentence contains words with these letters: {problems}, rewrite the sentence without using those letters and return only the new sentence.
+            Otherwise, return only the original sentence
 
-        Here is the previous sentence for context: {previous_sentence}
+            Here is the sentence to rewrite: {sentence}
 
-        Here is the next sentence for context: {next_sentence}
+            Here is the previous sentence for context: {previous_sentence}
+
+            Here is the next sentence for context: {next_sentence}
 
 
-        You will be disqualified if you return any words other than the new sentence or the original sentence.
-        """
-        response = query(prompt)
-        #print(response)
-        new_story += response
+            You will be disqualified if you return any words other than the new sentence or the original sentence.
+            """
+            response = query(prompt)
+            #print(response)
+            new_story += response
+        else:
+            new_story += sentences[i] + "."
     return new_story
 
 ### Function to edit the story
@@ -194,14 +167,40 @@ def edit(story):
     response = query(prompt)
     return response
 
+### Function to generate an outline
+### This function takes the topic (string) as input and returns an outline (string)
+def generate_outline(topic):
+    prompt = f"""
+    You are a creative author.
+
+    Create an outline for a children's story about {topic} (Age 10).
+
+    The story should be about {story_length} words long.
+
+    The story should have a clear beginning, middle, and end and have a lesson.
+
+    The story should be {chapters}  chapters long.
+
+    Return only the outline
+    """
+    outline = query(prompt)
+    return outline
+
 ### Main function
 def main():
     topic, problems = get_input()
     dictionary = get_words(problems)
-    story = generate_story(topic, problems, dictionary)
-    new_story = sentence_check(story, dictionary)
-    new_story = edit(new_story)
-    print(new_story)
+    outline = generate_outline(topic)
+    story =""
+    for chapter in range(chapters):
+        print(f"Generating chapter {chapter+1}")
+        new_chapter = generate_chapter(problems, outline, dictionary, chapter+1, story_length//chapters, story)
+        temp_chapter = new_chapter
+        temp_chapter = sentence_check(new_chapter, dictionary, problems)
+        temp_chapter = edit(temp_chapter)
+        story += temp_chapter
+    #story = generate_story(topic, problems, dictionary)
+    print(story)
     return 0
 
 if __name__ == "__main__":
