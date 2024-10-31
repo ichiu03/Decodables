@@ -5,7 +5,6 @@ import os
 # Get the directory where `dictionaryParser.py` is located
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
-# Define your categories based on the Orton-Gillingham Reading Specialist Test
 categories = {
     # Column 1 - Consonant Sounds
     "s": [], "t": [], "b": [], "m": [], "l": [], "d": [], "n": [], "p": [], "k": [], "j": [], "v": [],
