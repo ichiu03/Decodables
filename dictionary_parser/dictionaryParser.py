@@ -5,6 +5,7 @@ import os
 # Get the directory where `dictionaryParser.py` is located
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
+
 categories = {
     # Column 1 - Consonant Sounds
     "s": [], "t": [], "b": [], "m": [], "l": [], "d": [], "n": [], "p": [], "k": [], "j": [], "v": [],
@@ -299,9 +300,9 @@ def beginning_roots(word):
             break
 
 def fszl_check(word, arpabet):
-    if pronouncing.syllable_count(word) == 1 and word[-1] in "fszl":
+    if pronouncing.syllable_count(word) == 1:
         phonemes = arpabet.split()
-        if len(phonemes) > 1 and phonemes[-2] in ["IH", "EH", "AH", "UH", "AA", "AE"]:
+        if phonemes and phonemes[-1] in ["IH", "EH", "AH", "UH", "AA", "AE"]:
             categories["fszl"].append(word)
 
 def parse_and_process_words(file_path):
