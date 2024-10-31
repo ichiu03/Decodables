@@ -128,7 +128,7 @@ def ow_check(word, arpabet):
         categories["ow as in snow"].append(word)
 
 def ear_check(word, arpabet):
-    if "IH R" in arpabet or "IY1 R" in arpabet:
+    if "IH" in arpabet and "R" in arpabet or "IY" in arpabet and "R" in arpabet:
         categories["ear as in hear"].append(word)
     elif "ER" in arpabet:
         categories["ear as in early"].append(word)
@@ -399,9 +399,9 @@ def main():
     input_path = os.path.join(script_dir, 'WordDatav4.txt')
     parse_and_process_words(input_path)
     #getTopWords(20, 'categorized_words.json', 'truncated_dictionary.json')
-    phones1 = pronouncing.phones_for_word("hear")
+    phones1 = pronouncing.phones_for_word("year")
     phones2 = pronouncing.phones_for_word("early")
     print(phones1, phones2)
-    ear_check("hear", phones1[0])
+    ear_check("year", phones1[0])
     ear_check("early", phones2[0])
 main()
