@@ -368,6 +368,7 @@ def parse_and_process_words(file_path):
             OCE_check(word)
             x_in_word_check(word)
             
+            beginning_roots(word)
             begin_interm_affixes(word)
             base_suffix_prefix_base(word)
             interm_adv_affixes(word)
