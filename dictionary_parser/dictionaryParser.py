@@ -330,6 +330,10 @@ def is_y_rule_suffix(word):
 
     return False
 
+def is_e_rule_suffix(word):
+    return False
+
+
 def parse_and_process_words(file_path):
     try:
         with open(file_path, 'r') as file:
@@ -403,6 +407,9 @@ def parse_and_process_words(file_path):
                 
             if is_y_rule_suffix(word):
                 categories["y rule suffixes"].append(word)
+                
+            if is_e_rule_suffix(word):
+                categories["e rule-suffixes"].append(word)
 
             
             vce_check(word)
