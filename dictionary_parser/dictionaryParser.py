@@ -372,11 +372,12 @@ def parse_and_process_words(file_path):
             base_suffix_prefix_base(word)
             interm_adv_affixes(word)
 
+        output_path = os.path.join(script_dir, "categorized_words.json")
+        
         # Delete the file if it already exists
         if os.path.exists(output_path):
             os.remove(output_path)
 
-        output_path = os.path.join(script_dir, "categorized_words.json")
         with open(output_path, 'w') as json_file:
             json.dump(categories, json_file, indent=4)
 
@@ -409,5 +410,5 @@ def main():
     #print(phones1, phones2)
     #ear_check("year", phones1[0])
     #ear_check("early", phones2[0])
-    
+
 main()
