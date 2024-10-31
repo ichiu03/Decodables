@@ -1,5 +1,9 @@
 import json
 import pronouncing
+import os
+
+# Get the directory where `dictionaryParser.py` is located
+script_dir = os.path.dirname(os.path.abspath(__file__))
 
 # Define your categories based on the Orton-Gillingham Reading Specialist Test
 categories = {
@@ -179,8 +183,12 @@ def ei_check(word, arpabet):
         categories["ei as in vein"].append(word)
 
 def ch_check(word, arpabet):
-    if "K" in arpabet:
-        categories["ch as in echo"].append(word)
+    pronunciations = pronouncing.phones_for_word(word)
+    ch_index = word.find("CH")
+    for pronunciation in pronunciations:
+        if "K" in pronunciation.split()[ch_index:]:
+            categories["ch as in echo"].append(word)
+            break
 
 def ie_check(word, arpabet):
     if "AY" in arpabet:
@@ -204,7 +212,7 @@ def vccv(word):
     for i in range(len(word) - 3):
         if (word[i] in vowels and word[i+1] in consonants and 
             word[i+2] in consonants and word[i+3] in vowels):
-            categories["vcv, vcccv patterns"].append(word)
+            categories["vccv"].append(word)
 
 def vcv(word):
     for i in range(len(word) - 2):  # Iterate through the word for 3-letter patterns
@@ -216,7 +224,7 @@ def vcccv(word):
         if (word[i] in vowels and word[i+1] in consonants and 
             word[i+2] in consonants and word[i+3] in consonants and 
             word[i+4] in vowels):
-            categories["vccv"].append(word)
+            categories["vcv, vcccv patterns"].append(word)
 
 def syllable_type_check(word, arpabet):
     # Check for R-Controlled Syllable: presence of "ER", "AR", or "OR" in ARPAbet
@@ -347,7 +355,8 @@ def parse_and_process_words(file_path):
             base_suffix_prefix_base(word)
             interm_adv_affixes(word)
 
-        with open('categorized_words.json', 'w') as json_file:
+        output_path = os.path.join(script_dir, "categorized_words.json")
+        with open(output_path, 'w') as json_file:
             json.dump(categories, json_file, indent=4)
 
         print("\n-=-=-= Finished categorzing! Saved to 'categorized_words.json' =-=-=-")
@@ -357,7 +366,22 @@ def parse_and_process_words(file_path):
     except Exception as e:
         print(f"An error occurred: {e}")
 
+def getTopWords(num, inFile, outFile):
+    input_path = os.path.join(script_dir, inFile)
+    output_path = os.path.join(script_dir, outFile)
+    with open(input_path, 'r') as f:
+        data_dict = json.load(f)
+
+    truncated_dict = {key: values[:num] for key, values in categories.items()}
+
+    with open(output_path, 'w') as f:
+        json.dump(truncated_dict, f, indent=4)
+    
+    print(f"Data successfully written to truncated_dictionary.json")
+
 def main():
-    parse_and_process_words('WordDatav4.txt')
+    input_path = os.path.join(script_dir, 'WordDatav4.txt')
+    parse_and_process_words(input_path)
+    getTopWords(20, 'categorized_words.json', 'truncated_dictionary.json')
 
 main()
