@@ -5,7 +5,6 @@ import os
 # Get the directory where `dictionaryParser.py` is located
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
-# Define your categories based on the Orton-Gillingham Reading Specialist Test
 categories = {
     # Column 1 - Consonant Sounds
     "s": [], "t": [], "b": [], "m": [], "l": [], "d": [], "n": [], "p": [], "k": [], "j": [], "v": [],
@@ -200,6 +199,14 @@ def ch_check(word, arpabet):
         except IndexError:
             pass
 
+def augh_check(word, arpabet):
+    if "AA" in arpabet or "AO" in arpabet or "AH" in arpabet:
+        categories["augh"].append(word)
+
+def ough_check(word, arpabet):
+    if "AA" in arpabet or "AO" in arpabet or "AH" in arpabet:
+        categories["ough"].append(word)
+
 def ie_check(word, arpabet):
     if "AY" in arpabet:
         categories["ie as in pie"].append(word)
@@ -353,6 +360,10 @@ def parse_and_process_words(file_path):
                 ch_check(word, arpabet)
             if "sion" in word:
                 sion_check(word, arpabet)
+            if "augh" in word:
+                augh_check(word, arpabet)
+            if "ough" in word:
+                ough_check(word, arpabet)
             if "r" or "l" in word:
                 threel_blends(word)
             if "war" in word:
@@ -408,7 +419,7 @@ def getTopWords(num, inFile, outFile):
 def main():
     input_path = os.path.join(script_dir, 'WordDatav4.txt')
     parse_and_process_words(input_path)
-    #getTopWords(20, 'categorized_words.json', 'truncated_dictionary.json')
+    getTopWords(20, 'categorized_words.json', 'truncated_dictionary.json')
     #phones1 = pronouncing.phones_for_word("year")
     #phones2 = pronouncing.phones_for_word("early")
     #print(phones1, phones2)
