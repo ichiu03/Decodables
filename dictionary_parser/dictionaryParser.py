@@ -45,7 +45,7 @@ def x_in_word_check(word):
     keys = ["s", "t", "b", "m", "l", "d", "n", "p", "k", "j", "v", "z", "f", "r", "h", "w", "x",
         "a", "e", "i", "o", "u", "qu", "sh", "ay", "ck", "ee", "ch", "or", "all", "th", "oy",
         "ar", "wh", "er", "aw", "ly", "tch", "ed", "ai", "igh", "oa", "ir", "oi", "kn", "ur",
-        "dge", "tion", "au", "wor", "wr", "eigh", "war", "augh", "oe", "ui", "wa", "eu", "gh",
+        "dge", "tion", "au", "ough", "wor", "wr", "eigh", "war", "augh", "oe", "ui", "wa", "eu", "gh",
         "mb", "mn", "que", "gn", "stle", "rh", "gue", "alk", "alt", "qua", "sc", "ph"]
 
     if "ing" in word or "ang" in word or "ong" in word or "ung" in word:
@@ -124,10 +124,12 @@ def ow_check(word, arpabet):
         categories["ow as in snow"].append(word)
 
 def ear_check(word, arpabet):
-    if "IH" in arpabet and "R" in arpabet or "IY" in arpabet and "R" in arpabet:
+    if "IH R" in arpabet or "IY R" in arpabet:
         categories["ear as in hear"].append(word)
-    if "ER" in arpabet:
+        print("ear as in hear")
+    elif "ER" in arpabet:
         categories["ear as in early"].append(word)
+        print("ear as in early")
 
 def s_blends(word):
     if ("sn" in word or "sm" in word or "st" in word or "sw" in word):
@@ -183,12 +185,14 @@ def ei_check(word, arpabet):
         categories["ei as in vein"].append(word)
 
 def ch_check(word, arpabet):
-    pronunciations = pronouncing.phones_for_word(word)
-    ch_index = word.find("CH")
-    for pronunciation in pronunciations:
-        if "K" in pronunciation.split()[ch_index:]:
-            categories["ch as in echo"].append(word)
-            break
+    ch_index = word.find("ch")
+    if ch_index != -1:
+        phonemes = arpabet.split()
+        try:
+            if phonemes[ch_index] == "K":
+                categories["ch as in echo"].append(word)
+        except IndexError:
+            pass
 
 def ie_check(word, arpabet):
     if "AY" in arpabet:
@@ -283,6 +287,12 @@ def beginning_roots(word):
         if root in word:
             categories["beginning roots"].append(word)
             break
+
+def fszl_check(word, arpabet):
+    if len(pronouncing.syllable_count(word)) == 1 and word[-1] in "fszl":
+        phonemes = arpabet.split()
+        if len(phonemes) > 1 and phonemes[-2] in ["IH", "EH", "AH", "UH", "AA", "AE"]:
+            categories["fszl"].append(word)
  
 def parse_and_process_words(file_path):
     try:
@@ -333,12 +343,16 @@ def parse_and_process_words(file_path):
                 ue_check(word, arpabet)
             if "ei" in word:
                 ei_check(word, arpabet)
+            if 'ie' in word:
+                ie_check(word, arpabet)
             if "ch" in word:
                 ch_check(word, arpabet)
             if "sion" in word:
                 sion_check(word, arpabet)
             if "r" or "l" in word:
                 threel_blends(word)
+            if word[-1] in "fszl":
+                fszl_check(word, arpabet)
             if len(word) >= 3:
                 vcv(word)
                 vv_check(word, arpabet)
@@ -380,8 +394,11 @@ def getTopWords(num, inFile, outFile):
     print(f"Data successfully written to truncated_dictionary.json")
 
 def main():
-    input_path = os.path.join(script_dir, 'WordDatav4.txt')
-    parse_and_process_words(input_path)
-    getTopWords(20, 'categorized_words.json', 'truncated_dictionary.json')
-
+    #input_path = os.path.join(script_dir, 'WordDatav4.txt')
+    #parse_and_process_words(input_path)
+    #getTopWords(20, 'categorized_words.json', 'truncated_dictionary.json')
+    phones1 = pronouncing.phones_for_word("hear")
+    phones2 = pronouncing.phones_for_word("early")
+    ear_check("hear", phones1[0])
+    ear_check("early", phones2[0])
 main()
