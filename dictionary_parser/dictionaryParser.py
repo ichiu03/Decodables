@@ -92,7 +92,7 @@ def yCheck(word, arpabet):
     if "IH1" in arpabet:
         categories["y as in gym"].append(word) 
     # "-ey as in monkey" (ending with unstressed "IY0")
-    if arpabet.endswith("IY0"):
+    if arpabet.endswith("IY0") and word.endswith("ey"):
         categories["ey as in monkey"].append(word)
     # "ey as in they" (long "EY1" sound)
     elif "EY1" in arpabet:
@@ -260,7 +260,7 @@ def begin_interm_affixes(word):
             categories["begin/interm affixes"].append(word)
             break
 
-# 2. Function to categorize words with base/suffix or prefix/base patterns
+# Function to categorize words with base/suffix or prefix/base patterns
 def base_suffix_prefix_base(word):
     for prefix in begin_intermediate_prefixes:
         if word.startswith(prefix):
@@ -276,14 +276,14 @@ def base_suffix_prefix_base(word):
                 categories["base/suffix, prefix/base patterns"].append(word)
                 break
 
-# 3. Function to categorize words with intermediate/advanced affixes
+# Function to categorize words with intermediate/advanced affixes
 def interm_adv_affixes(word):
     for affix in intermediate_advanced_affixes:
         if word.startswith(affix) or word.endswith(affix):
             categories["interm./adv. affixes"].append(word)
             break
 
-# 4. Function to categorize words with beginning roots
+# Function to categorize words with beginning roots
 def beginning_roots(word):
     for root in roots:
         if root in word:
@@ -370,6 +370,10 @@ def parse_and_process_words(file_path):
             begin_interm_affixes(word)
             base_suffix_prefix_base(word)
             interm_adv_affixes(word)
+
+        # Delete the file if it already exists
+        if os.path.exists(output_path):
+            os.remove(output_path)
 
         output_path = os.path.join(script_dir, "categorized_words.json")
         with open(output_path, 'w') as json_file:
