@@ -44,9 +44,9 @@ roots = ["port", "ject", "tract", "mit", "miss", "ceit", "ceive", "struct", "fac
 
 def x_in_word_check(word):
     keys = ["s", "t", "b", "m", "l", "d", "n", "p", "k", "j", "v", "z", "f", "r", "h", "w", "x",
-        "a", "e", "i", "o", "u", "qu", "sh", "ay", "ck", "ee", "ch", "or", "all", "th", "oy",
-        "ar", "wh", "er", "aw", "ly", "tch", "ed", "ai", "igh", "oa", "ir", "oi", "kn", "ur",
-        "dge", "tion", "au", "ough", "wor", "wr", "eigh", "oe", "ui", "wa", "eu", "gh",
+        "a", "e", "i", "o", "u", "qu", "sh", "ay", "ck", "ee", "ch", "or", "all", "th", "oy", "ft",
+        "nd", "st", "ar", "wh", "er", "aw", "ly", "tch", "ed", "ai", "igh", "oa", "ir", "oi", "kn", "ur",
+        "dge", "tion", "au", "ough", "wor", "wr", "eigh", "augh", "oe", "ui", "wa", "eu", "gh",
         "mb", "mn", "que", "gn", "stle", "rh", "gue", "alk", "alt", "qua", "sc", "ph"]
 
     if "ing" in word or "ang" in word or "ong" in word or "ung" in word:
@@ -54,14 +54,17 @@ def x_in_word_check(word):
 
     if "ink" in word or "ank" in word or "onk" in word or "unk" in word: 
         categories["-ink, -ank, -onk, -unk"].append(word)
-
-    if "sp" in word or "nt" in word or "mp" in word:
+    
+    if word.endswith("ft") or word.endswith("st") or word.endswith("nd"):
+        categories["-ft, -nd, -st"].append(word)
+    
+    if word.endswith("sp") or word.endswith("nt") or word.endswith("mp"):
         categories["-sp, -nt, -mp"].append(word)
 
-    if "sk" in word or "lt" in word or "lk" in word:
+    if word.endswith("sk") or word.endswith("lt") or word.endswith("lk"):
         categories["-sk, -lt, -lk"].append(word)
 
-    if "ct" in word or "pt" in word:
+    if word.endswith("ct") or word.endswith("pt"):
         categories["-ct, -pt"].append(word)
         
     if ("ble" in word or "cle" in word or "dle" in word or "fle" in word or "gle" in word 
