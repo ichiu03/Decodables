@@ -144,7 +144,7 @@ def l_blends(word):
 
 def r_blends(word):
     if ("br" in word or "cr" in word or "dr" in word or "fr" in word or "gr" in word or "pr" in word or "tr" in word):
-        categories["s blends"].append(word)
+        categories["r blends"].append(word)
 
 def ea_check(word, arpabet):
     if "IY" in arpabet:
