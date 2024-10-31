@@ -124,12 +124,10 @@ def ow_check(word, arpabet):
         categories["ow as in snow"].append(word)
 
 def ear_check(word, arpabet):
-    if "IH R" in arpabet or "IY R" in arpabet:
+    if "IH R" in arpabet or "IY1 R" in arpabet:
         categories["ear as in hear"].append(word)
-        print("ear as in hear")
     elif "ER" in arpabet:
         categories["ear as in early"].append(word)
-        print("ear as in early")
 
 def s_blends(word):
     if ("sn" in word or "sm" in word or "st" in word or "sw" in word):
@@ -289,11 +287,11 @@ def beginning_roots(word):
             break
 
 def fszl_check(word, arpabet):
-    if len(pronouncing.syllable_count(word)) == 1 and word[-1] in "fszl":
+    if pronouncing.syllable_count(word) == 1 and word[-1] in "fszl":
         phonemes = arpabet.split()
         if len(phonemes) > 1 and phonemes[-2] in ["IH", "EH", "AH", "UH", "AA", "AE"]:
             categories["fszl"].append(word)
- 
+
 def parse_and_process_words(file_path):
     try:
         with open(file_path, 'r') as file:
@@ -327,8 +325,6 @@ def parse_and_process_words(file_path):
                 ear_check(word, arpabet)
             if "ea" in word:
                 ea_check(word, arpabet)
-            if "s" in word:
-                ear_check(word, arpabet)
             if "s" in word:
                 s_blends(word)
             if "l" in word:
@@ -394,11 +390,12 @@ def getTopWords(num, inFile, outFile):
     print(f"Data successfully written to truncated_dictionary.json")
 
 def main():
-    #input_path = os.path.join(script_dir, 'WordDatav4.txt')
-    #parse_and_process_words(input_path)
+    input_path = os.path.join(script_dir, 'WordDatav4.txt')
+    parse_and_process_words(input_path)
     #getTopWords(20, 'categorized_words.json', 'truncated_dictionary.json')
     phones1 = pronouncing.phones_for_word("hear")
     phones2 = pronouncing.phones_for_word("early")
+    print(phones1, phones2)
     ear_check("hear", phones1[0])
     ear_check("early", phones2[0])
 main()
