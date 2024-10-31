@@ -44,8 +44,8 @@ roots = ["port", "ject", "tract", "mit", "miss", "ceit", "ceive", "struct", "fac
 
 def x_in_word_check(word):
     keys = ["s", "t", "b", "m", "l", "d", "n", "p", "k", "j", "v", "z", "f", "r", "h", "w", "x",
-        "a", "e", "i", "o", "u", "qu", "sh", "ay", "ck", "ee", "ch", "or", "all", "th", "oy", "ft",
-        "nd", "st", "ar", "wh", "er", "aw", "ly", "tch", "ed", "ai", "igh", "oa", "ir", "oi", "kn", "ur",
+        "a", "e", "i", "o", "u", "qu", "sh", "ay", "ck", "ee", "ch", "or", "all", "th", "oy", "ar", 
+        "wh", "er", "aw", "ly", "tch", "ed", "ai", "igh", "oa", "ir", "oi", "kn", "ur",
         "dge", "tion", "au", "ough", "wor", "wr", "eigh", "augh", "oe", "ui", "wa", "eu", "gh",
         "mb", "mn", "que", "gn", "stle", "rh", "gue", "alk", "alt", "qua", "sc", "ph"]
 
@@ -420,7 +420,7 @@ def getTopWords(num, inFile, outFile):
 def main():
     input_path = os.path.join(script_dir, 'WordDatav4.txt')
     parse_and_process_words(input_path)
-    getTopWords(20, 'categorized_words.json', 'truncated_dictionary.json')
+    #getTopWords(20, 'categorized_words.json', 'truncated_dictionary.json')
     #phones1 = pronouncing.phones_for_word("year")
     #phones2 = pronouncing.phones_for_word("early")
     #print(phones1, phones2)
