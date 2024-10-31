@@ -93,7 +93,7 @@ def yCheck(word, arpabet):
     if "IH1" in arpabet:
         categories["y as in gym"].append(word) 
     # "-ey as in monkey" (ending with unstressed "IY0")
-    if arpabet.endswith("IY0"):
+    if arpabet.endswith("IY0") and word.endswith("ey"):
         categories["ey as in monkey"].append(word)
     # "ey as in they" (long "EY1" sound)
     elif "EY1" in arpabet:
@@ -129,7 +129,7 @@ def ow_check(word, arpabet):
         categories["ow as in snow"].append(word)
 
 def ear_check(word, arpabet):
-    if "IH R" in arpabet or "IY1 R" in arpabet:
+    if "IH" in arpabet and "R" in arpabet or "IY" in arpabet and "R" in arpabet:
         categories["ear as in hear"].append(word)
     elif "ER" in arpabet:
         categories["ear as in early"].append(word)
@@ -261,7 +261,7 @@ def begin_interm_affixes(word):
             categories["begin/interm affixes"].append(word)
             break
 
-# 2. Function to categorize words with base/suffix or prefix/base patterns
+# Function to categorize words with base/suffix or prefix/base patterns
 def base_suffix_prefix_base(word):
     for prefix in begin_intermediate_prefixes:
         if word.startswith(prefix):
@@ -277,14 +277,14 @@ def base_suffix_prefix_base(word):
                 categories["base/suffix, prefix/base patterns"].append(word)
                 break
 
-# 3. Function to categorize words with intermediate/advanced affixes
+# Function to categorize words with intermediate/advanced affixes
 def interm_adv_affixes(word):
     for affix in intermediate_advanced_affixes:
         if word.startswith(affix) or word.endswith(affix):
             categories["interm./adv. affixes"].append(word)
             break
 
-# 4. Function to categorize words with beginning roots
+# Function to categorize words with beginning roots
 def beginning_roots(word):
     for root in roots:
         if word.startswith(root):
@@ -372,6 +372,10 @@ def parse_and_process_words(file_path):
             base_suffix_prefix_base(word)
             interm_adv_affixes(word)
 
+        # Delete the file if it already exists
+        if os.path.exists(output_path):
+            os.remove(output_path)
+
         output_path = os.path.join(script_dir, "categorized_words.json")
         with open(output_path, 'w') as json_file:
             json.dump(categories, json_file, indent=4)
@@ -400,9 +404,9 @@ def main():
     input_path = os.path.join(script_dir, 'WordDatav4.txt')
     parse_and_process_words(input_path)
     #getTopWords(20, 'categorized_words.json', 'truncated_dictionary.json')
-    phones1 = pronouncing.phones_for_word("hear")
+    phones1 = pronouncing.phones_for_word("year")
     phones2 = pronouncing.phones_for_word("early")
     print(phones1, phones2)
-    ear_check("hear", phones1[0])
+    ear_check("year", phones1[0])
     ear_check("early", phones2[0])
 main()
