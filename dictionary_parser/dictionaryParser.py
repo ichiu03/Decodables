@@ -45,7 +45,7 @@ def x_in_word_check(word):
     keys = ["s", "t", "b", "m", "l", "d", "n", "p", "k", "j", "v", "z", "f", "r", "h", "w", "x",
         "a", "e", "i", "o", "u", "qu", "sh", "ay", "ck", "ee", "ch", "or", "all", "th", "oy",
         "ar", "wh", "er", "aw", "ly", "tch", "ed", "ai", "igh", "oa", "ir", "oi", "kn", "ur",
-        "dge", "tion", "au", "ough", "wor", "wr", "eigh", "war", "augh", "oe", "ui", "wa", "eu", "gh",
+        "dge", "tion", "au", "ough", "wor", "wr", "eigh", "augh", "oe", "ui", "wa", "eu", "gh",
         "mb", "mn", "que", "gn", "stle", "rh", "gue", "alk", "alt", "qua", "sc", "ph"]
 
     if "ing" in word or "ang" in word or "ong" in word or "ung" in word:
@@ -73,6 +73,10 @@ def x_in_word_check(word):
     for key in keys:
         if key in word:
             categories[key].append(word)
+
+def warCheck(word):
+    if "war" in word and "ware" not in word:
+        categories["war"].append(word)
 
 def yCheck(word, arpabet):    
     # "y as in yes" (initial /Y/ sound or /JH/ sound)
@@ -347,6 +351,8 @@ def parse_and_process_words(file_path):
                 sion_check(word, arpabet)
             if "r" or "l" in word:
                 threel_blends(word)
+            if "war" in word:
+                warCheck(word)
             if word[-1] in "fszl":
                 fszl_check(word, arpabet)
             if len(word) >= 3:
