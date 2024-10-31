@@ -223,7 +223,7 @@ def sion_check(word, arpabet):
         categories["-sion as in vision"].append(word)
 
 def threel_blends(word):
-    if ("thr" in word or "scr" in word or "spr" in word or "shr" in word or "spl" in word or "str" in word):
+    if (word.startswith("spr") or word.startswith("spl") or word.startswith("thr") or word.startswith("scr") or word.startswith("squ") or word.startswith("shr") or word.startswith("str")):
         categories["3-letter beg. blends"].append(word)
 
 def vccv(word):
