@@ -135,11 +135,11 @@ def ear_check(word, arpabet):
         categories["ear as in early"].append(word)
 
 def s_blends(word):
-    if ("sn" in word or "sm" in word or "st" in word or "sw" in word):
+    if ("sn" in word or "sm" in word or "st" in word or "sw" in word or "sc" in word or "sp" in word):
         categories["s blends"].append(word)
     
 def l_blends(word):
-    if ("bl" in word or "cl" in word or "fl" in word):
+    if ("bl" in word or "cl" in word or "fl" in word or "pl" in word or "gl" in word or "sl" in word):
         categories["l blends"].append(word)
 
 def r_blends(word):
