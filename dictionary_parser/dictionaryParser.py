@@ -46,7 +46,7 @@ def x_in_word_check(word):
     keys = ["s", "t", "b", "m", "l", "d", "n", "p", "k", "j", "v", "z", "f", "r", "h", "w", "x",
         "a", "e", "i", "o", "u", "qu", "sh", "ay", "ck", "ee", "ch", "or", "all", "th", "oy",
         "ar", "wh", "er", "aw", "ly", "tch", "ed", "ai", "igh", "oa", "ir", "oi", "kn", "ur",
-        "dge", "tion", "au", "ough", "wor", "wr", "eigh", "augh", "oe", "ui", "wa", "eu", "gh",
+        "dge", "tion", "au", "ough", "wor", "wr", "eigh", "oe", "ui", "wa", "eu", "gh",
         "mb", "mn", "que", "gn", "stle", "rh", "gue", "alk", "alt", "qua", "sc", "ph"]
 
     if "ing" in word or "ang" in word or "ong" in word or "ung" in word:
@@ -196,6 +196,14 @@ def ch_check(word, arpabet):
                 categories["ch as in echo"].append(word)
         except IndexError:
             pass
+
+def augh_check(word, arpabet):
+    if "AA" in arpabet or "AO" in arpabet or "AH" in arpabet:
+        categories["augh"].append(word)
+
+def ough_check(word, arpabet):
+    if "AA" in arpabet or "AO" in arpabet or "AH" in arpabet:
+        categories["ough"].append(word)
 
 def ie_check(word, arpabet):
     if "AY" in arpabet:
@@ -350,6 +358,10 @@ def parse_and_process_words(file_path):
                 ch_check(word, arpabet)
             if "sion" in word:
                 sion_check(word, arpabet)
+            if "augh" in word:
+                augh_check(word, arpabet)
+            if "ough" in word:
+                ough_check(word, arpabet)
             if "r" or "l" in word:
                 threel_blends(word)
             if "war" in word:
@@ -405,7 +417,7 @@ def getTopWords(num, inFile, outFile):
 def main():
     input_path = os.path.join(script_dir, 'WordDatav4.txt')
     parse_and_process_words(input_path)
-    #getTopWords(20, 'categorized_words.json', 'truncated_dictionary.json')
+    getTopWords(20, 'categorized_words.json', 'truncated_dictionary.json')
     #phones1 = pronouncing.phones_for_word("year")
     #phones2 = pronouncing.phones_for_word("early")
     #print(phones1, phones2)
