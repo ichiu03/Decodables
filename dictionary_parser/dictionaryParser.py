@@ -39,7 +39,8 @@ consonants = "bcdfghjklmnpqrstvwxyz"
 begin_intermediate_prefixes = ["un", "re", "pre", "dis", "non", "sub", "bi", "tri"]
 begin_intermediate_suffixes = ["ing", "ed", "ly", "ful", "ness", "ment", "able", "less"]
 intermediate_advanced_affixes = ["inter", "multi", "anti", "contra", "pseudo", "ology", "tion", "phobia"]
-roots = ["spect", "dict", "form", "struct", "tract", "graph", "scrib", "port", "vert", "ject"]
+roots = ["port", "ject", "tract", "mit", "miss", "ceit", "ceive", "struct", "fact", "form", "spect", 
+         "dict", "duct", "script", "rupt", "flect", "flex", "vert", "vers", "pel", "puls", "vis", "vid", "cap", "cept"]
 
 def x_in_word_check(word):
     keys = ["s", "t", "b", "m", "l", "d", "n", "p", "k", "j", "v", "z", "f", "r", "h", "w", "x",
@@ -286,7 +287,7 @@ def interm_adv_affixes(word):
 # Function to categorize words with beginning roots
 def beginning_roots(word):
     for root in roots:
-        if root in word:
+        if word.startswith(root):
             categories["beginning roots"].append(word)
             break
 
