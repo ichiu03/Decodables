@@ -2,10 +2,13 @@ import json
 import pronouncing
 import os
 import re
+import nltk
+from nltk.corpus import words
 
 # Get the directory where `dictionaryParser.py` is located
 script_dir = os.path.dirname(os.path.abspath(__file__))
-
+nltk.download('words')
+valid_words = set(words.words())
 
 categories = {
     # Column 1 - Consonant Sounds
@@ -44,6 +47,8 @@ intermediate_advanced_affixes = ["inter", "multi", "anti", "contra", "pseudo", "
 roots = ["port", "ject", "tract", "mit", "miss", "ceit", "ceive", "struct", "fact", "form", "spect", 
          "dict", "duct", "script", "rupt", "flect", "flex", "vert", "vers", "pel", "puls", "vis", "vid", "cap", "cept"]
 
+def is_valid_word(word):
+    return word in valid_words
 def x_in_word_check(word):
     keys = ["s", "t", "b", "m", "l", "d", "n", "p", "k", "j", "v", "z", "f", "r", "h", "w", "x",
         "a", "e", "i", "o", "u", "qu", "sh", "ay", "ck", "ee", "ch", "or", "all", "th", "oy", "ar", 
@@ -332,6 +337,16 @@ def is_y_rule_suffix(word):
     return False
 
 def is_e_rule_suffix(word):
+    for suffix in begin_intermediate_suffixes:
+        if word.endswith(suffix):
+            if suffix[0] in consonants:
+                base_word = word[:-len(suffix)]
+                if is_valid_word(base_word):
+                    return True
+            base_word_with_e = word[:-len(suffix)] + 'e'
+            if is_valid_word(base_word_with_e):
+                return True
+
     return False
 
 
