@@ -336,18 +336,13 @@ def is_y_rule_suffix(word):
 
     return False
 
-def is_e_rule_suffix(word):
-    for suffix in begin_intermediate_suffixes:
-        if word.endswith(suffix):
-            if suffix[0] in consonants:
-                base_word = word[:-len(suffix)]
-                if is_valid_word(base_word):
-                    return True
-            base_word_with_e = word[:-len(suffix)] + 'e'
-            if is_valid_word(base_word_with_e):
-                return True
+#def is_e_rule_suffix(word):
+ #   for suffix in begin_intermediate_suffixes:
+  #      if word.endswith(suffix) and len(word) > 6:
+   #         if is_valid_word(word) or is_valid_word(word+'e'):
+    #            return True
 
-    return False
+    #return False
 
 
 def parse_and_process_words(file_path):
@@ -423,9 +418,11 @@ def parse_and_process_words(file_path):
                 
             if is_y_rule_suffix(word):
                 categories["y rule suffixes"].append(word)
-                
-            if is_e_rule_suffix(word):
-                categories["e rule-suffixes"].append(word)
+
+            #for suffix in begin_intermediate_suffixes:
+             #   if word.endswith(suffix) and 'e' in word:
+              #      if is_e_rule_suffix(word):
+               #         categories["e rule-suffixes"].append(word)
 
             
             vce_check(word)
