@@ -2,13 +2,13 @@ import json
 import pronouncing
 import os
 import re
-import nltk
-from nltk.corpus import words
+#import nltk
+#from nltk.corpus import words
 
 # Get the directory where `dictionaryParser.py` is located
 script_dir = os.path.dirname(os.path.abspath(__file__))
-nltk.download('words')
-valid_words = set(words.words())
+#nltk.download('words')
+#valid_words = set(words.words())
 
 categories = {
     # Column 1 - Consonant Sounds
@@ -351,7 +351,6 @@ def is_e_rule_suffix(word):
                 return True
 
     return False
-
 
 def parse_and_process_words(file_path):
     try:
