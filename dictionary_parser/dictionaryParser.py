@@ -1,6 +1,7 @@
 import json
 import pronouncing
 import os
+import re
 
 # Get the directory where `dictionaryParser.py` is located
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -224,7 +225,7 @@ def sion_check(word, arpabet):
         categories["-sion as in vision"].append(word)
 
 def threel_blends(word):
-    if ("thr" in word or "scr" in word or "spr" in word or "shr" in word or "spl" in word or "str" in word):
+    if (word.startswith("spr") or word.startswith("spl") or word.startswith("thr") or word.startswith("scr") or word.startswith("squ") or word.startswith("shr") or word.startswith("str")):
         categories["3-letter beg. blends"].append(word)
 
 def vccv(word):
@@ -309,6 +310,31 @@ def fszl_check(word, arpabet):
         if phonemes and phonemes[-1] in ["IH", "EH", "AH", "UH", "AA", "AE"]:
             categories["fszl"].append(word)
 
+def is_y_rule_suffix(word):
+    #Maybe temporary Solution
+    exceptions = ["frontier", "glacier", "soldier", "barrier", "carrier", "pier", "priest", "series", "species"]
+    
+    if word in exceptions:
+        return False
+
+    if re.search(r'[^aeiou]ies$', word) or re.search(r'[^aeiou]ied$', word) or re.search(r'[^aeiou]ier$', word) or re.search(r'[^aeiou]iest$', word):
+        return True
+
+    if re.search(r'.*ying$', word):
+        return True
+
+    if re.search(r'[aeiou]y.*$', word):
+        return False  
+
+    if re.search(r'.*ies$', word) and not re.search(r'[aeiou]y', word):
+        return True
+
+    return False
+
+def is_e_rule_suffix(word):
+    return False
+
+
 def parse_and_process_words(file_path):
     try:
         with open(file_path, 'r') as file:
@@ -379,6 +405,13 @@ def parse_and_process_words(file_path):
                 vccv(word)
             if len(word) >= 5:
                 vcccv(word)
+                
+            if is_y_rule_suffix(word):
+                categories["y rule suffixes"].append(word)
+                
+            if is_e_rule_suffix(word):
+                categories["e rule-suffixes"].append(word)
+
             
             vce_check(word)
             OCE_check(word)
