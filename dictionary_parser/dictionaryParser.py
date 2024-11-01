@@ -247,14 +247,16 @@ def vcccv(word):
             categories["vcv, vcccv patterns"].append(word)
 
 def syllable_type_check(word, arpabet):
-    # Check for R-Controlled Syllable: presence of "ER", "AR", or "OR" in ARPAbet
+    if "V/R/L syllables" not in categories:
+        categories["V/R/L syllables"] = []
+    # Check for R-Controlled Syllable: presence of "ER", "AR", or "OR" in ARPAbet transcription
     if any(r_controlled in arpabet for r_controlled in ["ER", "AR", "OR"]):
         categories["V/R/L syllables"].append(word)
-    # Check for L-Controlled Syllable: Vowel followed by "L" in word spelling
-    if any(l_controlled in arpabet for l_controlled in ["OL", "AL", "UL"]):
+    # Check for L-Controlled Syllable: Vowel followed by "L" in ARPAbet transcription
+    if any(l_controlled in arpabet for l_controlled in ["OL", "AL", "UL", "EL", "IL"]):
         categories["V/R/L syllables"].append(word)
-    # Check for V-Controlled Syllable: Vowel followed by "V" in word spelling
-    if any(v_controlled in arpabet for v_controlled in ["IV", "AV", "OV", "UV"]):
+    # Check for V-Controlled Syllable: Vowel followed by "V" in word ARPAbet transcription
+    if any(v_controlled in arpabet for v_controlled in ["IV", "AV", "OV", "UV", "EV"]):
         categories["V/R/L syllables"].append(word)
 
 def vv_check(word, arpabet):
@@ -305,11 +307,12 @@ def beginning_roots(word):
             break
 
 def fszl_check(word, arpabet):
-    if pronouncing.syllable_count(word) == 1:
+    if pronouncing.syllable_count(arpabet) == 1:
         phonemes = arpabet.split()
-        if phonemes and phonemes[-1] in ["IH", "EH", "AH", "UH", "AA", "AE"]:
-            categories["fszl"].append(word)
-
+        for vowel in ["IH", "EH", "AH", "UH", "AA", "AE"]:
+            if vowel in phonemes[-2]:
+                categories["fszl"].append(word)
+    
 def is_y_rule_suffix(word):
     #Maybe temporary Solution
     exceptions = ["frontier", "glacier", "soldier", "barrier", "carrier", "pier", "priest", "series", "species"]
@@ -396,7 +399,7 @@ def parse_and_process_words(file_path):
                 threel_blends(word)
             if "war" in word:
                 warCheck(word)
-            if word[-1] in "fszl":
+            if word[-1] in "fszl" and word[-2] in "fszl" and word[-1] == word[-2]:
                 fszl_check(word, arpabet)
             if len(word) >= 3:
                 vcv(word)
@@ -405,18 +408,16 @@ def parse_and_process_words(file_path):
                 vccv(word)
             if len(word) >= 5:
                 vcccv(word)
-                
             if is_y_rule_suffix(word):
                 categories["y rule suffixes"].append(word)
-                
             if is_e_rule_suffix(word):
                 categories["e rule-suffixes"].append(word)
-
+            if "V" in word or "L" in word or "R" in word:
+                syllable_type_check(word, arpabet)
             
             vce_check(word)
             OCE_check(word)
             x_in_word_check(word)
-            
             beginning_roots(word)
             begin_interm_affixes(word)
             base_suffix_prefix_base(word)
@@ -455,10 +456,14 @@ def main():
     input_path = os.path.join(script_dir, 'WordDatav4.txt')
     parse_and_process_words(input_path)
     #getTopWords(20, 'categorized_words.json', 'truncated_dictionary.json')
-    #phones1 = pronouncing.phones_for_word("year")
+    #phones1 = pronouncing.phones_for_word("fizz")
     #phones2 = pronouncing.phones_for_word("early")
-    #print(phones1, phones2)
+    #print(phones1)
     #ear_check("year", phones1[0])
     #ear_check("early", phones2[0])
+    #print(phones1)
+    #print(phones1[0])
+    #fszl_check("fizz", phones1[0])
+    #print(categories["fszl"])
 
 main()
