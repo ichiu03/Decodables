@@ -41,8 +41,8 @@ categories = {
 }
 vowels = "aeiou"
 consonants = "bcdfghjklmnpqrstvwxyz"
-begin_intermediate_prefixes = ["un", "re", "pre", "dis", "non", "sub", "bi", "tri"]
-begin_intermediate_suffixes = ["ing", "ed", "ly", "ful", "ness", "ment", "able", "less"]
+begin_intermediate_prefixes = ["re", "de", "sub", "pre", "com", "con", "pro", "ex", "be", "dis"]
+begin_intermediate_suffixes = ["ful", "est", "ish", "less", "ness", "ling", "dom", "ic", "et", "en"]
 intermediate_advanced_affixes = ["inter", "multi", "anti", "contra", "pseudo", "ology", "tion", "phobia"]
 roots = ["port", "ject", "tract", "mit", "miss", "ceit", "ceive", "struct", "fact", "form", "spect", 
          "dict", "duct", "script", "rupt", "flect", "flex", "vert", "vers", "pel", "puls", "vis", "vid", "cap", "cept"]
@@ -272,6 +272,9 @@ def vv_check(word, arpabet):
         categories["v/v pattern"].append(word)
 
 def begin_interm_affixes(word):
+    exceptions = ["e-mail", "e-book", "e-commerce", "eject", "emit", "emigrate", "amorphous", "asymmetry", "adrift", "along", "alike"]
+    if word in exceptions:
+        categories["begin/interm affixes"].append(word)
     for prefix in begin_intermediate_prefixes:
         if word.startswith(prefix):
             categories["begin/interm affixes"].append(word)
