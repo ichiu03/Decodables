@@ -48,8 +48,48 @@ intermediate_advanced_affixes = ["inter", "multi", "anti", "contra", "pseudo", "
 roots = ["port", "ject", "tract", "mit", "miss", "ceit", "ceive", "struct", "fact", "form", "spect", 
          "dict", "duct", "script", "rupt", "flect", "flex", "vert", "vers", "pel", "puls", "vis", "vid", "cap", "cept"]
 
-def is_valid_word(word):
-    return word in valid_words
+def is_valid_presuf(wordbase):
+    
+    if len(wordbase) < 3:
+        return False
+    vowels = "aeiou"
+    if not any(char in vowels for char in wordbase.lower()):
+        return False
+    if wordbase.lower() in valid_words:
+        return True
+
+    # Handle 'i' to 'y' change (e.g., 'beauti' -> 'beauty')
+    if wordbase.endswith('i'):
+        modified_word = wordbase[:-1] + 'y'
+        if modified_word.lower() in valid_words:
+            return True
+
+    # Handle silent 'e' addition (e.g., 'hop' -> 'hope')
+    modified_word = wordbase + 'e'
+    if modified_word.lower() in valid_words:
+        return True
+
+    # Handle doubling consonants (e.g., 'begin' -> 'beginning')
+    if len(wordbase) >= 3 and wordbase[-1] == wordbase[-2]:
+        modified_word = wordbase[:-1]
+        if modified_word.lower() in valid_words:
+            return True
+
+    # Handle 'ie' to 'y' change (e.g., 'dy' -> 'die')
+    if wordbase.endswith('y') and len(wordbase) >= 2:
+        modified_word = wordbase[:-1] + 'ie'
+        if modified_word.lower() in valid_words:
+            return True
+
+    # Try replacing the last vowel with other vowels
+    if wordbase[-1] in vowels:
+        for vowel in vowels:
+            if vowel != wordbase[-1]:
+                modified_word = wordbase[:-1] + vowel
+                if modified_word.lower() in valid_words:
+                    return True
+
+    return False
 def x_in_word_check(word):
     keys = ["s", "t", "b", "m", "l", "d", "n", "p", "k", "j", "v", "z", "f", "r", "h", "w", "x",
         "a", "e", "i", "o", "u", "qu", "sh", "ay", "ck", "ee", "ch", "or", "all", "th", "oy", "ar", 
@@ -273,27 +313,31 @@ def vv_check(word, arpabet):
         categories["v/v pattern"].append(word)
 
 def begin_interm_affixes(word):
-    exceptions = ["e-mail", "e-book", "e-commerce", "eject", "emit", "emigrate", "amorphous", "asymmetry", "adrift", "along", "alike"]
+    exceptions = ["e-mail", "e-book", "e-commerce", "eject", "emit", "emigrate", "amorphous", "asymmetry", "adrift", "along", "alike", "queen", "dozen", "raven", "heaven", "rotten", "burden", "kitten", "Lauren", "broken", "budget", "target", "honest", "arrest", "protest", "contest", "request", "decline", "demonstrate", "democratic", "determine", "external", "extra"]
+
     if word in exceptions:
         if word not in categories["begin/interm affixes"]:
             categories["begin/interm affixes"].append(word)
         return  # Exit early if the word is an exception
-    
-    for prefix in begin_intermediate_suffixes:
-        if word.endswith(prefix):
-            wordbase = word[:-len(prefix)]  # Removes the suffix from the word
-            if len(wordbase) >= 2 and wordbase[-1] in consonants:  # Check if the remaining base has at least one syllable
-                if word not in categories["begin/interm affixes"]:  # Check for duplicates
+
+    # Check for prefixes
+    for prefix in begin_intermediate_prefixes:
+        if word.startswith(prefix):
+            wordbase = word[len(prefix):]  # Correctly remove the prefix
+            if is_valid_presuf(wordbase):
+                if word not in categories["begin/interm affixes"]:
                     categories["begin/interm affixes"].append(word)
                 break  # Exit the loop once a match is found
 
+    # Check for suffixes
     for suffix in begin_intermediate_suffixes:
         if word.endswith(suffix):
-            wordbase = word[:-len(suffix)]  # Removes the suffix from the word
-            if len(wordbase) >= 2 and wordbase[-1] in consonants:  # Check if the remaining base has at least one syllable
-                if word not in categories["begin/interm affixes"]:  # Check for duplicates
+            wordbase = word[:-len(suffix)]  # Correctly remove the suffix
+            if is_valid_presuf(wordbase):
+                if word not in categories["begin/interm affixes"]:
                     categories["begin/interm affixes"].append(word)
-                break
+                break  
+            # Exit the loop once a match is found
 
 # Function to categorize words with base/suffix or prefix/base patterns
 def base_suffix_prefix_base(word):
