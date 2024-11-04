@@ -487,7 +487,7 @@ def getTopWords(num, inFile, outFile):
 def main():
     input_path = os.path.join(script_dir, 'WordDatav4.txt')
     parse_and_process_words(input_path)
-    #getTopWords(20, 'categorized_words.json', 'truncated_dictionary.json')
+    getTopWords(20, 'categorized_words.json', 'truncated_dictionary.json')
     phones1 = pronouncing.phones_for_word("fizz")
     #phones2 = pronouncing.phones_for_word("early")
     #print(phones1)
