@@ -446,6 +446,8 @@ def parse_and_process_words(file_path):
                 print(f"\t'{word}' not found in the pronounce library's dictionary.")
                 categories["fail"].append(word)
                 continue 
+            else: 
+                print("\n", word)
 
             arpabet = phones[0]
             
@@ -548,7 +550,7 @@ def getTopWords(num, inFile, outFile):
     print(f"Data successfully written to truncated_dictionary.json")
 
 def main():
-    input_path = os.path.join(script_dir, 'WordDatav4.txt')
+    input_path = os.path.join(script_dir, 'output_words_list.txt') #WordDatav4.txt
     parse_and_process_words(input_path)
     #getTopWords(20, 'categorized_words.json', 'truncated_dictionary.json')
     phones1 = pronouncing.phones_for_word("fizz")

@@ -1,10 +1,15 @@
 import openai
 from openai import OpenAI
 import json
-from nltk.corpus import wordnet
-import nltk
 import os
 import re
+import nltk
+from nltk.corpus import words
+
+nltk.download('punkt')
+nltk.download('punkt_tab')
+nltk.download('wordnet')
+nltk.download('omw-1.4')
 
 client = OpenAI(
     api_key='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'
@@ -58,23 +63,37 @@ def get_words(problems):
 
 ### Function to write the story to a file as a list of words
 ### Function to write the story to a file with each word on a new line
+import re
+
+# Function to write the original and stripped-down versions of the story to separate files
 def write_story_to_file(story):
-    words_list = story.split()
-    with open('output_words_list.txt', 'w') as file:
+    # Write the original story to 'generated_story.txt'
+    with open('generated_story.txt', 'w', encoding='utf-8') as file:
+        file.write(story)
+    print("\nOriginal story written to 'generated_story.txt'.")
+
+    # Tokenize the story using NLTK's word_tokenize
+    words_list = nltk.word_tokenize(story)
+    with open('output_words_list.txt', 'w', encoding='utf-8') as file:
         for word in words_list:
             # Remove punctuation and hidden characters from each word
             cleaned_word = re.sub(r'[^\w\s]', '', word).strip()
-            file.write(f"{cleaned_word}\n")
-    print("\nGenerated story written to 'output_words_list.txt'.")
+            if cleaned_word:
+                file.write(f"{cleaned_word}\n")
+    print("\nStripped-down story written to 'output_words_list.txt'.")
 ### Function to delete the file before generating a new one
-def delete_old_file(file_path='output_words_list.txt'):
-    if os.path.exists(file_path):
-        os.remove(file_path)
-        print(f"Previous file '{file_path}' deleted.")
+### Function to delete the files before generating new ones
+def delete_old_file():
+    file_paths = ['output_words_list.txt', 'generated_story.txt']
+    for path in file_paths:
+        if os.path.exists(path):
+            os.remove(path)
+            print(f"Previous file '{path}' deleted.")
+
 
 def generate_chapter(problems, outline, dictionary, chapter_number, length, story):
     prompt = f"""
-    You are a creative author tasked with writing the {chapter_number} chapter of a children's story (age 10).
+    You are a creative author tasked with writing chapter {chapter_number} of a children's story (age 10).
 
     Here is the outline:
 
@@ -84,21 +103,12 @@ def generate_chapter(problems, outline, dictionary, chapter_number, length, stor
 
     {story}
 
-
     Write a {length} word chapter.
 
-    
-    
+    Please ensure that you use proper punctuation and include spaces after punctuation marks.
 
     Return only the new chapter.
     """
-    # DO NOT USE WORDS WITH THESE SOUNDS: {problems}
-    # Here are examples of the bad words: {bad_words}
-    
-
-    # If you use any words like this, you will be disqualified.
-
-    # DO NOT USE THE SOUNDS {problems} IN YOUR STORY.
     story = query(prompt)
     return story
 
@@ -212,8 +222,11 @@ def edit(story):
     response = query(prompt)
     return response
 
+def fix_spacing(text):
+    # Insert a space after punctuation marks if not followed by a space
+    text = re.sub(r'([.!?])([^\s])', r'\1 \2', text)
+    return text
 
-### Main function
 ### Main function
 def main():
     topic, problems = get_input()
@@ -225,11 +238,14 @@ def main():
         print(f"Generating chapter {chapter + 1}")
         new_chapter = generate_chapter(problems, outline, dictionary, chapter + 1, story_length // chapters, story)
         temp_chapter = new_chapter
-        temp_chapter = sentence_check(new_chapter, dictionary, problems)
+        temp_chapter = sentence_check(temp_chapter, dictionary, problems)
         temp_chapter = edit(temp_chapter)
-        story += temp_chapter
+        story += temp_chapter + " "  # Add a space between chapters
 
-    # Delete any existing output file only after the entire story is generated
+    # Fix missing spaces after punctuation
+    story = fix_spacing(story)
+
+    # Delete any existing output files only after the entire story is generated
     delete_old_file()
 
     # Write the final story to the file
@@ -238,6 +254,7 @@ def main():
     print("\nFinal story:")
     print(story)
     return 0
+
 
 if __name__ == "__main__":
     main()
