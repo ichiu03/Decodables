@@ -10,14 +10,17 @@ client = OpenAI(
 story_length = 1000
 chapters = 3
 
+good_words = []
+bad_words = []
+
 # Opening JSON file
-with open('dictionary-parser\categorized_words.json') as json_file:
+with open('dictionary_parser\categorized_words.json') as json_file:
     words = json.load(json_file)
 
 ### Function to get all words
 ### This function takes no input and returns a list of words
 def get_all_words():
-    f = open("dictionary-parser\WordDatav4.txt", "r")
+    f = open("dictionary_parser\WordDatav4.txt", "r")
     words = f.read().split("\n")
     return words[:2000]
 
@@ -43,13 +46,16 @@ def get_input():
 ### Function to get words
 ### This function takes a list of problem letters (list of strings) as input and returns a list of words
 def get_words(problems):
+    global bad_words
+    global good_words
+
     words_list = set(words[problems[0]]) if problems else set()
     for problem in problems[1:]:
         words_list.update(words[problem])
     all_words = get_all_words()
-    final_words = [word for word in all_words if word not in words_list]
-   
-    return list(final_words)
+    bad_words = [word for word in all_words if word not in words_list]
+    good_words = [word for word in all_words if word not in bad_words]
+    return bad_words
 
 ### Function to generate a story
 ### This function takes the topic (string), problems (list of strings), and dictionary (list of strings) as input and returns a story (string)
@@ -89,20 +95,17 @@ def generate_chapter(problems, outline, dictionary, chapter_number, length, stor
 
     {story}
 
-    This is your language:
 
-    {dictionary}
+    Write a {length} word chapter.
 
-    Write a {length} word chapter using only the words in your pre-defined language.
-
-    ONLY THESE WORDS ARE ALLOWED IN YOUR STORY:
-    {dictionary}
-
-    If you use any other words, you will be disqualified.
-
-    DO NOT USE THE LETTERS {problems} IN YOUR STORY.
+    DO NOT USE WORDS WITH THESE SOUNDS: {problems}
+    Here are examples of the bad words: {bad_words}
     
-    DO NOT USE ANY OTHER WORDS.
+
+    If you use any words like this, you will be disqualified.
+
+    DO NOT USE THE SOUNDS {problems} IN YOUR STORY.
+    
 
     Return only the new chapter.
     """
@@ -116,6 +119,11 @@ def sentence_check(story, dictionary, problems):
     sentences = story.split(".")
     for i in range(len(sentences)):
         check = False
+        remove_words = []
+        for word in bad_words:
+            if word in sentences[i]:
+                check = True
+                remove_words.append(word)
         for problem in problems:
             if problem in sentences[i]:
                 check = True
@@ -127,10 +135,11 @@ def sentence_check(story, dictionary, problems):
 
             prompt = f"""
         
-            Remove any words with the following letters: {problems}
+            Rewrite the following sentence and remove these words: {remove_words}
 
-            If the sentence contains words with these letters: {problems}, rewrite the sentence without using those letters and return only the new sentence.
-            Otherwise, return only the original sentence
+            Also remove any words with the following sounds: {problems}
+
+            Rewrite the sentence without using these sounds: {problems} and return only the new sentence.
 
             Here is the sentence to rewrite: {sentence}
 
@@ -138,14 +147,45 @@ def sentence_check(story, dictionary, problems):
 
             Here is the next sentence for context: {next_sentence}
 
+            REMOVE ALL WORDS WITH THESE SOUNDS: {problems}
+            DO NOT USE THESE SOUNDS IN THE REWRITE
 
-            You will be disqualified if you return any words other than the new sentence or the original sentence.
+            You will be disqualified if you return any words other than the new sentence.
             """
             response = query(prompt)
             #print(response)
             new_story += response
         else:
             new_story += sentences[i] + "."
+    return new_story
+
+def word_check(story, dictionary, problems):
+    new_story = ""
+    sentences = story.split(".")
+    
+    for sentence in sentences:
+        words = sentence.split(" ")
+        bad_words = []
+        for i in range(len(words)):
+            check = False
+            for problem in problems:
+                for example in dictionary[problem]:
+                    if example in words[i]:
+                        check = True
+                        bad_words.append(words[i])
+            if check:
+                
+                # Verify that the following sentence only contains words from this language: {dictionary}
+
+                prompt = f"""
+                    Rewrite the following sentence and remove all instances of the following words: {bad_words}
+
+                """
+                response = query(prompt)
+                #print(response)
+                new_story += response
+            else:
+                new_story += words[i] + " "
     return new_story
 
 ### Function to edit the story
