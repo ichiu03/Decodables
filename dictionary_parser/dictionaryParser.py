@@ -8,8 +8,18 @@ from nltk.corpus import words
 
 # Get the directory where `dictionaryParser.py` is located
 script_dir = os.path.dirname(os.path.abspath(__file__))
-nltk.download('words')
-valid_words = set(words.words())
+
+# Ensure the script checks locally for nltk_data
+os.environ['NLTK_DATA'] = os.path.expanduser('~/nltk_data')
+
+# Check if 'words' is already downloaded
+try:
+    # Try to access the words corpus
+    valid_words = set(words.words())
+except LookupError:
+    # If it’s not available, attempt to download it
+    print("Downloading 'words' corpus...")
+    nltk.download('words')
 
 categories = {
     # Column 1 - Consonant Sounds
