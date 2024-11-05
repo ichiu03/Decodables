@@ -8,8 +8,8 @@ from nltk.corpus import words
 
 # Get the directory where `dictionaryParser.py` is located
 script_dir = os.path.dirname(os.path.abspath(__file__))
-nltk.download('words')
-valid_words = set(words.words())
+#nltk.download('words')
+#valid_words = set(words.words())
 
 categories = {
     # Column 1 - Consonant Sounds
@@ -27,7 +27,7 @@ categories = {
     "ear as in hear": [], "ear as in early": [], "y as in bumpy": [], "aw": [], "ly": [], "ea as in eat": [],
     "ea as in bread": [], "3-letter beg. blends": [], "vcv, vcccv patterns": [], "tch": [], "soft c": [], 
     "soft g": [], "ai": [], "igh": [], "ed": [], "-ble, -cle, -dle, -fle, -gle, -kle, -ple, -tle, -zle": [],
-    "V/R/L syllables": [], "oa": [], "ir": [], "-ild, -ind, -old, -ost": [], "oi": [], "double rule-suffixes": [],
+    "l syllables": [],"v syllables": [], "r syllables": [], "oa": [], "ir": [], "-ild, -ind, -old, -ost": [], "oi": [], "double rule-suffixes": [],
     "ew as in few/blew": [], "v/v pattern": [], "kn": [], "e rule-suffixes": [], "ou as in south": [], "ur": [],
       "dge": [], "y rule suffixes": [], "tion": [], "begin/interm affixes": [], "base/suffix, prefix/base patterns": [], 
     # Column 5
@@ -210,13 +210,15 @@ def vce_check(word):
             word[i + 2].lower() == 'e'):
             categories["vce"].append(word)
         
-def OCE_check(word):
+def OCE_check(word, arpabet):
+    phonemes = arpabet.split()
     # Open syllables (ends in hard vowel)
-    if word[-1].lower() in vowels and len(word) > 1:
-        categories["Open syll."].append(word)
+    if word[-1] in vowels and len(word) > 1:
+        if not(word[-1] == "e" and "IY" not in phonemes[-1]):
+            categories["Open syll."].append(word)
     # Closed syllables (eg cat, man)
     for i in range(len(word) - 1):
-        if word[i].lower() in vowels and word[i + 1].lower() not in vowels:
+        if word[i] in vowels and word[i + 1].lower() not in vowels:
             categories["Closed syll."].append(word)
             return
         
@@ -292,18 +294,19 @@ def vcccv(word):
             word[i+4] in vowels):
             categories["vcv, vcccv patterns"].append(word)
 
-def syllable_type_check(word, arpabet):
-    if "V/R/L syllables" not in categories:
-        categories["V/R/L syllables"] = []
-    # Check for R-Controlled Syllable: presence of "ER", "AR", or "OR" in ARPAbet transcription
-    if any(r_controlled in arpabet for r_controlled in ["ER", "AR", "OR"]):
-        categories["V/R/L syllables"].append(word)
-    # Check for L-Controlled Syllable: Vowel followed by "L" in ARPAbet transcription
-    if any(l_controlled in arpabet for l_controlled in ["OL", "AL", "UL", "EL", "IL"]):
-        categories["V/R/L syllables"].append(word)
-    # Check for V-Controlled Syllable: Vowel followed by "V" in word ARPAbet transcription
-    if any(v_controlled in arpabet for v_controlled in ["IV", "AV", "OV", "UV", "EV"]):
-        categories["V/R/L syllables"].append(word)
+def vrl_check(word):
+    for r in ["ar", "er", "ir", "or", "ur"]:
+        if r in word:
+            categories["r syllables"].append(word)
+            break 
+    for l in ["ol", "al", "ul", "el", "il"]:
+        if l in word:
+            categories["l syllables"].append(word)
+            break  
+    for v in ["iv", "av", "ov", "uv", "ev"]:
+        if v in word:
+            categories["v syllables"].append(word)
+            break  
 
 def vv_check(word, arpabet):
     arpabet_tokens = arpabet.split()
@@ -311,6 +314,20 @@ def vv_check(word, arpabet):
     distinct_vowel_sounds = sum(1 for phoneme in arpabet_tokens if phoneme[0] in vowels.upper()) >= 2
     if consecutive_vowels and distinct_vowel_sounds:
         categories["v/v pattern"].append(word)
+
+def should_double_consonant(word, arpabet):
+    last_char = word[-1]
+    second_last_char = word[-2]
+    # Step 1: Check if the word ends with a single consonant preceded by a vowel
+    if last_char not in vowels and second_last_char in vowels:
+        # Check syllable count and stress pattern using pronouncing library
+        if arpabet:
+            # Use the first ARPAbet pronunciation available
+            syllable_count = pronouncing.syllable_count(arpabet)
+            stress_pattern = pronouncing.stresses(arpabet)
+            # Apply the Doubling Rule based on syllable count and stress
+            if syllable_count == 1 or (stress_pattern and stress_pattern[-1] == "1"):
+                categories["double rule-suffixes"].append(word)
 
 def begin_interm_affixes(word):
     exceptions = ["e-mail", "e-book", "e-commerce", "eject", "emit", "emigrate", "amorphous", "asymmetry", "adrift", "along", "alike", "queen", "dozen", "raven", "heaven", "rotten", "burden", "kitten", "Lauren", "broken", "budget", "target", "honest", "arrest", "protest", "contest", "request", "decline", "demonstrate", "democratic", "determine", "external", "extra"]
@@ -405,7 +422,6 @@ def is_y_rule_suffix(word):
 
     #return False
 
-
 def parse_and_process_words(file_path):
     try:
         with open(file_path, 'r') as file:
@@ -470,6 +486,7 @@ def parse_and_process_words(file_path):
             if word[-1] in "fszl" and word[-2] in "fszl" and word[-1] == word[-2]:
                 fszl_check(word, arpabet)
             if len(word) >= 3:
+                should_double_consonant(word, arpabet)
                 vcv(word)
                 vv_check(word, arpabet)
             if len(word) >= 4:
@@ -478,11 +495,13 @@ def parse_and_process_words(file_path):
                 vcccv(word)
             if is_y_rule_suffix(word):
                 categories["y rule suffixes"].append(word)
-
-
+            if is_e_rule_suffix(word):
+                categories["e rule-suffixes"].append(word)
+            if "v" in word or "l" in word or "r" in word:
+                vrl_check(word)
             
             vce_check(word)
-            OCE_check(word)
+            OCE_check(word, arpabet)
             x_in_word_check(word)
             beginning_roots(word)
             begin_interm_affixes(word)
@@ -521,8 +540,8 @@ def getTopWords(num, inFile, outFile):
 def main():
     input_path = os.path.join(script_dir, 'WordDatav4.txt')
     parse_and_process_words(input_path)
-    #getTopWords(20, 'categorized_words.json', 'truncated_dictionary.json')
-    #phones1 = pronouncing.phones_for_word("fizz")
+    getTopWords(20, 'categorized_words.json', 'truncated_dictionary.json')
+    phones1 = pronouncing.phones_for_word("fizz")
     #phones2 = pronouncing.phones_for_word("early")
     #print(phones1)
     #ear_check("year", phones1[0])
