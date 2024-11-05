@@ -8,7 +8,8 @@ Once upon a time, in a lush and vibrant space, the Froglympics began. The pond g
 """
 
 sentences = story.split(".")
-problems = 'w,qu,sh,or,oy,ar,igh'.split(",")
+problems = 'w,qu,sh,or,oy,ar,igh'
+problems = problems.split(",")
 bad = 0
 for sentence in sentences:
     for problem in problems:
