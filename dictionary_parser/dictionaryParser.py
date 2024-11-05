@@ -8,8 +8,18 @@ from nltk.corpus import words
 
 # Get the directory where `dictionaryParser.py` is located
 script_dir = os.path.dirname(os.path.abspath(__file__))
-nltk.download('words')
-valid_words = set(words.words())
+
+# Ensure the script checks locally for nltk_data
+os.environ['NLTK_DATA'] = os.path.expanduser('~/nltk_data')
+
+# Check if 'words' is already downloaded
+try:
+    # Try to access the words corpus
+    valid_words = set(words.words())
+except LookupError:
+    # If it’s not available, attempt to download it
+    print("Downloading 'words' corpus...")
+    nltk.download('words')
 
 categories = {
     # Column 1 - Consonant Sounds
@@ -496,7 +506,7 @@ def parse_and_process_words(file_path):
             if is_y_rule_suffix(word):
                 categories["y rule suffixes"].append(word)
             #if is_e_rule_suffix(word):
-             #   categories["e rule-suffixes"].append(word)
+                #categories["e rule-suffixes"].append(word)
             if "v" in word or "l" in word or "r" in word:
                 vrl_check(word)
             
@@ -540,7 +550,7 @@ def getTopWords(num, inFile, outFile):
 def main():
     input_path = os.path.join(script_dir, 'WordDatav4.txt')
     parse_and_process_words(input_path)
-    getTopWords(20, 'categorized_words.json', 'truncated_dictionary.json')
+    #getTopWords(20, 'categorized_words.json', 'truncated_dictionary.json')
     phones1 = pronouncing.phones_for_word("fizz")
     #phones2 = pronouncing.phones_for_word("early")
     #print(phones1)

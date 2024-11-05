@@ -47931,6 +47931,7 @@
         "prawn",
         "dawn",
         "withdrawal",
+        "yawn",
         "aware",
         "crawl",
         "law",
@@ -62726,7 +62727,11 @@
         "thought",
         "thought",
         "roughly",
-        "roughly"
+        "roughly",
+        "enough",
+        "enough",
+        "brought",
+        "brought"
     ],
     "wor": [
         "workshop",
@@ -63186,6 +63191,7 @@
         "whistle"
     ],
     "rh": [
+        "rhetoric",
         "neighborhood",
         "rhythm",
         "rhino",

@@ -7,8 +7,8 @@ client = OpenAI(
     api_key=os.environ.get("OPENAI_API_KEY")
 )
 
-story_length = 1000
-chapters = 3
+story_length = 250
+chapters = 1
 
 good_words = []
 bad_words = []
@@ -136,11 +136,10 @@ def sentence_check(story, dictionary, problems):
 
             prompt = f"""
         
-            Rewrite the following sentence and remove these words: {remove_words}
+            Rewrite the following sentence and Remove any words with the following sounds: {problems}
+            Also remove this words: {remove_words}
 
-            Also remove any words with the following sounds: {problems}
-
-            Rewrite the sentence without using these sounds: {problems} and return only the new sentence.
+            Return only the new sentence.
 
             Here is the sentence to rewrite: {sentence}
 
@@ -154,7 +153,6 @@ def sentence_check(story, dictionary, problems):
             You will be disqualified if you return any words other than the new sentence.
             """
             response = query(prompt)
-            #print(response)
             new_story += response
         else:
             new_story += sentences[i] + "."
