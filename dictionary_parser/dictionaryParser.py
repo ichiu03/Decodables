@@ -8,8 +8,8 @@ from nltk.corpus import words
 
 # Get the directory where `dictionaryParser.py` is located
 script_dir = os.path.dirname(os.path.abspath(__file__))
-#nltk.download('words')
-#valid_words = set(words.words())
+nltk.download('words')
+valid_words = set(words.words())
 
 categories = {
     # Column 1 - Consonant Sounds
@@ -495,8 +495,8 @@ def parse_and_process_words(file_path):
                 vcccv(word)
             if is_y_rule_suffix(word):
                 categories["y rule suffixes"].append(word)
-            if is_e_rule_suffix(word):
-                categories["e rule-suffixes"].append(word)
+            #if is_e_rule_suffix(word):
+             #   categories["e rule-suffixes"].append(word)
             if "v" in word or "l" in word or "r" in word:
                 vrl_check(word)
             
