@@ -10,6 +10,9 @@ client = OpenAI(
 story_length = 1000
 chapters = 3
 
+good_words = []
+bad_words = []
+
 # Opening JSON file
 with open('dictionary-parser\categorized_words.json') as json_file:
     words = json.load(json_file)
@@ -43,13 +46,16 @@ def get_input():
 ### Function to get words
 ### This function takes a list of problem letters (list of strings) as input and returns a list of words
 def get_words(problems):
+    global bad_words
+    global good_words
+
     words_list = set(words[problems[0]]) if problems else set()
     for problem in problems[1:]:
         words_list.update(words[problem])
     all_words = get_all_words()
-    final_words = [word for word in all_words if word not in words_list]
-   
-    return list(final_words)
+    bad_words = [word for word in all_words if word not in words_list]
+    good_words = [word for word in all_words if word not in bad_words]
+    return bad_words
 
 ### Function to generate a story
 ### This function takes the topic (string), problems (list of strings), and dictionary (list of strings) as input and returns a story (string)
@@ -146,6 +152,35 @@ def sentence_check(story, dictionary, problems):
             new_story += response
         else:
             new_story += sentences[i] + "."
+    return new_story
+
+def word_check(story, dictionary, problems):
+    new_story = ""
+    sentences = story.split(".")
+    
+    for sentence in sentences:
+        words = sentence.split(" ")
+        bad_words = []
+        for i in range(len(words)):
+            check = False
+            for problem in problems:
+                for example in dictionary[problem]:
+                    if example in words[i]:
+                        check = True
+                        bad_words.append(words[i])
+            if check:
+                
+                # Verify that the following sentence only contains words from this language: {dictionary}
+
+                prompt = f"""
+                    Rewrite the following sentence and remove all instances of the following words: {bad_words}
+
+                """
+                response = query(prompt)
+                #print(response)
+                new_story += response
+            else:
+                new_story += words[i] + " "
     return new_story
 
 ### Function to edit the story
