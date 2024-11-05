@@ -496,7 +496,7 @@ def parse_and_process_words(file_path):
             if is_y_rule_suffix(word):
                 categories["y rule suffixes"].append(word)
             #if is_e_rule_suffix(word):
-             #   categories["e rule-suffixes"].append(word)
+                #categories["e rule-suffixes"].append(word)
             if "v" in word or "l" in word or "r" in word:
                 vrl_check(word)
             
@@ -540,7 +540,7 @@ def getTopWords(num, inFile, outFile):
 def main():
     input_path = os.path.join(script_dir, 'WordDatav4.txt')
     parse_and_process_words(input_path)
-    getTopWords(20, 'categorized_words.json', 'truncated_dictionary.json')
+    #getTopWords(20, 'categorized_words.json', 'truncated_dictionary.json')
     phones1 = pronouncing.phones_for_word("fizz")
     #phones2 = pronouncing.phones_for_word("early")
     #print(phones1)
