@@ -7,8 +7,8 @@ client = OpenAI(
     api_key=os.environ.get("OPENAI_API_KEY")
 )
 
-story_length = 1000
-chapters = 3
+story_length = 250
+chapters = 1
 
 good_words = []
 bad_words = []
