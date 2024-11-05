@@ -98,17 +98,18 @@ def generate_chapter(problems, outline, dictionary, chapter_number, length, stor
 
     Write a {length} word chapter.
 
-    DO NOT USE WORDS WITH THESE SOUNDS: {problems}
-    Here are examples of the bad words: {bad_words}
     
-
-    If you use any words like this, you will be disqualified.
-
-    DO NOT USE THE SOUNDS {problems} IN YOUR STORY.
     
 
     Return only the new chapter.
     """
+    # DO NOT USE WORDS WITH THESE SOUNDS: {problems}
+    # Here are examples of the bad words: {bad_words}
+    
+
+    # If you use any words like this, you will be disqualified.
+
+    # DO NOT USE THE SOUNDS {problems} IN YOUR STORY.
     story = query(prompt)
     return story
 
