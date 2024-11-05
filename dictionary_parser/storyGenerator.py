@@ -66,29 +66,17 @@ def get_words(problems):
 import re
 
 # Function to write the original and stripped-down versions of the story to separate files
-# Function to write the original and stripped-down versions of the story to separate files
 def write_story_to_file(story):
     # Write the original story to 'generated_story.txt'
-    with open('generated_story.txt', 'w', encoding='utf-8') as file:
+    with open('dictionary_parser\\generated_story.txt', 'w', encoding='utf-8') as file:
         file.write(story)
     print("\nOriginal story written to 'generated_story.txt'.")
 
     # Tokenize the story using NLTK's word_tokenize
-    words_list = nltk.word_tokenize(story)
-    
-    # Specify the path for the output file in the dictionary_parser directory
-    output_path = os.path.join('dictionary_parser', 'output_words_list.txt')
-    
-    with open(output_path, 'w', encoding='utf-8') as file:
-        for word in words_list:
-            # Remove punctuation and hidden characters from each word
-            cleaned_word = re.sub(r'[^\w\s]', '', word).strip()
-            if cleaned_word:
-                file.write(f"{cleaned_word}\n")
-    print("\nStripped-down story written to 'dictionary_parser/output_words_list.txt'.")
-
+### Function to delete the file before generating a new one
+### Function to delete the files before generating new ones
 def delete_old_file():
-    file_paths = ['output_words_list.txt', 'generated_story.txt']
+    file_paths = ['generated_story.txt']
     for path in file_paths:
         if os.path.exists(path):
             os.remove(path)
@@ -214,6 +202,8 @@ def edit(story):
     Edit the following story.
 
     Make minial changes, only correct blatant errors.
+
+    Remove any Contractions and replace with the full word choice instead
 
     Make sure all sentences are coherent.
 

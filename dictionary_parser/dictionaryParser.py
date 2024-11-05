@@ -5,9 +5,13 @@ import re
 import nltk
 import syllapy
 from nltk.corpus import words
+import shutil
+
 
 # Get the directory where `dictionaryParser.py` is located
 script_dir = os.path.dirname(os.path.abspath(__file__))
+if os.path.exists('dictionary_parser\\edited_generated_story.txt'):
+    os.remove('dictionary_parser\\edited_generated_story.txt')
 
 # Ensure the script checks locally for nltk_data
 os.environ['NLTK_DATA'] = os.path.expanduser('~/nltk_data')
@@ -446,8 +450,6 @@ def parse_and_process_words(file_path):
                 print(f"\t'{word}' not found in the pronounce library's dictionary.")
                 categories["fail"].append(word)
                 continue 
-            else: 
-                print("\n", word)
 
             arpabet = phones[0]
             
@@ -549,8 +551,30 @@ def getTopWords(num, inFile, outFile):
     
     print(f"Data successfully written to truncated_dictionary.json")
 
+def copy_and_edit_file(input_file, output_file):
+    # Make a copy of the original file
+    shutil.copy(input_file, output_file)
+    print(f"Copied '{input_file}' to '{output_file}'.")
+
+    # Read the copied file
+    with open(output_file, 'r', encoding='utf-8') as file:
+        text = file.read()
+
+    # Extract unique words, remove punctuation, convert to lowercase
+    words = text.split()
+    unique_words = set(word.strip('.,!?;:"()[]').lower() for word in words)
+
+    # Write each unique word to the output file, one per line
+    with open(output_file, 'w', encoding='utf-8') as file:
+        for word in sorted(unique_words):
+            if word:  # Avoid empty strings
+                file.write(word + '\n')
+
+# Use 'generated_story.txt' as the input file and specify the output file name
+copy_and_edit_file('dictionary_parser\\generated_story.txt', 'dictionary_parser\\edited_generated_story.txt')
+
 def main():
-    input_path = os.path.join(script_dir, 'output_words_list.txt') #WordDatav4.txt
+    input_path = os.path.join(script_dir, 'edited_generated_story.txt')#WordDatav4.t
     parse_and_process_words(input_path)
     #getTopWords(20, 'categorized_words.json', 'truncated_dictionary.json')
     phones1 = pronouncing.phones_for_word("fizz")
