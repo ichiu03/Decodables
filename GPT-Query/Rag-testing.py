@@ -14,13 +14,13 @@ good_words = []
 bad_words = []
 
 # Opening JSON file
-with open('dictionary-parser\categorized_words.json') as json_file:
+with open('dictionary_parser\categorized_words.json') as json_file:
     words = json.load(json_file)
 
 ### Function to get all words
 ### This function takes no input and returns a list of words
 def get_all_words():
-    f = open("dictionary-parser\WordDatav4.txt", "r")
+    f = open("dictionary_parser\WordDatav4.txt", "r")
     words = f.read().split("\n")
     return words[:2000]
 
@@ -95,20 +95,17 @@ def generate_chapter(problems, outline, dictionary, chapter_number, length, stor
 
     {story}
 
-    This is your language:
 
-    {dictionary}
+    Write a {length} word chapter.
 
-    Write a {length} word chapter using only the words in your pre-defined language.
-
-    ONLY THESE WORDS ARE ALLOWED IN YOUR STORY:
-    {dictionary}
-
-    If you use any other words, you will be disqualified.
-
-    DO NOT USE THE LETTERS {problems} IN YOUR STORY.
+    DO NOT USE WORDS WITH THESE SOUNDS: {problems}
+    Here are examples of the bad words: {bad_words}
     
-    DO NOT USE ANY OTHER WORDS.
+
+    If you use any words like this, you will be disqualified.
+
+    DO NOT USE THE SOUNDS {problems} IN YOUR STORY.
+    
 
     Return only the new chapter.
     """
@@ -122,9 +119,11 @@ def sentence_check(story, dictionary, problems):
     sentences = story.split(".")
     for i in range(len(sentences)):
         check = False
-        for problem in problems:
-            if problem in sentences[i]:
+        remove_words = []
+        for word in bad_words:
+            if word in sentences[i]:
                 check = True
+                remove_words.append(word)
         if check:
             previous_sentence = sentences[i-1] + "." if i >0 else sentences[0] + "."
             next_sentence = sentences[i+1] + "." if i < len(sentences)-1 else sentences[i] + "."
@@ -133,10 +132,10 @@ def sentence_check(story, dictionary, problems):
 
             prompt = f"""
         
-            Remove any words with the following letters: {problems}
+            Rewrite the following sentence and remove these words: {remove_words}
+            Also remove any words with the following sounds: {problems}
 
-            If the sentence contains words with these letters: {problems}, rewrite the sentence without using those letters and return only the new sentence.
-            Otherwise, return only the original sentence
+            Rewrite the sentence without using these sounds: {problems} and return only the new sentence.
 
             Here is the sentence to rewrite: {sentence}
 
@@ -145,7 +144,7 @@ def sentence_check(story, dictionary, problems):
             Here is the next sentence for context: {next_sentence}
 
 
-            You will be disqualified if you return any words other than the new sentence or the original sentence.
+            You will be disqualified if you return any words other than the new sentence.
             """
             response = query(prompt)
             #print(response)
@@ -232,7 +231,7 @@ def main():
         new_chapter = generate_chapter(problems, outline, dictionary, chapter+1, story_length//chapters, story)
         temp_chapter = new_chapter
         temp_chapter = sentence_check(new_chapter, dictionary, problems)
-        temp_chapter = edit(temp_chapter)
+        #temp_chapter = edit(temp_chapter)
         story += temp_chapter
     #story = generate_story(topic, problems, dictionary)
     print(story)
