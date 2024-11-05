@@ -124,6 +124,9 @@ def sentence_check(story, dictionary, problems):
             if word in sentences[i]:
                 check = True
                 remove_words.append(word)
+        for problem in problems:
+            if problem in sentences[i]:
+                check = True
         if check:
             previous_sentence = sentences[i-1] + "." if i >0 else sentences[0] + "."
             next_sentence = sentences[i+1] + "." if i < len(sentences)-1 else sentences[i] + "."
@@ -133,6 +136,7 @@ def sentence_check(story, dictionary, problems):
             prompt = f"""
         
             Rewrite the following sentence and remove these words: {remove_words}
+
             Also remove any words with the following sounds: {problems}
 
             Rewrite the sentence without using these sounds: {problems} and return only the new sentence.
@@ -143,6 +147,8 @@ def sentence_check(story, dictionary, problems):
 
             Here is the next sentence for context: {next_sentence}
 
+            REMOVE ALL WORDS WITH THESE SOUNDS: {problems}
+            DO NOT USE THESE SOUNDS IN THE REWRITE
 
             You will be disqualified if you return any words other than the new sentence.
             """
@@ -231,7 +237,7 @@ def main():
         new_chapter = generate_chapter(problems, outline, dictionary, chapter+1, story_length//chapters, story)
         temp_chapter = new_chapter
         temp_chapter = sentence_check(new_chapter, dictionary, problems)
-        #temp_chapter = edit(temp_chapter)
+        temp_chapter = edit(temp_chapter)
         story += temp_chapter
     #story = generate_story(topic, problems, dictionary)
     print(story)
