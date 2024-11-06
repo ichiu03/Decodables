@@ -11,6 +11,12 @@ nltk.download('punkt_tab')
 nltk.download('wordnet')
 nltk.download('omw-1.4')
 
+if os.path.exists('dictionary_parser\\edited_generated_story.txt'):
+    os.remove('dictionary_parser\\edited_generated_story.txt')
+
+if os.path.exists('dictionary_parser\\generated_story.txt'):
+    os.remove('dictionary_parser\\generated_story.txt')
+
 client = OpenAI(
     api_key='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'
 )
