@@ -39,7 +39,8 @@ def find_synonyms(word):
             # Exclude the original word from the synonyms list
             if lemma.name().lower() != word.lower():
                 synonyms.add(lemma.name().lower())
-    return synonyms if synonyms else None  # Return one synonym if available
+    return synonyms if synonyms else None  # Return all synonyms if available
+
 
 def query(prompt): 
     messages = [
