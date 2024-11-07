@@ -8,10 +8,12 @@ from nltk.corpus import words
 import shutil
 
 
-# Get the directory where `dictionaryParser.py` is located
-script_dir = os.path.dirname(os.path.abspath(__file__))
 if os.path.exists('dictionary_parser\\edited_generated_story.txt'):
     os.remove('dictionary_parser\\edited_generated_story.txt')
+
+    
+# Get the directory where `dictionaryParser.py` is located
+script_dir = os.path.dirname(os.path.abspath(__file__))
 
 # Ensure the script checks locally for nltk_data
 os.environ['NLTK_DATA'] = os.path.expanduser('~/nltk_data')
@@ -438,7 +440,7 @@ def is_y_rule_suffix(word):
 
 def parse_and_process_words(file_path):
     try:
-        with open(file_path, 'r') as file:
+        with open(file_path, 'r', encoding='utf-8') as file:
             words = file.read().splitlines()
 
         unique_words = set(words)
@@ -528,7 +530,7 @@ def parse_and_process_words(file_path):
         if os.path.exists(output_path):
             os.remove(output_path)
 
-        with open(output_path, 'w') as json_file:
+        with open(output_path, 'w', encoding='utf-8') as json_file:
             json.dump(categories, json_file, indent=4)
 
         print("\n-=-=-= Finished categorzing! Saved to 'categorized_words.json' =-=-=-")
@@ -541,12 +543,12 @@ def parse_and_process_words(file_path):
 def getTopWords(num, inFile, outFile):
     input_path = os.path.join(script_dir, inFile)
     output_path = os.path.join(script_dir, outFile)
-    with open(input_path, 'r') as f:
+    with open(input_path, 'r', encoding='utf-8') as f:
         data_dict = json.load(f)
 
     truncated_dict = {key: values[:num] for key, values in categories.items()}
 
-    with open(output_path, 'w') as f:
+    with open(output_path, 'w', encoding='utf-8') as f:
         json.dump(truncated_dict, f, indent=4)
     
     print(f"Data successfully written to truncated_dictionary.json")
@@ -562,10 +564,10 @@ def copy_and_edit_file(input_file, output_file):
 
     # Extract unique words, remove punctuation, convert to lowercase
     words = text.split()
-    unique_words = set(word.strip('.,!?;:"()[]').lower() for word in words)
+    unique_words = set(word.strip('.,!?;:"()[]“”').lower() for word in words)
 
     # Write each unique word to the output file, one per line
-    with open(output_file, 'w', encoding='utf-8') as file:
+    with open(output_file, 'w', encoding='utf-8', errors='replace') as file:
         for word in sorted(unique_words):
             if word:  # Avoid empty strings
                 file.write(word + '\n')
