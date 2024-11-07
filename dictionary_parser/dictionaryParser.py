@@ -562,15 +562,15 @@ def copy_and_edit_file(input_file, output_file):
     with open(output_file, 'r', encoding='utf-8') as file:
         text = file.read()
 
-    # Extract unique words, remove punctuation, convert to lowercase
-    words = text.split()
-    unique_words = set(word.strip('.,!?;:"()[]“”').lower() for word in words)
+    # Extract words, remove punctuation, and convert to lowercase
+    words = [word.strip('.,!?;:"()[]“”').lower() for word in text.split()]
 
-    # Write each unique word to the output file, one per line
+    # Write each word to the output file, one per line, maintaining the original order
     with open(output_file, 'w', encoding='utf-8', errors='replace') as file:
-        for word in sorted(unique_words):
+        for word in words:
             if word:  # Avoid empty strings
                 file.write(word + '\n')
+
 
 # Use 'generated_story.txt' as the input file and specify the output file name
 copy_and_edit_file('dictionary_parser\\generated_story.txt', 'dictionary_parser\\edited_generated_story.txt')
