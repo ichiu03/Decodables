@@ -47,9 +47,9 @@ def save_updated_story(updated_story, output_file):
     print(f"Updated story has been saved to '{output_file}'.")
 
 if __name__ == "__main__":
-    synonyms_file = 'synonyms.txt'
+    synonyms_file = 'dictionary_parser\\word_synonyms.txt'
     story_file = 'dictionary_parser\\generated_story.txt'
-    output_file = 'updated_story.txt'
+    output_file = 'dictionary_parser\\updated_story.txt'
 
     # Load synonyms
     synonyms_dict = load_synonyms(synonyms_file)

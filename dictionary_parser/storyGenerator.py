@@ -49,9 +49,31 @@ def query(prompt):
     return response.choices[0].message.content
 
 ### Function to get user input
-def get_input():
+
+input_data_path = 'dictionary_parser/problemsounds.json'
+
+def clear_json_file():
+    # Clear the contents of the JSON file
+    with open(input_data_path, 'w', encoding='utf-8') as file:
+        file.write('{}')  # Write an empty JSON object
+
+def get_input_and_save():
+    clear_json_file()  # Clear the file before saving new data
+    
     topic = input("Enter your story topic: ")
-    problems = (input("Enter the problem letters separated by commas: ")).split(",")
+    problems = input("Enter the problem letters separated by commas: ").split(",")
+    problems = [problem.strip() for problem in problems]  # Clean up whitespace
+
+    # Create a dictionary to store the input
+    input_data = {
+        "topic": topic,
+        "problems": problems
+    }
+
+    # Save the data to a JSON file
+    with open(input_data_path, 'w', encoding='utf-8') as file:
+        json.dump(input_data, file, indent=4)
+
     return topic, problems
 
 ### Function to get words
@@ -229,7 +251,7 @@ def fix_spacing(text):
 
 ### Main function
 def main():
-    topic, problems = get_input()
+    topic, problems = get_input_and_save()
     dictionary = get_words(problems)
     outline = generate_outline(topic)
     story = ""
