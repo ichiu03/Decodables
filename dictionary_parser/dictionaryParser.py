@@ -59,7 +59,6 @@ roots = ["port", "ject", "tract", "mit", "miss", "ceit", "ceive", "struct", "fac
          "dict", "duct", "script", "rupt", "flect", "flex", "vert", "vers", "pel", "puls", "vis", "vid", "cap", "cept"]
 
 def is_valid_presuf(wordbase):
-    
     if len(wordbase) < 3:
         return False
     vowels = "aeiou"
@@ -100,12 +99,30 @@ def is_valid_presuf(wordbase):
                     return True
 
     return False
-def x_in_word_check(word):
-    keys = ["s", "t", "b", "m", "l", "d", "n", "p", "k", "j", "v", "z", "f", "r", "h", "w", "x",
+def x_in_word_check(word, arpabet):
+    keys = ["m", "l", "p", "k", "j", "v", "z", "f", "r", "h", "w", "x",
         "a", "e", "i", "o", "u", "qu", "sh", "ay", "ck", "ee", "ch", "or", "all", "th", "oy", "ar", 
         "wh", "er", "aw", "ly", "tch", "ed", "ai", "igh", "oa", "ir", "oi", "kn", "ur",
         "dge", "tion", "au", "ough", "wor", "wr", "eigh", "augh", "oe", "ui", "wa", "eu", "gh",
         "mb", "mn", "que", "gn", "stle", "rh", "gue", "alk", "alt", "qua", "sc", "ph"]
+
+    if "s" in word and "S" in arpabet:
+        categories["s"].append(word)
+
+    if "t" in word and "T" in arpabet:
+        categories["t"].append(word)
+
+    if "b" in word and "B" in arpabet:
+        categories["b"].append(word)
+
+    if "d" in word and "D" in arpabet:
+        categories["d"].append(word)
+
+    if "n" in word and "N" in arpabet:
+        categories["n"].append(word)
+
+    if "p" in word and "P" in arpabet:
+        categories["p"].append(word)
 
     if "ing" in word or "ang" in word or "ong" in word or "ung" in word:
         categories["-ing, -ong, -ang, -ung"].append(word)
@@ -142,7 +159,7 @@ def warCheck(word):
 
 def yCheck(word, arpabet):    
     # "y as in yes" (initial /Y/ sound or /JH/ sound)
-    if arpabet.startswith("Y") or arpabet.startswith("JH"):
+    if arpabet[0] == "Y" or arpabet[0] == "JH":
         categories["y as in yes"].append(word)
     # "y as in dry" (long "i" sound, represented by "AY1" in ARPAbet)
     if "AY1" in arpabet:
@@ -154,24 +171,24 @@ def yCheck(word, arpabet):
     if "IH1" in arpabet:
         categories["y as in gym"].append(word) 
     # "-ey as in monkey" (ending with unstressed "IY0")
-    if arpabet.endswith("IY0") and word.endswith("ey"):
+    if arpabet[-1] == "IY0" and word.endswith("ey"):
         categories["ey as in monkey"].append(word)
     # "ey as in they" (long "EY1" sound)
     elif "EY1" in arpabet:
         categories["ey as in they"].append(word)
 
 def hard_vs_soft_C(word, arpabet):
-    if "K" in arpabet: # Hard C
-        categories["hard c"].append(word)
-
-    elif "S" in arpabet: # Soft C
-        categories["soft c"].append(word)
+    arpabet_flat = "".join(arpabet)
+    for i, (letter, phone) in enumerate(zip(word, arpabet_flat)):
+        if letter == 'c' and phone == 'K':  # Ensure 'C' specifically makes the 'K' sound
+            categories["hard c"].append(word)
+            return  # Exit once categorized as hard 'C'
+    categories["soft c"].append(word)
 
 def hard_vs_soft_G(word, arpabet):
     if "G" in arpabet: # Hard C
         categories["hard g"].append(word)
-
-        
+ 
     elif "JH" in arpabet: # Soft C
         categories["soft g"].append(word)
 
@@ -221,10 +238,9 @@ def vce_check(word):
             categories["vce"].append(word)
         
 def OCE_check(word, arpabet):
-    phonemes = arpabet.split()
     # Open syllables (ends in hard vowel)
     if word[-1] in vowels and len(word) > 1:
-        if not(word[-1] == "e" and "IY" not in phonemes[-1]):
+        if not(word[-1] == "e" and "IY" not in arpabet[-1]):
             categories["Open syll."].append(word)
     # Closed syllables (eg cat, man)
     for i in range(len(word) - 1):
@@ -251,14 +267,8 @@ def ei_check(word, arpabet):
         categories["ei as in vein"].append(word)
 
 def ch_check(word, arpabet):
-    ch_index = word.find("ch")
-    if ch_index != -1:
-        phonemes = arpabet.split()
-        try:
-            if phonemes[ch_index] == "K":
-                categories["ch as in echo"].append(word)
-        except IndexError:
-            pass
+    if "CH" in arpabet:
+        
 
 def augh_check(word, arpabet):
     if "AA" in arpabet or "AO" in arpabet or "AH" in arpabet:
@@ -319,9 +329,8 @@ def vrl_check(word):
             break  
 
 def vv_check(word, arpabet):
-    arpabet_tokens = arpabet.split()
     consecutive_vowels = any(word[i] in vowels and word[i + 1] in vowels for i in range(len(word) - 1))
-    distinct_vowel_sounds = sum(1 for phoneme in arpabet_tokens if phoneme[0] in vowels.upper()) >= 2
+    distinct_vowel_sounds = sum(1 for phoneme in arpabet if phoneme[0] in vowels.upper()) >= 2
     if consecutive_vowels and distinct_vowel_sounds:
         categories["v/v pattern"].append(word)
 
@@ -398,9 +407,8 @@ def beginning_roots(word):
 
 def fszl_check(word, arpabet):
     if pronouncing.syllable_count(arpabet) == 1:
-        phonemes = arpabet.split()
         for vowel in ["IH", "EH", "AH", "UH", "AA", "AE"]:
-            if vowel in phonemes[-2]:
+            if vowel in arpabet[-2]:
                 categories["fszl"].append(word)
     
 def is_y_rule_suffix(word):
@@ -432,6 +440,55 @@ def is_y_rule_suffix(word):
 
     #return False
 
+def doubling_categorization(word):
+    # Define common vowel suffixes
+    vowel_suffixes = ["ing", "ed", "er", "est", "able", "y"]
+
+    # Separate base word and suffix
+    base_word = word
+    suffix = ""
+    for suffix_option in vowel_suffixes:
+        if word.endswith(suffix_option):
+            base_word = word[:-len(suffix_option)]
+            suffix = suffix_option
+            break
+
+    # If no valid suffix was found, return (no action)
+    if not suffix:
+        return
+
+    # Check if the base word ends in one vowel and one consonant
+    if len(base_word) < 2 or not base_word[-1].isalpha() or not base_word[-2].isalpha():
+        return  # Invalid input, base word must end in a vowel + consonant
+
+    # Helper function to check if a character is a vowel
+    def is_vowel(char):
+        return char.lower() in "aeiou"
+
+    # Check if base word ends in a single vowel + consonant
+    if is_vowel(base_word[-2]) and not is_vowel(base_word[-1]):
+        # Get pronunciations for the word to determine syllables and stress pattern
+        pronunciations = pronouncing.phones_for_word(base_word)
+        if not pronunciations:
+            return  # If no pronunciation is available, we cannot determine syllables/stress
+
+        # Use the first pronunciation available
+        pronunciation = pronunciations[0]
+        syllable_count = pronouncing.syllable_count(pronunciation)
+
+        if syllable_count == 1:
+            # One-syllable word, apply general doubling rule
+            categories["double rule-suffixes"].append(word)
+        
+        elif syllable_count == 2:
+            # Two-syllable word, check if the last syllable is stressed
+            stress_pattern = pronouncing.stresses(pronunciation)
+            if stress_pattern[-1] == "1":  # Last syllable is stressed
+                categories["2 syllable dblg."].append(word)
+            else:
+                # Last syllable is not stressed, apply general doubling rule
+                categories["double rule-suffixes"].append(word)
+                
 def parse_and_process_words(file_path):
     try:
         with open(file_path, 'r') as file:
@@ -443,11 +500,11 @@ def parse_and_process_words(file_path):
             word.lower()
             phones = pronouncing.phones_for_word(word)
             if not phones:
-                print(f"\t'{word}' not found in the pronounce library's dictionary.")
+                print(f"\t'{word}' not found in the pronouncing library's dictionary.")
                 categories["fail"].append(word)
                 continue 
 
-            arpabet = phones[0]
+            arpabet = phones[0].split()
             
             if "c" in word:
                 hard_vs_soft_C(word, arpabet)
@@ -496,7 +553,7 @@ def parse_and_process_words(file_path):
             if word[-1] in "fszl" and word[-2] in "fszl" and word[-1] == word[-2]:
                 fszl_check(word, arpabet)
             if len(word) >= 3:
-                should_double_consonant(word, arpabet)
+                #should_double_consonant(word, arpabet)
                 vcv(word)
                 vv_check(word, arpabet)
             if len(word) >= 4:
@@ -510,9 +567,10 @@ def parse_and_process_words(file_path):
             if "v" in word or "l" in word or "r" in word:
                 vrl_check(word)
             
+            doubling_categorization(word)
             vce_check(word)
             OCE_check(word, arpabet)
-            x_in_word_check(word)
+            x_in_word_check(word, arpabet)
             beginning_roots(word)
             begin_interm_affixes(word)
             base_suffix_prefix_base(word)
@@ -545,13 +603,13 @@ def getTopWords(num, inFile, outFile):
     with open(output_path, 'w') as f:
         json.dump(truncated_dict, f, indent=4)
     
-    print(f"Data successfully written to truncated_dictionary.json")
+    # print(f"Data successfully written to truncated_dictionary.json")
 
 def main():
     input_path = os.path.join(script_dir, 'WordDatav4.txt')
     parse_and_process_words(input_path)
-    #getTopWords(20, 'categorized_words.json', 'truncated_dictionary.json')
-    phones1 = pronouncing.phones_for_word("fizz")
+    getTopWords(20, 'categorized_words.json', 'truncated_dictionary.json')
+    #phones1 = pronouncing.phones_for_word("fizz")
     #phones2 = pronouncing.phones_for_word("early")
     #print(phones1)
     #ear_check("year", phones1[0])
