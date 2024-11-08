@@ -11,7 +11,7 @@ import shutil
 if os.path.exists('dictionary_parser\\edited_generated_story.txt'):
     os.remove('dictionary_parser\\edited_generated_story.txt')
 
-    
+
 # Get the directory where `dictionaryParser.py` is located
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
