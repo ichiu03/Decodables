@@ -5,13 +5,7 @@ import re
 import nltk
 import syllapy
 from nltk.corpus import words
-import shutil
 
-
-if os.path.exists('dictionary_parser\\edited_generated_story.txt'):
-    os.remove('dictionary_parser\\edited_generated_story.txt')
-
-    
 # Get the directory where `dictionaryParser.py` is located
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -32,7 +26,8 @@ categories = {
     "s": [], "t": [], "b": [], "m": [], "l": [], "d": [], "n": [], "p": [], "k": [], "j": [], "v": [],
     "z": [], "f": [], "hard c": [], "hard g": [], "r": [], "h": [], "w": [], "x": [], "y as in yes": [],
     # Column 2 - All vowels (short & long)
-    "a": [], "i": [], "o": [], "u": [], "e": [],
+    "long a": [], "short a": [], "long i": [], "short i": [], "long o": [], "short o": [],
+    "long u": [], "short u": [], "long e": [], "short e": [],
     # Column 3 
     "fszl": [], "qu": [], "sh": [], "ay": [], "ck": [], "ee": [], "ch": [], "or": [], "s blends": [],
     "l blends": [], "r blends": [], "-ing, -ong, -ang, -ung": [], "all": [], "th": [], "oy": [],
@@ -54,7 +49,7 @@ categories = {
     "mn": [], "que": [], "gn": [], "stle": [],"rh": [], "gue": [], "alk": [], "alt": [], "qua": [], "sc": [], "2 syllable dblg.": [],     
     # Uncategorized
     "fail": [],
-    "sight words": ['a','an', 'any', 'many', 'and', 'on', 'is', 'are', 'the', 'was', 'were', 'it', 'am', 'be', 'go', 'to', 'been', 'come', 'some', 'do', 'does', 'done', 'what', 'who', 'you', 'your', 'both', 'buy', 'door', 'floor', 'four', 'none', 'once', 'one', 'only', 'pull', 'push', 'sure', 'talk', 'walk', 'their', 'there', "they're", 'very', 'want', 'again', 'against', 'always', 'among', 'busy', 'could', 'should', 'would', 'enough', 'rough', 'tough', 'friend', 'move', 'prove', 'ocean', 'people', 'she', 'other', 'above', 'father', 'usually', 'special', 'front', 'thought', 'he', 'we', 'they', 'nothing', 'learned', 'toward', 'put', 'hour', 'beautiful', 'whole', 'trouble', 'of', 'off', 'use', 'have', 'our', 'say', 'make', 'take', 'see', 'think', 'look', 'give', 'how', 'ask', 'boy', 'girl', 'us', 'him', 'his', 'her', 'by', 'where', 'were', 'wear', 'hers', "don't", 'which', 'just', 'know', 'into', 'good', 'other', 'than', 'then', 'now', 'even', 'also', 'after', 'know', 'because', 'most', 'day', 'these', 'two', 'already', 'through', 'though', 'like', 'said', 'too', 'has', 'in', 'brother', 'sister', 'that', 'them', 'from', 'for', 'with', 'doing', 'well', 'before', 'tonight', 'down', 'about', 'but', 'up', 'around', 'goes', 'gone', 'build', 'built', 'cough', 'lose', 'loose', 'truth', 'daughter', 'son']
+    "sight words": ['a', 'any', 'many', 'and', 'on', 'is', 'are', 'the', 'was', 'were', 'it', 'am', 'be', 'go', 'to', 'been', 'come', 'some', 'do', 'does', 'done', 'what', 'who', 'you', 'your', 'both', 'buy', 'door', 'floor', 'four', 'none', 'once', 'one', 'only', 'pull', 'push', 'sure', 'talk', 'walk', 'their', 'there', "they're", 'very', 'want', 'again', 'against', 'always', 'among', 'busy', 'could', 'should', 'would', 'enough', 'rough', 'tough', 'friend', 'move', 'prove', 'ocean', 'people', 'she', 'other', 'above', 'father', 'usually', 'special', 'front', 'thought', 'he', 'we', 'they', 'nothing', 'learned', 'toward', 'put', 'hour', 'beautiful', 'whole', 'trouble', 'of', 'off', 'use', 'have', 'our', 'say', 'make', 'take', 'see', 'think', 'look', 'give', 'how', 'ask', 'boy', 'girl', 'us', 'him', 'his', 'her', 'by', 'where', 'were', 'wear', 'hers', "don't", 'which', 'just', 'know', 'into', 'good', 'other', 'than', 'then', 'now', 'even', 'also', 'after', 'know', 'because', 'most', 'day', 'these', 'two', 'already', 'through', 'though', 'like', 'said', 'too', 'has', 'in', 'brother', 'sister', 'that', 'them', 'from', 'for', 'with', 'doing', 'well', 'before', 'tonight', 'down', 'about', 'but', 'up', 'around', 'goes', 'gone', 'build', 'built', 'cough', 'lose', 'loose', 'truth', 'daughter', 'son']
 }
 vowels = "aeiou"
 consonants = "bcdfghjklmnpqrstvwxyz"
@@ -106,55 +101,74 @@ def is_valid_presuf(wordbase):
 
     return False
 def x_in_word_check(word, arpabet):
-    keys = ["m", "l", "p", "k", "j", "v", "z", "f", "r", "h", "w", "x",
-        "a", "e", "i", "o", "u", "qu", "sh", "ay", "ck", "ee", "ch", "or", "all", "th", "oy", "ar", 
+    keys = ["m", "l", "p", "k", "j", "v", "z", "f", "x",
+        "qu", "sh", "ay", "ck", "ee", "ch", "or", "all", "th", "oy", "ar", 
         "wh", "er", "aw", "ly", "tch", "ed", "ai", "igh", "oa", "ir", "oi", "kn", "ur",
         "dge", "tion", "au", "ough", "wor", "wr", "eigh", "augh", "oe", "ui", "wa", "eu", "gh",
         "mb", "mn", "que", "gn", "stle", "rh", "gue", "alk", "alt", "qua", "sc", "ph"]
 
-    if "s" in word and "S" in arpabet:
+    tokens = arpabet.split()
+
+    if "s" in word and "S" in tokens:
         categories["s"].append(word)
-
-    if "t" in word and "T" in arpabet:
+    if "t" in word and "T" in tokens:
         categories["t"].append(word)
-
-    if "b" in word and "B" in arpabet:
+    if "b" in word and "B" in tokens:
         categories["b"].append(word)
-
-    if "d" in word and "D" in arpabet:
+    if "d" in word and "D" in tokens:
         categories["d"].append(word)
-
-    if "n" in word and "N" in arpabet:
+    if "n" in word and "N" in tokens:
         categories["n"].append(word)
-
-    if "p" in word and "P" in arpabet:
+    if "p" in word and "P" in tokens:
         categories["p"].append(word)
+    if "r" in word and "R" in tokens:
+        categories["r"].append(word)
+    if "h" in word and "HH" in tokens:
+        categories["h"].append(word)
+    if "x" in word and "K S" in arpabet:
+        categories["x"].append(word)
+    if "a" in word:
+        if "EY" in tokens:
+            categories["long a"].append(word)
+        if "AA" in tokens or "AH" in tokens or "AE" in tokens:
+            categories["short a"].append(word)
+    if "e" in word:
+        if "IH" in tokens:
+            categories["long e"].append(word)
+        if "EH" in tokens or "AH" in tokens:
+            categories["short e"].append(word)
+    if "i" in word:
+        categories["i"].append(word)
+    if "o" in word:
+        categories["o"].append(word)
+    if "u" in word:
+        categories["u"].append(word)
+    if "w" in word and "W" in tokens:
+        if "wh" in word: # Check if there's 'w' and 'wh'
+            w_index = word.index('wh')
+            no_wh = word[: w_index] + word[w_index + 2:]
+            if "w" in no_wh: # still a 'w', after removing 'wh'
+                categories['w'].append(word)
+        else:
+            categories['w'].append(word)
 
     if "ing" in word or "ang" in word or "ong" in word or "ung" in word:
         categories["-ing, -ong, -ang, -ung"].append(word)
-
     if "ink" in word or "ank" in word or "onk" in word or "unk" in word: 
         categories["-ink, -ank, -onk, -unk"].append(word)
-    
     if word.endswith("ft") or word.endswith("st") or word.endswith("nd"):
         categories["-ft, -nd, -st"].append(word)
-    
     if word.endswith("sp") or word.endswith("nt") or word.endswith("mp"):
         categories["-sp, -nt, -mp"].append(word)
-
     if word.endswith("sk") or word.endswith("lt") or word.endswith("lk"):
         categories["-sk, -lt, -lk"].append(word)
-
     if word.endswith("ct") or word.endswith("pt"):
         categories["-ct, -pt"].append(word)
-        
     if ("ble" in word or "cle" in word or "dle" in word or "fle" in word or "gle" in word 
           or "kle" in word or "ple" in word or "tle" in word or "zle" in word):
          categories["-ble, -cle, -dle, -fle, -gle, -kle, -ple, -tle, -zle"].append(word)
-         
     if "ild" in word or "ind" in word or "old" in word or "ost" in word:
         categories["-ild, -ind, -old, -ost"].append(word)
-
     for key in keys:
         if key in word:
             categories[key].append(word)
@@ -163,38 +177,40 @@ def warCheck(word):
     if "war" in word and "ware" not in word:
         categories["war"].append(word)
 
-def yCheck(word, arpabet):    
-    # "y as in yes" (initial /Y/ sound or /JH/ sound)
-    if arpabet[0] == "Y" or arpabet[0] == "JH":
-        categories["y as in yes"].append(word)
+def yCheck(word, arpabet):   
+    tokens = arpabet.split()
+    # "y as in yes" (initial /Y/ sound)
+    if "ye" in word or "ya" in word or "yo" in word:
+        if "Y EH" in arpabet or "Y OW" in arpabet or "Y AO" in arpabet or "Y UH" in arpabet or "Y AH" in arpabet:
+            categories["y as in yes"].append(word)
     # "y as in dry" (long "i" sound, represented by "AY1" in ARPAbet)
-    if "AY1" in arpabet:
+    if "AY" in arpabet:
         categories["y as in dry"].append(word)
     # "y as in bumpy" (unstressed "IY0" sound in ARPAbet)
-    elif "IY0" in arpabet:
+    elif "IY" in arpabet:
         categories["y as in bumpy"].append(word)
     # "y in gym" (short "i" sound, "IH1" in ARPAbet)
-    if "IH1" in arpabet:
+    if "IH" in arpabet:
         categories["y as in gym"].append(word) 
     # "-ey as in monkey" (ending with unstressed "IY0")
-    if arpabet[-1] == "IY0" and word.endswith("ey"):
+    if arpabet.endswith("IY") and word.endswith("ey"):
         categories["ey as in monkey"].append(word)
     # "ey as in they" (long "EY1" sound)
-    elif "EY1" in arpabet:
+    elif "EY" in arpabet:
         categories["ey as in they"].append(word)
 
 def hard_vs_soft_C(word, arpabet):
-    arpabet_flat = "".join(arpabet)
-    for i, (letter, phone) in enumerate(zip(word, arpabet_flat)):
+    for i, (letter, phone) in enumerate(zip(word, arpabet.split())):
         if letter == 'c' and phone == 'K':  # Ensure 'C' specifically makes the 'K' sound
             categories["hard c"].append(word)
             return  # Exit once categorized as hard 'C'
     categories["soft c"].append(word)
 
 def hard_vs_soft_G(word, arpabet):
-    if "G" in arpabet: # Hard C
+    tokens = arpabet.split()
+    if "G" in tokens: # Hard C
         categories["hard g"].append(word)
- 
+        
     elif "JH" in arpabet: # Soft C
         categories["soft g"].append(word)
 
@@ -244,9 +260,10 @@ def vce_check(word):
             categories["vce"].append(word)
         
 def OCE_check(word, arpabet):
+    tokens = arpabet.split()
     # Open syllables (ends in hard vowel)
     if word[-1] in vowels and len(word) > 1:
-        if not(word[-1] == "e" and "IY" not in arpabet[-1]):
+        if not(word[-1] == "e" and "IY" not in tokens[-1]):
             categories["Open syll."].append(word)
     # Closed syllables (eg cat, man)
     for i in range(len(word) - 1):
@@ -273,8 +290,14 @@ def ei_check(word, arpabet):
         categories["ei as in vein"].append(word)
 
 def ch_check(word, arpabet):
-    if "CH" in arpabet:
-        
+    ch_index = word.find("ch")
+    if ch_index != -1:
+        tokens = arpabet.split()
+        try:
+            if tokens[ch_index] == "K":
+                categories["ch as in echo"].append(word)
+        except IndexError:
+            pass
 
 def augh_check(word, arpabet):
     if "AA" in arpabet or "AO" in arpabet or "AH" in arpabet:
@@ -335,8 +358,9 @@ def vrl_check(word):
             break  
 
 def vv_check(word, arpabet):
+    tokens = arpabet.split()
     consecutive_vowels = any(word[i] in vowels and word[i + 1] in vowels for i in range(len(word) - 1))
-    distinct_vowel_sounds = sum(1 for phoneme in arpabet if phoneme[0] in vowels.upper()) >= 2
+    distinct_vowel_sounds = sum(1 for phoneme in tokens if phoneme[0] in vowels.upper()) >= 2
     if consecutive_vowels and distinct_vowel_sounds:
         categories["v/v pattern"].append(word)
 
@@ -413,8 +437,9 @@ def beginning_roots(word):
 
 def fszl_check(word, arpabet):
     if pronouncing.syllable_count(arpabet) == 1:
+        tokens = arpabet.split()
         for vowel in ["IH", "EH", "AH", "UH", "AA", "AE"]:
-            if vowel in arpabet[-2]:
+            if vowel in tokens[-2]:
                 categories["fszl"].append(word)
     
 def is_y_rule_suffix(word):
@@ -497,7 +522,7 @@ def doubling_categorization(word):
                 
 def parse_and_process_words(file_path):
     try:
-        with open(file_path, 'r', encoding='utf-8') as file:
+        with open(file_path, 'r') as file:
             words = file.read().splitlines()
 
         unique_words = set(words)
@@ -510,7 +535,8 @@ def parse_and_process_words(file_path):
                 categories["fail"].append(word)
                 continue 
 
-            arpabet = phones[0].split()
+            arp = phones[0]
+            arpabet = re.sub(r'\d', '', arp)
             
             if "c" in word:
                 hard_vs_soft_C(word, arpabet)
@@ -588,7 +614,7 @@ def parse_and_process_words(file_path):
         if os.path.exists(output_path):
             os.remove(output_path)
 
-        with open(output_path, 'w', encoding='utf-8') as json_file:
+        with open(output_path, 'w') as json_file:
             json.dump(categories, json_file, indent=4)
 
         print("\n-=-=-= Finished categorzing! Saved to 'categorized_words.json' =-=-=-")
@@ -601,51 +627,21 @@ def parse_and_process_words(file_path):
 def getTopWords(num, inFile, outFile):
     input_path = os.path.join(script_dir, inFile)
     output_path = os.path.join(script_dir, outFile)
-    with open(input_path, 'r', encoding='utf-8') as f:
+    with open(input_path, 'r') as f:
         data_dict = json.load(f)
 
     truncated_dict = {key: values[:num] for key, values in categories.items()}
 
-    with open(output_path, 'w', encoding='utf-8') as f:
+    with open(output_path, 'w') as f:
         json.dump(truncated_dict, f, indent=4)
     
     # print(f"Data successfully written to truncated_dictionary.json")
 
-def copy_and_edit_file(input_file, output_file):
-    # Make a copy of the original file
-    shutil.copy(input_file, output_file)
-    print(f"Copied '{input_file}' to '{output_file}'.")
-
-    # Read the copied file
-    with open(output_file, 'r', encoding='utf-8') as file:
-        text = file.read()
-
-    # Extract words, remove punctuation, and convert to lowercase
-    words = [word.strip('.,!?;:"()[]“”').lower() for word in text.split()]
-
-    # Write each word to the output file, one per line, maintaining the original order
-    with open(output_file, 'w', encoding='utf-8', errors='replace') as file:
-        for word in words:
-            if word:  # Avoid empty strings
-                file.write(word + '\n')
-
-
-# Use 'generated_story.txt' as the input file and specify the output file name
-copy_and_edit_file('dictionary_parser\\generated_story.txt', 'dictionary_parser\\edited_generated_story.txt')
-
 def main():
-    file_path = 'edited_generated_story.txt' #WordDatav4.txt
-    input_path = os.path.join(script_dir, file_path)
+    input_path = os.path.join(script_dir, 'WordDatav4.txt')
     parse_and_process_words(input_path)
-    getTopWords(20, 'categorized_words.json', 'truncated_dictionary.json')
-    #phones1 = pronouncing.phones_for_word("fizz")
-    #phones2 = pronouncing.phones_for_word("early")
-    #print(phones1)
-    #ear_check("year", phones1[0])
-    #ear_check("early", phones2[0])
-    #print(phones1)
-    #print(phones1[0])
-    #fszl_check("fizz", phones1[0])
-    #print(categories["fszl"])
+    #getTopWords(20, 'categorized_words.json', 'truncated_dictionary.json')
+    phones1 = pronouncing.phones_for_word("existing")
+    #hard_vs_soft_G('fucking', phones1[0])
 
 main()
