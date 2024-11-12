@@ -108,7 +108,7 @@ def is_valid_presuf(wordbase):
     return False
 def x_in_word_check(word, arpabet):
     keys = ["m", "l", "p", "k", "j", "v", "z", "f", "x",
-        "qu", "sh", "ay", "ck", "ee", "ch", "or", "all", "th", "oy", "ar", 
+        "sh", "ay", "ck", "ee", "ch", "or", "all", "th", "oy", "ar", 
         "wh", "er", "aw", "ly", "tch", "ed", "ai", "igh", "oa", "ir", "oi", "kn", "ur",
         "dge", "tion", "au", "ough", "wor", "wr", "eigh", "augh", "oe", "ui", "wa", "eu", "gh",
         "mb", "mn", "que", "gn", "stle", "rh", "gue", "alk", "alt", "qua", "sc", "ph"]
@@ -166,7 +166,9 @@ def x_in_word_check(word, arpabet):
                 categories['w'].append(word)
         else:
             categories['w'].append(word)
-
+    if "qu" in word:
+        if "K W" in arpabet:
+            categories["qu"].append(word)
     if "ing" in word or "ang" in word or "ong" in word or "ung" in word:
         categories["-ing, -ong, -ang, -ung"].append(word)
     if "ink" in word or "ank" in word or "onk" in word or "unk" in word: 
