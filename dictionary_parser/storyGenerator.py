@@ -21,8 +21,8 @@ client = OpenAI(
     api_key='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'
 )
 
-story_length = 1000
-chapters = 3
+story_length = 5000
+chapters = 10
 
 good_words = []
 bad_words = []
@@ -43,7 +43,7 @@ def query(prompt):
         {"role": "system", "content": prompt},
     ]
     response = client.chat.completions.create(
-        model="gpt-4o-mini",
+        model="gpt-3.5-turbo",
         messages=messages,
     )
     return response.choices[0].message.content
