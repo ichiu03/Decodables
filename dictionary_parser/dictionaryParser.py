@@ -576,7 +576,7 @@ def copy_and_edit_file(input_file, output_file):
 copy_and_edit_file('dictionary_parser\\generated_story.txt', 'dictionary_parser\\edited_generated_story.txt')
 
 def main():
-    file_path = 'edited_generated_story.txt' #WordDatav4.txt
+    file_path = 'edited_generated_story.txt' 
     input_path = os.path.join(script_dir, file_path)
     parse_and_process_words(input_path)
     #getTopWords(20, 'categorized_words.json', 'truncated_dictionary.json')
