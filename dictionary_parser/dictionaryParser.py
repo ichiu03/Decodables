@@ -144,11 +144,20 @@ def x_in_word_check(word, arpabet):
         if "EH" in tokens or "AH" in tokens:
             categories["short e"].append(word)
     if "i" in word:
-        categories["i"].append(word)
+        if "AY" in tokens:
+            categories["long i"].append(word)
+        if "IH" in tokens:
+            categories["short i"].append(word)
     if "o" in word:
-        categories["o"].append(word)
+        if "OW" in tokens:
+            categories["long o"].append(word)
+        if "AH" in tokens or "AA" in tokens or "AO" in tokens:
+            categories["short o"].append(word)
     if "u" in word:
-        categories["u"].append(word)
+        if "UW" in tokens:
+            categories["long u"].append(word)
+        if "AH" in tokens:
+            categories["short u"].append(word)
     if "w" in word and "W" in tokens:
         if "wh" in word: # Check if there's 'w' and 'wh'
             w_index = word.index('wh')
