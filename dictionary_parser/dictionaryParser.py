@@ -5,7 +5,13 @@ import re
 import nltk
 import syllapy
 from nltk.corpus import words
+import shutil
 
+
+if os.path.exists('dictionary_parser\\edited_generated_story.txt'):
+    os.remove('dictionary_parser\\edited_generated_story.txt')
+
+    
 # Get the directory where `dictionaryParser.py` is located
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -48,7 +54,7 @@ categories = {
     "mn": [], "que": [], "gn": [], "stle": [],"rh": [], "gue": [], "alk": [], "alt": [], "qua": [], "sc": [], "2 syllable dblg.": [],     
     # Uncategorized
     "fail": [],
-    "sight words": ['a', 'any', 'many', 'and', 'on', 'is', 'are', 'the', 'was', 'were', 'it', 'am', 'be', 'go', 'to', 'been', 'come', 'some', 'do', 'does', 'done', 'what', 'who', 'you', 'your', 'both', 'buy', 'door', 'floor', 'four', 'none', 'once', 'one', 'only', 'pull', 'push', 'sure', 'talk', 'walk', 'their', 'there', "they're", 'very', 'want', 'again', 'against', 'always', 'among', 'busy', 'could', 'should', 'would', 'enough', 'rough', 'tough', 'friend', 'move', 'prove', 'ocean', 'people', 'she', 'other', 'above', 'father', 'usually', 'special', 'front', 'thought', 'he', 'we', 'they', 'nothing', 'learned', 'toward', 'put', 'hour', 'beautiful', 'whole', 'trouble', 'of', 'off', 'use', 'have', 'our', 'say', 'make', 'take', 'see', 'think', 'look', 'give', 'how', 'ask', 'boy', 'girl', 'us', 'him', 'his', 'her', 'by', 'where', 'were', 'wear', 'hers', "don't", 'which', 'just', 'know', 'into', 'good', 'other', 'than', 'then', 'now', 'even', 'also', 'after', 'know', 'because', 'most', 'day', 'these', 'two', 'already', 'through', 'though', 'like', 'said', 'too', 'has', 'in', 'brother', 'sister', 'that', 'them', 'from', 'for', 'with', 'doing', 'well', 'before', 'tonight', 'down', 'about', 'but', 'up', 'around', 'goes', 'gone', 'build', 'built', 'cough', 'lose', 'loose', 'truth', 'daughter', 'son']
+    "sight words": ['a','an', 'any', 'many', 'and', 'on', 'is', 'are', 'the', 'was', 'were', 'it', 'am', 'be', 'go', 'to', 'been', 'come', 'some', 'do', 'does', 'done', 'what', 'who', 'you', 'your', 'both', 'buy', 'door', 'floor', 'four', 'none', 'once', 'one', 'only', 'pull', 'push', 'sure', 'talk', 'walk', 'their', 'there', "they're", 'very', 'want', 'again', 'against', 'always', 'among', 'busy', 'could', 'should', 'would', 'enough', 'rough', 'tough', 'friend', 'move', 'prove', 'ocean', 'people', 'she', 'other', 'above', 'father', 'usually', 'special', 'front', 'thought', 'he', 'we', 'they', 'nothing', 'learned', 'toward', 'put', 'hour', 'beautiful', 'whole', 'trouble', 'of', 'off', 'use', 'have', 'our', 'say', 'make', 'take', 'see', 'think', 'look', 'give', 'how', 'ask', 'boy', 'girl', 'us', 'him', 'his', 'her', 'by', 'where', 'were', 'wear', 'hers', "don't", 'which', 'just', 'know', 'into', 'good', 'other', 'than', 'then', 'now', 'even', 'also', 'after', 'know', 'because', 'most', 'day', 'these', 'two', 'already', 'through', 'though', 'like', 'said', 'too', 'has', 'in', 'brother', 'sister', 'that', 'them', 'from', 'for', 'with', 'doing', 'well', 'before', 'tonight', 'down', 'about', 'but', 'up', 'around', 'goes', 'gone', 'build', 'built', 'cough', 'lose', 'loose', 'truth', 'daughter', 'son']
 }
 vowels = "aeiou"
 consonants = "bcdfghjklmnpqrstvwxyz"
@@ -491,7 +497,7 @@ def doubling_categorization(word):
                 
 def parse_and_process_words(file_path):
     try:
-        with open(file_path, 'r') as file:
+        with open(file_path, 'r', encoding='utf-8') as file:
             words = file.read().splitlines()
 
         unique_words = set(words)
@@ -582,7 +588,7 @@ def parse_and_process_words(file_path):
         if os.path.exists(output_path):
             os.remove(output_path)
 
-        with open(output_path, 'w') as json_file:
+        with open(output_path, 'w', encoding='utf-8') as json_file:
             json.dump(categories, json_file, indent=4)
 
         print("\n-=-=-= Finished categorzing! Saved to 'categorized_words.json' =-=-=-")
@@ -595,18 +601,41 @@ def parse_and_process_words(file_path):
 def getTopWords(num, inFile, outFile):
     input_path = os.path.join(script_dir, inFile)
     output_path = os.path.join(script_dir, outFile)
-    with open(input_path, 'r') as f:
+    with open(input_path, 'r', encoding='utf-8') as f:
         data_dict = json.load(f)
 
     truncated_dict = {key: values[:num] for key, values in categories.items()}
 
-    with open(output_path, 'w') as f:
+    with open(output_path, 'w', encoding='utf-8') as f:
         json.dump(truncated_dict, f, indent=4)
     
     # print(f"Data successfully written to truncated_dictionary.json")
 
+def copy_and_edit_file(input_file, output_file):
+    # Make a copy of the original file
+    shutil.copy(input_file, output_file)
+    print(f"Copied '{input_file}' to '{output_file}'.")
+
+    # Read the copied file
+    with open(output_file, 'r', encoding='utf-8') as file:
+        text = file.read()
+
+    # Extract words, remove punctuation, and convert to lowercase
+    words = [word.strip('.,!?;:"()[]“”').lower() for word in text.split()]
+
+    # Write each word to the output file, one per line, maintaining the original order
+    with open(output_file, 'w', encoding='utf-8', errors='replace') as file:
+        for word in words:
+            if word:  # Avoid empty strings
+                file.write(word + '\n')
+
+
+# Use 'generated_story.txt' as the input file and specify the output file name
+copy_and_edit_file('dictionary_parser\\generated_story.txt', 'dictionary_parser\\edited_generated_story.txt')
+
 def main():
-    input_path = os.path.join(script_dir, 'WordDatav4.txt')
+    file_path = 'edited_generated_story.txt' #WordDatav4.txt
+    input_path = os.path.join(script_dir, file_path)
     parse_and_process_words(input_path)
     getTopWords(20, 'categorized_words.json', 'truncated_dictionary.json')
     #phones1 = pronouncing.phones_for_word("fizz")
