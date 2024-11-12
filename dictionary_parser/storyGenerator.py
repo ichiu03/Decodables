@@ -11,12 +11,18 @@ nltk.download('punkt_tab')
 nltk.download('wordnet')
 nltk.download('omw-1.4')
 
+if os.path.exists('dictionary_parser\\edited_generated_story.txt'):
+    open('dictionary_parser\\edited_generated_story.txt', 'w').close()
+
+if os.path.exists('dictionary_parser\\generated_story.txt'):
+    open('dictionary_parser\\generated_story.txt', 'w').close()
+
 client = OpenAI(
     api_key='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'
 )
 
-story_length = 200
-chapters = 3
+story_length = 5000
+chapters = 10
 
 good_words = []
 bad_words = []
@@ -37,15 +43,37 @@ def query(prompt):
         {"role": "system", "content": prompt},
     ]
     response = client.chat.completions.create(
-        model="gpt-4o-mini",
+        model="gpt-3.5-turbo",
         messages=messages,
     )
     return response.choices[0].message.content
 
 ### Function to get user input
-def get_input():
+
+input_data_path = 'dictionary_parser/problemsounds.json'
+
+def clear_json_file():
+    # Clear the contents of the JSON file
+    with open(input_data_path, 'w', encoding='utf-8') as file:
+        file.write('{}')  # Write an empty JSON object
+
+def get_input_and_save():
+    clear_json_file()  # Clear the file before saving new data
+    
     topic = input("Enter your story topic: ")
-    problems = (input("Enter the problem letters separated by commas: ")).split(",")
+    problems = input("Enter the problem letters separated by commas: ").split(",")
+    problems = [problem.strip() for problem in problems]  # Clean up whitespace
+
+    # Create a dictionary to store the input
+    input_data = {
+        "topic": topic,
+        "problems": problems
+    }
+
+    # Save the data to a JSON file
+    with open(input_data_path, 'w', encoding='utf-8') as file:
+        json.dump(input_data, file, indent=4)
+
     return topic, problems
 
 ### Function to get words
@@ -223,7 +251,7 @@ def fix_spacing(text):
 
 ### Main function
 def main():
-    topic, problems = get_input()
+    topic, problems = get_input_and_save()
     dictionary = get_words(problems)
     outline = generate_outline(topic)
     story = ""
