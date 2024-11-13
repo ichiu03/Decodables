@@ -108,7 +108,7 @@ def is_valid_presuf(wordbase):
     return False
 def x_in_word_check(word, arpabet):
     keys = ["m", "l", "p", "k", "j", "v", "z", "f", "x",
-        "sh", "ay", "ck", "ee", "ch", "or", "all", "th", "oy", "ar", 
+        "sh", "ay", "ck", "ee", "all", "th", "oy", "ar", 
         "wh", "er", "aw", "ly", "tch", "ed", "ai", "igh", "oa", "ir", "oi", "kn", "ur",
         "dge", "tion", "au", "ough", "wor", "wr", "eigh", "augh", "oe", "ui", "wa", "eu", "gh",
         "mb", "mn", "que", "gn", "stle", "rh", "gue", "alk", "alt", "qua", "sc", "ph"]
@@ -169,6 +169,12 @@ def x_in_word_check(word, arpabet):
     if "qu" in word:
         if "K W" in arpabet:
             categories["qu"].append(word)
+    if "ch" in word:
+        if "CH" in tokens:
+            categories["ch"].append(word)
+    if "or" in word:
+        if "AO R" in arpabet:
+            categories["or"].append(word)
     if "ing" in word or "ang" in word or "ong" in word or "ung" in word:
         categories["-ing, -ong, -ang, -ung"].append(word)
     if "ink" in word or "ank" in word or "onk" in word or "unk" in word: 
@@ -252,16 +258,19 @@ def ear_check(word, arpabet):
         categories["ear as in early"].append(word)
 
 def s_blends(word):
-    if ("sn" in word or "sm" in word or "st" in word or "sw" in word or "sc" in word or "sp" in word):
-        categories["s blends"].append(word)
+    if word.startswith("sn") or word.startswith("sm") or word.startswith("st") or word.startswith("sw") or word.startswith("sc") or word.startswith("sp"):
+        if word[2] in "aeiou":
+            categories["s blends"].append(word)
     
 def l_blends(word):
-    if ("bl" in word or "cl" in word or "fl" in word or "pl" in word or "gl" in word or "sl" in word):
-        categories["l blends"].append(word)
+    if word.startswith("bl") or word.startswith("cl") or word.startswith("fl") or word.startswith("pl") or word.startswith("gl") or word.startswith("sl"):
+        if word[2] in "aeiou":
+            categories["l blends"].append(word)
 
 def r_blends(word):
-    if ("br" in word or "cr" in word or "dr" in word or "fr" in word or "gr" in word or "pr" in word or "tr" in word):
-        categories["r blends"].append(word)
+    if word.startswith("br") or word.startswith("cr") or word.startswith("dr") or word.startswith("fr") or word.startswith("gr") or word.startswith("pr") or word.startswith("tr"):
+        if word[2] in "aeiou":
+            categories["r blends"].append(word)
 
 def ea_check(word, arpabet):
     if "IY" in arpabet:
@@ -662,4 +671,54 @@ def main():
     phones1 = pronouncing.phones_for_word("existing")
     #hard_vs_soft_G('fucking', phones1[0])
 
-main()
+#main()
+
+def map_chunks_to_phonemes(word):
+    """
+    Splits a word into chunks at vowel boundaries and maps each chunk to its corresponding phonemes.
+
+    Args:
+        word (str): The word to split and map.
+    
+    Returns:
+        dict: A dictionary mapping word chunks to their phonemes.
+    """
+    vowels = "AEIOUYaeiouy"  # Treat 'y' as a vowel in this context
+    phonetic_transcriptions = pronouncing.phones_for_word(word)
+    
+    if not phonetic_transcriptions:
+        return f"No phonetic transcription found for '{word}'."
+    
+    phonemes = phonetic_transcriptions[0].split()  # Use the first phonetic transcription
+    chunk_to_phonemes = {}
+    current_chunk = []
+    current_phoneme_chunk = []
+
+    phoneme_iter = iter(phonemes)
+
+    for letter in word:
+        current_chunk.append(letter)
+        
+        if letter in vowels:  # Finalize chunk at vowel
+            try:
+                # Collect phonemes until a vowel phoneme is encountered
+                while True:
+                    phoneme = next(phoneme_iter)
+                    current_phoneme_chunk.append(phoneme)
+                    if phoneme[-1].isdigit():  # Vowel phoneme found
+                        break
+            except StopIteration:
+                pass
+            
+            # Map the current chunk to its phonemes
+            chunk_to_phonemes[''.join(current_chunk)] = ' '.join(current_phoneme_chunk)
+            current_chunk = []
+            current_phoneme_chunk = []
+
+    # Handle any leftover chunk or phoneme
+    if current_chunk:
+        chunk_to_phonemes[''.join(current_chunk)] = ' '.join(current_phoneme_chunk)
+        
+    return chunk_to_phonemes
+
+print(map_chunks_to_phonemes("celebration"))
