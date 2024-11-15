@@ -7,6 +7,7 @@ import syllapy
 from nltk.corpus import words
 import shutil
 
+# Sight words must be unioned outside of dictionaryParser !!!!
 
 if os.path.exists('dictionary_parser\\edited_generated_story.txt'):
     os.remove('dictionary_parser\\edited_generated_story.txt')
@@ -108,8 +109,8 @@ def is_valid_presuf(wordbase):
     return False
 def x_in_word_check(word, arpabet):
     keys = ["m", "l", "p", "k", "j", "v", "z", "f", "x",
-        "sh", "ay", "ck", "ee", "all", "th", "oy", "ar", 
-        "wh", "er", "aw", "ly", "tch", "ed", "ai", "igh", "oa", "ir", "oi", "kn", "ur",
+        "sh", "ay", "ck", "ee", "all", "th", "oy", 
+        "wh", "er", "aw", "tch", "ed", "ai", "igh", "oa", "ir", "oi", "kn", "ur",
         "dge", "tion", "au", "ough", "wor", "wr", "eigh", "augh", "oe", "ui", "wa", "eu", "gh",
         "mb", "mn", "que", "gn", "stle", "rh", "gue", "alk", "alt", "qua", "sc", "ph"]
 
@@ -175,6 +176,11 @@ def x_in_word_check(word, arpabet):
     if "or" in word:
         if "AO R" in arpabet:
             categories["or"].append(word)
+    if "ar" in word:
+        if "AA R" in arpabet:
+            categories["ar"].append(word)
+    if word[-2:] == "ly" and tokens[-1] == "IY":
+        categories["ly"].append(word)
     if "ing" in word or "ang" in word or "ong" in word or "ung" in word:
         categories["-ing, -ong, -ang, -ung"].append(word)
     if "ink" in word or "ank" in word or "onk" in word or "unk" in word: 
@@ -252,7 +258,7 @@ def ow_check(word, arpabet):
         categories["ow as in snow"].append(word)
 
 def ear_check(word, arpabet):
-    if "IH" in arpabet and "R" in arpabet or "IY" in arpabet and "R" in arpabet:
+    if "IH R" in arpabet or "IY R" in arpabet:
         categories["ear as in hear"].append(word)
     elif "ER" in arpabet:
         categories["ear as in early"].append(word)
@@ -559,7 +565,7 @@ def parse_and_process_words(file_path):
             if not phones:
                 print(f"\t'{word}' not found in the pronouncing library's dictionary.")
                 categories["fail"].append(word)
-                continue 
+                continue
 
             arp = phones[0]
             arpabet = re.sub(r'\d', '', arp)
@@ -664,14 +670,13 @@ def getTopWords(num, inFile, outFile):
     # print(f"Data successfully written to truncated_dictionary.json")
 
 def main():
-    file_path = 'edited_generated_story.txt' 
+    file_path = 'WordDatav4.txt' 
     input_path = os.path.join(script_dir, file_path)
     parse_and_process_words(input_path)
     #getTopWords(20, 'categorized_words.json', 'truncated_dictionary.json')
     phones1 = pronouncing.phones_for_word("existing")
-    #hard_vs_soft_G('fucking', phones1[0])
 
-#main()
+main()
 
 def map_chunks_to_phonemes(word):
     """
@@ -683,7 +688,7 @@ def map_chunks_to_phonemes(word):
     Returns:
         dict: A dictionary mapping word chunks to their phonemes.
     """
-    vowels = "AEIOUYaeiouy"  # Treat 'y' as a vowel in this context
+    vowels = "aeiouy"  # Treat 'y' as a vowel in this context
     phonetic_transcriptions = pronouncing.phones_for_word(word)
     
     if not phonetic_transcriptions:
@@ -721,4 +726,5 @@ def map_chunks_to_phonemes(word):
         
     return chunk_to_phonemes
 
-print(map_chunks_to_phonemes("celebration"))
+#print(map_chunks_to_phonemes("celebration"))
+
