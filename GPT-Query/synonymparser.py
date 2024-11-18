@@ -58,6 +58,7 @@ def query(prompt):
     )
     return response.choices[0].message.content
 
+'''
 def sentence_rewrite(word):
     with open('dictionary_parser\\generated_story', 'r', encoding='utf-8') as file:
         story = file.read()
@@ -89,9 +90,9 @@ def sentence_rewrite(word):
             good_story += new_sentence
         else:
             good_story += sentence
-    
+   
     return good_story
-
+'''
     
 
 

@@ -1,11 +1,7 @@
 {
-    "topic": "A car race between 3 really fast cars",
+    "topic": "cars",
     "problems": [
-        "d",
         "b",
-        "x",
-        "w",
-        "j",
-        "v"
+        "d"
     ]
 }
