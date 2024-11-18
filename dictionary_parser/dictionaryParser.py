@@ -391,8 +391,8 @@ def vrl_check(word):
             break  
 
 def vv_check(word, arpabet):
-    for i in range(len(word) - 1):
-        if word[i] in vowels and word[i + 1] in vowels:
+    #for i in range(len(word) - 1):
+    #    if word[i] in vowels and word[i + 1] in vowels:
             
     tokens = arpabet.split()
     consecutive_vowels = any(word[i] in vowels and word[i + 1] in vowels for i in range(len(word) - 1))
