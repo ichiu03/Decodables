@@ -670,7 +670,7 @@ def getTopWords(num, inFile, outFile):
     # print(f"Data successfully written to truncated_dictionary.json")
 
 def main():
-    file_path = 'WordDatav4.txt' 
+    file_path = 'generated_story.txt' 
     input_path = os.path.join(script_dir, file_path)
     parse_and_process_words(input_path)
     #getTopWords(20, 'categorized_words.json', 'truncated_dictionary.json')
