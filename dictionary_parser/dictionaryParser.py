@@ -1,6 +1,7 @@
 import json
 import pronouncing
 import os
+import string
 import re
 import nltk
 import syllapy
@@ -652,7 +653,7 @@ def parse_and_process_words(inFile, outFile):
         print("\n-=-=-= Finished categorzing! Saved to 'categorized_words.json' =-=-=-")
     
     except FileNotFoundError:
-        print(f"The file {file_path} was not found.")
+        print(f"The file was not found.")
     except Exception as e:
         print(f"An error occurred: {e}")
 
@@ -669,10 +670,38 @@ def getTopWords(num, inFile, outFile):
     
     # print(f"Data successfully written to truncated_dictionary.json")
 
+def stripped(filename):
+    # Define the output filename
+    output_filename = filename.replace('generated_story.txt', 'parsed_stripped_story.txt')
+
+    # Read the input file
+    with open(filename, 'r', encoding='utf-8') as input_file:
+        content = input_file.read()
+
+    # Remove punctuation and split into words
+    translator = str.maketrans('', '', string.punctuation)
+    stripped_content = content.translate(translator)
+    words = stripped_content.split()
+
+    # Write each word to the output file, one per line
+    with open(output_filename, 'w', encoding='utf-8') as output_file:
+        for word in words:
+            output_file.write(word.lower() + '\n')
+
+    return output_filename  # Return the new filename
+
 def main():
-    file_path = 'generated_story.txt' 
-    input_path = os.path.join(script_dir, file_path)
-    parse_and_process_words(input_path)
+    # Get the script directory
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    
+    # Strip punctuation and prepare the parsed file
+    stripped_file_path = stripped(os.path.join(script_dir, 'generated_story.txt'))
+    
+    # Use the stripped file for further processing
+    parse_and_process_words(stripped_file_path, 'categorized_words.json')
+
+    # Example function call (adjust as necessary for your use case)
+    # getTopWords(20, 'categorized_words.json', 'truncated_dictionary.json')
     #getTopWords(20, 'categorized_words.json', 'truncated_dictionary.json')
     phones1 = pronouncing.phones_for_word("existing")
 

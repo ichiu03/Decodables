@@ -22,7 +22,7 @@ client = OpenAI(
 )
 
 story_length = 500
-chapters = 3
+chapters = 1
 
 good_words = []
 bad_words = []
