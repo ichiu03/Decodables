@@ -555,9 +555,9 @@ def doubling_categorization(word):
                 # Last syllable is not stressed, apply general doubling rule
                 categories["double rule-suffixes"].append(word)
                 
-def parse_and_process_words(file_path):
+def parse_and_process_words(inFile, outFile):
     try:
-        with open(file_path, 'r') as file:
+        with open(inFile, 'r') as file:
             words = file.read().splitlines()
 
         unique_words = set(words)
@@ -643,7 +643,7 @@ def parse_and_process_words(file_path):
             base_suffix_prefix_base(word)
             interm_adv_affixes(word)
 
-        output_path = os.path.join(script_dir, "categorized_words.json")
+        output_path = os.path.join(script_dir, outFile)
         
         # Delete the file if it already exists
         if os.path.exists(output_path):
@@ -680,6 +680,9 @@ def main():
     phones1 = pronouncing.phones_for_word("existing")
 
 main()
+
+def run(inFile: str, outFile: str, full_or_truncated: bool):
+    file_path = os.path.join(script_dir, inFile)
 
 def map_chunks_to_phonemes(word):
     """
