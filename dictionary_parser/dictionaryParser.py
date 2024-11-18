@@ -47,13 +47,13 @@ categories = {
     "soft g": [], "ai": [], "igh": [], "ed": [], "-ble, -cle, -dle, -fle, -gle, -kle, -ple, -tle, -zle": [],
     "l syllables": [],"v syllables": [], "r syllables": [], "oa": [], "ir": [], "-ild, -ind, -old, -ost": [], "oi": [], "double rule-suffixes": [],
     "ew as in few/blew": [], "v/v pattern": [], "kn": [], "e rule-suffixes": [], "ou as in south": [], "ur": [],
-      "dge": [], "y rule suffixes": [], "tion": [],
+      "dge": [], "y rule suffixes": [], "tion": [], "begin/interm affixes": [], "base/suffix, prefix/base patterns": [], 
     # Column 5
-    "au": [], "war": [], "ey as in monkey": [], "ey as in they": [], "ph": [],
-    "ie as in pie": [], "ie as in thief": [], "-sion as in tension": [], "-sion as in vision" : [],
+    "au": [], "war": [], "ey as in monkey": [], "ey as in they": [],  "interm./adv. affixes": [], "ph": [],
+    "ie as in pie": [], "ie as in thief": [], "beginning roots": [], "-sion as in tension": [], "-sion as in vision" : [],
     "y as in gym": [], "wr": [], "eigh": [], "ue as in blue": [], "ough": [], "wor": [], "ei as in receive": [],
     "ei as in vein": [], "augh": [], "oe": [], "ui": [], "ch as in echo": [], "wa": [], "eu": [], "gh": [], "mb": [],
-    "mn": [], "que": [], "gn": [], "stle": [],"rh": [], "gue": [], "alk": [], "alt": [], "qua": [], "sc": [], 
+    "mn": [], "que": [], "gn": [], "stle": [],"rh": [], "gue": [], "alk": [], "alt": [], "qua": [], "sc": [], "2 syllable dblg.": [],     
     # Uncategorized
     "fail": [],
     "sight words": ['a', 'any', 'many', 'and', 'on', 'is', 'are', 'the', 'was', 'were', 'it', 'am', 'be', 'go', 'to', 'been', 'come', 'some', 'do', 'does', 'done', 'what', 'who', 'you', 'your', 'both', 'buy', 'door', 'floor', 'four', 'none', 'once', 'one', 'only', 'pull', 'push', 'sure', 'talk', 'walk', 'their', 'there', "they're", 'very', 'want', 'again', 'against', 'always', 'among', 'busy', 'could', 'should', 'would', 'enough', 'rough', 'tough', 'friend', 'move', 'prove', 'ocean', 'people', 'she', 'other', 'above', 'father', 'usually', 'special', 'front', 'thought', 'he', 'we', 'they', 'nothing', 'learned', 'toward', 'put', 'hour', 'beautiful', 'whole', 'trouble', 'of', 'off', 'use', 'have', 'our', 'say', 'make', 'take', 'see', 'think', 'look', 'give', 'how', 'ask', 'boy', 'girl', 'us', 'him', 'his', 'her', 'by', 'where', 'were', 'wear', 'hers', "don't", 'which', 'just', 'know', 'into', 'good', 'other', 'than', 'then', 'now', 'even', 'also', 'after', 'know', 'because', 'most', 'day', 'these', 'two', 'already', 'through', 'though', 'like', 'said', 'too', 'has', 'in', 'brother', 'sister', 'that', 'them', 'from', 'for', 'with', 'doing', 'well', 'before', 'tonight', 'down', 'about', 'but', 'up', 'around', 'goes', 'gone', 'build', 'built', 'cough', 'lose', 'loose', 'truth', 'daughter', 'son']
@@ -69,29 +69,35 @@ roots = ["port", "ject", "tract", "mit", "miss", "ceit", "ceive", "struct", "fac
 def is_valid_presuf(wordbase):
     if len(wordbase) < 3:
         return False
+    vowels = "aeiou"
     if not any(char in vowels for char in wordbase.lower()):
         return False
     if wordbase.lower() in valid_words:
         return True
+
     # Handle 'i' to 'y' change (e.g., 'beauti' -> 'beauty')
     if wordbase.endswith('i'):
         modified_word = wordbase[:-1] + 'y'
         if modified_word.lower() in valid_words:
             return True
+
     # Handle silent 'e' addition (e.g., 'hop' -> 'hope')
     modified_word = wordbase + 'e'
     if modified_word.lower() in valid_words:
         return True
+
     # Handle doubling consonants (e.g., 'begin' -> 'beginning')
     if len(wordbase) >= 3 and wordbase[-1] == wordbase[-2]:
         modified_word = wordbase[:-1]
         if modified_word.lower() in valid_words:
             return True
+
     # Handle 'ie' to 'y' change (e.g., 'dy' -> 'die')
     if wordbase.endswith('y') and len(wordbase) >= 2:
         modified_word = wordbase[:-1] + 'ie'
         if modified_word.lower() in valid_words:
             return True
+
     # Try replacing the last vowel with other vowels
     if wordbase[-1] in vowels:
         for vowel in vowels:
@@ -99,20 +105,17 @@ def is_valid_presuf(wordbase):
                 modified_word = wordbase[:-1] + vowel
                 if modified_word.lower() in valid_words:
                     return True
-    return False
 
+    return False
 def x_in_word_check(word, arpabet):
     keys = ["m", "l", "p", "k", "j", "v", "z", "f", "x",
         "sh", "ay", "ck", "ee", "all", "th", "oy", 
-        "wh", "er", "aw", "tch", "ed", "ai", "oa", "kn", "ur",
+        "wh", "er", "aw", "tch", "ed", "ai", "igh", "oa", "ir", "oi", "kn", "ur",
         "dge", "tion", "au", "ough", "wor", "wr", "eigh", "augh", "oe", "ui", "wa", "eu", "gh",
         "mb", "mn", "que", "gn", "stle", "rh", "gue", "alk", "alt", "qua", "sc", "ph"]
 
     tokens = arpabet.split()
-    if 'oi' in word and 'OY' in tokens:
-        categories['oi'].append(word)
-    if 'ir' in word and "ER" in tokens:
-        categories['ir'].append(word)
+
     if "s" in word and "S" in tokens:
         categories["s"].append(word)
     if "t" in word and "T" in tokens:
@@ -178,10 +181,6 @@ def x_in_word_check(word, arpabet):
             categories["ar"].append(word)
     if word[-2:] == "ly" and tokens[-1] == "IY":
         categories["ly"].append(word)
-    if "igh" in word:
-        index = word.find("igh")
-        if word[index-1] not in 'eia':
-            categories['igh'].append(word)
     if "ing" in word or "ang" in word or "ong" in word or "ung" in word:
         categories["-ing, -ong, -ang, -ung"].append(word)
     if "ink" in word or "ank" in word or "onk" in word or "unk" in word: 
@@ -194,9 +193,9 @@ def x_in_word_check(word, arpabet):
         categories["-sk, -lt, -lk"].append(word)
     if word.endswith("ct") or word.endswith("pt"):
         categories["-ct, -pt"].append(word)
-    if (word.endswith('ble') or word.endswith('cle') or word.endswith('dle') or word.endswith('fle') or 
-        word.endswith('gle') or word.endswith('ple') or word.endswith('tle') or word.endswith('zle') or word.endswith('kle')):
-        categories["-ble, -cle, -dle, -fle, -gle, -kle, -ple, -tle, -zle"].append(word)
+    if ("ble" in word or "cle" in word or "dle" in word or "fle" in word or "gle" in word 
+          or "kle" in word or "ple" in word or "tle" in word or "zle" in word):
+         categories["-ble, -cle, -dle, -fle, -gle, -kle, -ple, -tle, -zle"].append(word)
     if "ild" in word or "ind" in word or "old" in word or "ost" in word:
         categories["-ild, -ind, -old, -ost"].append(word)
     for key in keys:
@@ -266,23 +265,23 @@ def ear_check(word, arpabet):
 
 def s_blends(word):
     if word.startswith("sn") or word.startswith("sm") or word.startswith("st") or word.startswith("sw") or word.startswith("sc") or word.startswith("sp"):
-        if word[2] in vowels:
+        if word[2] in "aeiou":
             categories["s blends"].append(word)
     
 def l_blends(word):
     if word.startswith("bl") or word.startswith("cl") or word.startswith("fl") or word.startswith("pl") or word.startswith("gl") or word.startswith("sl"):
-        if word[2] in vowels:
+        if word[2] in "aeiou":
             categories["l blends"].append(word)
 
 def r_blends(word):
     if word.startswith("br") or word.startswith("cr") or word.startswith("dr") or word.startswith("fr") or word.startswith("gr") or word.startswith("pr") or word.startswith("tr"):
-        if word[2] in vowels:
+        if word[2] in "aeiou":
             categories["r blends"].append(word)
 
 def ea_check(word, arpabet):
     if "IY" in arpabet:
         categories["ea as in eat"].append(word)
-    if "EH" in arpabet and "EH R" not in arpabet:
+    if "EH" in arpabet:
         categories["ea as in bread"].append(word)
 
 def vce_check(word):
@@ -355,7 +354,7 @@ def sion_check(word, arpabet):
         categories["-sion as in vision"].append(word)
 
 def threel_blends(word):
-    if (word.startswith("spr") or word.startswith("spl") or word.startswith("thr") or word.startswith("scr") or word.startswith("shr") or word.startswith("str")):
+    if (word.startswith("spr") or word.startswith("spl") or word.startswith("thr") or word.startswith("scr") or word.startswith("squ") or word.startswith("shr") or word.startswith("str")):
         categories["3-letter beg. blends"].append(word)
 
 def vccv(word):
@@ -391,9 +390,6 @@ def vrl_check(word):
             break  
 
 def vv_check(word, arpabet):
-    for i in range(len(word) - 1):
-        if word[i] in vowels and word[i + 1] in vowels:
-            
     tokens = arpabet.split()
     consecutive_vowels = any(word[i] in vowels and word[i + 1] in vowels for i in range(len(word) - 1))
     distinct_vowel_sounds = sum(1 for phoneme in tokens if phoneme[0] in vowels.upper()) >= 2
@@ -413,6 +409,63 @@ def should_double_consonant(word, arpabet):
             # Apply the Doubling Rule based on syllable count and stress
             if syllable_count == 1 or (stress_pattern and stress_pattern[-1] == "1"):
                 categories["double rule-suffixes"].append(word)
+
+def begin_interm_affixes(word):
+    exceptions = ["e-mail", "e-book", "e-commerce", "eject", "emit", "emigrate", "amorphous", "asymmetry", "adrift", "along", "alike", "queen", "dozen", "raven", "heaven", "rotten", "burden", "kitten", "Lauren", "broken", "budget", "target", "honest", "arrest", "protest", "contest", "request", "decline", "demonstrate", "democratic", "determine", "external", "extra"]
+
+    if word in exceptions:
+        if word not in categories["begin/interm affixes"]:
+            categories["begin/interm affixes"].append(word)
+        return  # Exit early if the word is an exception
+
+    # Check for prefixes
+    for prefix in begin_intermediate_prefixes:
+        if word.startswith(prefix):
+            wordbase = word[len(prefix):]  # Correctly remove the prefix
+            if is_valid_presuf(wordbase):
+                if word not in categories["begin/interm affixes"]:
+                    categories["begin/interm affixes"].append(word)
+                break  # Exit the loop once a match is found
+
+    # Check for suffixes
+    for suffix in begin_intermediate_suffixes:
+        if word.endswith(suffix):
+            wordbase = word[:-len(suffix)]  # Correctly remove the suffix
+            if is_valid_presuf(wordbase):
+                if word not in categories["begin/interm affixes"]:
+                    categories["begin/interm affixes"].append(word)
+                break  
+            # Exit the loop once a match is found
+
+# Function to categorize words with base/suffix or prefix/base patterns
+def base_suffix_prefix_base(word):
+    for prefix in begin_intermediate_prefixes:
+        if word.startswith(prefix):
+            base = word[len(prefix):]  # Base ?
+            if base:  # If there's remaining base
+                categories["base/suffix, prefix/base patterns"].append(word)
+                break
+
+    for suffix in begin_intermediate_suffixes:
+        if word.endswith(suffix):
+            base = word[:-len(suffix)]  # Remove suffix to identify base
+            if base:  # If there's remaining base
+                categories["base/suffix, prefix/base patterns"].append(word)
+                break
+
+# Function to categorize words with intermediate/advanced affixes
+def interm_adv_affixes(word):
+    for affix in intermediate_advanced_affixes:
+        if word.startswith(affix) or word.endswith(affix):
+            categories["interm./adv. affixes"].append(word)
+            break
+
+# Function to categorize words with beginning roots
+def beginning_roots(word):
+    for root in roots:
+        if word.startswith(root):
+            categories["beginning roots"].append(word)
+            break
 
 def fszl_check(word, arpabet):
     if pronouncing.syllable_count(arpabet) == 1:
@@ -442,6 +495,63 @@ def is_y_rule_suffix(word):
 
     return False
 
+#def is_e_rule_suffix(word):
+ #   for suffix in begin_intermediate_suffixes:
+  #      if word.endswith(suffix) and len(word) > 6:
+   #         if is_valid_word(word) or is_valid_word(word+'e'):
+    #            return True
+
+    #return False
+
+def doubling_categorization(word):
+    # Define common vowel suffixes
+    vowel_suffixes = ["ing", "ed", "er", "est", "able", "y"]
+
+    # Separate base word and suffix
+    base_word = word
+    suffix = ""
+    for suffix_option in vowel_suffixes:
+        if word.endswith(suffix_option):
+            base_word = word[:-len(suffix_option)]
+            suffix = suffix_option
+            break
+
+    # If no valid suffix was found, return (no action)
+    if not suffix:
+        return
+
+    # Check if the base word ends in one vowel and one consonant
+    if len(base_word) < 2 or not base_word[-1].isalpha() or not base_word[-2].isalpha():
+        return  # Invalid input, base word must end in a vowel + consonant
+
+    # Helper function to check if a character is a vowel
+    def is_vowel(char):
+        return char.lower() in "aeiou"
+
+    # Check if base word ends in a single vowel + consonant
+    if is_vowel(base_word[-2]) and not is_vowel(base_word[-1]):
+        # Get pronunciations for the word to determine syllables and stress pattern
+        pronunciations = pronouncing.phones_for_word(base_word)
+        if not pronunciations:
+            return  # If no pronunciation is available, we cannot determine syllables/stress
+
+        # Use the first pronunciation available
+        pronunciation = pronunciations[0]
+        syllable_count = pronouncing.syllable_count(pronunciation)
+
+        if syllable_count == 1:
+            # One-syllable word, apply general doubling rule
+            categories["double rule-suffixes"].append(word)
+        
+        elif syllable_count == 2:
+            # Two-syllable word, check if the last syllable is stressed
+            stress_pattern = pronouncing.stresses(pronunciation)
+            if stress_pattern[-1] == "1":  # Last syllable is stressed
+                categories["2 syllable dblg."].append(word)
+            else:
+                # Last syllable is not stressed, apply general doubling rule
+                categories["double rule-suffixes"].append(word)
+                
 def parse_and_process_words(file_path):
     try:
         with open(file_path, 'r') as file:
@@ -507,7 +617,7 @@ def parse_and_process_words(file_path):
             if word[-1] in "fszl" and word[-2] in "fszl" and word[-1] == word[-2]:
                 fszl_check(word, arpabet)
             if len(word) >= 3:
-                should_double_consonant(word, arpabet)
+                #should_double_consonant(word, arpabet)
                 vcv(word)
                 vv_check(word, arpabet)
             if len(word) >= 4:
@@ -521,9 +631,14 @@ def parse_and_process_words(file_path):
             if "v" in word or "l" in word or "r" in word:
                 vrl_check(word)
             
+            doubling_categorization(word)
             vce_check(word)
             OCE_check(word, arpabet)
             x_in_word_check(word, arpabet)
+            beginning_roots(word)
+            begin_interm_affixes(word)
+            base_suffix_prefix_base(word)
+            interm_adv_affixes(word)
 
         output_path = os.path.join(script_dir, "categorized_words.json")
         
@@ -555,7 +670,7 @@ def getTopWords(num, inFile, outFile):
     # print(f"Data successfully written to truncated_dictionary.json")
 
 def main():
-    file_path = 'Dictionary.txt' 
+    file_path = 'WordDatav4.txt' 
     input_path = os.path.join(script_dir, file_path)
     parse_and_process_words(input_path)
     #getTopWords(20, 'categorized_words.json', 'truncated_dictionary.json')
@@ -573,7 +688,7 @@ def map_chunks_to_phonemes(word):
     Returns:
         dict: A dictionary mapping word chunks to their phonemes.
     """
-
+    vowels = "aeiouy"  # Treat 'y' as a vowel in this context
     phonetic_transcriptions = pronouncing.phones_for_word(word)
     
     if not phonetic_transcriptions:
