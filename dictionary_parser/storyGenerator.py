@@ -155,7 +155,19 @@ def sentence_check(story):
     prev_sentence = sentences[0]
     for sentence in sentences:
         next_sentence = sentences[sentences.index(sentence) + 1] if sentences.index(sentence) < len(sentences) - 1 else ""
-        if ""
+        if "___" in sentence:
+            prompt = f"""
+                Give 5 words that would make sense in the following blank space:
+                {prev_sentence}
+                {sentence}
+                {next_sentence}
+                return only the 5 words separated by commas. Like this "word1,word2,word3,word4,word5"
+            """
+            response = query(prompt)
+            words = response.split(",")
+            for word in words:
+                pass
+                # Check each word to see if it fits in the 
         prev_sentence = sentence
     return new_story
 
