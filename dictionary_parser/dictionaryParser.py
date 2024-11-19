@@ -1,12 +1,14 @@
 import json
 import pronouncing
 import os
+import string
 import re
 import nltk
 import syllapy
 from nltk.corpus import words
 import shutil
 
+# Sight words must be unioned outside of dictionaryParser !!!!
 
 if os.path.exists('dictionary_parser\\edited_generated_story.txt'):
     os.remove('dictionary_parser\\edited_generated_story.txt')
@@ -108,8 +110,8 @@ def is_valid_presuf(wordbase):
     return False
 def x_in_word_check(word, arpabet):
     keys = ["m", "l", "p", "k", "j", "v", "z", "f", "x",
-        "qu", "sh", "ay", "ck", "ee", "ch", "or", "all", "th", "oy", "ar", 
-        "wh", "er", "aw", "ly", "tch", "ed", "ai", "igh", "oa", "ir", "oi", "kn", "ur",
+        "sh", "ay", "ck", "ee", "all", "th", "oy", 
+        "wh", "er", "aw", "tch", "ed", "ai", "igh", "oa", "ir", "oi", "kn", "ur",
         "dge", "tion", "au", "ough", "wor", "wr", "eigh", "augh", "oe", "ui", "wa", "eu", "gh",
         "mb", "mn", "que", "gn", "stle", "rh", "gue", "alk", "alt", "qua", "sc", "ph"]
 
@@ -144,11 +146,20 @@ def x_in_word_check(word, arpabet):
         if "EH" in tokens or "AH" in tokens:
             categories["short e"].append(word)
     if "i" in word:
-        categories["i"].append(word)
+        if "AY" in tokens:
+            categories["long i"].append(word)
+        if "IH" in tokens:
+            categories["short i"].append(word)
     if "o" in word:
-        categories["o"].append(word)
+        if "OW" in tokens:
+            categories["long o"].append(word)
+        if "AH" in tokens or "AA" in tokens or "AO" in tokens:
+            categories["short o"].append(word)
     if "u" in word:
-        categories["u"].append(word)
+        if "UW" in tokens:
+            categories["long u"].append(word)
+        if "AH" in tokens:
+            categories["short u"].append(word)
     if "w" in word and "W" in tokens:
         if "wh" in word: # Check if there's 'w' and 'wh'
             w_index = word.index('wh')
@@ -157,7 +168,20 @@ def x_in_word_check(word, arpabet):
                 categories['w'].append(word)
         else:
             categories['w'].append(word)
-
+    if "qu" in word:
+        if "K W" in arpabet:
+            categories["qu"].append(word)
+    if "ch" in word:
+        if "CH" in tokens:
+            categories["ch"].append(word)
+    if "or" in word:
+        if "AO R" in arpabet:
+            categories["or"].append(word)
+    if "ar" in word:
+        if "AA R" in arpabet:
+            categories["ar"].append(word)
+    if word[-2:] == "ly" and tokens[-1] == "IY":
+        categories["ly"].append(word)
     if "ing" in word or "ang" in word or "ong" in word or "ung" in word:
         categories["-ing, -ong, -ang, -ung"].append(word)
     if "ink" in word or "ank" in word or "onk" in word or "unk" in word: 
@@ -235,22 +259,25 @@ def ow_check(word, arpabet):
         categories["ow as in snow"].append(word)
 
 def ear_check(word, arpabet):
-    if "IH" in arpabet and "R" in arpabet or "IY" in arpabet and "R" in arpabet:
+    if "IH R" in arpabet or "IY R" in arpabet:
         categories["ear as in hear"].append(word)
     elif "ER" in arpabet:
         categories["ear as in early"].append(word)
 
 def s_blends(word):
-    if ("sn" in word or "sm" in word or "st" in word or "sw" in word or "sc" in word or "sp" in word):
-        categories["s blends"].append(word)
+    if word.startswith("sn") or word.startswith("sm") or word.startswith("st") or word.startswith("sw") or word.startswith("sc") or word.startswith("sp"):
+        if word[2] in "aeiou":
+            categories["s blends"].append(word)
     
 def l_blends(word):
-    if ("bl" in word or "cl" in word or "fl" in word or "pl" in word or "gl" in word or "sl" in word):
-        categories["l blends"].append(word)
+    if word.startswith("bl") or word.startswith("cl") or word.startswith("fl") or word.startswith("pl") or word.startswith("gl") or word.startswith("sl"):
+        if word[2] in "aeiou":
+            categories["l blends"].append(word)
 
 def r_blends(word):
-    if ("br" in word or "cr" in word or "dr" in word or "fr" in word or "gr" in word or "pr" in word or "tr" in word):
-        categories["r blends"].append(word)
+    if word.startswith("br") or word.startswith("cr") or word.startswith("dr") or word.startswith("fr") or word.startswith("gr") or word.startswith("pr") or word.startswith("tr"):
+        if word[2] in "aeiou":
+            categories["r blends"].append(word)
 
 def ea_check(word, arpabet):
     if "IY" in arpabet:
@@ -526,9 +553,9 @@ def doubling_categorization(word):
                 # Last syllable is not stressed, apply general doubling rule
                 categories["double rule-suffixes"].append(word)
                 
-def parse_and_process_words(file_path):
+def parse_and_process_words(inFile, outFile):
     try:
-        with open(file_path, 'r') as file:
+        with open(inFile, 'r') as file:
             words = file.read().splitlines()
 
         unique_words = set(words)
@@ -539,7 +566,7 @@ def parse_and_process_words(file_path):
             if not phones:
                 print(f"\t'{word}' not found in the pronouncing library's dictionary.")
                 categories["fail"].append(word)
-                continue 
+                continue
 
             arp = phones[0]
             arpabet = re.sub(r'\d', '', arp)
@@ -614,7 +641,7 @@ def parse_and_process_words(file_path):
             base_suffix_prefix_base(word)
             interm_adv_affixes(word)
 
-        output_path = os.path.join(script_dir, "categorized_words.json")
+        output_path = os.path.join(script_dir, outFile)
         
         # Delete the file if it already exists
         if os.path.exists(output_path):
@@ -626,7 +653,7 @@ def parse_and_process_words(file_path):
         print("\n-=-=-= Finished categorzing! Saved to 'categorized_words.json' =-=-=-")
     
     except FileNotFoundError:
-        print(f"The file {file_path} was not found.")
+        print(f"The file was not found.")
     except Exception as e:
         print(f"An error occurred: {e}")
 
@@ -643,11 +670,93 @@ def getTopWords(num, inFile, outFile):
     
     # print(f"Data successfully written to truncated_dictionary.json")
 
+def stripped(filename):
+    # Define the output filename
+    output_filename = filename.replace('generated_story.txt', 'parsed_stripped_story.txt')
+
+    # Read the input file
+    with open(filename, 'r', encoding='utf-8') as input_file:
+        content = input_file.read()
+
+    # Remove punctuation and split into words
+    translator = str.maketrans('', '', string.punctuation)
+    stripped_content = content.translate(translator)
+    words = stripped_content.split()
+
+    # Write each word to the output file, one per line
+    with open(output_filename, 'w', encoding='utf-8') as output_file:
+        for word in words:
+            output_file.write(word.lower() + '\n')
+
+    return output_filename  # Return the new filename
+
 def main():
-    input_path = os.path.join(script_dir, 'WordDatav4.txt')
-    parse_and_process_words(input_path)
+    # Get the script directory
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    
+    # Strip punctuation and prepare the parsed file
+    stripped_file_path = stripped(os.path.join(script_dir, 'generated_story.txt'))
+    
+    # Use the stripped file for further processing
+    parse_and_process_words(stripped_file_path, 'categorized_words.json')
+
+    # Example function call (adjust as necessary for your use case)
+    # getTopWords(20, 'categorized_words.json', 'truncated_dictionary.json')
     #getTopWords(20, 'categorized_words.json', 'truncated_dictionary.json')
     phones1 = pronouncing.phones_for_word("existing")
-    #hard_vs_soft_G('fucking', phones1[0])
 
 main()
+
+def run(inFile: str, outFile: str, full_or_truncated: bool):
+    file_path = os.path.join(script_dir, inFile)
+
+def map_chunks_to_phonemes(word):
+    """
+    Splits a word into chunks at vowel boundaries and maps each chunk to its corresponding phonemes.
+
+    Args:
+        word (str): The word to split and map.
+    
+    Returns:
+        dict: A dictionary mapping word chunks to their phonemes.
+    """
+    vowels = "aeiouy"  # Treat 'y' as a vowel in this context
+    phonetic_transcriptions = pronouncing.phones_for_word(word)
+    
+    if not phonetic_transcriptions:
+        return f"No phonetic transcription found for '{word}'."
+    
+    phonemes = phonetic_transcriptions[0].split()  # Use the first phonetic transcription
+    chunk_to_phonemes = {}
+    current_chunk = []
+    current_phoneme_chunk = []
+
+    phoneme_iter = iter(phonemes)
+
+    for letter in word:
+        current_chunk.append(letter)
+        
+        if letter in vowels:  # Finalize chunk at vowel
+            try:
+                # Collect phonemes until a vowel phoneme is encountered
+                while True:
+                    phoneme = next(phoneme_iter)
+                    current_phoneme_chunk.append(phoneme)
+                    if phoneme[-1].isdigit():  # Vowel phoneme found
+                        break
+            except StopIteration:
+                pass
+            
+            # Map the current chunk to its phonemes
+            chunk_to_phonemes[''.join(current_chunk)] = ' '.join(current_phoneme_chunk)
+            current_chunk = []
+            current_phoneme_chunk = []
+
+    # Handle any leftover chunk or phoneme
+    if current_chunk:
+        chunk_to_phonemes[''.join(current_chunk)] = ' '.join(current_phoneme_chunk)
+        
+    return chunk_to_phonemes
+
+#print(map_chunks_to_phonemes("celebration"))
+

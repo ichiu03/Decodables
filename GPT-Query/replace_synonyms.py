@@ -54,7 +54,7 @@ def save_updated_story(updated_story, output_file):
 
 if __name__ == "__main__":
     synonyms_file = 'dictionary_parser\\word_synonyms.txt'
-    story_file = 'dictionary_parser\\edited_generated_story.txt'
+    story_file = 'dictionary_parser\\generated_story.txt'
     output_file = 'dictionary_parser\\updated_story.txt'
 
     # Load synonyms
