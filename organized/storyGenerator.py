@@ -228,7 +228,7 @@ def fix_spacing(text):
     return text
 
 ### Main function
-def main():
+def generate_story():
     topic, problems = get_input_and_save()
     dictionary = get_words(problems)
     outline = generate_outline(topic)
@@ -246,16 +246,12 @@ def main():
     story = fix_spacing(story)
 
     story = sentence_check(story)
-    # Delete any existing output files only after the entire story is generated
-    delete_old_file()
 
-    # Write the final story to the file
-    write_story_to_file(story)
 
-    print("\nFinal story:")
-    print(story)
-    return 0
+    # print("\nFinal story:")
+    # print(story)
+    return story
 
 
 if __name__ == "__main__":
-    main()
+    generate_story()
