@@ -1,4 +1,12 @@
 import re
+import openai
+from openai import OpenAI
+import json
+
+client = OpenAI(
+    api_key='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'
+)
+
 
 def load_synonyms(synonyms_file):
     synonyms_dict = {}
@@ -52,19 +60,97 @@ def save_updated_story(updated_story, output_file):
         file.write(updated_story)
     print(f"Updated story has been saved to '{output_file}'.")
 
+def query(prompt): 
+    messages = [
+        {"role": "system", "content": prompt},
+    ]
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=messages,
+    )
+    return response.choices[0].message.content
+
+
+import re
+
+import re
+
+def format_punctuation_with_quotes(text):
+    # Normalize multiple underscores to '____'
+    text = re.sub(r'_{2,}', '____', text)
+    
+    # Ensure spaces around '____', treating it as a word
+    # Add a space before '____' if it's attached to a word character
+    text = re.sub(r'(?<=\w)(____)', r' \1', text)
+    # Add a space after '____' if it's followed by a word character
+    text = re.sub(r'(____)(?=\w)', r'\1 ', text)
+    # Handle cases where multiple '____' are adjacent
+    text = re.sub(r'(____)(____)', r'\1 \2', text)
+    
+    # Remove unnecessary spaces before punctuation
+    text = re.sub(r'\s+([,.!?;:])', r'\1', text)
+    
+    # Ensure there's a space after punctuation marks if not present, unless followed by punctuation or quotes
+    text = re.sub(r'([,.!?;:])([^\s"\'().,!?:;])', r'\1 \2', text)
+    
+    # Handle quotation marks with a state machine
+    chars = list(text)
+    new_chars = []
+    in_quotes = False
+    i = 0
+    while i < len(chars):
+        c = chars[i]
+        if c == '"':
+            if in_quotes:
+                # Closing quote
+                # Remove space before closing quote
+                if new_chars and new_chars[-1] == ' ':
+                    new_chars.pop()
+                new_chars.append(c)
+                in_quotes = False
+                # Add space after closing quote if needed
+                if i + 1 < len(chars) and chars[i + 1] not in ' ,.!?;:\'"':
+                    new_chars.append(' ')
+            else:
+                # Opening quote
+                # Add space before opening quote if necessary
+                if new_chars and new_chars[-1] not in ' \n':
+                    new_chars.append(' ')
+                new_chars.append(c)
+                in_quotes = True
+                # Skip any spaces immediately after the opening quote
+                i += 1
+                while i < len(chars) and chars[i] == ' ':
+                    i += 1
+                continue
+        else:
+            new_chars.append(c)
+        i += 1
+    text = ''.join(new_chars)
+    
+    # Normalize multiple spaces to a single space
+    text = re.sub(r'\s+', ' ', text)
+    
+    # Trim leading and trailing spaces
+    text = text.strip()
+    
+    return text
+
 if __name__ == "__main__":
     synonyms_file = 'dictionary_parser\\word_synonyms.txt'
     story_file = 'dictionary_parser\\generated_story.txt'
     output_file = 'dictionary_parser\\updated_story.txt'
-
+    
     # Load synonyms
     synonyms_dict = load_synonyms(synonyms_file)
-
+    
     # Read the original story
     story = read_story(story_file)
-
+    
     # Replace problematic words with synonyms
     updated_story = replace_words_in_story(story, synonyms_dict)
-
+    
+    updated_story = format_punctuation_with_quotes(updated_story)
     # Save the updated story
     save_updated_story(updated_story, output_file)
+
