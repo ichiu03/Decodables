@@ -561,7 +561,6 @@ def parse_and_process_words(story):
     try:
         words = get_words(story)
         
-
         unique_words = set(words)
         print("-=-=-= Parsing through words =-=-=-\n")
         for word in unique_words:
