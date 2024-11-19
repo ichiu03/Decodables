@@ -58,40 +58,6 @@ def query(prompt):
     )
     return response.choices[0].message.content
 
-'''
-def sentence_rewrite(word):
-    with open('dictionary_parser\\generated_story', 'r', encoding='utf-8') as file:
-        story = file.read()
-    good_story = ""
-    sentences = story.split('.')
-    for sentence in sentences:
-        if word in sentence:
-            previous_sentence = sentences[sentences.index(sentence) - 1]
-            next_sentence = sentences[sentences.index(sentence) + 1]
-            message = f"""
-            Rewrite the following sentence and remove the word '{word}'
-            here is the sentence: 
-            
-            {sentence}
-
-            here is the previous sentence for context:
-
-            {previous_sentence}
-
-            here is the next sentence for context:
-
-            {next_sentence}
-
-            return only the new sentence or you will be disqualified
-
-            """
-            new_sentence = query(message)
-            good_story += new_sentence
-        else:
-            good_story += sentence
-   
-    return good_story
-'''
     
 
 
