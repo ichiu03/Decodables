@@ -63,7 +63,6 @@ def sentence_rewrite(word):
         story = file.read()
     good_story = ""
     sentences = story.split('.')
-    bad_sentences = []
     for sentence in sentences:
         if word in sentence:
             previous_sentence = sentences[sentences.index(sentence) - 1]
