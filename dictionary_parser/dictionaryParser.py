@@ -567,6 +567,9 @@ def parse_and_process_words(inFile, outFile):
                 print(f"\t'{word}' not found in the pronouncing library's dictionary.")
                 categories["fail"].append(word)
                 continue
+            else:
+                print(f"\t'{word}' found in the pronouncing library's dictionary.")
+
 
             arp = phones[0]
             arpabet = re.sub(r'\d', '', arp)
@@ -693,17 +696,19 @@ def stripped(filename):
 def main():
     # Get the script directory
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    
+
+    # Input and output file paths
+    input_file = os.path.join(script_dir, 'Dictionary.txt')  # Input file
+    output_file = 'dictionary_categorized.json'  # Output file
+
     # Strip punctuation and prepare the parsed file
-    stripped_file_path = stripped(os.path.join(script_dir, 'generated_story.txt'))
+    stripped_file_path = stripped(input_file)
     
     # Use the stripped file for further processing
-    parse_and_process_words(stripped_file_path, 'categorized_words.json')
+    parse_and_process_words(stripped_file_path, output_file)
+    
+    print(f"Processed words from '{input_file}' and saved to '{output_file}'.")
 
-    # Example function call (adjust as necessary for your use case)
-    # getTopWords(20, 'categorized_words.json', 'truncated_dictionary.json')
-    #getTopWords(20, 'categorized_words.json', 'truncated_dictionary.json')
-    phones1 = pronouncing.phones_for_word("existing")
 
 main()
 
