@@ -111,7 +111,7 @@ def delete_old_file():
             print(f"Previous file '{path}' deleted.")
 
 
-def generate_chapter(problems, outline, dictionary, chapter_number, length, story):
+def generate_chapter(outline, chapter_number, length, story):
     prompt = f"""
     You are a creative author tasked with writing chapter {chapter_number} of a children's story (age 10).
 
@@ -149,49 +149,14 @@ def generate_outline(topic):
     outline = query(prompt)
     return outline
 
-def sentence_check(story, dictionary, problems):
-    new_story = ""
+def sentence_check(story):
     sentences = story.split(".")
-    for i in range(len(sentences)):
-        check = False
-        remove_words = []
-        for word in bad_words:
-            if word in sentences[i]:
-                check = True
-                remove_words.append(word)
-        for problem in problems:
-            if problem in sentences[i]:
-                check = True
-        if check:
-            previous_sentence = sentences[i-1] + "." if i >0 else sentences[0] + "."
-            next_sentence = sentences[i+1] + "." if i < len(sentences)-1 else sentences[i] + "."
-            sentence = sentences[i] + "."
-            # Verify that the following sentence only contains words from this language: {dictionary}
-
-            prompt = f"""
-        
-            Rewrite the following sentence and remove these words: {remove_words}
-
-            Also remove any words with the following sounds: {problems}
-
-            Rewrite the sentence without using these sounds: {problems} and return only the new sentence.
-
-            Here is the sentence to rewrite: {sentence}
-
-            Here is the previous sentence for context: {previous_sentence}
-
-            Here is the next sentence for context: {next_sentence}
-
-            REMOVE ALL WORDS WITH THESE SOUNDS: {problems}
-            DO NOT USE THESE SOUNDS IN THE REWRITE
-
-            You will be disqualified if you return any words other than the new sentence.
-            """
-            response = query(prompt)
-            #print(response)
-            new_story += response
-        else:
-            new_story += sentences[i] + "."
+    new_story = ""
+    prev_sentence = sentences[0]
+    for sentence in sentences:
+        next_sentence = sentences[sentences.index(sentence) + 1] if sentences.index(sentence) < len(sentences) - 1 else ""
+        if ""
+        prev_sentence = sentence
     return new_story
 
 def word_check(story, dictionary, problems):
@@ -258,7 +223,7 @@ def main():
 
     for chapter in range(chapters):
         print(f"Generating chapter {chapter + 1}")
-        new_chapter = generate_chapter(problems, outline, dictionary, chapter + 1, story_length // chapters, story)
+        new_chapter = generate_chapter(outline, chapter + 1, story_length // chapters, story)
         temp_chapter = new_chapter
         temp_chapter = sentence_check(temp_chapter, dictionary, problems)
         temp_chapter = edit(temp_chapter)
@@ -267,6 +232,7 @@ def main():
     # Fix missing spaces after punctuation
     story = fix_spacing(story)
 
+    story = sentence_check(story)
     # Delete any existing output files only after the entire story is generated
     delete_old_file()
 
