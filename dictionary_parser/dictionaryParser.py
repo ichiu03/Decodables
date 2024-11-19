@@ -575,7 +575,7 @@ def parse_and_process_words(inFile, outFile):
                 # Append the word to 'unknown_words.txt' with a placeholder
                 unknown_words_file_path = os.path.join(script_dir, 'unknown_words.txt')
                 with open(unknown_words_file_path, 'a', encoding='utf-8') as unknown_words_file:
-                    unknown_words_file.write(f"{word} ____\n")
+                    unknown_words_file.write(f"{word} ___\n")
 
                 # Add to 'fail' category for reference
                 categories["fail"].append(word)

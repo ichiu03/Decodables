@@ -80,11 +80,11 @@ def write_words_with_synonyms(gathered_words, output_path, nonreplacing_words):
                     if synonym and synonym in valid_synonyms:
                         file.write(f"{word} {synonym}\n")
                     else:
-                        file.write(f"{word} ____\n")
+                        file.write(f"{word} ___\n")
                 else:
-                    file.write(f"{word} ____\n")
+                    file.write(f"{word} ___\n")
             else:
-                file.write(f"{word} ____\n")
+                file.write(f"{word} ___\n")
 
     print(f"Words and their synonyms have been saved to '{output_path}'")
 
