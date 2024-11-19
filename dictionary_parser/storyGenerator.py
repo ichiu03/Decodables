@@ -167,7 +167,8 @@ def sentence_check(story):
             words = response.split(",")
             for word in words:
                 pass
-                # Check each word to see if it fits in the 
+                # Use dictionary parser to check if the word is good
+                # if it is, then add it to the sentence
         prev_sentence = sentence
     return new_story
 
