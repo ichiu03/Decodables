@@ -5,38 +5,62 @@ from storyGenerator import *
 from replace_synonyms import *
 from synonymparser import *
 
+def get_words(sentence, problems, previous_sentence, next_sentence):
+    synonyms_dict = {}
+    prompt = f"""
+        Give 10 words that would make sense in the following blank space:
+        
+        {sentence}
+
+        return only the 10 words separated by commas. Like this "word1,word2,word3,word4,word5"
+        order the words so the best fit is first
+    """
+    response = query(prompt)
+    words = response.split(",")
+    words_dict = parse_and_process_words(sentence)
+    for problem in problems:
+        for word in words:
+            if word in words_dict[problem]:
+                words.remove(word)
+    if len(words) >0:
+        synonyms_dict['___']= " " + words[0]
+        updated_sentence = replace_words_in_story(sentence, synonyms_dict)
+        return updated_sentence
+    else:
+        prompt = f"""
+            Rewrite the following sentence to preserve the meaning and remove the blank space:
+
+            here is the previous sentence for context: {previous_sentence}
+            here is the sentence with the blank space: {sentence}
+            here is the next sentence for context: {next_sentence}
+        """
+        response = query(prompt)
+        word_dict = parse_and_process_words(response)
+
+        #synonym
+        synonyms_dict = synonymparser(word_dict, problems)
+
+        #replace
+        updated_sentence = replace_words_in_story(response, synonyms_dict)
+        if '___' in updated_sentence:
+            updated_sentence = get_words(updated_sentence, problems, previous_sentence, next_sentence)
+        else:
+            return updated_sentence
+
+
+
 
 def sentence_check(story, problems):
     sentences = story.split(".")
     new_story = ""
     prev_sentence = sentences[0]
-    synonyms_dict = {}
     for sentence in sentences:
         next_sentence = sentences[sentences.index(sentence) + 1] if sentences.index(sentence) < len(sentences) - 1 else ""
         if "___" in sentence:
-            prompt = f"""
-                Give 5 words that would make sense in the following blank space:
-                prevoius sentence: {prev_sentence}
-                sentence to change: {sentence}
-                next sentence: {next_sentence}
-                return only the 5 words separated by commas. Like this "word1,word2,word3,word4,word5"
-                order the words so the best fit is first
-            """
-            response = query(prompt)
-            words = response.split(",")
-            words_dict = parse_and_process_words(story)
-            for problem in problems:
-                for word in words:
-                    if word in words_dict[problem]:
-                        words.remove(word)
-            if len(words) >0:
-                synonyms_dict['___']= words[0]
-            else:
-                synonyms_dict['___'] = "___"
-            updated_sentence = replace_words_in_story(sentence, synonyms_dict)
-            new_story += updated_sentence
+            updated_sentence = get_words(sentence, problems, prev_sentence, next_sentence)
+            new_story += updated_sentence + ". "
         else:
-            new_story += sentence
+            new_story += sentence + ". "
 
         prev_sentence = sentence
     return new_story
@@ -62,9 +86,9 @@ def main():
     story = sentence_check(updated_story, problems)
 
     print("Saving updated story...")
-    print(updated_story)
+    print(story)
     output_file = 'dictionary_parser\\updated_story.txt'
-    save_updated_story(updated_story, output_file)
+    save_updated_story(story, output_file)
 
 if __name__ == "__main__":
     main()

@@ -78,13 +78,13 @@ def write_words_with_synonyms(gathered_words, nonreplacing_words):
                 
                 # Ensure that the chosen synonym is valid and in the large dictionary
                 if synonym and synonym in valid_synonyms:
-                    synonyms_dict[word] = synonym
+                    synonyms_dict[word] = " " + synonym
                 else:
-                    synonyms_dict[word] = "___"
+                    synonyms_dict[word] = " ___"
             else:
-                synonyms_dict[word] = "___"
+                synonyms_dict[word] = " ___"
         else:
-            synonyms_dict[word] = "___"
+            synonyms_dict[word] = " ___"
 
     return synonyms_dict
 

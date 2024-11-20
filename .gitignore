@@ -1,3 +1,7 @@
 .env
 venv
 __pycache__
+dictionary_parser\updated_story.txt
+dictionary_parser\word_synonyms.txt
+dictionary_parser\unknown_words.txt
+dictionary_parser\generated_story.txt
