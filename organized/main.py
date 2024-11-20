@@ -19,7 +19,7 @@ def get_words(sentence, problems, word_dict, previous_sentence, next_sentence):
     if len(bad_words) == 0:
         return None
     synonyms_dict = {}
-    print("sentence: " + sentence)
+    # print("sentence: " + sentence)
     words = []
     for word in bad_words:
         prompt = f"""
@@ -86,7 +86,7 @@ def get_synonyms_dict(story, word_dict, problems):
         for word in words:
             for problem in problems:
                 if word in word_dict[problem] and word not in sight_words:
-                    print(f"bad word: {word}")
+                    # print(f"bad word: {word}")
                     prompt = f"""
                         Give 5 words that would make sense as replacements for the following word in the sentence:
 
@@ -95,7 +95,7 @@ def get_synonyms_dict(story, word_dict, problems):
                         sentence to fix: {sentence}
                         next sentence (for context): {next_sentence}
 
-                        return only the 5 words separated by commas. Like this "word1,word2,word3,word4,word5"
+                        return only the 5 words separated by commas. Like this: "word1,word2,word3,word4,word5"
                         order the words so the best fit is first
                         """
                     response = query(prompt)
@@ -105,10 +105,10 @@ def get_synonyms_dict(story, word_dict, problems):
                         for problem in problems:
                             if temp_word in temp_words_dict[problem]:# or word not in large_dictionary:
                                 temp_words.remove(temp_word)
-                                print(f"CAUGHT {temp_word}")
+                                # print(f"CAUGHT {temp_word}")
                                 break
                     if len(temp_words) > 0:
-                        print(f"good word: {temp_words[0]}")
+                        # print(f"good word: {temp_words[0]}")
                         synonyms_dict[word] = " " + temp_words[0]
                     else:
                         synonyms_dict[word] = " ___"
@@ -171,11 +171,25 @@ def main():
 
     # Check the output
     word_dict = parse_and_process_words(story)
+
     for problem in problems:
         print(f"problem: {problem}")
         bads = [i for i in word_dict[problem] if i not in sight_words and i in story]
         print(f"bads: {bads}")
     
+    synonyms_dict = get_synonyms_dict(story, word_dict, problems)
+    story = replace_words_in_story(story, synonyms_dict)
+    print(story)
+
+    word_dict = parse_and_process_words(story)
+
+    for problem in problems:
+        print(f"problem: {problem}")
+        bads = [i for i in word_dict[problem] if i not in sight_words and i in story]
+        print(f"bads: {bads}")
+
+
+        
     output_file = 'dictionary_parser\\updated_story.txt'
     save_updated_story(story, output_file)
 
