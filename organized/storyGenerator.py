@@ -63,7 +63,7 @@ def get_input():
     story_length = int(input("Enter the length of the story: "))
     topic = input("Enter your story topic: ")
     problems = input("Enter the problem letters separated by commas: ").split(",")
-    sight_words = input("Enter the sight words separated by commas: ")
+    # sight_words = input("Enter the sight words separated by commas: ")
     problems = [problem.strip() for problem in problems]  # Clean up whitespace
 
     return topic, problems
