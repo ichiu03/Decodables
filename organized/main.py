@@ -140,19 +140,21 @@ def sentence_check(story, problems):
     return new_story
 
 
-
 def main():
     topic, problems = get_input()
     global sight_words
     sight_words = "his,she,the,they,that,is,was,to,their,has,them,then,than,with,and,of,for,as,at,by,an,or,if,be,are,not,from,have,when,where,what,how,why,who,which,will,can,do,does,done,doing"
+    
     # Generate the intial story
     print("Generating story...")
     story = generate_story(topic, problems)
     print(story)
+    
     # Sort the words with dictionary_parser to see whats good and whats bad
     print("Checking each word...")
     word_dict = parse_and_process_words(story)
     print(word_dict)
+    
     #synonym
     print("Finding synonyms...")
     # synonyms_dict = synonymparser(word_dict, problems)
@@ -167,37 +169,7 @@ def main():
     print("Saving updated story...")
     print(story)
 
-    global categories
-    categories = {
-        # Column 1 - Consonant Sounds
-        "s": [], "t": [], "b": [], "m": [], "l": [], "d": [], "n": [], "p": [], "k": [], "j": [], "v": [],
-        "z": [], "f": [], "hard c": [], "hard g": [], "r": [], "h": [], "w": [], "x": [], "y as in yes": [],
-        # Column 2 - All vowels (short & long)
-        "long a": [], "short a": [], "long i": [], "short i": [], "long o": [], "short o": [],
-        "long u": [], "short u": [], "long e": [], "short e": [],
-        # Column 3 
-        "fszl": [], "qu": [], "sh": [], "ay": [], "ck": [], "ee": [], "ch": [], "or": [], "s blends": [],
-        "l blends": [], "r blends": [], "-ing, -ong, -ang, -ung": [], "all": [], "th": [], "oy": [],
-        "-ink, -ank, -onk, -unk": [], "-ft, -nd, -st": [], "-sp, -nt, -mp": [], "-sk, -lt, -lk": [], "-ct, -pt": [],
-        "y as in dry": [], "ar": [], "wh": [], "oo as in school": [], "oo as in book": [], "vce": [],
-        "er": [], "ow as in plow": [], "ow as in snow": [], "vccv": [], "Open syll.": [], "Closed syll.": [], "contractions": [], 
-        # Column 4
-        "ear as in hear": [], "ear as in early": [], "y as in bumpy": [], "aw": [], "ly": [], "ea as in eat": [],
-        "ea as in bread": [], "3-letter beg. blends": [], "vcv, vcccv patterns": [], "tch": [], "soft c": [], 
-        "soft g": [], "ai": [], "igh": [], "ed": [], "-ble, -cle, -dle, -fle, -gle, -kle, -ple, -tle, -zle": [],
-        "l syllables": [],"v syllables": [], "r syllables": [], "oa": [], "ir": [], "-ild, -ind, -old, -ost": [], "oi": [], "double rule-suffixes": [],
-        "ew as in few/blew": [], "v/v pattern": [], "kn": [], "e rule-suffixes": [], "ou as in south": [], "ur": [],
-        "dge": [], "y rule suffixes": [], "tion": [], "begin/interm affixes": [], "base/suffix, prefix/base patterns": [], 
-        # Column 5
-        "au": [], "war": [], "ey as in monkey": [], "ey as in they": [],  "interm./adv. affixes": [], "ph": [],
-        "ie as in pie": [], "ie as in thief": [], "beginning roots": [], "-sion as in tension": [], "-sion as in vision" : [],
-        "y as in gym": [], "wr": [], "eigh": [], "ue as in blue": [], "ough": [], "wor": [], "ei as in receive": [],
-        "ei as in vein": [], "augh": [], "oe": [], "ui": [], "ch as in echo": [], "wa": [], "eu": [], "gh": [], "mb": [],
-        "mn": [], "que": [], "gn": [], "stle": [],"rh": [], "gue": [], "alk": [], "alt": [], "qua": [], "sc": [], "2 syllable dblg.": [],     
-        # Uncategorized
-        "fail": [],
-        "sight words": ['a', 'any', 'many', 'and', 'on', 'is', 'are', 'the', 'was', 'were', 'it', 'am', 'be', 'go', 'to', 'been', 'come', 'some', 'do', 'does', 'done', 'what', 'who', 'you', 'your', 'both', 'buy', 'door', 'floor', 'four', 'none', 'once', 'one', 'only', 'pull', 'push', 'sure', 'talk', 'walk', 'their', 'there', "they're", 'very', 'want', 'again', 'against', 'always', 'among', 'busy', 'could', 'should', 'would', 'enough', 'rough', 'tough', 'friend', 'move', 'prove', 'ocean', 'people', 'she', 'other', 'above', 'father', 'usually', 'special', 'front', 'thought', 'he', 'we', 'they', 'nothing', 'learned', 'toward', 'put', 'hour', 'beautiful', 'whole', 'trouble', 'of', 'off', 'use', 'have', 'our', 'say', 'make', 'take', 'see', 'think', 'look', 'give', 'how', 'ask', 'boy', 'girl', 'us', 'him', 'his', 'her', 'by', 'where', 'were', 'wear', 'hers', "don't", 'which', 'just', 'know', 'into', 'good', 'other', 'than', 'then', 'now', 'even', 'also', 'after', 'know', 'because', 'most', 'day', 'these', 'two', 'already', 'through', 'though', 'like', 'said', 'too', 'has', 'in', 'brother', 'sister', 'that', 'them', 'from', 'for', 'with', 'doing', 'well', 'before', 'tonight', 'down', 'about', 'but', 'up', 'around', 'goes', 'gone', 'build', 'built', 'cough', 'lose', 'loose', 'truth', 'daughter', 'son']
-    }
+    # Check the output
     word_dict = parse_and_process_words(story)
     for problem in problems:
         print(f"problem: {problem}")
