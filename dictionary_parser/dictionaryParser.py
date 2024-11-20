@@ -566,7 +566,7 @@ def parse_and_process_words(inFile, outFile):
             word = word.lower()
             
             # Skip single-letter or empty words
-            if len(word) <= 1:
+            if len(word) <= 1 and word != ("a" or "i") and not word.isdigit():
                 categories["fail"].append(word)
                 continue
 
