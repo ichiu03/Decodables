@@ -18,6 +18,7 @@ def get_words(sentence, problems, previous_sentence, next_sentence):
     response = query(prompt)
     words = response.split(",")
     words_dict = parse_and_process_words(sentence)
+    print(words_dict)
     for problem in problems:
         for word in words:
             if word in words_dict[problem]:
@@ -33,6 +34,8 @@ def get_words(sentence, problems, previous_sentence, next_sentence):
             here is the previous sentence for context: {previous_sentence}
             here is the sentence with the blank space: {sentence}
             here is the next sentence for context: {next_sentence}
+
+            return only the new sentence or you will be DISQUALIFIED
         """
         response = query(prompt)
         word_dict = parse_and_process_words(response)

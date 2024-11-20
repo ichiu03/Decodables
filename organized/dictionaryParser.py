@@ -568,11 +568,11 @@ def parse_and_process_words(story):
             phones = pronouncing.phones_for_word(word) if len(word) > 1 else False
             
             if not phones:
-                print(f"\t'{word}' not found in the pronouncing library's dictionary.")
+                # print(f"\t'{word}' not found in the pronouncing library's dictionary.")
                 categories["fail"].append(word)
                 continue
-            else:
-                print(f"\t'{word}' found in the pronouncing library's dictionary.")
+            # else:
+                # print(f"\t'{word}' found in the pronouncing library's dictionary.")
 
 
             arp = phones[0]

@@ -8,20 +8,12 @@ client = OpenAI(
     api_key='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'
 )
 
-
-# # Load categorized words
-# with open('dictionary_parser\\categorized_words.json', 'r', encoding='utf-8') as json_file:
-#     categorized_words = json.load(json_file)
-
 with open('dictionary_parser\\dictionary_categorized.json', 'r', encoding='utf-8') as json_file:
     dictionary = json.load(json_file)
 
 with open('dictionary_parser\\dictionary.txt', 'r', encoding='utf-8') as file:
     large_dictionary = set(word.strip().lower() for word in file.readlines())
 
-# # Load problem sounds (categories) to gather words from
-# with open('dictionary_parser\\problemsounds.json', 'r') as json_file:
-#     categories = json.load(json_file)
 
 # Function to gather words from specified categories
 def gather_words_from_categories(categorized_words, categories):
@@ -58,9 +50,6 @@ def query(prompt):
     )
     return response.choices[0].message.content
 
-    
-
-
 # Function to write words and their synonyms to a text file
 # Function to write words and their synonyms to a text file
 def write_words_with_synonyms(gathered_words, nonreplacing_words):
@@ -87,18 +76,6 @@ def write_words_with_synonyms(gathered_words, nonreplacing_words):
             synonyms_dict[word] = " ___"
 
     return synonyms_dict
-
-# Main function to execute the entire process
-# def main():
-#     # Gather words from specified categories
-#     gathered_words = gather_words_from_categories(categorized_words, categories)
-#     nonreplacing_words = gather_words_from_categories(dictionary, categories)
-    
-#     # Path for the output file
-#     output_path = 'dictionary_parser\\word_synonyms.txt'
-    
-#     # Write words and their synonyms to the text file
-#     write_words_with_synonyms(gathered_words, output_path, nonreplacing_words)
 
 def synonymparser(word_dict, problems):
     gathered_words = gather_words_from_categories(word_dict, problems)
