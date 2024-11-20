@@ -21,7 +21,7 @@ client = OpenAI(
     api_key='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'
 )
 
-story_length = 500
+story_length = 50
 chapters = 1
 
 good_words = []
@@ -57,22 +57,11 @@ def clear_json_file():
     with open(input_data_path, 'w', encoding='utf-8') as file:
         file.write('{}')  # Write an empty JSON object
 
-def get_input_and_save():
-    clear_json_file()  # Clear the file before saving new data
-    
+def get_input():
+ 
     topic = input("Enter your story topic: ")
     problems = input("Enter the problem letters separated by commas: ").split(",")
     problems = [problem.strip() for problem in problems]  # Clean up whitespace
-
-    # Create a dictionary to store the input
-    input_data = {
-        "topic": topic,
-        "problems": problems
-    }
-
-    # Save the data to a JSON file
-    with open(input_data_path, 'w', encoding='utf-8') as file:
-        json.dump(input_data, file, indent=4)
 
     return topic, problems
 
@@ -228,8 +217,8 @@ def fix_spacing(text):
     return text
 
 ### Main function
-def generate_story():
-    topic, problems = get_input_and_save()
+def generate_story(topic, problems):
+    
     dictionary = get_words(problems)
     outline = generate_outline(topic)
     story = ""
@@ -237,15 +226,15 @@ def generate_story():
     for chapter in range(chapters):
         print(f"Generating chapter {chapter + 1}")
         new_chapter = generate_chapter(outline, chapter + 1, story_length // chapters, story)
-        temp_chapter = new_chapter
-        temp_chapter = sentence_check(temp_chapter, dictionary, problems)
-        temp_chapter = edit(temp_chapter)
-        story += temp_chapter + " "  # Add a space between chapters
-
+        # temp_chapter = new_chapter
+        # temp_chapter = sentence_check(temp_chapter, dictionary, problems)
+        temp_chapter = edit(new_chapter)
+        story += temp_chapter + "\n"  # Add a space between chapters
+    print(story)
     # Fix missing spaces after punctuation
-    story = fix_spacing(story)
+    # story = fix_spacing(story)
 
-    story = sentence_check(story)
+    # story = sentence_check(story)
 
 
     # print("\nFinal story:")

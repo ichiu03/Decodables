@@ -52,6 +52,10 @@ def save_updated_story(updated_story, output_file):
         file.write(updated_story)
     print(f"Updated story has been saved to '{output_file}'.")
 
+def synonymparser(story, synonyms_dict):
+    updated_story = replace_words_in_story(story, synonyms_dict)
+    return updated_story
+
 if __name__ == "__main__":
     synonyms_file = 'dictionary_parser\\word_synonyms.txt'
     story_file = 'dictionary_parser\\generated_story.txt'

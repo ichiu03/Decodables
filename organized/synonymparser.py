@@ -9,9 +9,9 @@ client = OpenAI(
 )
 
 
-# Load categorized words
-with open('dictionary_parser\\categorized_words.json', 'r', encoding='utf-8') as json_file:
-    categorized_words = json.load(json_file)
+# # Load categorized words
+# with open('dictionary_parser\\categorized_words.json', 'r', encoding='utf-8') as json_file:
+#     categorized_words = json.load(json_file)
 
 with open('dictionary_parser\\dictionary_categorized.json', 'r', encoding='utf-8') as json_file:
     dictionary = json.load(json_file)
@@ -19,15 +19,15 @@ with open('dictionary_parser\\dictionary_categorized.json', 'r', encoding='utf-8
 with open('dictionary_parser\\dictionary.txt', 'r', encoding='utf-8') as file:
     large_dictionary = set(word.strip().lower() for word in file.readlines())
 
-# Load problem sounds (categories) to gather words from
-with open('dictionary_parser\\problemsounds.json', 'r') as json_file:
-    categories = json.load(json_file)
+# # Load problem sounds (categories) to gather words from
+# with open('dictionary_parser\\problemsounds.json', 'r') as json_file:
+#     categories = json.load(json_file)
 
 # Function to gather words from specified categories
 def gather_words_from_categories(categorized_words, categories):
     gathered_words = []
 
-    for category in categories.get('problems', []):  # Ensure we access the 'problems' key in the JSON
+    for category in categories:  # Ensure we access the 'problems' key in the JSON
         if category in categorized_words:
             gathered_words.extend(categorized_words[category])
 
@@ -63,42 +63,55 @@ def query(prompt):
 
 # Function to write words and their synonyms to a text file
 # Function to write words and their synonyms to a text file
-def write_words_with_synonyms(gathered_words, output_path, nonreplacing_words):
-    with open(output_path, 'w', encoding='utf-8') as file:
-        for word in gathered_words:
-            synonyms = find_synonyms(word)
-            if synonyms:
-                # Filter synonyms to ensure they are in the large dictionary and not in nonreplacing_words
-                valid_synonyms = [syn for syn in synonyms if syn in large_dictionary and syn not in nonreplacing_words]
+def write_words_with_synonyms(gathered_words, nonreplacing_words):
+    synonyms_dict = {}
+    for word in gathered_words:
+        synonyms = find_synonyms(word)
+        if synonyms:
+            # Filter synonyms to ensure they are in the large dictionary and not in nonreplacing_words
+            valid_synonyms = [syn for syn in synonyms if syn in large_dictionary and syn not in nonreplacing_words]
 
-                if valid_synonyms:
-                    # Convert the set to a list for JSON serialization
-                    message = f"Which one of these synonyms is most similar to '{word}': {valid_synonyms}. Respond with just the word."
-                    synonym = query(message)
-                    
-                    # Ensure that the chosen synonym is valid and in the large dictionary
-                    if synonym and synonym in valid_synonyms:
-                        file.write(f"{word} {synonym}\n")
-                    else:
-                        file.write(f"{word} ____\n")
+            if valid_synonyms:
+                # Convert the set to a list for JSON serialization
+                message = f"Which one of these synonyms is most similar to '{word}': {valid_synonyms}. Respond with just the word."
+                synonym = query(message)
+                
+                # Ensure that the chosen synonym is valid and in the large dictionary
+                if synonym and synonym in valid_synonyms:
+                    synonyms_dict[word] = synonym
                 else:
-                    file.write(f"{word} ____\n")
+                    synonyms_dict[word] = "___"
             else:
-                file.write(f"{word} ____\n")
+                synonyms_dict[word] = "___"
+        else:
+            synonyms_dict[word] = "___"
 
-    print(f"Words and their synonyms have been saved to '{output_path}'")
+    return synonyms_dict
 
 # Main function to execute the entire process
-def main():
-    # Gather words from specified categories
-    gathered_words = gather_words_from_categories(categorized_words, categories)
-    nonreplacing_words = gather_words_from_categories(dictionary, categories)
+# def main():
+#     # Gather words from specified categories
+#     gathered_words = gather_words_from_categories(categorized_words, categories)
+#     nonreplacing_words = gather_words_from_categories(dictionary, categories)
     
-    # Path for the output file
-    output_path = 'dictionary_parser\\word_synonyms.txt'
+#     # Path for the output file
+#     output_path = 'dictionary_parser\\word_synonyms.txt'
     
-    # Write words and their synonyms to the text file
-    write_words_with_synonyms(gathered_words, output_path, nonreplacing_words)
+#     # Write words and their synonyms to the text file
+#     write_words_with_synonyms(gathered_words, output_path, nonreplacing_words)
+
+def synonymparser(word_dict, problems):
+    gathered_words = gather_words_from_categories(word_dict, problems)
+    nonreplacing_words = gather_words_from_categories(dictionary, problems)
+
+    final_synonms = write_words_with_synonyms(gathered_words,  nonreplacing_words)
+
+    return final_synonms
+
+    
+
+
+
 # Run the main function
 if __name__ == "__main__":
     main()
