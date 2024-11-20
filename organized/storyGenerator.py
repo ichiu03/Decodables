@@ -23,7 +23,7 @@ client = OpenAI(
 
 story_length = 500
 chapters = 1
-
+sight_words = ""
 good_words = []
 bad_words = []
 
@@ -58,9 +58,12 @@ def clear_json_file():
         file.write('{}')  # Write an empty JSON object
 
 def get_input():
- 
+    global story_length
+    global sight_words
+    story_length = int(input("Enter the length of the story: "))
     topic = input("Enter your story topic: ")
     problems = input("Enter the problem letters separated by commas: ").split(",")
+    sight_words = input("Enter the sight words separated by commas: ")
     problems = [problem.strip() for problem in problems]  # Clean up whitespace
 
     return topic, problems

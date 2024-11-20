@@ -558,6 +558,7 @@ def get_words(story):
     return words
   
 def parse_and_process_words(story):
+    # categories = {}
     try:
         words = get_words(story)
         
