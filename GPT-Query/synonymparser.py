@@ -99,6 +99,8 @@ def main():
     
     # Write words and their synonyms to the text file
     write_words_with_synonyms(gathered_words, output_path, nonreplacing_words)
+    open('dictionary_parser\\word_synonyms.txt', 'a', encoding='utf-8').write(open('dictionary_parser\\unknown_words.txt', 'r', encoding='utf-8').read())
+
 # Run the main function
 if __name__ == "__main__":
     main()
