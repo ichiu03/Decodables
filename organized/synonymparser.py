@@ -107,12 +107,3 @@ def synonymparser(word_dict, problems):
     final_synonms = write_words_with_synonyms(gathered_words,  nonreplacing_words)
 
     return final_synonms
-
-    
-
-
-
-# Run the main function
-if __name__ == "__main__":
-    main()
-
