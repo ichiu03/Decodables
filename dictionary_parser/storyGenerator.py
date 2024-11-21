@@ -63,6 +63,10 @@ def get_input_and_save():
     topic = input("Enter your story topic: ")
     problems = input("Enter the problem letters separated by commas: ").split(",")
     problems = [problem.strip() for problem in problems]  # Clean up whitespace
+    
+    # Ensure "fail" is always included
+    if "fail" not in problems:
+        problems.append("fail")
 
     # Create a dictionary to store the input
     input_data = {
@@ -148,7 +152,7 @@ def generate_outline(topic):
     """
     outline = query(prompt)
     return outline
-
+'''
 def sentence_check(story):
     sentences = story.split(".")
     new_story = ""
@@ -226,7 +230,7 @@ def fix_spacing(text):
     # Insert a space after punctuation marks if not followed by a space
     text = re.sub(r'([.!?])([^\s])', r'\1 \2', text)
     return text
-
+'''
 ### Main function
 def main():
     topic, problems = get_input_and_save()
@@ -234,18 +238,20 @@ def main():
     outline = generate_outline(topic)
     story = ""
 
+
     for chapter in range(chapters):
         print(f"Generating chapter {chapter + 1}")
         new_chapter = generate_chapter(outline, chapter + 1, story_length // chapters, story)
         temp_chapter = new_chapter
-        temp_chapter = sentence_check(temp_chapter, dictionary, problems)
-        temp_chapter = edit(temp_chapter)
+        #temp_chapter = sentence_check(temp_chapter, dictionary, problems)
+        #temp_chapter = edit(temp_chapter)
         story += temp_chapter + " "  # Add a space between chapters
 
     # Fix missing spaces after punctuation
-    story = fix_spacing(story)
+    #story = fix_spacing(story)
 
-    story = sentence_check(story)
+    #story = sentence_check(story)
+
     # Delete any existing output files only after the entire story is generated
     delete_old_file()
 

@@ -1,9 +1,8 @@
 {
-    "topic": "cars",
+    "topic": "dogs",
     "problems": [
-        "b",
+        "l",
         "m",
-        "w",
-        "x"
+        "fail"
     ]
 }
