@@ -25,12 +25,12 @@ def get_words(sentence, problems, word_dict, previous_sentence, next_sentence):
     words = []
     for word in bad_words:
         prompt = f"""
-            Give 5 words that would make sense as replacements for the following word in the sentence:
+            Give 10 words that would make sense as replacements for the following word in the sentence and don't include these sounds: {problems}:
             word: {word}
             
             sentence: {sentence}
 
-            return only the 5 words separated by commas. Like this "word1,word2,word3,word4,word5"
+            return only the 10 words separated by commas. Like this "word1,word2,word3,word4,word5"
             order the words so the best fit is first
         """
         response = query(prompt)
@@ -90,15 +90,19 @@ def get_synonyms_dict(story, word_dict, problems):
             word = "".join(re.findall("[a-zA-Z]", word)).lower()
             for problem in problems:
                 if word in word_dict[problem] and word not in sight_words:
+                    #
+                    #
+                    #
+                    #HARD CODE THIS????
                     prompt = f"""
-                        Give 5 words that would make sense as replacements for the following word in the sentence:
+                        Give 10 words that would make sense as replacements for the following word in the sentence and don't include these sounds: {problems}:
 
                         word: {word}
                         previous sentence (for context): {prev_sentence}
                         sentence to fix: {sentence}
                         next sentence (for context): {next_sentence}
 
-                        return only the 5 words separated by commas. Like this: "word1,word2,word3,word4,word5"
+                        return only the 10 words separated by commas. Like this: "word1,word2,word3,word4,word5"
                         order the words so the best fit is first
                         """
                     response = query(prompt)
