@@ -65,6 +65,11 @@ begin_intermediate_suffixes = ["ful", "est", "ish", "less", "ness", "ling", "dom
 intermediate_advanced_affixes = ["inter", "multi", "anti", "contra", "pseudo", "ology", "tion", "phobia"]
 roots = ["port", "ject", "tract", "mit", "miss", "ceit", "ceive", "struct", "fact", "form", "spect", 
          "dict", "duct", "script", "rupt", "flect", "flex", "vert", "vers", "pel", "puls", "vis", "vid", "cap", "cept"]
+vowel_phonemes = {
+    "AA", "AE", "AH", "AO", "AW", "AY", 
+    "EH", "EY", "IH", "IY", 
+    "OW", "OY", "UH", "UW"
+}
 
 def is_valid_presuf(wordbase):
     if len(wordbase) < 3:
@@ -208,7 +213,6 @@ def warCheck(word):
         categories["war"].append(word)
 
 def yCheck(word, arpabet):   
-    tokens = arpabet.split()
     # "y as in yes" (initial /Y/ sound)
     if "ye" in word or "ya" in word or "yo" in word:
         if "Y EH" in arpabet or "Y OW" in arpabet or "Y AO" in arpabet or "Y UH" in arpabet or "Y AH" in arpabet:
@@ -226,7 +230,7 @@ def yCheck(word, arpabet):
     if arpabet.endswith("IY") and word.endswith("ey"):
         categories["ey as in monkey"].append(word)
     # "ey as in they" (long "EY1" sound)
-    elif "EY" in arpabet:
+    elif "ey" in word and "EY" in arpabet:
         categories["ey as in they"].append(word)
 
 def hard_vs_soft_C(word, arpabet):
@@ -391,14 +395,21 @@ def vrl_check(word):
             break  
 
 def vv_check(word, arpabet):
-    #for i in range(len(word) - 1):
-    #    if word[i] in vowels and word[i + 1] in vowels:
-            
+    consecutive = False
+    for i in range(len(word) - 1):
+        if word[i] in vowels and word[i + 1] in vowels:
+            consecutive = True
+    if not consecutive: return 
+
     tokens = arpabet.split()
-    consecutive_vowels = any(word[i] in vowels and word[i + 1] in vowels for i in range(len(word) - 1))
-    distinct_vowel_sounds = sum(1 for phoneme in tokens if phoneme[0] in vowels.upper()) >= 2
-    if consecutive_vowels and distinct_vowel_sounds:
-        categories["v/v pattern"].append(word)
+    count = 0
+    while count + 1 < len(tokens):
+        first = tokens[count]
+        second = tokens[count + 1]
+        if first in vowel_phonemes and second in vowel_phonemes:
+            categories["v/v pattern"].append(word)
+            return
+        count += 1
 
 def should_double_consonant(word, arpabet):
     last_char = word[-1]
@@ -442,15 +453,46 @@ def is_y_rule_suffix(word):
 
     return False
 
-def parse_and_process_words(file_path):
-    try:
-        with open(file_path, 'r') as file:
-            words = file.read().splitlines()
+def map_chunks_to_phonemes(word):
+    arpabet = pronouncing.phones_for_word(word)
+    phonemes = arpabet[0].split()  # Use the first phonetic transcription
+    chunk_to_phonemes = {}
+    current_chunk = []
+    current_phoneme_chunk = []
+    phoneme_iter = iter(phonemes)
+    for letter in word:
+        current_chunk.append(letter)
+        if letter in vowels:  # Finalize chunk at vowel
+            try:
+                # Collect phonemes until a vowel phoneme is encountered
+                while True:
+                    phoneme = next(phoneme_iter)
+                    current_phoneme_chunk.append(phoneme)
+                    if phoneme[-1].isdigit():  # Vowel phoneme found
+                        break
+            except StopIteration:
+                pass
+            # Map the current chunk to its phonemes
+            chunk_to_phonemes[''.join(current_chunk)] = ' '.join(current_phoneme_chunk)
+            current_chunk = []
+            current_phoneme_chunk = []
 
+    # Handle any leftover chunk or phoneme
+    if current_chunk:
+        chunk_to_phonemes[''.join(current_chunk)] = ' '.join(current_phoneme_chunk)
+        
+    return chunk_to_phonemes
+
+def parse_and_process_words(input_path, output_path):
+    try:
+        with open(input_path, 'r') as file:
+            words = file.read().splitlines()
         unique_words = set(words)
         print("-=-=-= Parsing through words =-=-=-\n")
         for word in unique_words:
             word.lower()
+            if word in categories["sight words"]:
+                continue
             phones = pronouncing.phones_for_word(word)
             if not phones:
                 print(f"\t'{word}' not found in the pronouncing library's dictionary.")
@@ -525,8 +567,6 @@ def parse_and_process_words(file_path):
             OCE_check(word, arpabet)
             x_in_word_check(word, arpabet)
 
-        output_path = os.path.join(script_dir, "categorized_words.json")
-        
         # Delete the file if it already exists
         if os.path.exists(output_path):
             os.remove(output_path)
@@ -537,79 +577,47 @@ def parse_and_process_words(file_path):
         print("\n-=-=-= Finished categorzing! Saved to 'categorized_words.json' =-=-=-")
     
     except FileNotFoundError:
-        print(f"The file {file_path} was not found.")
+        print(f"The file {input_path} was not found.")
     except Exception as e:
         print(f"An error occurred: {e}")
 
-def getTopWords(num, inFile, outFile):
-    input_path = os.path.join(script_dir, inFile)
-    output_path = os.path.join(script_dir, outFile)
+def getTopWords(num, input_path, output_path):
     with open(input_path, 'r') as f:
         data_dict = json.load(f)
-
     truncated_dict = {key: values[:num] for key, values in categories.items()}
-
     with open(output_path, 'w') as f:
         json.dump(truncated_dict, f, indent=4)
     
-    # print(f"Data successfully written to truncated_dictionary.json")
+    print(f"Data successfully written to truncated_dictionary.json")
+
+### Takes in a list of all the problem categories and makes sure every categories doesn't have words from 
+### any of the categories. 
+def ridOverlap(problemCategories: list) -> None:
+    badWords = []
+    for category in problemCategories:
+        badWords.extend(categories[category])
+    badWords = set(badWords)  # Deduplicate
+
+    for key, value in categories.items():
+        categories[key] = [word for word in value if word not in badWords]
+
 
 def main():
-    file_path = 'WordDatav4.txt' 
-    input_path = os.path.join(script_dir, file_path)
-    parse_and_process_words(input_path)
+    filename = 'WordDatav4.txt' 
+    input_path = os.path.join(script_dir, filename)
+    output_path = os.path.join(script_dir, "categorized_words.json")
+    parse_and_process_words(input_path, output_path)
     #getTopWords(20, 'categorized_words.json', 'truncated_dictionary.json')
-    phones1 = pronouncing.phones_for_word("existing")
+
+def run(inFile: str, outFile: str, full_or_truncated: bool):
+    input_path = os.path.join(script_dir, inFile)
+    output_path = os.path.join(script_dir, outFile)
+    if full_or_truncated:
+        parse_and_process_words(input_path, output_path)
+    else:
+        getTopWords(20, 'categorized_words.json', 'truncated_dictionary.json')
 
 main()
 
-def map_chunks_to_phonemes(word):
-    """
-    Splits a word into chunks at vowel boundaries and maps each chunk to its corresponding phonemes.
-
-    Args:
-        word (str): The word to split and map.
-    
-    Returns:
-        dict: A dictionary mapping word chunks to their phonemes.
-    """
-
-    phonetic_transcriptions = pronouncing.phones_for_word(word)
-    
-    if not phonetic_transcriptions:
-        return f"No phonetic transcription found for '{word}'."
-    
-    phonemes = phonetic_transcriptions[0].split()  # Use the first phonetic transcription
-    chunk_to_phonemes = {}
-    current_chunk = []
-    current_phoneme_chunk = []
-
-    phoneme_iter = iter(phonemes)
-
-    for letter in word:
-        current_chunk.append(letter)
-        
-        if letter in vowels:  # Finalize chunk at vowel
-            try:
-                # Collect phonemes until a vowel phoneme is encountered
-                while True:
-                    phoneme = next(phoneme_iter)
-                    current_phoneme_chunk.append(phoneme)
-                    if phoneme[-1].isdigit():  # Vowel phoneme found
-                        break
-            except StopIteration:
-                pass
-            
-            # Map the current chunk to its phonemes
-            chunk_to_phonemes[''.join(current_chunk)] = ' '.join(current_phoneme_chunk)
-            current_chunk = []
-            current_phoneme_chunk = []
-
-    # Handle any leftover chunk or phoneme
-    if current_chunk:
-        chunk_to_phonemes[''.join(current_chunk)] = ' '.join(current_phoneme_chunk)
-        
-    return chunk_to_phonemes
-
-#print(map_chunks_to_phonemes("celebration"))
+#print(map_chunks_to_phonemes("builder"))
 
