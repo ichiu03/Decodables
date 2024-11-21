@@ -124,13 +124,15 @@ def generate_chapter(outline, chapter_number, length, story):
     story = query(prompt)
     return story
 
-def generate_outline(topic, readingLevel):
+def generate_outline(topic, readingLevel, syllablecount):
     prompt = f"""
     You are a creative author.
 
     Create an outline for a children's story about {topic} (Reading level: {readingLevel}).
 
     The story should be about {story_length} words long.
+
+    The story should only include words with at most {syllablecount} syllables.
 
     The story should have a clear beginning, middle, and end and have a lesson.
 
@@ -221,9 +223,18 @@ def fix_spacing(text):
 
 ### Main function
 def generate_story(topic, problems):
-    readingLevel = input("What reading level would you like the story to be written in (Child's graded reading level): ")
+    readingLevel = input("What reading level would you like the story to be written in (K,1,2,3...8): ")
+    syllablecount = 0
+    if readingLevel == "K" or "1" or "2":
+        syllablecount += 2
+    if readingLevel == "3" or "4":
+        syllablecount += 3
+    if readingLevel == "5" or "6":
+        syllablecount += 4
+    if readingLevel == "7" or "8":
+        syllablecount += 5
     dictionary = get_words(problems)
-    outline = generate_outline(topic, readingLevel)
+    outline = generate_outline(topic, readingLevel, syllablecount)
     story = ""
 
     for chapter in range(chapters):
