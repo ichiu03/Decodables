@@ -3,7 +3,7 @@
 from dictionaryParser import *
 from storyGenerator import *
 from replace_synonyms import *
-from synonymparser import *
+# from synonymparser import *
 
 replace = []
 

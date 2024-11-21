@@ -80,6 +80,17 @@ def get_input_and_save():
 
     return topic, problems
 
+def get_input():
+    global story_length
+    global sight_words
+    story_length = int(input("Enter the length of the story: "))
+    topic = input("Enter your story topic: ")
+    problems = input("Enter the problem letters separated by commas: ").split(",")
+    # sight_words = input("Enter the sight words separated by commas: ")
+    problems = [problem.strip() for problem in problems]  # Clean up whitespace
+
+    return topic, problems
+
 ### Function to get words
 def get_words(problems):
     global bad_words
@@ -231,6 +242,33 @@ def fix_spacing(text):
     text = re.sub(r'([.!?])([^\s])', r'\1 \2', text)
     return text
 '''
+
+### Main function
+def generate_story(topic, problems):
+    
+    dictionary = get_words(problems)
+    outline = generate_outline(topic)
+    story = ""
+
+    for chapter in range(chapters):
+        print(f"Generating chapter {chapter + 1}")
+        new_chapter = generate_chapter(outline, chapter + 1, story_length // chapters, story)
+        # temp_chapter = new_chapter
+        # temp_chapter = sentence_check(temp_chapter, dictionary, problems)
+        # temp_chapter = edit(new_chapter)
+        story += new_chapter + "\n"  # Add a space between chapters
+    print(story)
+    # Fix missing spaces after punctuation
+    # story = fix_spacing(story)
+
+    # story = sentence_check(story)
+
+
+    # print("\nFinal story:")
+    # print(story)
+    return story
+
+
 ### Main function
 def main():
     topic, problems = get_input_and_save()

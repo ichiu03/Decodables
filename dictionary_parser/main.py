@@ -62,7 +62,7 @@ def get_words(sentence, problems, word_dict, previous_sentence, next_sentence):
             word_dict = parse_and_process_words(response)
 
             #synonym
-            synonyms_dict = synonymparser(word_dict, problems)
+            # synonyms_dict = synonymparser(word_dict, problems)
 
             # #replace
             # updated_sentence = replace_words_in_story(response, synonyms_dict)
@@ -156,7 +156,7 @@ def main():
     
     # Sort the words with dictionary_parser to see whats good and whats bad
     print("Checking each word...")
-    word_dict = parse_and_process_words(story)
+    word_dict = parse_and_process_words(story, "test.json")
     # print(word_dict)
     
     #synonym

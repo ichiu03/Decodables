@@ -483,10 +483,15 @@ def map_chunks_to_phonemes(word):
         
     return chunk_to_phonemes
 
-def parse_and_process_words(input_path, output_path):
+def get_words(story):
+    words = re.findall(r'\b\w+\b', story)
+    return words
+
+def parse_and_process_words(story, output_path):
     try:
-        with open(input_path, 'r') as file:
-            words = file.read().splitlines()
+        words = get_words(story)
+        
+        unique_words = set(words)
         unique_words = set(words)
         print("-=-=-= Parsing through words =-=-=-\n")
         for word in unique_words:
@@ -567,6 +572,10 @@ def parse_and_process_words(input_path, output_path):
             OCE_check(word, arpabet)
             x_in_word_check(word, arpabet)
 
+        if os.path.exists(output_path):
+            os.remove(output_path)
+        with open(output_path, 'w') as file:
+            json.dump(categories, file, indent=4)
         return categories
 
         # print("\n-=-=-= Finished categorzing! Saved to 'categorized_words.json' =-=-=-")
@@ -602,7 +611,9 @@ def main():
     filename = 'generated_story.txt' 
     input_path = os.path.join(script_dir, filename)
     output_path = os.path.join(script_dir, "categorized_words.json")
-    parse_and_process_words(input_path, output_path)
+    with open(input_path, 'r') as f:
+        story = f.read()
+    parse_and_process_words(story, "test.json")
 
 def run(inFile: str, outFile: str, full_or_truncated: bool):
     input_path = os.path.join(script_dir, inFile)
