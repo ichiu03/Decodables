@@ -143,11 +143,75 @@ def sentence_check(story, problems):
         prev_sentence = sentence
     return new_story
 
+def ultraformatting(text):
+    # Normalize multiple underscores to '____'
+    text = re.sub(r'_{2,}', '____', text)
+    
+    # Ensure spaces around '____', treating it as a word
+    # Add a space before '____' if it's attached to a word character
+    text = re.sub(r'(?<=\w)(____)', r' \1', text)
+    # Add a space after '____' if it's followed by a word character
+    text = re.sub(r'(____)(?=\w)', r'\1 ', text)
+    # Handle cases where multiple '____' are adjacent
+    text = re.sub(r'(____)(____)', r'\1 \2', text)
+    
+    # Remove unnecessary spaces before punctuation
+    text = re.sub(r'\s+([,.!?;:])', r'\1', text)
+    
+    # Ensure there's a space after punctuation marks if not present, unless followed by punctuation or quotes
+    text = re.sub(r'([,.!?;:])([^\s"\'().,!?:;])', r'\1 \2', text)
+    
+    # Handle quotation marks with a state machine
+    chars = list(text)
+    new_chars = []
+    in_quotes = False
+    i = 0
+    while i < len(chars):
+        c = chars[i]
+        if c == '"':
+            if in_quotes:
+                # Closing quote
+                # Remove space before closing quote
+                if new_chars and new_chars[-1] == ' ':
+                    new_chars.pop()
+                new_chars.append(c)
+                in_quotes = False
+                # Add space after closing quote if needed
+                if i + 1 < len(chars) and chars[i + 1] not in ' ,.!?;:\'"':
+                    new_chars.append(' ')
+            else:
+                # Opening quote
+                # Add space before opening quote if necessary
+                if new_chars and new_chars[-1] not in ' \n':
+                    new_chars.append(' ')
+                new_chars.append(c)
+                in_quotes = True
+                # Skip any spaces immediately after the opening quote
+                i += 1
+                while i < len(chars) and chars[i] == ' ':
+                    i += 1
+                continue
+        else:
+            new_chars.append(c)
+        i += 1
+    text = ''.join(new_chars)
+    
+    # Normalize multiple spaces to a single space
+    text = re.sub(r'\s+', ' ', text)
+    
+    # Trim leading and trailing spaces
+    text = text.strip()
+    
+    return text
+
+def count_words_in_text(text):
+    words = text.split()
+    return len(words)
 
 def main():
     topic, problems = get_input()
     global sight_words
-    sight_words = "at,his,she,the,they,that,is,was,to,their,has,them,then,than,with,and,of,for,as,at,by,an,or,if,be,are,not,from,have,when,where,what,how,why,who,which,will,can,do,does,done,doing"
+    sight_words = "a,any,many,and,on,is,are,the,was,were,it,am,be,go,to,been,come,some,do,does,done,what,who,you,your,both,buy,door,floor,four,none,once,one,only,pull,push,sure,talk,walk,their,there,they're,very,want,again,against,always,among,busy,could,should,would,enough,rough,tough,friend,move,prove,ocean,people,she,other,above,father,usually,special,front,thought,he,we,they,nothing,learned,toward,put,hour,beautiful,whole,trouble,of,off,use,have,our,say,make,take,see,think,look,give,how,ask,boy,girl,us,him,his,her,by,where,were,wear,hers,don't,which,just,know,into,good,other,than,then,now,even,also,after,know,because,most,day,these,two,already,through,though,like,said,too,has,in,brother,sister,that,them,from,for,with,doing,well,before,tonight,down,about,but,up,around,goes,gone,build,built,cough,lose,loose,truth,daughter,son"
     
     # Generate the intial story
     print("Generating story...")
@@ -186,15 +250,23 @@ def main():
     print(story)
     word_dict = parse_and_process_words(story)
 
+    problemcount = 0
     for problem in problems:
         print(f"problem: {problem}")
         bads = [i.lower() for i in word_dict[problem] if i.lower() not in sight_words and i in story]
+        problemcount += len(bads)
         print(f"bads: {bads}")
 
 
         
-    output_file = 'dictionary_parser\\updated_story.txt'
+    output_file = 'organized\\updated_story.txt'
+    story = ultraformatting(story)
     save_updated_story(story, output_file)
+
+    # Pass the story text to count_words_in_text
+    wordcount = count_words_in_text(story)
+    decodability = 1 - problemcount / wordcount
+    print(f"This text is {decodability * 100:.2f}% decodable")
 
 if __name__ == "__main__":
     main()

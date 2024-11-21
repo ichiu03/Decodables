@@ -124,11 +124,11 @@ def generate_chapter(outline, chapter_number, length, story):
     story = query(prompt)
     return story
 
-def generate_outline(topic):
+def generate_outline(topic, readingLevel):
     prompt = f"""
     You are a creative author.
 
-    Create an outline for a children's story about {topic} (Age 10).
+    Create an outline for a children's story about {topic} (Reading level: {readingLevel}).
 
     The story should be about {story_length} words long.
 
@@ -221,9 +221,9 @@ def fix_spacing(text):
 
 ### Main function
 def generate_story(topic, problems):
-    
+    readingLevel = input("What reading level would you like the story to be written in (Child's graded reading level): ")
     dictionary = get_words(problems)
-    outline = generate_outline(topic)
+    outline = generate_outline(topic, readingLevel)
     story = ""
 
     for chapter in range(chapters):

@@ -124,7 +124,7 @@ def format_punctuation_with_quotes(text):
 if __name__ == "__main__":
     synonyms_file = 'dictionary_parser\\word_synonyms.txt'
     story_file = 'dictionary_parser\\generated_story.txt'
-    output_file = 'dictionary_parser\\updated_story.txt'
+    output_file = 'organized\\updated_story.txt'
     
     # Load synonyms
     synonyms_dict = load_synonyms(synonyms_file)
