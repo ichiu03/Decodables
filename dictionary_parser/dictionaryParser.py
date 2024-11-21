@@ -566,10 +566,6 @@ def parse_and_process_words(input_path, output_path):
             vce_check(word)
             OCE_check(word, arpabet)
             x_in_word_check(word, arpabet)
-            beginning_roots(word)
-            begin_interm_affixes(word)
-            base_suffix_prefix_base(word)
-            interm_adv_affixes(word)
 
         return categories
 
