@@ -58,6 +58,8 @@ def query(prompt):
     )
     return response.choices[0].message.content
 
+<<<<<<< HEAD
+=======
 def sentence_rewrite(word):
     with open('dictionary_parser\\generated_story', 'r', encoding='utf-8') as file:
         story = file.read()
@@ -92,6 +94,7 @@ def sentence_rewrite(word):
     
     return good_story
 
+>>>>>>> parent of ce8bccd (adding my stuff?)
     
 
 
@@ -133,6 +136,8 @@ def main():
     
     # Write words and their synonyms to the text file
     write_words_with_synonyms(gathered_words, output_path, nonreplacing_words)
+    open('dictionary_parser\\word_synonyms.txt', 'a', encoding='utf-8').write(open('dictionary_parser\\unknown_words.txt', 'r', encoding='utf-8').read())
+
 # Run the main function
 if __name__ == "__main__":
     main()
