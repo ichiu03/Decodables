@@ -655,21 +655,15 @@ def parse_and_process_words(inFile, outFile):
             base_suffix_prefix_base(word)
             interm_adv_affixes(word)
 
-        output_path = os.path.join(script_dir, outFile)
-        
-        # Delete the file if it already exists
-        if os.path.exists(output_path):
-            os.remove(output_path)
+        return categories
 
-        with open(output_path, 'w') as json_file:
-            json.dump(categories, json_file, indent=4)
-
-        print("\n-=-=-= Finished categorzing! Saved to 'categorized_words.json' =-=-=-")
+        # print("\n-=-=-= Finished categorzing! Saved to 'categorized_words.json' =-=-=-")
     
     except FileNotFoundError:
         print(f"The file was not found.")
     except Exception as e:
         print(f"An error occurred: {e}")
+    return None
 
 def getTopWords(num, inFile, outFile):
     input_path = os.path.join(script_dir, inFile)
