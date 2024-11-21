@@ -565,7 +565,7 @@ def parse_and_process_words(story):
         unique_words = set(words)
         print("-=-=-= Parsing through words =-=-=-\n")
         for word in unique_words:
-            word.lower()
+            word = word.lower()
             phones = pronouncing.phones_for_word(word) if len(word) > 1 else False
             
             if not phones:

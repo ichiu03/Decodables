@@ -5,6 +5,8 @@ from storyGenerator import *
 from replace_synonyms import *
 from synonymparser import *
 
+replace = []
+
 with open('dictionary_parser\\dictionary.txt', 'r', encoding='utf-8') as file:
     large_dictionary = set(word.strip().lower() for word in file.readlines())
 
@@ -77,6 +79,7 @@ def get_words(sentence, problems, word_dict, previous_sentence, next_sentence):
         return synonyms_dict
 
 def get_synonyms_dict(story, word_dict, problems):
+    global replace
     sentences = story.split(".")
     prev_sentence = sentences[0]
     synonyms_dict = {}
@@ -84,9 +87,9 @@ def get_synonyms_dict(story, word_dict, problems):
         next_sentence = sentences[sentences.index(sentence) + 1] if sentences.index(sentence) < len(sentences) - 1 else ""
         words = sentence.split(" ")
         for word in words:
+            word = "".join(re.findall("[a-zA-Z]", word)).lower()
             for problem in problems:
                 if word in word_dict[problem] and word not in sight_words:
-                    # print(f"bad word: {word}")
                     prompt = f"""
                         Give 5 words that would make sense as replacements for the following word in the sentence:
 
@@ -109,10 +112,11 @@ def get_synonyms_dict(story, word_dict, problems):
                                 break
                     if len(temp_words) > 0:
                         # print(f"good word: {temp_words[0]}")
+                        replace.append(temp_words[0])
                         synonyms_dict[word] = " " + temp_words[0]
                     else:
                         synonyms_dict[word] = " ___"
-                    break
+                    # break
         prev_sentence = sentence
     return synonyms_dict
     # print(f"synonyms dict: {synonyms_dict}")
@@ -143,7 +147,7 @@ def sentence_check(story, problems):
 def main():
     topic, problems = get_input()
     global sight_words
-    sight_words = "his,she,the,they,that,is,was,to,their,has,them,then,than,with,and,of,for,as,at,by,an,or,if,be,are,not,from,have,when,where,what,how,why,who,which,will,can,do,does,done,doing"
+    sight_words = "at,his,she,the,they,that,is,was,to,their,has,them,then,than,with,and,of,for,as,at,by,an,or,if,be,are,not,from,have,when,where,what,how,why,who,which,will,can,do,does,done,doing"
     
     # Generate the intial story
     print("Generating story...")
@@ -153,7 +157,7 @@ def main():
     # Sort the words with dictionary_parser to see whats good and whats bad
     print("Checking each word...")
     word_dict = parse_and_process_words(story)
-    print(word_dict)
+    # print(word_dict)
     
     #synonym
     print("Finding synonyms...")
@@ -180,12 +184,11 @@ def main():
     synonyms_dict = get_synonyms_dict(story, word_dict, problems)
     story = replace_words_in_story(story, synonyms_dict)
     print(story)
-
     word_dict = parse_and_process_words(story)
 
     for problem in problems:
         print(f"problem: {problem}")
-        bads = [i for i in word_dict[problem] if i not in sight_words and i in story]
+        bads = [i.lower() for i in word_dict[problem] if i.lower() not in sight_words and i in story]
         print(f"bads: {bads}")
 
 
