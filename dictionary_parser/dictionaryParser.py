@@ -603,11 +603,10 @@ def ridOverlap(problemCategories: list) -> None:
 
 
 def main():
-    filename = 'WordDatav4.txt' 
+    filename = 'generated_story.txt' 
     input_path = os.path.join(script_dir, filename)
     output_path = os.path.join(script_dir, "categorized_words.json")
     parse_and_process_words(input_path, output_path)
-    #getTopWords(20, 'categorized_words.json', 'truncated_dictionary.json')
 
 def run(inFile: str, outFile: str, full_or_truncated: bool):
     input_path = os.path.join(script_dir, inFile)
