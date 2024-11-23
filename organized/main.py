@@ -3,6 +3,8 @@
 from dictionaryParser import *
 from storyGenerator import *
 from replace_synonyms import *
+from collections import Counter
+from datetime import datetime
 # from synonymparser import *
 
 replace = []
@@ -90,7 +92,7 @@ def get_synonyms_dict(story, word_dict, problems):
             word = "".join(re.findall("[a-zA-Z]", word)).lower()
             for problem in problems:
                 if word in word_dict[problem] and word not in sight_words:
-                    #HARD CODE THIS????
+                    #HARD CODE
                     prompt = f"""
                         Give 10 words that would make sense as replacements for the following word in the sentence and don't include these sounds: {problems}:
 
@@ -209,65 +211,78 @@ def count_words_in_text(text):
     words = text.split()
     return len(words)
 
+
 def main():
     topic, problems = get_input()
     global sight_words
     sight_words = "a,any,many,and,on,is,are,the,was,were,it,am,be,go,to,been,come,some,do,does,done,what,who,you,your,both,buy,door,floor,four,none,once,one,only,pull,push,sure,talk,walk,their,there,they're,very,want,again,against,always,among,busy,could,should,would,enough,rough,tough,friend,move,prove,ocean,people,she,other,above,father,usually,special,front,thought,he,we,they,nothing,learned,toward,put,hour,beautiful,whole,trouble,of,off,use,have,our,say,make,take,see,think,look,give,how,ask,boy,girl,us,him,his,her,by,where,were,wear,hers,don't,which,just,know,into,good,other,than,then,now,even,also,after,know,because,most,day,these,two,already,through,though,like,said,too,has,in,brother,sister,that,them,from,for,with,doing,well,before,tonight,down,about,but,up,around,goes,gone,build,built,cough,lose,loose,truth,daughter,son"
     
-    # Generate the intial story
+    # Generate the initial story
     print("Generating story...")
     story = generate_story(topic, problems)
     print(story)
     
-    # Sort the words with dictionary_parser to see whats good and whats bad
+    # Sort the words with dictionary_parser to see what's good and what's bad
     print("Checking each word...")
     word_dict = parse_and_process_words(story)
-    # print(word_dict)
     
-    #synonym
+    # Find synonyms
     print("Finding synonyms...")
-    # synonyms_dict = synonymparser(word_dict, problems)
     synonyms_dict = get_synonyms_dict(story, word_dict, problems)
-
-    #replace
+    
+    # Replace problematic words with synonyms
     print("Replacing synonyms...")
     story = replace_words_in_story(story, synonyms_dict)
-
-    # story = sentence_check(updated_story, problems)
-
-    print("Saving updated story...")
-    print(story)
-
-    # Check the output
-    word_dict = parse_and_process_words(story)
-
-    for problem in problems:
-        print(f"problem: {problem}")
-        bads = [i for i in word_dict[problem] if i not in sight_words and i in story]
-        print(f"bads: {bads}")
     
-    synonyms_dict = get_synonyms_dict(story, word_dict, problems)
-    story = replace_words_in_story(story, synonyms_dict)
-    print(story)
-    word_dict = parse_and_process_words(story)
+    # Prepare sight words set
+    sight_words_set = set(word.lower().strip() for word in sight_words.split(','))
 
-    problemcount = 0
+    # Tokenize the story into words and count occurrences
+    story_words = re.findall(r'\b\w+\b', story.lower())
+    story_word_counts = Counter(story_words)
+
+    # Combine all bads into a single set
+    all_bads = set()
     for problem in problems:
-        print(f"problem: {problem}")
-        bads = [i.lower() for i in word_dict[problem] if i.lower() not in sight_words and i in story]
-        problemcount += len(bads)
-        print(f"bads: {bads}")
+        problem_words = set(word.lower() for word in word_dict[problem] if word.lower() not in sight_words_set)
+        all_bads.update(problem_words)
 
+    # Count occurrences of each unique bad word in the story
+    problemcount = 0
+    bad_occurrences = {}
+    for bad_word in all_bads:
+        count = story_word_counts.get(bad_word, 0)
+        if count > 0:
+            problemcount += count
+            bad_occurrences[bad_word] = count
 
-        
+    # Print the results for the final updated story
+    print("Bad Word Occurrences:")
+    for word, count in bad_occurrences.items():
+        print(f"{word}: {count}")
+
+    # Calculate decodability
+    wordcount = count_words_in_text(story)
+    decodability = 1 - problemcount / wordcount
+
+    # Print decodability to the console
+    print(f"This text is {decodability * 100:.2f}% decodable")
+
+    # Prepare the data for the file
+    current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    decodability_entry = f"{decodability * 100:.2f}% {current_time} Word Count: {len(story.split())}\n"
+
+    # Append the data to the file
+    with open("organized\\decodability_measurements.txt", "a") as file:
+        file.write(decodability_entry)
+    
+
+    # Save the final story
     output_file = 'organized\\updated_story.txt'
     story = ultraformatting(story)
     save_updated_story(story, output_file)
+    print(f"Updated story has been saved to '{output_file}'.")
 
-    # Pass the story text to count_words_in_text
-    wordcount = count_words_in_text(story)
-    decodability = 1 - problemcount / wordcount
-    print(f"This text is {decodability * 100:.2f}% decodable")
 
 if __name__ == "__main__":
     main()

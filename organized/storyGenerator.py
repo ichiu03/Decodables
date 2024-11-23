@@ -119,6 +119,8 @@ def generate_chapter(outline, chapter_number, length, story):
 
     Please ensure that you use proper punctuation and include spaces after punctuation marks.
 
+    Maintain the correct literary tense.
+
     Return only the new chapter.
     """
     story = query(prompt)
