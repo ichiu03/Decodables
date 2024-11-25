@@ -225,8 +225,8 @@ def x_in_word_check(word: str, arpabet: str) -> None:
         if 'OW' in tokens and verification_to_add(word, arpabet, 'o', ['OW'], ['AH', 'AA', 'AO']):
             categories['long o'].append(word)
         if 'AH' in tokens or 'AA' in tokens or 'AO' in tokens: 
-            if verification_to_add(word, arpabet, 'o', ['AH', 'AA', 'AO'], ['OW'])
-            categories['short o'].append(word)
+            if verification_to_add(word, arpabet, 'o', ['AH', 'AA', 'AO'], ['OW']):
+                categories['short o'].append(word)
     if 'u' in word:
         if 'UW' in tokens and verification_to_add(word, arpabet, 'u', ['UW'], ['AH']): categories['long u'].append(word)
         if 'AH' in tokens and verification_to_add(word, arpabet, 'u', ['AH'], ['UW']): categories['short u'].append(word)
@@ -473,23 +473,26 @@ def fszl_check(word: str, arpabet: str) -> None:
             if vowel in tokens[-2]:
                 categories['fszl'].append(word)
     
+# Precompile the regex patterns
+y_rule_patterns = re.compile(r'[^aeiou](ies|ied|ier|iest)$')
+vowel_y_pattern = re.compile(r'[aeiou]y')
+
 def is_y_rule_suffix(word: str) -> bool:
-    #Maybe temporary Solution
-    exceptions = ['frontier', 'glacier', 'soldier', 'barrier', 'carrier', 'pier', 'priest', 'series', 'species']
-    
-    if word in exceptions:
+    EXCEPTIONS = {'frontier', 'glacier', 'soldier', 'barrier', 'carrier', 'pier', 'priest', 'series', 'species'}
+    if word in EXCEPTIONS:
         return False
 
-    if re.search(r'[^aeiou]ies$', word) or re.search(r'[^aeiou]ied$', word) or re.search(r'[^aeiou]ier$', word) or re.search(r'[^aeiou]iest$', word):
+    if y_rule_patterns.search(word): # Check for patterns where Y changes to I
+        return True
+    if word.endswith('ying'): # Check for "ying" suffix
         return True
 
-    if re.search(r'.*ying$', word):
-        return True
+    # Disallow words with Vowel + Y patterns
+    if vowel_y_pattern.search(word):
+        return False
 
-    if re.search(r'[aeiou]y.*$', word):
-        return False  
-
-    if re.search(r'.*ies$', word) and not re.search(r'[aeiou]y', word):
+    # Final check for "ies" pattern without vowels before "y"
+    if word.endswith('ies') and not 'y' in word[:word.rfind('ies')]:
         return True
 
     return False
