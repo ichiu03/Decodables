@@ -5,6 +5,7 @@ from storyGenerator import *
 from replace_synonyms import *
 from collections import Counter
 from datetime import datetime
+import language_tool_python
 # from synonymparser import *
 
 replace = []
@@ -211,29 +212,35 @@ def count_words_in_text(text):
     words = text.split()
     return len(words)
 
+def correct_text(text):
+    tool = language_tool_python.LanguageTool('en-US')
+    matches = tool.check(text)
+    corrected_text = language_tool_python.utils.correct(text, matches)
+    return corrected_text
 
-def main():
-    topic, problems = get_input()
-    global sight_words
-    sight_words = "a,any,many,and,on,is,are,the,was,were,it,am,be,go,to,been,come,some,do,does,done,what,who,you,your,both,buy,door,floor,four,none,once,one,only,pull,push,sure,talk,walk,their,there,they're,very,want,again,against,always,among,busy,could,should,would,enough,rough,tough,friend,move,prove,ocean,people,she,other,above,father,usually,special,front,thought,he,we,they,nothing,learned,toward,put,hour,beautiful,whole,trouble,of,off,use,have,our,say,make,take,see,think,look,give,how,ask,boy,girl,us,him,his,her,by,where,were,wear,hers,don't,which,just,know,into,good,other,than,then,now,even,also,after,know,because,most,day,these,two,already,through,though,like,said,too,has,in,brother,sister,that,them,from,for,with,doing,well,before,tonight,down,about,but,up,around,goes,gone,build,built,cough,lose,loose,truth,daughter,son"
-    
-    # Generate the initial story
-    print("Generating story...")
-    story = generate_story(topic, problems)
-    print(story)
-    
-    # Sort the words with dictionary_parser to see what's good and what's bad
+def process_story(story, problems, apply_correction=False):
+    if apply_correction:
+        print("Applying grammar correction...")
+        story = correct_text(story)
+        print("Corrected Story:")
+        print(story)
+        marker = "grammar corrected"
+    else:
+        print("Skipping grammar correction...")
+        marker = "grammar not corrected"
+
+    # Continue with your processing
     print("Checking each word...")
     word_dict = parse_and_process_words(story)
-    
+
     # Find synonyms
     print("Finding synonyms...")
     synonyms_dict = get_synonyms_dict(story, word_dict, problems)
-    
+
     # Replace problematic words with synonyms
     print("Replacing synonyms...")
     story = replace_words_in_story(story, synonyms_dict)
-    
+
     # Prepare sight words set
     sight_words_set = set(word.lower().strip() for word in sight_words.split(','))
 
@@ -270,18 +277,36 @@ def main():
 
     # Prepare the data for the file
     current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    decodability_entry = f"{decodability * 100:.2f}% {current_time} Word Count: {len(story.split())}\n"
+    decodability_entry = f"{decodability * 100:.2f}% {current_time} Word Count: {len(story.split())} {marker}\n"
 
     # Append the data to the file
-    with open("organized\\decodability_measurements.txt", "a") as file:
+    decodability_file = "organized\\decodability_measurements.txt"
+    with open(decodability_file, "a") as file:
         file.write(decodability_entry)
-    
 
     # Save the final story
-    output_file = 'organized\\updated_story.txt'
+    output_file = 'organized\\updated_story_corrected.txt' if apply_correction else 'organized\\updated_story.txt'
     story = ultraformatting(story)
     save_updated_story(story, output_file)
     print(f"Updated story has been saved to '{output_file}'.")
+
+
+def main():
+    topic, problems = get_input()
+    global sight_words
+    sight_words = "a,any,many,and,on,is,are,the,was,were,it,am,be,go,to,been,come,some,do,does,done,what,who,you,your,both,buy,door,floor,four,none,once,one,only,pull,push,sure,talk,walk,their,there,they're,very,want,again,against,always,among,busy,could,should,would,enough,rough,tough,friend,move,prove,ocean,people,she,other,above,father,usually,special,front,thought,he,we,they,nothing,learned,toward,put,hour,beautiful,whole,trouble,of,off,use,have,our,say,make,take,see,think,look,give,how,ask,boy,girl,us,him,his,her,by,where,were,wear,hers,don't,which,just,know,into,good,other,than,then,now,even,also,after,know,because,most,day,these,two,already,through,though,like,said,too,has,in,brother,sister,that,them,from,for,with,doing,well,before,tonight,down,about,but,up,around,goes,gone,build,built,cough,lose,loose,truth,daughter,son"
+    
+    print("Generating story...")
+    story = generate_story(topic, problems)
+    print(story)
+
+    # First Run: Without Grammar Correction
+    print("\n--- Processing Without Grammar Correction ---")
+    process_story(story, problems, apply_correction=False)
+
+    # Second Run: With Grammar Correction
+    print("\n--- Processing With Grammar Correction ---")
+    process_story(story, problems, apply_correction=True)
 
 
 if __name__ == "__main__":
