@@ -37,7 +37,7 @@ def get_words(sentence, problems, word_dict, previous_sentence, next_sentence):
         temp_words = response.split(",")
         words.extend(temp_words)
 
-    words_dict = parse_and_process_words(sentence)
+    words_dict = parse_and_process_words(sentence, "output.json")
     blanks = len(words)//5
     words_blanks = [words[i:i+blanks] for i in range(0, len(words), blanks)]
     for problem in problems:
@@ -59,7 +59,7 @@ def get_words(sentence, problems, word_dict, previous_sentence, next_sentence):
                 return only the new sentence or you will be DISQUALIFIED
             """
             response = query(prompt)
-            word_dict = parse_and_process_words(response)
+            word_dict = parse_and_process_words(response, "output.json")
 
             #synonym
             # synonyms_dict = synonymparser(word_dict, problems)
@@ -103,7 +103,7 @@ def get_synonyms_dict(story, word_dict, problems):
                         """
                     response = query(prompt)
                     temp_words = response.split(",")
-                    temp_words_dict = parse_and_process_words(response)
+                    temp_words_dict = parse_and_process_words(response, "output.json")
                     for temp_word in temp_words:
                         for problem in problems:
                             if temp_word in temp_words_dict[problem]:# or word not in large_dictionary:
@@ -174,7 +174,7 @@ def main():
     print(story)
 
     # Check the output
-    word_dict = parse_and_process_words(story)
+    word_dict = parse_and_process_words(story, "output.json")
 
     for problem in problems:
         print(f"problem: {problem}")
@@ -184,7 +184,7 @@ def main():
     synonyms_dict = get_synonyms_dict(story, word_dict, problems)
     story = replace_words_in_story(story, synonyms_dict)
     print(story)
-    word_dict = parse_and_process_words(story)
+    word_dict = parse_and_process_words(story, "output.json")
 
     for problem in problems:
         print(f"problem: {problem}")

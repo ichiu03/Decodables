@@ -1468,7 +1468,16 @@
         "sentiment",
         "spends",
         "outsider",
-        "script"
+        "script",
+        "contests",
+        "enthusiast",
+        "tasks",
+        "support",
+        "school",
+        "classmates",
+        "solving",
+        "perseverance",
+        "nervous"
     ],
     "t": [
         "tranquil",
@@ -3406,7 +3415,20 @@
         "poetry",
         "outsider",
         "lifetime",
-        "script"
+        "script",
+        "competition",
+        "contests",
+        "triumphed",
+        "felt",
+        "Chapter",
+        "mental",
+        "enthusiast",
+        "tasks",
+        "support",
+        "classmates",
+        "teaching",
+        "At",
+        "Competition"
     ],
     "b": [
         "scramble",
@@ -3954,7 +3976,9 @@
         "robot",
         "borrowed",
         "bike",
-        "bravo"
+        "bravo",
+        "problem",
+        "began"
     ],
     "m": [
         "customer",
@@ -4864,7 +4888,15 @@
         "implement",
         "attempt",
         "lifetime",
-        "may"
+        "may",
+        "competition",
+        "triumphed",
+        "upcoming",
+        "mental",
+        "problem",
+        "classmates",
+        "math",
+        "Competition"
     ],
     "l": [
         "tranquil",
@@ -6664,7 +6696,17 @@
         "cleans",
         "implement",
         "cuddly",
-        "lifetime"
+        "lifetime",
+        "Lily",
+        "felt",
+        "mental",
+        "problem",
+        "school",
+        "puzzles",
+        "classmates",
+        "solving",
+        "value",
+        "challenges"
     ],
     "d": [
         "diary",
@@ -7826,7 +7868,9 @@
         "drug",
         "spends",
         "borrowed",
-        "outsider"
+        "outsider",
+        "joined",
+        "friends"
     ],
     "n": [
         "fence",
@@ -9689,7 +9733,19 @@
         "sentiment",
         "implement",
         "confusion",
-        "spends"
+        "spends",
+        "competition",
+        "contests",
+        "mental",
+        "enthusiast",
+        "joined",
+        "began",
+        "never",
+        "friends",
+        "perseverance",
+        "Competition",
+        "challenges",
+        "nervous"
     ],
     "p": [
         "prescription",
@@ -11766,7 +11822,26 @@
         "poetry",
         "poetry",
         "script",
-        "script"
+        "script",
+        "competition",
+        "competition",
+        "triumphed",
+        "upcoming",
+        "upcoming",
+        "Chapter",
+        "Chapter",
+        "problem",
+        "problem",
+        "support",
+        "support",
+        "puzzles",
+        "puzzles",
+        "preparing",
+        "preparing",
+        "perseverance",
+        "perseverance",
+        "Competition",
+        "Competition"
     ],
     "k": [
         "kill",
@@ -12096,7 +12171,8 @@
         "ok",
         "wicked",
         "yak",
-        "bike"
+        "bike",
+        "tasks"
     ],
     "j": [
         "majestic",
@@ -12164,7 +12240,8 @@
         "enjoyed",
         "majestically",
         "majority",
-        "jug"
+        "jug",
+        "joined"
     ],
     "v": [
         "voluntary",
@@ -12650,7 +12727,13 @@
         "gravity",
         "visited",
         "relevant",
-        "bravo"
+        "bravo",
+        "giving",
+        "never",
+        "solving",
+        "value",
+        "perseverance",
+        "nervous"
     ],
     "z": [
         "recognized",
@@ -12727,7 +12810,8 @@
         "dizzy",
         "organizes",
         "criticize",
-        "zany"
+        "zany",
+        "puzzles"
     ],
     "f": [
         "fence",
@@ -13264,7 +13348,10 @@
         "fortunately",
         "thoughtfully",
         "confusion",
-        "lifetime"
+        "lifetime",
+        "felt",
+        "friends",
+        "faced"
     ],
     "hard c": [
         "gigantic",
@@ -13877,7 +13964,8 @@
         "romantic",
         "cleans",
         "cuddly",
-        "confusion"
+        "confusion",
+        "upcoming"
     ],
     "hard g": [
         "recognition",
@@ -14177,7 +14265,9 @@
         "legal",
         "organizes",
         "gravity",
-        "drug"
+        "drug",
+        "giving",
+        "began"
     ],
     "r": [
         "tranquil",
@@ -15830,7 +15920,14 @@
         "borrowed",
         "poetry",
         "script",
-        "bravo"
+        "bravo",
+        "triumphed",
+        "Through",
+        "problem",
+        "support",
+        "friends",
+        "preparing",
+        "perseverance"
     ],
     "h": [
         "holds",
@@ -16692,7 +16789,8 @@
         "zany",
         "taste",
         "hallway",
-        "may"
+        "may",
+        "faced"
     ],
     "short a": [
         "tranquil",
@@ -18020,7 +18118,17 @@
         "relevant",
         "practitioner",
         "attempt",
-        "bravo"
+        "bravo",
+        "Chapter",
+        "mental",
+        "enthusiast",
+        "tasks",
+        "began",
+        "value",
+        "math",
+        "Math",
+        "perseverance",
+        "challenges"
     ],
     "long i": [
         "diary",
@@ -18373,7 +18481,8 @@
         "required",
         "outsider",
         "lifetime",
-        "bike"
+        "bike",
+        "triumphed"
     ],
     "short i": [
         "prescription",
@@ -19500,7 +19609,15 @@
         "visited",
         "practitioner",
         "implement",
-        "script"
+        "script",
+        "competition",
+        "Lily",
+        "upcoming",
+        "giving",
+        "solving",
+        "preparing",
+        "teaching",
+        "Competition"
     ],
     "long o": [
         "owned",
@@ -20887,7 +21004,15 @@
         "obtain",
         "diamond",
         "practitioner",
-        "confusion"
+        "confusion",
+        "competition",
+        "contests",
+        "upcoming",
+        "problem",
+        "support",
+        "solving",
+        "Competition",
+        "nervous"
     ],
     "long u": [
         "including",
@@ -20976,7 +21101,10 @@
         "routine",
         "cute",
         "resume",
-        "studio"
+        "studio",
+        "Through",
+        "enthusiast",
+        "value"
     ],
     "short u": [
         "tranquil",
@@ -21505,7 +21633,11 @@
         "thoughtfully",
         "thumb",
         "cuddly",
-        "drug"
+        "drug",
+        "upcoming",
+        "support",
+        "puzzles",
+        "nervous"
     ],
     "long e": [
         "return",
@@ -21727,7 +21859,8 @@
         "delight",
         "besides",
         "repeated",
-        "visited"
+        "visited",
+        "began"
     ],
     "short e": [
         "preserve",
@@ -22203,7 +22336,11 @@
         "retirement",
         "chooses",
         "relevant",
-        "sentiment"
+        "sentiment",
+        "triumphed",
+        "problem",
+        "puzzles",
+        "The"
     ],
     "fszl": [],
     "qu": [
@@ -22827,7 +22964,9 @@
         "check",
         "checkers",
         "beach",
-        "chooses"
+        "chooses",
+        "teaching",
+        "challenges"
     ],
     "or": [
         "support",
@@ -23022,7 +23161,8 @@
         "organize",
         "Korean",
         "fortunately",
-        "organizes"
+        "organizes",
+        "support"
     ],
     "s blends": [
         "spoke",
@@ -23391,7 +23531,8 @@
         "flexibility",
         "plaster",
         "slam",
-        "cleans"
+        "cleans",
+        "classmates"
     ],
     "r blends": [
         "tranquil",
@@ -23809,7 +23950,11 @@
         "gravity",
         "practitioner",
         "drug",
-        "bravo"
+        "bravo",
+        "triumphed",
+        "problem",
+        "friends",
+        "preparing"
     ],
     "-ing, -ong, -ang, -ung": [
         "lung",
@@ -24052,7 +24197,12 @@
         "dangerous",
         "following",
         "interesting",
-        "stranger"
+        "stranger",
+        "upcoming",
+        "giving",
+        "solving",
+        "preparing",
+        "teaching"
     ],
     "all": [
         "fall",
@@ -24150,7 +24300,8 @@
         "totally",
         "allow",
         "finally",
-        "hallway"
+        "hallway",
+        "challenges"
     ],
     "th": [
         "northern",
@@ -24313,7 +24464,10 @@
         "bathtub",
         "therapy",
         "thoughtfully",
-        "thumb"
+        "thumb",
+        "enthusiast",
+        "math",
+        "Math"
     ],
     "oy": [
         "joy",
@@ -24540,7 +24694,8 @@
         "sand",
         "round",
         "wound",
-        "diamond"
+        "diamond",
+        "enthusiast"
     ],
     "-sp, -nt, -mp": [
         "respondent",
@@ -24756,7 +24911,8 @@
         "fault",
         "chalk",
         "felt",
-        "task"
+        "task",
+        "felt"
     ],
     "-ct, -pt": [
         "reject",
@@ -25181,7 +25337,8 @@
         "tool",
         "loop",
         "chooses",
-        "spool"
+        "spool",
+        "school"
     ],
     "oo as in book": [
         "looked",
@@ -26894,7 +27051,12 @@
         "outsider",
         "lifetime",
         "lifetime",
-        "bike"
+        "bike",
+        "joined",
+        "classmates",
+        "never",
+        "faced",
+        "perseverance"
     ],
     "er": [
         "customer",
@@ -27528,7 +27690,11 @@
         "minister",
         "stranger",
         "practitioner",
-        "outsider"
+        "outsider",
+        "Chapter",
+        "never",
+        "perseverance",
+        "nervous"
     ],
     "ow as in plow": [
         "somehow",
@@ -29982,7 +30148,22 @@
         "confusion",
         "attempt",
         "borrowed",
-        "outsider"
+        "outsider",
+        "competition",
+        "contests",
+        "upcoming",
+        "Chapter",
+        "mental",
+        "problem",
+        "support",
+        "solving",
+        "teaching",
+        "perseverance",
+        "perseverance",
+        "Competition",
+        "challenges",
+        "challenges",
+        "nervous"
     ],
     "Open syll.": [
         "agenda",
@@ -35529,7 +35710,39 @@
         "script",
         "may",
         "bike",
-        "bravo"
+        "bravo",
+        "competition",
+        "contests",
+        "Lily",
+        "triumphed",
+        "felt",
+        "upcoming",
+        "Chapter",
+        "mental",
+        "Through",
+        "enthusiast",
+        "joined",
+        "problem",
+        "tasks",
+        "support",
+        "giving",
+        "school",
+        "puzzles",
+        "began",
+        "classmates",
+        "never",
+        "solving",
+        "friends",
+        "value",
+        "preparing",
+        "teaching",
+        "math",
+        "faced",
+        "Math",
+        "perseverance",
+        "Competition",
+        "challenges",
+        "nervous"
     ],
     "contractions": [],
     "ear as in hear": [
@@ -36173,7 +36386,8 @@
         "gravity",
         "zany",
         "cuddly",
-        "poetry"
+        "poetry",
+        "Lily"
     ],
     "aw": [
         "awkwardly",
@@ -36536,7 +36750,8 @@
         "fortunately",
         "strictly",
         "thoughtfully",
-        "cuddly"
+        "cuddly",
+        "Lily"
     ],
     "ea as in eat": [
         "please",
@@ -36734,7 +36949,8 @@
         "disease",
         "repeated",
         "neat",
-        "cleans"
+        "cleans",
+        "teaching"
     ],
     "ea as in bread": [
         "breakfast",
@@ -41090,7 +41306,28 @@
         "lifetime",
         "lifetime",
         "bike",
-        "bravo"
+        "bravo",
+        "competition",
+        "competition",
+        "triumphed",
+        "upcoming",
+        "enthusiast",
+        "enthusiast",
+        "joined",
+        "giving",
+        "puzzles",
+        "began",
+        "classmates",
+        "classmates",
+        "never",
+        "value",
+        "preparing",
+        "preparing",
+        "faced",
+        "perseverance",
+        "perseverance",
+        "Competition",
+        "Competition"
     ],
     "tch": [
         "watchful",
@@ -41364,7 +41601,9 @@
         "insurance",
         "associate",
         "science",
-        "medicine"
+        "medicine",
+        "faced",
+        "perseverance"
     ],
     "soft g": [
         "agenda",
@@ -41535,7 +41774,8 @@
         "dangerous",
         "stranger",
         "apology",
-        "urge"
+        "urge",
+        "challenges"
     ],
     "ai": [
         "aide",
@@ -42085,7 +42325,10 @@
         "rolled",
         "visited",
         "required",
-        "borrowed"
+        "borrowed",
+        "triumphed",
+        "joined",
+        "faced"
     ],
     "-ble, -cle, -dle, -fle, -gle, -kle, -ple, -tle, -zle": [
         "scramble",
@@ -43272,7 +43515,14 @@
         "spool",
         "rolled",
         "relevant",
-        "hallway"
+        "hallway",
+        "Lily",
+        "felt",
+        "mental",
+        "school",
+        "solving",
+        "value",
+        "challenges"
     ],
     "v syllables": [
         "driveway",
@@ -43594,7 +43844,10 @@
         "activity",
         "gravity",
         "relevant",
-        "bravo"
+        "bravo",
+        "giving",
+        "never",
+        "perseverance"
     ],
     "r syllables": [
         "diary",
@@ -45126,7 +45379,13 @@
         "practitioner",
         "required",
         "borrowed",
-        "outsider"
+        "outsider",
+        "Chapter",
+        "support",
+        "never",
+        "preparing",
+        "perseverance",
+        "nervous"
     ],
     "oa": [
         "soap",
@@ -45333,7 +45592,8 @@
         "boil",
         "oil",
         "disappointed",
-        "appoint"
+        "appoint",
+        "joined"
     ],
     "double rule-suffixes": [],
     "ew as in few/blew": [
@@ -45490,7 +45750,8 @@
         "associate",
         "science",
         "Korean",
-        "studio"
+        "studio",
+        "enthusiast"
     ],
     "kn": [
         "darkness",
@@ -46037,7 +46298,9 @@
         "infection",
         "communication",
         "intervention",
-        "practitioner"
+        "practitioner",
+        "competition",
+        "Competition"
     ],
     "au": [
         "authorize",
@@ -46152,7 +46415,8 @@
         "photography",
         "sapphire",
         "physically",
-        "phrase"
+        "phrase",
+        "triumphed"
     ],
     "ie as in pie": [
         "fried",
@@ -46519,7 +46783,8 @@
         "dizzy",
         "fifty",
         "activity",
-        "strictly"
+        "strictly",
+        "Lily"
     ],
     "wr": [
         "writes",
@@ -46573,7 +46838,8 @@
         "virtue",
         "continued",
         "unique",
-        "revenue"
+        "revenue",
+        "value"
     ],
     "ough": [
         "doughnut",
@@ -46596,7 +46862,8 @@
         "although",
         "although",
         "thoughtfully",
-        "thoughtfully"
+        "thoughtfully",
+        "Through"
     ],
     "wor": [
         "homework",
@@ -46761,7 +47028,8 @@
         "chemistry",
         "technological",
         "choir",
-        "echo"
+        "echo",
+        "school"
     ],
     "wa": [
         "driveway",
@@ -46915,7 +47183,8 @@
         "sunlight",
         "lightly",
         "delight",
-        "thoughtfully"
+        "thoughtfully",
+        "Through"
     ],
     "mb": [
         "scramble",
@@ -47163,7 +47432,8 @@
         "scared",
         "sculpture",
         "science",
-        "script"
+        "script",
+        "school"
     ],
     "failed to categorize": [
         "dejectedly",
@@ -47229,6 +47499,7 @@
         "shouldn",
         "victoriously",
         "absentmindedly",
-        "obnoxiously"
+        "obnoxiously",
+        "1"
     ]
 }
