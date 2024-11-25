@@ -501,7 +501,7 @@ def get_words(story: str) -> list:
     words = re.findall(r'\b\w+\b', story)
     return words
 
-def parse_and_process_words(story: str, output_path: str) -> dict:
+def parse_and_process_words(story: str, output_path = "output.json") -> dict:
     try:
         words = get_words(story)
         unique_words = set(words)
