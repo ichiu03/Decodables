@@ -14,72 +14,72 @@ with open('dictionary_parser\\dictionary.txt', 'r', encoding='utf-8') as file:
     large_dictionary = set(word.strip().lower() for word in file.readlines())
 
 
-def get_words(sentence, problems, word_dict, previous_sentence, next_sentence):
-    words = sentence.split(" ")
-    bad_words = []
-    for word in words:
-        for problem in problems:
-            if word in word_dict[problem]: #or word not in large_dictionary:
-                bad_words.append(word)
-    if len(bad_words) == 0:
-        return None
-    synonyms_dict = {}
-    # print("sentence: " + sentence)
-    words = []
-    for word in bad_words:
-        prompt = f"""
-            Give 10 words that would make sense as replacements for the following word in the sentence and don't include these sounds: {problems}:
-            word: {word}
+# def get_words(sentence, problems, word_dict, previous_sentence, next_sentence):
+#     words = sentence.split(" ")
+#     bad_words = []
+#     for word in words:
+#         for problem in problems:
+#             if word in word_dict[problem]: #or word not in large_dictionary:
+#                 bad_words.append(word)
+#     if len(bad_words) == 0:
+#         return None
+#     synonyms_dict = {}
+#     # print("sentence: " + sentence)
+#     words = []
+#     for word in bad_words:
+#         prompt = f"""
+#             Give 10 words that would make sense as replacements for the following word in the sentence and don't include these sounds: {problems}:
+#             word: {word}
             
-            sentence: {sentence}
+#             sentence: {sentence}
 
-            return only the 10 words separated by commas. Like this "word1,word2,word3,word4,word5"
-            order the words so the best fit is first
-        """
-        response = query(prompt)
-        temp_words = response.split(",")
-        words.extend(temp_words)
+#             return only the 10 words separated by commas. Like this "word1,word2,word3,word4,word5"
+#             order the words so the best fit is first
+#         """
+#         response = query(prompt)
+#         temp_words = response.split(",")
+#         words.extend(temp_words)
 
-    words_dict = parse_and_process_words(sentence)
-    blanks = len(words)//5
-    words_blanks = [words[i:i+blanks] for i in range(0, len(words), blanks)]
-    for problem in problems:
-        for i in range(len(words_blanks)):
-            for word in words_blanks[i]:
-                if word in words_dict[problem] or word not in large_dictionary:
-                    words.remove(word)
-    for i in range(len(words_blanks)):
-        if len(words_blanks[i]) >0:
-            synonyms_dict[bad_words[i]]= " " + words_blanks[i][0] + " "
-        else:
-            prompt = f"""
-                Rewrite the following sentence to preserve the meaning and remove the blank space:
+#     words_dict = parse_and_process_words(sentence)
+#     blanks = len(words)//5
+#     words_blanks = [words[i:i+blanks] for i in range(0, len(words), blanks)]
+#     for problem in problems:
+#         for i in range(len(words_blanks)):
+#             for word in words_blanks[i]:
+#                 if word in words_dict[problem] or word not in large_dictionary:
+#                     words.remove(word)
+#     for i in range(len(words_blanks)):
+#         if len(words_blanks[i]) >0:
+#             synonyms_dict[bad_words[i]]= " " + words_blanks[i][0] + " "
+#         else:
+#             prompt = f"""
+#                 Rewrite the following sentence to preserve the meaning and remove the blank space:
 
-                here is the previous sentence for context: {previous_sentence}
-                here is the sentence with the blank space: {sentence}
-                here is the next sentence for context: {next_sentence}
+#                 here is the previous sentence for context: {previous_sentence}
+#                 here is the sentence with the blank space: {sentence}
+#                 here is the next sentence for context: {next_sentence}
 
-                return only the new sentence or you will be DISQUALIFIED
-            """
-            response = query(prompt)
-            word_dict = parse_and_process_words(response)
+#                 return only the new sentence or you will be DISQUALIFIED
+#             """
+#             response = query(prompt)
+#             word_dict = parse_and_process_words(response)
 
-            #synonym
-            synonyms_dict = synonymparser(word_dict, problems)
+#             #synonym
+#             synonyms_dict = synonymparser(word_dict, problems)
 
-            # #replace
-            # updated_sentence = replace_words_in_story(response, synonyms_dict)
-            # print('Updated Sentence: '+ updated_sentence)
-            # if '___' in updated_sentence:
-            #     updated_sentence = get_words(updated_sentence, problems, previous_sentence, next_sentence)
-            # else:
-            #     return updated_sentence
+#             # #replace
+#             # updated_sentence = replace_words_in_story(response, synonyms_dict)
+#             # print('Updated Sentence: '+ updated_sentence)
+#             # if '___' in updated_sentence:
+#             #     updated_sentence = get_words(updated_sentence, problems, previous_sentence, next_sentence)
+#             # else:
+#             #     return updated_sentence
 
-        #### change to return synonyms_dict only#####
-        # print(f"synonyms dict: {synonyms_dict}")
-        # updated_sentence = replace_words_in_story(sentence, synonyms_dict)
-        # return updated_sentence
-        return synonyms_dict
+#         #### change to return synonyms_dict only#####
+#         # print(f"synonyms dict: {synonyms_dict}")
+#         # updated_sentence = replace_words_in_story(sentence, synonyms_dict)
+#         # return updated_sentence
+#         return synonyms_dict
 
 def get_synonyms_dict(story, word_dict, problems):
     global replace
