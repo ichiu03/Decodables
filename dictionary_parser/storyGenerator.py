@@ -5,6 +5,8 @@ import os
 import re
 import nltk
 from nltk.corpus import words
+from dictionary_parser import parse_and_process_words
+import random
 
 nltk.download('punkt')
 nltk.download('punkt_tab')
@@ -147,7 +149,8 @@ def generate_chapter(outline, chapter_number, length, story):
     story = query(prompt)
     return story
 
-def generate_outline(topic):
+def generate_outline(topic,name):
+    
     prompt = f"""
     You are a creative author.
 
@@ -159,97 +162,135 @@ def generate_outline(topic):
 
     The story should be {chapters}  chapters long.
 
+    The main character should be named {name}.
+
     Return only the outline
     """
     outline = query(prompt)
     return outline
-'''
-def sentence_check(story):
-    sentences = story.split(".")
-    new_story = ""
-    prev_sentence = sentences[0]
-    for sentence in sentences:
-        next_sentence = sentences[sentences.index(sentence) + 1] if sentences.index(sentence) < len(sentences) - 1 else ""
-        if "___" in sentence:
-            prompt = f"""
-                Give 5 words that would make sense in the following blank space:
-                {prev_sentence}
-                {sentence}
-                {next_sentence}
-                return only the 5 words separated by commas. Like this "word1,word2,word3,word4,word5"
-            """
-            response = query(prompt)
-            words = response.split(",")
-            for word in words:
-                pass
-                # Use dictionary parser to check if the word is good
-                # if it is, then add it to the sentence
-        prev_sentence = sentence
-    return new_story
 
-def word_check(story, dictionary, problems):
-    new_story = ""
-    sentences = story.split(".")
+def choose_name(problems):
+    names = [
+        "Olivia", "Noah",
+        "Amelia", "Liam",
+        "Emma", "Oliver",
+        "Sophia", "Elijah",
+        "Charlotte", "Mateo",
+        "Isabella", "Lucas",
+        "Ava", "Levi",
+        "Mia", "Ezra",
+        "Ellie", "Asher",
+        "Luna", "Leo",
+        "Harper", "James",
+        "Aurora", "Luca",
+        "Evelyn", "Henry",
+        "Eliana", "Hudson",
+        "Aria", "Ethan",
+        "Violet", "Muhammad",
+        "Nova", "Maverick",
+        "Lily", "Theodore",
+        "Camila", "Grayson",
+        "Gianna", "Daniel",
+        "Mila", "Michael",
+        "Sofia", "Jack",
+        "Hazel", "Benjamin",
+        "Scarlett", "Elias",
+        "Ivy", "Sebastian",
+        "Ella", "Kai",
+        "Willow", "Theo",
+        "Layla", "Wyatt",
+        "Avery", "Gabriel",
+        "Eleanor", "Mason",
+        "Elena", "Samuel",
+        "Nora", "Alexander",
+        "Chloe", "Jackson",
+        "Penelope", "William",
+        "Elizabeth", "Carter",
+        "Abigail", "Owen",
+        "Delilah", "David",
+        "Riley", "Aiden",
+        "Isla", "Josiah",
+        "Lainey", "Luke",
+        "Paisley", "Julian",
+        "Lucy", "Santiago",
+        "Emilia", "Ezekiel",
+        "Stella", "Isaiah",
+        "Grace", "Waylon",
+        "Maya", "Miles",
+        "Naomi", "Isaac",
+        "Ayla", "John",
+        "Emily", "Logan",
+        "Leilani", "Matthew",
+        "Athena", "Jacob",
+        "Zoey", "Caleb",
+        "Kinsley", "Jayden",
+        "Iris", "Roman",
+        "Victoria", "Joseph",
+        "Madison", "Nathan",
+        "Zoe", "Anthony",
+        "Sophie", "Cooper",
+        "Valentina", "Enzo",
+        "Alice", "Weston",
+        "Aaliyah", "Nolan",
+        "Autumn", "Thomas",
+        "Sadie", "Adam",
+        "Addison", "Eli",
+        "Adeline", "Lincoln",
+        "Eden", "Micah",
+        "Hannah", "Silas",
+        "Emery", "Amir",
+        "Amara", "Joshua",
+        "Ruby", "Rowan",
+        "Brooklyn", "Beau",
+        "Bella", "Atlas",
+        "Melody", "Wesley",
+        "Serenity", "Luka",
+        "Everly", "Jaxon",
+        "Gabriella", "Jeremiah",
+        "Millie", "Adrian",
+        "Raelynn", "Xavier",
+        "Josie", "Walker",
+        "Nevaeh", "Cameron",
+        "Daisy", "Christopher",
+        "Lyla", "Colton",
+        "Lillian", "Charlie",
+        "Skylar", "Bennett",
+        "Maria", "Brooks",
+        "Natalie", "Myles",
+        "Leah", "Andrew",
+        "Kennedy", "Jace",
+        "Jade", "River",
+        "Ember", "Ryan",
+        "Madelyn", "Zion",
+        "Clara", "Easton",
+        "Hailey", "Everett",
+        "Anna", "Axel",
+        "Savannah", "Parker",
+        "Oakley", "Greyson",
+        "Audrey", "Hunter",
+        "Brielle", "Christian",
+        "Cora", "Max",
+        "Liliana", "Adriel"
+    ]
+
+    categorized_names = parse_and_process_words(" ".join(names))
+
+    for problem in problems:
+        for name in names:
+            if name.lower() in categorized_names[problem]:
+                names.remove(name)
     
-    for sentence in sentences:
-        words = sentence.split(" ")
-        bad_words = []
-        for i in range(len(words)):
-            check = False
-            for problem in problems:
-                for example in dictionary[problem]:
-                    if example in words[i]:
-                        check = True
-                        bad_words.append(words[i])
-            if check:
-                
-                # Verify that the following sentence only contains words from this language: {dictionary}
+    return names[random.randint(0, len(names) - 1)]
 
-                prompt = f"""
-                    Rewrite the following sentence and remove all instances of the following words: {bad_words}
-
-                """
-                response = query(prompt)
-                #print(response)
-                new_story += response
-            else:
-                new_story += words[i] + " "
-    return new_story
-
-### Function to edit the story
-### This function takes the story (string) as input and returns the edited story (string)
-def edit(story):
-    prompt = f"""
-    Edit the following story.
-
-    Make minial changes, only correct blatant errors.
-
-    Remove any Contractions and replace with the full word choice instead
-
-    Make sure all sentences are coherent.
-
-    Remove sentences that do not make sense or are irrelevant.
-
-    Here is the story to edit: {story}
-
-    Return only the story, no extra words.
-    """
-    response = query(prompt)
-    return response
-
-def fix_spacing(text):
-    # Insert a space after punctuation marks if not followed by a space
-    text = re.sub(r'([.!?])([^\s])', r'\1 \2', text)
-    return text
-'''
 
 ### Main function
 def generate_story(topic, problems):
     
     dictionary = get_words(problems)
-    outline = generate_outline(topic)
+    name = choose_name(problems)
+    outline = generate_outline(topic, name)
     story = ""
-
+    
     for chapter in range(chapters):
         print(f"Generating chapter {chapter + 1}")
         new_chapter = generate_chapter(outline, chapter + 1, story_length // chapters, story)

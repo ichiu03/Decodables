@@ -6,6 +6,7 @@ from replace_synonyms import *
 from collections import Counter
 from datetime import datetime
 import language_tool_python
+import random
 # from synonymparser import *
 
 replace = []
