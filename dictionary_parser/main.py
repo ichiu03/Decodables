@@ -98,13 +98,13 @@ def get_synonyms_dict(story, word_dict, problems):
                     prompt = f"""
                         Give 10 words that would make sense as replacements for the following word in the sentence and don't include these sounds: {problems}:
 
-                        word: {word}
-                        previous sentence (for context): {prev_sentence}
-                        sentence to fix: {sentence}
-                        next sentence (for context): {next_sentence}
+                        word: {word}.
+                        previous sentence (for context): {prev_sentence}.
+                        sentence to fix: {sentence}.
+                        next sentence (for context): {next_sentence}.
 
-                        return only the 10 words separated by commas. Like this: "word1,word2,word3,word4,word5"
-                        order the words so the best fit is first
+                        Return only the 10 words separated by commas. They should be formatted like this: "word1,word2,word3,word4,word5,word6,word7,word8,word9,word10"
+                        order the words so the best fit is first.
                         """
                     response = query(prompt)
                     temp_words = response.split(",")
@@ -219,7 +219,7 @@ def correct_text(text):
     corrected_text = language_tool_python.utils.correct(text, matches)
     return corrected_text
 
-def process_story(story, problems, apply_correction=False):
+def process_story(story, problems, apply_correction=False, spellcheck=False):
     if apply_correction:
         print("Applying grammar correction...")
         story = correct_text(story)
@@ -229,6 +229,18 @@ def process_story(story, problems, apply_correction=False):
     else:
         print("Skipping grammar correction...")
         marker = "grammar not corrected"
+    
+    if spellcheck:
+        print("Applying Spellcheck...")
+        prompt = f" Take this story and make any necessary grammar and syntax corrections to make it more readable and abide by proper english writing and reading standards: {story}. Return just the new fixed story."
+        story = query(prompt)
+        marker += " Spellcheck"
+
+    else:         
+        print("Skipping Spellcheck...")
+        marker += " No Spellcheck"
+
+
 
     # Continue with your processing
     print("Checking each word...")
@@ -286,10 +298,16 @@ def process_story(story, problems, apply_correction=False):
         file.write(decodability_entry)
 
     # Save the final story
-    output_file = 'dictionary_parser\\updated_story_corrected.txt' if apply_correction else 'dictionary_parser\\updated_story.txt'
+    if apply_correction and spellcheck:
+        output_file = 'dictionary_parser\\updated_story_transition.txt'
+    elif apply_correction:
+        output_file = 'dictionary_parser\\updated_story_corrected.txt'
+    else:
+        output_file = 'dictionary_parser\\updated_story.txt'
     story = ultraformatting(story)
     save_updated_story(story, output_file)
     print(f"Updated story has been saved to '{output_file}'.")
+
 
 
 def main():
@@ -303,11 +321,15 @@ def main():
 
     # First Run: Without Grammar Correction
     print("\n--- Processing Without Grammar Correction ---")
-    process_story(story, problems, apply_correction=False)
+    process_story(story, problems, apply_correction=False, spellcheck=False)
 
     # Second Run: With Grammar Correction
     print("\n--- Processing With Grammar Correction ---")
-    process_story(story, problems, apply_correction=True)
+    process_story(story, problems, apply_correction=True, spellcheck=False)
+    
+    print("\n--- Processing With Grammar Correction and Spell Check words---")
+    process_story(story, problems, apply_correction=True, spellcheck=True)
+
 
 
 if __name__ == "__main__":
