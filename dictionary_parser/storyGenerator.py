@@ -274,13 +274,14 @@ def choose_name(problems):
     ]
 
     categorized_names = parse_and_process_words(" ".join(names))
-
     for problem in problems:
         for name in names:
-            if name.lower() in categorized_names[problem]:
+            if name in categorized_names[problem]:
                 names.remove(name)
     
-    return names[random.randint(0, len(names) - 1)]
+    name = names[random.randint(0, len(names) - 1)]
+    print(f"Chosen name: {name}")
+    return name
 
 
 ### Main function
