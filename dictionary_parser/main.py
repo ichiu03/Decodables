@@ -8,6 +8,7 @@ from datetime import datetime
 import language_tool_python
 import random
 # from synonymparser import *
+sight_words = ""
 
 replace = []
 
