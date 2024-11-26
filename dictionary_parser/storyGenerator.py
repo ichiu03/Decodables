@@ -5,7 +5,7 @@ import os
 import re
 import nltk
 from nltk.corpus import words
-from dictionary_parser import parse_and_process_words
+from dictionaryParser import parse_and_process_words
 import random
 
 nltk.download('punkt')
