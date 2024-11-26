@@ -280,12 +280,12 @@ def process_story(story, problems, apply_correction=False):
     decodability_entry = f"{decodability * 100:.2f}% {current_time} Word Count: {len(story.split())} {marker}\n"
 
     # Append the data to the file
-    decodability_file = "organized\\decodability_measurements.txt"
+    decodability_file = "dictionary_parser\\decodability_measurements.txt"
     with open(decodability_file, "a") as file:
         file.write(decodability_entry)
 
     # Save the final story
-    output_file = 'organized\\updated_story_corrected.txt' if apply_correction else 'organized\\updated_story.txt'
+    output_file = 'dictionary_parser\\updated_story_corrected.txt' if apply_correction else 'dictionary_parser\\updated_story.txt'
     story = ultraformatting(story)
     save_updated_story(story, output_file)
     print(f"Updated story has been saved to '{output_file}'.")
