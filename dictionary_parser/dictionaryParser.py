@@ -52,8 +52,8 @@ vv_sounds = {
     'eo': ['IY ER', 'IY OW', 'IY AA'], 'ue': ['UW AH', 'UW EH'], 'eu': ['IY AH'], 'ao': ['EY AA'], 'ei': ['IY AH'], 
     'ua': ['UW EH', 'UW EY', 'AH W AH', 'AH W EY', 'UW W AH', 'UW EY', 'UW AH', 'UW AE']}
 sight_words = {'a', 'any', 'many', 'and', 'on', 'is', 'are', 'the', 'was', 'were', 'it', 'am', 'be', 'go', 'to', 'been', 'come', 'some', 'do', 'does', 'done', 'what', 'who', 'you', 'your', 'both', 'buy', 'door', 'floor', 'four', 'none', 'once', 'one', 'only', 'pull', 'push', 'sure', 'talk', 'walk', 'their', 'there', "they're", 'very', 'want', 'again', 'against', 'always', 'among', 'busy', 'could', 'should', 'would', 'enough', 'rough', 'tough', 'friend', 'move', 'prove', 'ocean', 'people', 'she', 'other', 'above', 'father', 'usually', 'special', 'front', 'thought', 'he', 'we', 'they', 'nothing', 'learned', 'toward', 'put', 'hour', 'beautiful', 'whole', 'trouble', 'of', 'off', 'use', 'have', 'our', 'say', 'make', 'take', 'see', 'think', 'look', 'give', 'how', 'ask', 'boy', 'girl', 'us', 'him', 'his', 'her', 'by', 'where', 'were', 'wear', 'hers', "don't", 'which', 'just', 'know', 'into', 'good', 'other', 'than', 'then', 'now', 'even', 'also', 'after', 'know', 'because', 'most', 'day', 'these', 'two', 'already', 'through', 'though', 'like', 'said', 'too', 'has', 'in', 'brother', 'sister', 'that', 'them', 'from', 'for', 'with', 'doing', 'well', 'before', 'tonight', 'down', 'about', 'but', 'up', 'around', 'goes', 'gone', 'build', 'built', 'cough', 'lose', 'loose', 'truth', 'daughter', 'son'}
-VOWELS = {'aeiou'}
-CONSONANTS = {'bcdfghjklmnpqrstvwxyz'}
+VOWELS = set('aeiou')
+CONSONANTS = set('bcdfghjklmnpqrstvwxyz')
 COMPOUND_SOUNDS = {
     'ai', 'au', 'ay', 'ae', 'ao', 'ar', 'ea', 'ee', 'ei', 'eo', 'eu', 'er',
     'ia', 'ie', 'io', 'iu', 'ir', 'oa', 'oe', 'oi', 'oo', 'ou', 'or', 'ua',
@@ -248,7 +248,9 @@ def yCheck(word: str, arpabet: str) -> None:
     if arpabet.endswith('IY') and word.endswith('ey'): 
         if verificationToAdd(word, arpabet, 'ey', ['IY'], ['EY']):
             categories['ey as in monkey'].append(word)
-    elif 'ey' in word and 'EY' in arpabet: categories['ey as in they'].append(word)
+    if 'ey' in word:
+        if verificationToAdd(word, arpabet, 'ey', ['EY'], ['IH']):
+            categories['ey as in they'].append(word)
 
 def ingongangungCheck(word: str) -> None:
     # For -ong, -ang, -ung endings
@@ -401,8 +403,6 @@ def threelBlends(word: str) -> None:
         categories['3-letter beg. blends'].append(word)
 
 def vccvCheck(word: str, arpabet: str) -> None:
-    syllable_count = pronouncing.syllable_count(arpabet)
-    if syllable_count != 2: return
     if len(word) < 4: return
     for i in range(len(word) - 3):  # Changed to -3 since we need 4 characters (VCCV)
         if (word[i] in VOWELS and 
@@ -421,8 +421,6 @@ def vceCheck(word: str) -> None:
         categories['vce'].append(word)
         
 def OCECheck(word: str, arpabet: str) -> None:
-    syllable_count = pronouncing.syllable_count(arpabet)
-    if syllable_count != 1: return
     if len(word) < 2: return
     tokens = arpabet.split()
     # Open syllables: Check if the last sound is a long vowel sound
@@ -536,7 +534,7 @@ def getWords(text: str) -> set:
     words = re.findall(r'\b[A-Za-z]+\'?[A-Za-z]*\b', text.lower())
     return set(words)
 
-def callCategorizationFunctions(word: str, arpabet: str) -> None:
+def callCategorizationFunctions(word: str, arpabet: str, syllable_count: int) -> None:
     hardVsSoftC(word, arpabet)
     hardVsSoftG(word, arpabet)
     yCheck(word, arpabet)
@@ -563,15 +561,17 @@ def callCategorizationFunctions(word: str, arpabet: str) -> None:
     shouldDoubleConsonant(word, arpabet)
     vcvCheck(word)
     vvCheck(word, arpabet)
-    vccvCheck(word, arpabet)
     vcccvCheck(word)
-    OCECheck(word, arpabet)
     isYRuleSuffix(word)
     vrlCheck(word)
     vceCheck(word)
     xInWordCheck(word, arpabet)
     ingongangungCheck(word)
     contractionsCheck(word)
+    if syllable_count == 2:
+        vccvCheck(word, arpabet)
+    if syllable_count == 1:
+        OCECheck(word, arpabet)
 
 def parseAndProcessWords(story: str, output_path = "output.json") -> dict:
     try:
@@ -587,9 +587,9 @@ def parseAndProcessWords(story: str, output_path = "output.json") -> dict:
                 print(f"\t'{word}' not found in the pronouncing library's dictionary.")
                 categories['failed to categorize'].append(word)
                 continue
-            
+            syllable_count = pronouncing.syllable_count(phones[0])
             arpabet = re.sub(r'\d', '', phones[0])
-            callCategorizationFunctions(word, arpabet)
+            callCategorizationFunctions(word, arpabet, syllable_count)
             
         if os.path.exists(output_path):
             os.remove(output_path)
