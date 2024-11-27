@@ -3,9 +3,7 @@ import pronouncing
 import os
 import re
 import nltk
-import syllapy
 from nltk.corpus import words
-import shutil
 import traceback
 
 # Get the directory where `dictionaryParser.py` is located
@@ -183,7 +181,7 @@ def is_valid_presuf(wordbase: str) -> bool:
 
 def x_in_word_check(word: str, arpabet: str) -> None:
     tokens = arpabet.split()
-    keys = ['m', 'l', 'p', 'v', 'z', 'f', 'sh', 'ay', 'ck', 'ee', 'all', 'th', 'oy', 
+    keys = ['m', 'l', 'p', 'v', 'z', 'f', 'sh', 'ay', 'ck', 'ee', 'th', 'oy', 
         'wh', 'er', 'aw', 'tch', 'ed', 'ai', 'oa', 'kn', 'ur',
         'dge', 'tion', 'au', 'ough', 'wor', 'wr', 'eigh', 'augh', 'oe', 'ui', 'wa', 'eu', 'gh',
         'mb', 'mn', 'que', 'gn', 'stle', 'rh', 'gue', 'alk', 'alt', 'qua', 'sc', 'ph']
@@ -243,7 +241,6 @@ def x_in_word_check(word: str, arpabet: str) -> None:
     if 'or' in word and 'AO R' in arpabet: categories['or'].append(word)
     if 'ar' in word and 'AA R' in arpabet: categories['ar'].append(word)
     if word[-2:] == 'ly' and tokens[-1] == 'IY': categories['ly'].append(word)
-    if 'ing' in word or 'ang' in word or 'ong' in word or 'ung' in word: categories['-ing, -ong, -ang, -ung'].append(word)
     if 'ink' in word or 'ank' in word or 'onk' in word or 'unk' in word: categories['-ink, -ank, -onk, -unk'].append(word)
     if word.endswith('ft') or word.endswith('st') or word.endswith('nd'): categories['-ft, -nd, -st'].append(word)
     if word.endswith('sp') or word.endswith('nt') or word.endswith('mp'): categories['-sp, -nt, -mp'].append(word)
@@ -269,15 +266,60 @@ def yCheck(word: str, arpabet: str) -> None:
         if 'Y EH' in arpabet or 'Y OW' in arpabet or 'Y AO' in arpabet or 'Y UH' in arpabet or 'Y AH' in arpabet:
             categories['y as in yes'].append(word)
     # 'y as in dry' (long 'i' sound, represented by 'AY1' in ARPAbet)
-    if 'AY' in arpabet: categories['y as in dry'].append(word)
+    if 'AY' in arpabet: 
+        if verification_to_add(word, arpabet, 'y', ['AY'], ['IH']):
+            categories['y as in dry'].append(word)
     # 'y as in bumpy' (unstressed 'IY0' sound in ARPAbet)
-    elif 'IY' in arpabet: categories['y as in bumpy'].append(word)
+    elif 'IY' in arpabet: 
+        if verification_to_add(word, arpabet, 'y', ['IY'], ['IH']):
+            categories['y as in bumpy'].append(word)
     # 'y in gym' (short 'i' sound, 'IH1' in ARPAbet)
-    if 'IH' in arpabet: categories['y as in gym'].append(word) 
+    if 'IH' in arpabet: 
+        if verification_to_add(word, arpabet, 'y', ['IH'], ['IH']):
+            categories['y as in gym'].append(word) 
     # '-ey as in monkey' (ending with unstressed 'IY0')
-    if arpabet.endswith('IY') and word.endswith('ey'): categories['ey as in monkey'].append(word)
+    if arpabet.endswith('IY') and word.endswith('ey'): 
+        if verification_to_add(word, arpabet, 'ey', ['IY'], ['EY']):
+            categories['ey as in monkey'].append(word)
     # 'ey as in they' (long 'EY1' sound)
     elif 'ey' in word and 'EY' in arpabet: categories['ey as in they'].append(word)
+
+def ingongangungCheck(word: str) -> None:
+    # For -ong, -ang, -ung endings, we can keep the simple check
+    if word.endswith(('ong', 'ang', 'ung')):
+        categories['-ing, -ong, -ang, -ung'].append(word)
+    
+    # For -ing endings, we need to be more selective
+    if word.endswith('ing'):
+        # First add simple words like "sing", "ring" etc
+        if len(word) <= 5: 
+            categories['-ing, -ong, -ang, -ung'].append(word)
+            return
+        # For longer words, check if they are derived from verbs
+        root_word = word[:-3]
+        modified_root_word = None
+        if root_word in valid_words: return
+        # Check for the case of doubled consonants
+        if len(root_word) > 1 and root_word[-1] == root_word[-2]: # swimming -> swim
+            modified_root_word = root_word[:-1]
+        if modified_root_word in valid_words: return
+        # Single letter with dropped 'e'
+        modified_root_word_e = root_word + 'e'
+        if modified_root_word_e in valid_words: return
+        # double letter with dropped 'e'
+        if modified_root_word is not None:
+            modified_root_word_e2 = modified_root_word + 'e'
+            if modified_root_word_e2 in valid_words: return
+        # If we get here, we should add the word
+        categories['-ing, -ong, -ang, -ung'].append(word)
+
+def allCheck(word: str) -> None:
+    if word.endswith('ly'):
+        root_word = word[:-2]
+        if 'all' in root_word:
+            categories['all'].append(word)
+    else:
+        categories['all'].append(word)
 
 def hard_vs_soft_C(word: str, arpabet: str) -> None:
     tokens = arpabet.split()
@@ -337,25 +379,11 @@ def ea_check(word: str, arpabet: str) -> None:
     if 'EH' in arpabet and 'EH R' not in arpabet:
         categories['ea as in bread'].append(word)
 
-def vce_check(word: str) -> None:
-    for i in range(len(word) - 2):
-        if (word[i].lower() in vowels and
-            word[i + 1].lower() in consonants and
-            word[i + 2].lower() == 'e'):
-            categories['vce'].append(word)
-        
-def OCE_check(word: str, arpabet: str) -> None:
-    tokens = arpabet.split()
-    # Open syllables (ends in hard vowel)
-    if word[-1] in vowels and len(word) > 1:
-        if not(word[-1] == 'e' and 'IY' not in tokens[-1]):
-            categories['Open syll.'].append(word)
-    # Closed syllables (eg cat, man)
-    for i in range(len(word) - 1):
-        if word[i] in vowels and word[i + 1].lower() not in vowels:
-            categories['Closed syll.'].append(word)
-            return
-        
+def check_contractions(word: str) -> None:
+    if "'" in word:
+        if re.match(r"[a-zA-Z]+\'[a-zA-Z]*", word):
+            categories['contractions'].append(word)
+
 def ew_check(word: str, arpabet: str) -> None:
     if 'UW' in arpabet:
         categories['ew as in few/blew'].append(word)
@@ -411,10 +439,46 @@ def threel_blends(word: str) -> None:
         categories['3-letter beg. blends'].append(word)
 
 def vccv(word: str) -> None:
-    for i in range(len(word) - 3):
-        if (word[i] in vowels and word[i+1] in consonants and 
-            word[i+2] in consonants and word[i+3] in vowels):
-            categories['vccv'].append(word)
+    for i in range(len(word) - 3):  # Changed to -3 since we need 4 characters (VCCV)
+        if (word[i] in vowels and 
+            word[i+1] in consonants and 
+            word[i+2] in consonants and 
+            word[i+3] in vowels):
+            if len(word) > i + 4:
+                categories['vccv'].append(word)
+                return
+
+def vce_check(word: str) -> None:
+    if len(word) >= 3:
+        if (word[-3].lower() in vowels and
+            word[-2].lower() in consonants and
+            word[-1].lower() == 'e'):
+            categories['vce'].append(word)
+        
+def OCE_check(word: str, arpabet: str) -> None:
+    tokens = arpabet.split()
+    # Open syllables: Check if the last sound is a long vowel sound
+    if tokens[-1] in ['AY', 'EY', 'IY', 'OW', 'UW'] and word[-1] in vowels:
+        categories['Open syll.'].append(word)
+        return
+    # Closed syllables: Check if it has a short vowel sound followed by a consonant sound
+    if word[-1] in consonants and word[-2] in vowels:
+        for i in range(len(tokens) - 1):
+            if (tokens[i] in ['AE', 'EH', 'IH', 'AA', 'AH', 'UH'] and 
+            tokens[i + 1] not in ['AY', 'EY', 'IY', 'OW', 'UW', 'AE', 'EH', 'IH', 'AA', 'AH', 'UH']):
+                if word[-1] == 's':
+                    root_word = word[:-1]
+                    if root_word in valid_words or root_word[-1] in vowels:
+                        return
+                elif word.endswith('ed'):
+                    root_word = word[:-1] # Remove 'd'
+                    if root_word in valid_words or root_word[-1] in vowels:
+                        return
+                    root_word = word[:-2] # Remove 'ed'
+                    if root_word in valid_words or root_word[-1] in vowels:
+                        return  
+                categories['Closed syll.'].append(word)
+                return
 
 def vcv(word: str) -> None:
     for i in range(len(word) - 2):  # Iterate through the word for 3-letter patterns
@@ -480,26 +544,23 @@ vowel_y_pattern = re.compile(r'[aeiou]y')
 def is_y_rule_suffix(word: str) -> bool:
     EXCEPTIONS = {'frontier', 'glacier', 'soldier', 'barrier', 'carrier', 'pier', 'priest', 'series', 'species'}
     if word in EXCEPTIONS:
-        return False
+        return
 
     if y_rule_patterns.search(word): # Check for patterns where Y changes to I
-        return True
+        categories['y rule suffixes'].append(word)
     if word.endswith('ying'): # Check for "ying" suffix
-        return True
-
+        categories['y rule suffixes'].append(word)
     # Disallow words with Vowel + Y patterns
     if vowel_y_pattern.search(word):
-        return False
-
+        return 
     # Final check for "ies" pattern without vowels before "y"
     if word.endswith('ies') and not 'y' in word[:word.rfind('ies')]:
-        return True
+        categories['y rule suffixes'].append(word)
+    return 
 
-    return False
-
-def get_words(story: str) -> list:
-    words = re.findall(r'\b\w+\b', story)
-    return words
+def get_words(text: str) -> set:
+    words = re.findall(r'\b[A-Za-z]+\'?[A-Za-z]*\b', text.lower())
+    return set(words)
 
 def parse_and_process_words(story: str, output_path = "output.json") -> dict:
     try:
@@ -516,6 +577,7 @@ def parse_and_process_words(story: str, output_path = "output.json") -> dict:
                 categories['failed to categorize'].append(word)
                 continue
             
+            syllable_count = pronouncing.syllable_count(phones[0])
             arpabet = re.sub(r'\d', '', phones[0])
             
             if 'c' in word:
@@ -524,8 +586,6 @@ def parse_and_process_words(story: str, output_path = "output.json") -> dict:
                 hard_vs_soft_G(word, arpabet)
             if 'y' in word:
                 yCheck(word, arpabet)
-            if "'" in word:
-                categories['contractions'].append(word)
             if 'oo' in word:
                 oo_check(word, arpabet)
             if 'ow' in word:
@@ -562,26 +622,29 @@ def parse_and_process_words(story: str, output_path = "output.json") -> dict:
                 threel_blends(word)
             if 'war' in word:
                 warCheck(word)
+            if 'all' in word:
+                allCheck(word)
             if len(word) > 3 and word[-1] in 'fszl' and word[-2] in 'fszl' and word[-1] == word[-2]:
                 fszl_check(word, arpabet)
             if len(word) >= 3:
                 should_double_consonant(word, arpabet)
                 vcv(word)
                 vv_check(word, arpabet)
-            if len(word) >= 4:
+            if len(word) >= 4 and syllable_count == 2:
                 vccv(word)
             if len(word) >= 5:
                 vcccv(word)
+            if len(word) >= 3 and syllable_count == 1:
+                OCE_check(word, arpabet)
             if is_y_rule_suffix(word):
                 categories['y rule suffixes'].append(word)
-            #if is_e_rule_suffix(word):
-                #categories['e rule-suffixes'].append(word)
             if 'v' in word or 'l' in word or 'r' in word:
                 vrl_check(word)
             
             vce_check(word)
-            OCE_check(word, arpabet)
             x_in_word_check(word, arpabet)
+            ingongangungCheck(word)
+            check_contractions(word)
 
         if os.path.exists(output_path):
             os.remove(output_path)
@@ -596,9 +659,7 @@ def parse_and_process_words(story: str, output_path = "output.json") -> dict:
         traceback.print_exc()
     return categories
 
-def getTopWords(num: int, input_path: str, output_path: str) -> None:
-    with open(input_path, 'r') as f:
-        data_dict = json.load(f)
+def getTopWords(num: int, output_path: str) -> None:
     truncated_dict = {key: values[:num] for key, values in categories.items()}
     with open(output_path, 'w') as f:
         json.dump(truncated_dict, f, indent=4)
@@ -613,15 +674,5 @@ def main():
         story = f.read()
     parse_and_process_words(story, output_path)
 
-main()
-
-### Takes in a list of all the problem categories and makes sure every categories doesn't have words from 
-### any of the categories. 
-def ridOverlap(problemCategories: list) -> None:
-    badWords = []
-    for category in problemCategories:
-        badWords.extend(categories[category])
-    badWords = set(badWords)  # Deduplicate
-
-    for key, value in categories.items():
-        categories[key] = [word for word in value if word not in badWords]
+if __name__ == "__main__":
+    main()
