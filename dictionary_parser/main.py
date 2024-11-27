@@ -42,7 +42,7 @@ with open('dictionary_parser\\dictionary.txt', 'r', encoding='utf-8') as file:
 #         temp_words = response.split(",")
 #         words.extend(temp_words)
 
-#     words_dict = parse_and_process_words(sentence)
+#     words_dict = parseAndProcessWords(sentence)
 #     blanks = len(words)//5
 #     words_blanks = [words[i:i+blanks] for i in range(0, len(words), blanks)]
 #     for problem in problems:
@@ -64,7 +64,7 @@ with open('dictionary_parser\\dictionary.txt', 'r', encoding='utf-8') as file:
 #                 return only the new sentence or you will be DISQUALIFIED
 #             """
 #             response = query(prompt)
-#             word_dict = parse_and_process_words(response)
+#             word_dict = parseAndProcessWords(response)
 
 #             #synonym
 #             synonyms_dict = synonymparser(word_dict, problems)
@@ -109,7 +109,7 @@ def get_synonyms_dict(story, word_dict, problems):
                         """
                     response = query(prompt)
                     temp_words = response.split(",")
-                    temp_words_dict = parse_and_process_words(response)
+                    temp_words_dict = parseAndProcessWords(response)
                     for temp_word in temp_words:
                         for problem in problems:
                             if temp_word in temp_words_dict[problem]:# or word not in large_dictionary:
@@ -245,7 +245,7 @@ def process_story(story, problems, apply_correction=False, spellcheck=False):
 
     # Continue with your processing
     print("Checking each word...")
-    word_dict = parse_and_process_words(story)
+    word_dict = parseAndProcessWords(story)
 
     # Find synonyms
     print("Finding synonyms...")
