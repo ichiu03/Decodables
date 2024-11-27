@@ -136,8 +136,7 @@ def mapChunksToPhonemes(word: str) -> dict:
 ### Confirms whether to add a word to a category, based on troublesome phonemes
 def verificationToAdd(word: str, arpabet: str, letters: str, desired_pho: list, problem_pho: list) -> bool:
     # Check if BOTH a desired phoneme AND a problem phoneme are present
-    if not (any(pho in arpabet for pho in desired_pho) and any(pho in arpabet for pho in problem_pho)):
-        return False
+    if not (any(pho in arpabet for pho in desired_pho) or any(pho in arpabet for pho in problem_pho)): return
     matches = False
     mapping = mapChunksToPhonemes(word)
     for chunk, phoneme in mapping.items():
@@ -618,5 +617,5 @@ def main():
         story = f.read()
     parseAndProcessWords(story, output_path)
 
-#if __name__ == "__main__":
-    #main()
+if __name__ == "__main__":
+    main()
