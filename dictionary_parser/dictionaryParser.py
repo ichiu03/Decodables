@@ -503,11 +503,10 @@ def shouldDoubleConsonant(word: str, arpabet: str) -> None:
 
 def fszlCheck(word: str, arpabet: str) -> None:
     if len(word) < 3 or word[-1] not in 'fszl' or word[-2] not in 'fszl' or word[-1] != word[-2]: return
-    if pronouncing.syllable_count(arpabet) == 1:
-        tokens = arpabet.split()
-        for vowel in ['IH', 'EH', 'AH', 'UH', 'AA', 'AE']:
-            if vowel in tokens[-2]:
-                categories['fszl'].append(word)
+    tokens = arpabet.split()
+    for vowel in ['IH', 'EH', 'AH', 'UH', 'AA', 'AE']:
+        if vowel in tokens[-2]:
+            categories['fszl'].append(word)
     
 # Precompile the regex patterns
 yRulePatterns = re.compile(r'[^aeiou](ies|ied|ier|iest)$')
@@ -557,7 +556,6 @@ def callCategorizationFunctions(word: str, arpabet: str, syllable_count: int) ->
     threelBlends(word)
     warCheck(word)
     allCheck(word)
-    fszlCheck(word, arpabet)
     shouldDoubleConsonant(word, arpabet)
     vcvCheck(word)
     vvCheck(word, arpabet)
@@ -572,6 +570,7 @@ def callCategorizationFunctions(word: str, arpabet: str, syllable_count: int) ->
         vccvCheck(word, arpabet)
     if syllable_count == 1:
         OCECheck(word, arpabet)
+        fszlCheck(word, arpabet)
 
 def parseAndProcessWords(story: str, output_path = "output.json") -> dict:
     try:
@@ -616,6 +615,7 @@ def main():
     with open(input_path, 'r') as f:
         story = f.read()
     parseAndProcessWords(story, output_path)
-
+    output_path2 = os.path.join(script_dir, 'truncated_dictionary.json')
+    getTopWords(20, output_path2)
 if __name__ == "__main__":
     main()
