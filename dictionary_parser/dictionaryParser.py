@@ -136,7 +136,7 @@ def mapChunksToPhonemes(word: str) -> dict:
 ### Confirms whether to add a word to a category, based on troublesome phonemes
 def verificationToAdd(word: str, arpabet: str, letters: str, desired_pho: list, problem_pho: list) -> bool:
     # Check if BOTH a desired phoneme AND a problem phoneme are present
-    if not (any(pho in arpabet for pho in desired_pho) or any(pho in arpabet for pho in problem_pho)): return
+    if not (any(pho in arpabet for pho in desired_pho) or any(pho in arpabet for pho in problem_pho)): return True
     matches = False
     mapping = mapChunksToPhonemes(word)
     for chunk, phoneme in mapping.items():
@@ -605,17 +605,15 @@ def getTopWords(num: int, output_path: str) -> None:
     truncated_dict = {key: values[:num] for key, values in categories.items()}
     with open(output_path, 'w') as f:
         json.dump(truncated_dict, f, indent=4)
-    
     print(f"Data successfully written to truncated_dictionary.json")
 
 def main():
-    filename = 'WordDatav4.txt' 
-    input_path = os.path.join(script_dir, filename)
+    input_path = os.path.join(script_dir, 'WordDatav4.txt')
     output_path = os.path.join(script_dir, 'categorized_words.json')
+    output_path2 = os.path.join(script_dir, 'truncated_dictionary.json')
     with open(input_path, 'r') as f:
         story = f.read()
     parseAndProcessWords(story, output_path)
-    output_path2 = os.path.join(script_dir, 'truncated_dictionary.json')
     getTopWords(20, output_path2)
 if __name__ == "__main__":
     main()
