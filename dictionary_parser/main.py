@@ -233,13 +233,17 @@ def process_story(story, problems, apply_correction=False, spellcheck=False):
     
     if spellcheck:
         print("Applying Spellcheck...")
-        prompt = f" Take this story and make any necessary grammar and syntax corrections to make it more readable and abide by proper english writing and reading standards: {story}. Return just the new fixed story."
+        prompt = f" You are a literary editor. Rewrite this story and make any necessary changes to the story to make it 100% readable and abide by proper english writing and reading standards: {story}. Return just the new fixed story."
         story = query(prompt)
         marker += " Spellcheck"
-
+        
     else:         
         print("Skipping Spellcheck...")
         marker += " No Spellcheck"
+        
+    promptgrade =f"What is the quality of this story ranked on a grading scale of A-F: {story}. Return only the letter grade (A,B,C,D,F) and nothing else."
+    graded = query(promptgrade)
+    
 
 
 
@@ -291,7 +295,7 @@ def process_story(story, problems, apply_correction=False, spellcheck=False):
 
     # Prepare the data for the file
     current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    decodability_entry = f"{decodability * 100:.2f}% {current_time} Word Count: {len(story.split())} {marker}\n"
+    decodability_entry = f"{decodability * 100:.2f}% {current_time} Word Count: {len(story.split())} Grade: {graded} {marker}\n"
 
     # Append the data to the file
     decodability_file = "dictionary_parser\\decodability_measurements.txt"
@@ -323,10 +327,6 @@ def main():
     # First Run: Without Grammar Correction
     print("\n--- Processing Without Grammar Correction ---")
     process_story(story, problems, apply_correction=False, spellcheck=False)
-
-    # Second Run: With Grammar Correction
-    print("\n--- Processing With Grammar Correction ---")
-    process_story(story, problems, apply_correction=True, spellcheck=False)
     
     print("\n--- Processing With Grammar Correction and Spell Check words---")
     process_story(story, problems, apply_correction=True, spellcheck=True)
