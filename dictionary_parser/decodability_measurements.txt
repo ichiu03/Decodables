@@ -28,14 +28,60 @@
 89.91% 2024-11-25 14:52:00 Word Count: 426 grammar corrected
 95.35% 2024-11-26 11:26:34 Word Count: 86 grammar not corrected
 93.02% 2024-11-26 11:26:55 Word Count: 86 grammar corrected
-99.39% 2024-11-26 11:35:55 Word Count: 488 grammar not corrected
-99.59% 2024-11-26 11:36:27 Word Count: 488 grammar corrected
-93.67% 2024-11-26 11:41:15 Word Count: 221 grammar not corrected
-94.14% 2024-11-26 11:42:18 Word Count: 222 grammar corrected
-92.08% 2024-11-26 11:46:38 Word Count: 101 grammar not corrected
-94.06% 2024-11-26 11:47:15 Word Count: 101 grammar corrected
-86.96% 2024-11-26 11:50:20 Word Count: 92 grammar not corrected
-85.87% 2024-11-26 11:50:47 Word Count: 92 grammar corrected
-84.54% 2024-11-26 11:54:39 Word Count: 97 grammar not corrected
-87.36% 2024-11-26 11:55:33 Word Count: 87 grammar not corrected
-91.95% 2024-11-26 11:56:08 Word Count: 87 grammar corrected
+93.98% 2024-11-26 11:36:09 Word Count: 83 grammar not corrected
+92.77% 2024-11-26 11:36:27 Word Count: 83 grammar corrected
+87.59% 2024-11-26 11:48:28 Word Count: 145 grammar not corrected
+86.30% 2024-11-26 11:49:04 Word Count: 146 grammar corrected
+86.39% 2024-11-26 12:02:33 Word Count: 147 grammar not corrected No transition words
+87.76% 2024-11-26 12:03:08 Word Count: 147 grammar corrected No transition words
+87.76% 2024-11-26 12:03:45 Word Count: 147 grammar corrected added transition words
+93.68% 2024-11-26 12:08:21 Word Count: 95 grammar not corrected No transition words
+91.58% 2024-11-26 12:08:50 Word Count: 95 grammar corrected No transition words
+93.68% 2024-11-26 12:09:22 Word Count: 95 grammar corrected added transition words
+93.79% 2024-11-26 12:16:17 Word Count: 145 grammar not corrected No transition words
+90.07% 2024-11-26 12:16:52 Word Count: 151 grammar corrected No transition words
+90.65% 2024-11-26 12:17:27 Word Count: 139 grammar corrected added transition words
+94.41% 2024-11-26 12:25:43 Word Count: 358 grammar not corrected No transition words
+94.41% 2024-11-26 12:27:01 Word Count: 358 grammar corrected No transition words
+94.97% 2024-11-26 12:28:30 Word Count: 358 grammar corrected added transition words
+86.67% 2024-11-26 12:36:03 Word Count: 30 grammar not corrected No transition words
+86.67% 2024-11-26 12:36:13 Word Count: 30 grammar corrected No transition words
+90.00% 2024-11-26 12:36:24 Word Count: 30 grammar corrected added transition words
+89.20% 2024-11-26 12:45:41 Word Count: 250 grammar not corrected No Spellcheck
+90.36% 2024-11-26 12:46:41 Word Count: 249 grammar corrected No Spellcheck
+92.37% 2024-11-26 12:47:42 Word Count: 249 grammar corrected Spellcheck
+94.56% 2024-11-26 12:52:05 Word Count: 147 grammar not corrected No Spellcheck
+96.55% 2024-11-26 12:52:36 Word Count: 145 grammar corrected No Spellcheck
+95.89% 2024-11-26 12:53:09 Word Count: 146 grammar corrected Spellcheck
+93.96% 2024-11-26 13:06:37 Word Count: 149 grammar not corrected No Spellcheck
+91.95% 2024-11-26 13:07:21 Word Count: 149 grammar corrected No Spellcheck
+91.95% 2024-11-26 13:08:04 Word Count: 149 grammar corrected Spellcheck
+93.59% 2024-11-30 12:07:24 Word Count: 421 grammar not corrected No Spellcheck
+94.76% 2024-11-30 12:08:42 Word Count: 420 grammar corrected No Spellcheck
+95.49% 2024-11-30 12:10:08 Word Count: 421 grammar corrected Spellcheck
+87.20% 2024-11-30 12:21:13 Word Count: 211 grammar not corrected No Spellcheck
+86.26% 2024-11-30 12:22:13 Word Count: 211 grammar corrected No Spellcheck
+83.89% 2024-11-30 12:23:11 Word Count: 211 grammar corrected Spellcheck
+95.95% 2024-11-30 12:38:44 Word Count: 247 Readability: Grade: B
+92.99% 2024-11-30 12:43:37 Word Count: 328 Readability: C grammar not corrected No Spellcheck
+91.08% 2024-11-30 12:44:40 Word Count: 325 Readability: C grammar corrected No Spellcheck
+92.00% 2024-11-30 12:45:49 Word Count: 325 Readability: B grammar corrected Spellcheck
+91.47% 2024-11-30 12:49:11 Word Count: 457 Readability Grade: C grammar not corrected No Spellcheck
+91.89% 2024-11-30 12:50:25 Word Count: 456 Readability Grade: D grammar corrected No Spellcheck
+92.78% 2024-11-30 12:51:46 Word Count: 457 Readability Grade: Grade: B grammar corrected Spellcheck
+94.58% 2024-11-30 13:00:31 Word Count: 646 Readability Grade: Grade: B grammar not corrected No Spellcheck
+93.03% 2024-11-30 13:02:39 Word Count: 646 Readability Grade: B grammar corrected Spellcheck
+92.02% 2024-11-30 13:06:25 Word Count: 263 Readability Grade: Grade: C grammar not corrected No Spellcheck
+92.69% 2024-11-30 13:07:28 Word Count: 260 Readability Grade: Grade level: B grammar corrected Spellcheck
+93.84% 2024-11-30 13:12:31 Word Count: 357 Readability Grade: Grade: B grammar not corrected No Spellcheck
+91.64% 2024-11-30 13:13:53 Word Count: 359 Readability Grade: C grammar corrected Spellcheck
+91.94% 2024-11-30 13:22:29 Word Count: 211 Grade: B grammar not corrected No Spellcheck
+90.05% 2024-11-30 13:23:15 Word Count: 211 Grade: B grammar corrected Spellcheck
+92.03% 2024-11-30 13:28:35 Word Count: 301 Grade: B grammar not corrected No Spellcheck
+91.32% 2024-11-30 13:29:29 Word Count: 265 Grade: C grammar corrected Spellcheck
+94.96% 2024-11-30 13:31:15 Word Count: 139 Grade: B grammar not corrected No Spellcheck
+92.95% 2024-11-30 13:31:51 Word Count: 156 Grade: B grammar corrected Spellcheck
+89.72% 2024-11-30 13:38:34 Word Count: 253 Grade: Error grammar not corrected No Spellcheck
+90.59% 2024-11-30 13:39:32 Word Count: 255 Grade: Error grammar corrected Spellcheck
+98.41% 2024-11-30 13:59:33 Word Count: 252 Grade: B grammar not corrected No Spellcheck
+98.79% 2024-11-30 13:59:47 Word Count: 248 Grade: A grammar corrected Spellcheck

@@ -5,7 +5,7 @@ import os
 import re
 import nltk
 from nltk.corpus import words
-from dictionaryParser import parse_and_process_words
+from dictionaryParser import parseAndProcessWords
 import random
 
 nltk.download('punkt')
@@ -85,8 +85,10 @@ def get_input_and_save():
 def get_input():
     global story_length
     global sight_words
+    global readingLevel
     story_length = int(input("Enter the length of the story: "))
     topic = input("Enter your story topic: ")
+    readingLevel = input("Enter the grade level of the reader (Only the grade number): ")
     problems = input("Enter the problem letters separated by commas: ").split(",")
     # sight_words = input("Enter the sight words separated by commas: ")
     problems = [problem.strip() for problem in problems]  # Clean up whitespace
@@ -130,7 +132,7 @@ def delete_old_file():
 
 def generate_chapter(outline, chapter_number, length, story):
     prompt = f"""
-    You are a creative author tasked with writing chapter {chapter_number} of a children's story (age 10).
+    You are a creative author tasked with writing chapter {chapter_number} of a children's story for a child at a {readingLevel} grade reading level.
 
     Here is the outline:
 
@@ -154,7 +156,7 @@ def generate_outline(topic,name):
     prompt = f"""
     You are a creative author.
 
-    Create an outline for a children's story about {topic} (Age 10).
+    Create an outline for a children's story about {topic} of a children's story for a child at a {readingLevel} grade reading level.
 
     The story should be about {story_length} words long.
 
@@ -169,126 +171,12 @@ def generate_outline(topic,name):
     outline = query(prompt)
     return outline
 
-def choose_name(problems):
-    names = [
-        "Olivia", "Noah",
-        "Amelia", "Liam",
-        "Emma", "Oliver",
-        "Sophia", "Elijah",
-        "Charlotte", "Mateo",
-        "Isabella", "Lucas",
-        "Ava", "Levi",
-        "Mia", "Ezra",
-        "Ellie", "Asher",
-        "Luna", "Leo",
-        "Harper", "James",
-        "Aurora", "Luca",
-        "Evelyn", "Henry",
-        "Eliana", "Hudson",
-        "Aria", "Ethan",
-        "Violet", "Muhammad",
-        "Nova", "Maverick",
-        "Lily", "Theodore",
-        "Camila", "Grayson",
-        "Gianna", "Daniel",
-        "Mila", "Michael",
-        "Sofia", "Jack",
-        "Hazel", "Benjamin",
-        "Scarlett", "Elias",
-        "Ivy", "Sebastian",
-        "Ella", "Kai",
-        "Willow", "Theo",
-        "Layla", "Wyatt",
-        "Avery", "Gabriel",
-        "Eleanor", "Mason",
-        "Elena", "Samuel",
-        "Nora", "Alexander",
-        "Chloe", "Jackson",
-        "Penelope", "William",
-        "Elizabeth", "Carter",
-        "Abigail", "Owen",
-        "Delilah", "David",
-        "Riley", "Aiden",
-        "Isla", "Josiah",
-        "Lainey", "Luke",
-        "Paisley", "Julian",
-        "Lucy", "Santiago",
-        "Emilia", "Ezekiel",
-        "Stella", "Isaiah",
-        "Grace", "Waylon",
-        "Maya", "Miles",
-        "Naomi", "Isaac",
-        "Ayla", "John",
-        "Emily", "Logan",
-        "Leilani", "Matthew",
-        "Athena", "Jacob",
-        "Zoey", "Caleb",
-        "Kinsley", "Jayden",
-        "Iris", "Roman",
-        "Victoria", "Joseph",
-        "Madison", "Nathan",
-        "Zoe", "Anthony",
-        "Sophie", "Cooper",
-        "Valentina", "Enzo",
-        "Alice", "Weston",
-        "Aaliyah", "Nolan",
-        "Autumn", "Thomas",
-        "Sadie", "Adam",
-        "Addison", "Eli",
-        "Adeline", "Lincoln",
-        "Eden", "Micah",
-        "Hannah", "Silas",
-        "Emery", "Amir",
-        "Amara", "Joshua",
-        "Ruby", "Rowan",
-        "Brooklyn", "Beau",
-        "Bella", "Atlas",
-        "Melody", "Wesley",
-        "Serenity", "Luka",
-        "Everly", "Jaxon",
-        "Gabriella", "Jeremiah",
-        "Millie", "Adrian",
-        "Raelynn", "Xavier",
-        "Josie", "Walker",
-        "Nevaeh", "Cameron",
-        "Daisy", "Christopher",
-        "Lyla", "Colton",
-        "Lillian", "Charlie",
-        "Skylar", "Bennett",
-        "Maria", "Brooks",
-        "Natalie", "Myles",
-        "Leah", "Andrew",
-        "Kennedy", "Jace",
-        "Jade", "River",
-        "Ember", "Ryan",
-        "Madelyn", "Zion",
-        "Clara", "Easton",
-        "Hailey", "Everett",
-        "Anna", "Axel",
-        "Savannah", "Parker",
-        "Oakley", "Greyson",
-        "Audrey", "Hunter",
-        "Brielle", "Christian",
-        "Cora", "Max",
-        "Liliana", "Adriel"
-    ]
-
-    categorized_names = parse_and_process_words(" ".join(names))
-    for problem in problems:
-        for name in names:
-            if name in categorized_names[problem]:
-                names.remove(name)
-    
-    name = names[random.randint(0, len(names) - 1)]
-    print(f"Chosen name: {name}")
-    return name
-
 
 ### Main function
 def generate_story(topic, problems):
     
     dictionary = get_words(problems)
-    name = choose_name(problems)
+    name = input("What do you want the main charachter's name to be: ")
     outline = generate_outline(topic, name)
     story = ""
     

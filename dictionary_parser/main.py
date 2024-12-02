@@ -42,7 +42,7 @@ with open('dictionary_parser\\dictionary.txt', 'r', encoding='utf-8') as file:
 #         temp_words = response.split(",")
 #         words.extend(temp_words)
 
-#     words_dict = parse_and_process_words(sentence)
+#     words_dict = parseAndProcessWords(sentence)
 #     blanks = len(words)//5
 #     words_blanks = [words[i:i+blanks] for i in range(0, len(words), blanks)]
 #     for problem in problems:
@@ -64,7 +64,7 @@ with open('dictionary_parser\\dictionary.txt', 'r', encoding='utf-8') as file:
 #                 return only the new sentence or you will be DISQUALIFIED
 #             """
 #             response = query(prompt)
-#             word_dict = parse_and_process_words(response)
+#             word_dict = parseAndProcessWords(response)
 
 #             #synonym
 #             synonyms_dict = synonymparser(word_dict, problems)
@@ -99,10 +99,10 @@ def get_synonyms_dict(story, word_dict, problems):
                     prompt = f"""
                         Give 10 words that would make sense as replacements for the following word in the sentence and don't include these sounds: {problems}:
 
-                        word: {word}
-                        previous sentence (for context): {prev_sentence}
-                        sentence to fix: {sentence}
-                        next sentence (for context): {next_sentence}
+                        word: {word}.
+                        previous sentence (for context): {prev_sentence}.
+                        sentence to fix: {sentence}.
+                        next sentence (for context): {next_sentence}.
 
                         return only the 10 words separated by commas. Like this: "word1,word2,word3,word4,word5"
                         order the words so the best fit is first
@@ -111,7 +111,7 @@ def get_synonyms_dict(story, word_dict, problems):
                         """
                     response = query(prompt)
                     temp_words = response.split(",")
-                    temp_words_dict = parse_and_process_words(response)
+                    temp_words_dict = parseAndProcessWords(response)
                     for temp_word in temp_words:
                         for problem in problems:
                             if temp_word in temp_words_dict[problem]:# or word not in large_dictionary:
@@ -222,7 +222,7 @@ def correct_text(text):
     corrected_text = language_tool_python.utils.correct(text, matches)
     return corrected_text
 
-def process_story(story, problems, apply_correction=False):
+def process_story(story, problems, apply_correction=False, spellcheck=False):
     if apply_correction:
         print("Applying grammar correction...")
         story = correct_text(story)
@@ -232,10 +232,26 @@ def process_story(story, problems, apply_correction=False):
     else:
         print("Skipping grammar correction...")
         marker = "grammar not corrected"
+    
+    if spellcheck:
+        print("Applying Spellcheck...")
+        prompt = f" You are a literary editor. Rewrite this story and make any necessary changes to the story to make it 100% readable and abide by proper english writing and reading standards: {story}. Return just the new fixed story."
+        story = query(prompt)
+        marker += " Spellcheck"
+        
+    else:         
+        print("Skipping Spellcheck...")
+        marker += " No Spellcheck"
+        
+    promptgrade =f"What is the quality of this story ranked on a grading scale of A-F: {story}. Return only the letter grade (A,B,C,D,F) and nothing else."
+    graded = query(promptgrade)
+    
+
+
 
     # Continue with your processing
     print("Checking each word...")
-    word_dict = parse_and_process_words(story)
+    word_dict = parseAndProcessWords(story)
 
     # Find synonyms
     print("Finding synonyms...")
@@ -281,7 +297,7 @@ def process_story(story, problems, apply_correction=False):
 
     # Prepare the data for the file
     current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    decodability_entry = f"{decodability * 100:.2f}% {current_time} Word Count: {len(story.split())} {marker}\n"
+    decodability_entry = f"{decodability * 100:.2f}% {current_time} Word Count: {len(story.split())} Grade: {graded} {marker}\n"
 
     # Append the data to the file
     decodability_file = "dictionary_parser\\decodability_measurements.txt"
@@ -289,10 +305,16 @@ def process_story(story, problems, apply_correction=False):
         file.write(decodability_entry)
 
     # Save the final story
-    output_file = 'dictionary_parser\\updated_story_corrected.txt' if apply_correction else 'dictionary_parser\\updated_story.txt'
+    if apply_correction and spellcheck:
+        output_file = 'dictionary_parser\\updated_story_transition.txt'
+    elif apply_correction:
+        output_file = 'dictionary_parser\\updated_story_corrected.txt'
+    else:
+        output_file = 'dictionary_parser\\updated_story.txt'
     story = ultraformatting(story)
     save_updated_story(story, output_file)
     print(f"Updated story has been saved to '{output_file}'.")
+
 
 
 def main():
@@ -306,11 +328,11 @@ def main():
 
     # First Run: Without Grammar Correction
     print("\n--- Processing Without Grammar Correction ---")
-    process_story(story, problems, apply_correction=False)
+    process_story(story, problems, apply_correction=False, spellcheck=False)
+    
+    print("\n--- Processing With Grammar Correction and Spell Check words---")
+    process_story(story, problems, apply_correction=True, spellcheck=True)
 
-    # Second Run: With Grammar Correction
-    print("\n--- Processing With Grammar Correction ---")
-    process_story(story, problems, apply_correction=True)
 
 
 if __name__ == "__main__":
