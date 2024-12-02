@@ -106,6 +106,8 @@ def get_synonyms_dict(story, word_dict, problems):
 
                         return only the 10 words separated by commas. Like this: "word1,word2,word3,word4,word5"
                         order the words so the best fit is first
+
+                        RETURN ONLY THE LIST OF WORDS
                         """
                     response = query(prompt)
                     temp_words = response.split(",")
