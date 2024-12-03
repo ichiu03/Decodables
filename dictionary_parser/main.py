@@ -149,8 +149,6 @@ def process_story(story, problems, apply_correction=False, spellcheck=False):
     graded = query(promptgrade)
     
 
-
-
     # Continue with your processing
     print("Checking each word...")
     word_dict = parseAndProcessWords(story)
