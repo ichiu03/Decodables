@@ -11,17 +11,17 @@ client = OpenAI(
 )
 
 # Load categorized words
-with open('dictionary_parser\\categorized_words.json', 'r', encoding='utf-8') as json_file:
+with open('dictionary_parser/categorized_words.json', 'r', encoding='utf-8') as json_file:
     categorized_words = json.load(json_file)
 
-with open('dictionary_parser\\dictionary_categorized.json', 'r', encoding='utf-8') as json_file:
+with open('dictionary_parser/dictionary_categorized.json', 'r', encoding='utf-8') as json_file:
     dictionary = json.load(json_file)
 
-with open('dictionary_parser\\dictionary.txt', 'r', encoding='utf-8') as file:
+with open('dictionary_parser/dictionary.txt', 'r', encoding='utf-8') as file:
     large_dictionary = set(word.strip().lower() for word in file.readlines())
 
 # Load problem sounds (categories) to gather words from
-with open('dictionary_parser\\problemsounds.json', 'r') as json_file:
+with open('dictionary_parser/problemsounds.json', 'r') as json_file:
     categories = json.load(json_file)
 
 # Function to gather words from specified categories
@@ -60,7 +60,7 @@ def query(prompt):
     return response.choices[0].message.content
 
 def sentence_rewrite(word):
-    with open('dictionary_parser\\generated_story', 'r', encoding='utf-8') as file:
+    with open('dictionary_parser/generated_story', 'r', encoding='utf-8') as file:
         story = file.read()
     good_story = ""
     sentences = story.split('.')
@@ -130,11 +130,11 @@ def main():
     nonreplacing_words = gather_words_from_categories(dictionary, categories)
     
     # Path for the output file
-    output_path = 'dictionary_parser\\word_synonyms.txt'
+    output_path = 'dictionary_parser/word_synonyms.txt'
     
     # Write words and their synonyms to the text file
     write_words_with_synonyms(gathered_words, output_path, nonreplacing_words)
-    open('dictionary_parser\\word_synonyms.txt', 'a', encoding='utf-8').write(open('dictionary_parser\\unknown_words.txt', 'r', encoding='utf-8').read())
+    open('dictionary_parser/word_synonyms.txt', 'a', encoding='utf-8').write(open('dictionary_parser/unknown_words.txt', 'r', encoding='utf-8').read())
 
 
 
