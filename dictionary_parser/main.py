@@ -12,7 +12,7 @@ sight_words = ""
 with open('dictionary_parser\\dictionary.txt', 'r', encoding='utf-8') as file:
     large_dictionary = set(word.strip().lower() for word in file.readlines())
 
-def get_synonyms_dict(story, word_dict, problems):
+def get_synonyms_dict(story: str, word_dict: dict, problems: list) -> dict:
     sentences = story.split(".")
     prev_sentence = sentences[0]
     synonyms_dict = {}
@@ -51,6 +51,7 @@ def get_synonyms_dict(story, word_dict, problems):
                         synonyms_dict[word] = " ___"
         prev_sentence = sentence
     return synonyms_dict
+
 
 def ultraformatting(text):
     # Normalize multiple underscores to '____'
@@ -113,17 +114,17 @@ def ultraformatting(text):
     
     return text
 
-def count_words_in_text(text):
+def count_words_in_text(text: str) -> int:
     words = text.split()
     return len(words)
 
-def correct_text(text):
+def correct_text(text: str) -> str:
     tool = language_tool_python.LanguageTool('en-US')
     matches = tool.check(text)
     corrected_text = language_tool_python.utils.correct(text, matches)
     return corrected_text
 
-def process_story(story, problems, apply_correction=False, spellcheck=False):
+def process_story(story, problems, apply_correction=False, spellcheck=False): 
     if apply_correction:
         print("Applying grammar correction...")
         story = correct_text(story)
