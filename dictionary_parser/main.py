@@ -144,10 +144,7 @@ def process_story(story, problems, apply_correction=False, spellcheck=False, com
         print("Skipping Spellcheck...")
         marker += " No Spellcheck"
         
-    promptgrade =f"What is the quality of this story ranked on a grading scale of A-F: {story}. Return only the letter grade (A,B,C,D,F) and nothing else."
-    graded = query(promptgrade)
     
-
     # Continue with your processing
     print("Checking each word...")
     word_dict = parseAndProcessWords(story)
@@ -196,7 +193,7 @@ def process_story(story, problems, apply_correction=False, spellcheck=False, com
 
     # Prepare the data for the file
     current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    decodability_entry = f"{decodability * 100:.2f}% {current_time} Word Count: {len(story.split())} Grade: {graded} {marker}\n"
+    decodability_entry = f"{decodability * 100:.2f}% {current_time} Word Count: {len(story.split())} {marker}\n"
 
     # Append the data to the file
     decodability_file = "dictionary_parser/decodability_measurements.txt"
