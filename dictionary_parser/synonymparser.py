@@ -4,7 +4,7 @@ from nltk.corpus import wordnet
 from openai import OpenAI
 
 client = OpenAI(
-    api_key= os.environ.get('OPENAI_API_KEY')
+    api_key= os.getenv('OPENAI_API_KEY')
 )
 
 # Load categorized words
