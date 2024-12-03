@@ -9,13 +9,10 @@ import language_tool_python
 
 sight_words = ""
 
-replace = []
-
 with open('dictionary_parser\\dictionary.txt', 'r', encoding='utf-8') as file:
     large_dictionary = set(word.strip().lower() for word in file.readlines())
 
 def get_synonyms_dict(story, word_dict, problems):
-    global replace
     sentences = story.split(".")
     prev_sentence = sentences[0]
     synonyms_dict = {}
@@ -45,21 +42,15 @@ def get_synonyms_dict(story, word_dict, problems):
                     temp_words_dict = parseAndProcessWords(response)
                     for temp_word in temp_words:
                         for problem in problems:
-                            if temp_word in temp_words_dict[problem]:# or word not in large_dictionary:
+                            if temp_word in temp_words_dict[problem]:
                                 temp_words.remove(temp_word)
-                                # print(f"CAUGHT {temp_word}")
                                 break
                     if len(temp_words) > 0:
-                        # print(f"good word: {temp_words[0]}")
-                        replace.append(temp_words[0])
                         synonyms_dict[word] = " " + temp_words[0]
                     else:
                         synonyms_dict[word] = " ___"
-                    # break
         prev_sentence = sentence
     return synonyms_dict
-    # print(f"synonyms dict: {synonyms_dict}")
-    # return synonyms_dict
 
 def sentence_check(story, problems):
     sentences = story.split(".")
