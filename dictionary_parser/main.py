@@ -123,7 +123,7 @@ def correct_text(text: str) -> str:
     corrected_text = language_tool_python.utils.correct(text, matches)
     return corrected_text
 
-def process_story(story, problems, apply_correction=False, spellcheck=False): 
+def process_story(story, problems, apply_correction=False, spellcheck=False, combined=False): 
     if apply_correction:
         print("Applying grammar correction...")
         story = correct_text(story)
@@ -204,34 +204,55 @@ def process_story(story, problems, apply_correction=False, spellcheck=False):
         file.write(decodability_entry)
 
     # Save the final story
-    if apply_correction and spellcheck:
-        output_file = 'dictionary_parser\\updated_story_transition.txt'
+    if apply_correction and spellcheck and combined:
+        output_file = 'dictionary_parser/combined.txt'
+    elif apply_correction and spellcheck:
+        output_file = 'dictionary_parser/updated_story_transition.txt'
     elif apply_correction:
-        output_file = 'dictionary_parser\\updated_story_corrected.txt'
+        output_file = 'dictionary_parser/updated_story_corrected.txt'
     else:
-        output_file = 'dictionary_parser\\updated_story.txt'
+        output_file = 'dictionary_parser/updated_story.txt'
     story = ultraformatting(story)
     save_updated_story(story, output_file)
     print(f"Updated story has been saved to '{output_file}'.")
+    return story
 
+def combine(story1, story2):
+    prompt = f"""
+    Take the two versions of the story provided below and combine their sentences into one improved version. 
+    Retain the original plot and key details. 
+    Keep the creative language from both versions.
+    Ensure the final story maintains the same narrative structure but uses the best phrases from each version. 
+    Do not invent new plot elements or diverge from the original stories.
 
+    Version 1: {story1}
+
+    Version 2: {story2}
+    """
+    ultstory = query(prompt)
+    return ultstory
 
 def main():
     topic, problems = get_input()
     global sight_words
-    sight_words = "a,any,many,and,on,is,are,the,was,were,it,am,be,go,to,been,come,some,do,does,done,what,who,you,your,both,buy,door,floor,four,none,once,one,only,pull,push,sure,talk,walk,their,there,they're,very,want,again,against,always,among,busy,could,should,would,enough,rough,tough,friend,move,prove,ocean,people,she,other,above,father,usually,special,front,thought,he,we,they,nothing,learned,toward,put,hour,beautiful,whole,trouble,of,off,use,have,our,say,make,take,see,think,look,give,how,ask,boy,girl,us,him,his,her,by,where,were,wear,hers,don't,which,just,know,into,good,other,than,then,now,even,also,after,know,because,most,day,these,two,already,through,though,like,said,too,has,in,brother,sister,that,them,from,for,with,doing,well,before,tonight,down,about,but,up,around,goes,gone,build,built,cough,lose,loose,truth,daughter,son"
-    
+    sight_words = "a,at,any,many,and,on,is,are,the,was,were,it,am,be,go,to,out,been,come,some,do,does,done,what,who,you,your,both,buy,door,floor,four,none,once,one,only,pull,push,sure,talk,walk,their,there,they're,very,want,again,against,always,among,busy,could,should,would,enough,rough,tough,friend,move,prove,ocean,people,she,other,above,father,usually,special,front,thought,he,we,they,nothing,learned,toward,put,hour,beautiful,whole,trouble,of,off,use,have,our,say,make,take,see,think,look,give,how,ask,boy,girl,us,him,his,her,by,where,were,wear,hers,don't,which,just,know,into,good,other,than,then,now,even,also,after,know,because,most,day,these,two,already,through,though,like,said,too,has,in,brother,sister,that,them,from,for,with,doing,well,before,tonight,down,about,but,up,around,goes,gone,build,built,cough,lose,loose,truth,daughter,son"
+
     print("Generating story...")
     story = generate_story(topic, problems)
     print(story)
 
     # First Run: Without Grammar Correction
     print("\n--- Processing Without Grammar Correction ---")
-    process_story(story, problems, apply_correction=False, spellcheck=False)
-    
-    print("\n--- Processing With Grammar Correction and Spell Check words---")
-    process_story(story, problems, apply_correction=True, spellcheck=True)
+    story1 = process_story(story, problems, apply_correction=False, spellcheck=False, combined=False)
 
+    print("\n--- Processing With Grammar Correction and Spell Check ---")
+    story2 = process_story(story, problems, apply_correction=True, spellcheck=True, combined=False)
+
+    # Now, combine the two stories
+    story3 = combine(story1, story2)
+
+    # Process the combined story
+    process_story(story3, problems, apply_correction=True, spellcheck=True, combined=True)
 
 
 if __name__ == "__main__":
