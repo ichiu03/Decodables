@@ -6,7 +6,7 @@ import nltk
 from nltk.corpus import words
 import traceback
 
-# Get the directory where `dictionaryParser.py` is located
+# Get the directory where `dictionaryParser.py` is located 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
 # Ensure the script checks locally for nltk_data
