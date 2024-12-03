@@ -5,9 +5,8 @@ import openai
 from openai import OpenAI
 
 client = OpenAI(
-    api_key='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'
+    api_key= os.environ.get('OPENAI_API_KEY')
 )
-
 
 # Load categorized words
 with open('dictionary_parser\\categorized_words.json', 'r', encoding='utf-8') as json_file:
