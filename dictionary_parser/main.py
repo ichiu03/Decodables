@@ -52,27 +52,6 @@ def get_synonyms_dict(story, word_dict, problems):
         prev_sentence = sentence
     return synonyms_dict
 
-def sentence_check(story, problems):
-    sentences = story.split(".")
-    new_story = ""
-    prev_sentence = sentences[0]
-    for sentence in sentences:
-        next_sentence = sentences[sentences.index(sentence) + 1] if sentences.index(sentence) < len(sentences) - 1 else ""
-        if "___" in sentence:
-            synonyms_dict = get_words(sentence, problems, prev_sentence, next_sentence)
-            updated_sentence = replace_words_in_story(sentence, synonyms_dict)
-            print('Updated Sentence: '+ updated_sentence)
-            if '___' in updated_sentence:
-                updated_sentence = get_words(updated_sentence, problems, prev_sentence, next_sentence)
-            else:
-                return updated_sentence
-            new_story += updated_sentence + ". "
-        else:
-            new_story += sentence + ". "
-
-        prev_sentence = sentence
-    return new_story
-
 def ultraformatting(text):
     # Normalize multiple underscores to '____'
     text = re.sub(r'_{2,}', '____', text)
