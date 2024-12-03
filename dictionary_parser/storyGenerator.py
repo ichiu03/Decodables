@@ -13,11 +13,11 @@ nltk.download('punkt_tab')
 nltk.download('wordnet')
 nltk.download('omw-1.4')
 
-if os.path.exists('dictionary_parser\\edited_generated_story.txt'):
-    open('dictionary_parser\\edited_generated_story.txt', 'w').close()
+if os.path.exists('dictionary_parser/edited_generated_story.txt'):
+    open('dictionary_parser/edited_generated_story.txt', 'w').close()
 
-if os.path.exists('dictionary_parser\\generated_story.txt'):
-    open('dictionary_parser\\generated_story.txt', 'w').close()
+if os.path.exists('dictionary_parser/generated_story.txt'):
+    open('dictionary_parser/generated_story.txt', 'w').close()
 
 client = OpenAI(
     api_key= os.getenv('OPENAI_API_KEY')
@@ -30,12 +30,12 @@ good_words = []
 bad_words = []
 
 # Opening JSON file
-with open('dictionary_parser\\categorized_words.json') as json_file:
+with open('dictionary_parser/categorized_words.json') as json_file:
     words = json.load(json_file)
 
 ### Function to get all words
 def get_all_words():
-    with open("dictionary_parser\\WordDatav4.txt", "r") as f:
+    with open("dictionary_parser/WordDatav4.txt", "r") as f:
         words = f.read().split("\n")
     return words[:2000]
 
@@ -115,7 +115,7 @@ import re
 # Function to write the original and stripped-down versions of the story to separate files
 def write_story_to_file(story):
     # Write the original story to 'generated_story.txt'
-    with open('dictionary_parser\\generated_story.txt', 'w', encoding='utf-8') as file:
+    with open('dictionary_parser/generated_story.txt', 'w', encoding='utf-8') as file:
         file.write(story)
     print("\nOriginal story written to 'generated_story.txt'.")
 

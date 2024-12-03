@@ -8,7 +8,7 @@ import language_tool_python
 
 sight_words = ""
 
-with open('dictionary_parser\\dictionary.txt', 'r', encoding='utf-8') as file:
+with open('dictionary_parser/dictionary.txt', 'r', encoding='utf-8') as file:
     large_dictionary = set(word.strip().lower() for word in file.readlines())
 
 def get_synonyms_dict(story: str, word_dict: dict, problems: list) -> dict:
@@ -199,17 +199,17 @@ def process_story(story, problems, apply_correction=False, spellcheck=False):
     decodability_entry = f"{decodability * 100:.2f}% {current_time} Word Count: {len(story.split())} Grade: {graded} {marker}\n"
 
     # Append the data to the file
-    decodability_file = "dictionary_parser\\decodability_measurements.txt"
+    decodability_file = "dictionary_parser/decodability_measurements.txt"
     with open(decodability_file, "a") as file:
         file.write(decodability_entry)
 
     # Save the final story
     if apply_correction and spellcheck:
-        output_file = 'dictionary_parser\\updated_story_transition.txt'
+        output_file = 'dictionary_parser/updated_story_transition.txt'
     elif apply_correction:
-        output_file = 'dictionary_parser\\updated_story_corrected.txt'
+        output_file = 'dictionary_parser/updated_story_corrected.txt'
     else:
-        output_file = 'dictionary_parser\\updated_story.txt'
+        output_file = 'dictionary_parser/updated_story.txt'
     story = ultraformatting(story)
     save_updated_story(story, output_file)
     print(f"Updated story has been saved to '{output_file}'.")
