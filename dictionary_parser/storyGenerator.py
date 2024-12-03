@@ -1,12 +1,8 @@
-import openai
 from openai import OpenAI
 import json
 import os
-import re
 import nltk
 from nltk.corpus import words
-from dictionaryParser import parseAndProcessWords
-import random
 
 nltk.download('punkt')
 nltk.download('punkt_tab')

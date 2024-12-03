@@ -1,7 +1,5 @@
 import re
-import openai
 from openai import OpenAI
-import json
 import os
 
 client = OpenAI(
@@ -72,9 +70,6 @@ def query(prompt):
     return response.choices[0].message.content
 
 
-import re
-
-import re
 
 def format_punctuation_with_quotes(text):
     # Normalize multiple underscores to '____'

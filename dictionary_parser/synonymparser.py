@@ -1,7 +1,6 @@
 import json
 import os
 from nltk.corpus import wordnet
-import openai
 from openai import OpenAI
 
 client = OpenAI(
