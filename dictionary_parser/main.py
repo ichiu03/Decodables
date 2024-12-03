@@ -33,7 +33,8 @@ def get_synonyms_dict(story: str, word_dict: dict, problems: list) -> dict:
 
                         return only the 10 words separated by commas. Like this: "word1,word2,word3,word4,word5"
                         order the words so the best fit is first
-
+                        Remember, a change in tense or form of the word is not an acceptable synonym. Maintain tense and form as these words are going to replace the original word in a story.
+                        
                         RETURN ONLY THE LIST OF WORDS
                         """
                     response = query(prompt)
@@ -123,6 +124,32 @@ def correct_text(text: str) -> str:
     corrected_text = language_tool_python.utils.correct(text, matches)
     return corrected_text
 
+def rewrite_sentences(story):
+    sentences = story.split(".")  # Split sentences by period
+    finaltext = ""  # To store the revised story
+    
+    for i, sentence in enumerate(sentences):
+        # Get previous and next sentence for context
+        prev_sentence = sentences[i - 1] if i > 0 else ""
+        next_sentence = sentences[i + 1] if i < len(sentences) - 1 else ""
+        
+        # Form the prompt
+        prompt = f"""
+            Rewrite this sentence so it sounds better and is more easily read: {sentence}
+
+            Here is the previous sentence and next sentence for context: Previous: {prev_sentence} Next: {next_sentence}
+        """
+        
+        # Call the function to get the rewritten sentence (query function assumed)
+        sentence_rev = query(prompt).strip()
+        
+        # Add the revised sentence to the final text
+        if sentence_rev:  # Avoid adding empty strings
+            finaltext += sentence_rev + " "
+    
+    return finaltext.strip()  # Strip trailing whitespace
+   
+
 def process_story(story, problems, apply_correction=False, spellcheck=False, combined=False): 
     if apply_correction:
         print("Applying grammar correction...")
@@ -156,6 +183,9 @@ def process_story(story, problems, apply_correction=False, spellcheck=False, com
     # Replace problematic words with synonyms
     print("Replacing synonyms...")
     story = replace_words_in_story(story, synonyms_dict)
+
+    # Rewrite problematic sentences
+    story = rewrite_sentences(story)
 
     # Prepare sight words set
     sight_words_set = set(word.lower().strip() for word in sight_words.split(','))
@@ -250,6 +280,7 @@ def main():
 
     # Process the combined story
     process_story(story3, problems, apply_correction=True, spellcheck=True, combined=True)
+
 
 
 if __name__ == "__main__":
