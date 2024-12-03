@@ -1,8 +1,12 @@
 from openai import OpenAI
+from dotenv import load_dotenv
 import json
 import os
 import nltk
 from nltk.corpus import words
+from dotenv import load_dotenv
+
+load_dotenv()
 
 nltk.download('punkt')
 nltk.download('punkt_tab')
