@@ -2,9 +2,10 @@ import re
 import openai
 from openai import OpenAI
 import json
+import os
 
 client = OpenAI(
-    api_key='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'
+    api_key= os.environ.get('OPENAI_API_KEY')
 )
 
 

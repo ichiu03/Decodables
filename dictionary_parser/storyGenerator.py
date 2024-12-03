@@ -20,7 +20,7 @@ if os.path.exists('dictionary_parser\\generated_story.txt'):
     open('dictionary_parser\\generated_story.txt', 'w').close()
 
 client = OpenAI(
-    api_key='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'
+    api_key= os.environ.get('OPENAI_API_KEY')
 )
 
 story_length = 500
