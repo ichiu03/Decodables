@@ -23,7 +23,7 @@ def get_synonyms_dict(story: str, word_dict: dict, problems: list) -> dict:
             word = "".join(re.findall("[a-zA-Z]", word)).lower()
             for problem in problems:
                 if word in word_dict[problem] and word not in sight_words:
-                    #HARD CODE
+                    
                     prompt = f"""
                         Give 10 words that would make sense as replacements for the following word in the sentence and don't include these sounds: {problems}:
 
