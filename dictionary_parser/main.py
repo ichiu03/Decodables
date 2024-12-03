@@ -6,85 +6,13 @@ from replace_synonyms import *
 from collections import Counter
 from datetime import datetime
 import language_tool_python
-import random
-# from synonymparser import *
-sight_words = ""
 
-replace = []
+sight_words = ""
 
 with open('dictionary_parser\\dictionary.txt', 'r', encoding='utf-8') as file:
     large_dictionary = set(word.strip().lower() for word in file.readlines())
 
-
-# def get_words(sentence, problems, word_dict, previous_sentence, next_sentence):
-#     words = sentence.split(" ")
-#     bad_words = []
-#     for word in words:
-#         for problem in problems:
-#             if word in word_dict[problem]: #or word not in large_dictionary:
-#                 bad_words.append(word)
-#     if len(bad_words) == 0:
-#         return None
-#     synonyms_dict = {}
-#     # print("sentence: " + sentence)
-#     words = []
-#     for word in bad_words:
-#         prompt = f"""
-#             Give 10 words that would make sense as replacements for the following word in the sentence and don't include these sounds: {problems}:
-#             word: {word}
-            
-#             sentence: {sentence}
-
-#             return only the 10 words separated by commas. Like this "word1,word2,word3,word4,word5"
-#             order the words so the best fit is first
-#         """
-#         response = query(prompt)
-#         temp_words = response.split(",")
-#         words.extend(temp_words)
-
-#     words_dict = parseAndProcessWords(sentence)
-#     blanks = len(words)//5
-#     words_blanks = [words[i:i+blanks] for i in range(0, len(words), blanks)]
-#     for problem in problems:
-#         for i in range(len(words_blanks)):
-#             for word in words_blanks[i]:
-#                 if word in words_dict[problem] or word not in large_dictionary:
-#                     words.remove(word)
-#     for i in range(len(words_blanks)):
-#         if len(words_blanks[i]) >0:
-#             synonyms_dict[bad_words[i]]= " " + words_blanks[i][0] + " "
-#         else:
-#             prompt = f"""
-#                 Rewrite the following sentence to preserve the meaning and remove the blank space:
-
-#                 here is the previous sentence for context: {previous_sentence}
-#                 here is the sentence with the blank space: {sentence}
-#                 here is the next sentence for context: {next_sentence}
-
-#                 return only the new sentence or you will be DISQUALIFIED
-#             """
-#             response = query(prompt)
-#             word_dict = parseAndProcessWords(response)
-
-#             #synonym
-#             synonyms_dict = synonymparser(word_dict, problems)
-
-#             # #replace
-#             # updated_sentence = replace_words_in_story(response, synonyms_dict)
-#             # print('Updated Sentence: '+ updated_sentence)
-#             # if '___' in updated_sentence:
-#             #     updated_sentence = get_words(updated_sentence, problems, previous_sentence, next_sentence)
-#             # else:
-#             #     return updated_sentence
-
-#         #### change to return synonyms_dict only#####
-#         # print(f"synonyms dict: {synonyms_dict}")
-#         # updated_sentence = replace_words_in_story(sentence, synonyms_dict)
-#         # return updated_sentence
-#         return synonyms_dict
-
-def get_synonyms_dict(story, word_dict, problems):
-    global replace
+def get_synonyms_dict(story: str, word_dict: dict, problems: list) -> dict:
     sentences = story.split(".")
     prev_sentence = sentences[0]
     synonyms_dict = {}
@@ -104,50 +32,26 @@ def get_synonyms_dict(story, word_dict, problems):
                         sentence to fix: {sentence}.
                         next sentence (for context): {next_sentence}.
 
-                        Return only the 10 words separated by commas. They should be formatted like this: "word1,word2,word3,word4,word5,word6,word7,word8,word9,word10"
-                        order the words so the best fit is first.
+                        return only the 10 words separated by commas. Like this: "word1,word2,word3,word4,word5"
+                        order the words so the best fit is first
+
+                        RETURN ONLY THE LIST OF WORDS
                         """
                     response = query(prompt)
                     temp_words = response.split(",")
                     temp_words_dict = parseAndProcessWords(response)
                     for temp_word in temp_words:
                         for problem in problems:
-                            if temp_word in temp_words_dict[problem]:# or word not in large_dictionary:
+                            if temp_word in temp_words_dict[problem]:
                                 temp_words.remove(temp_word)
-                                # print(f"CAUGHT {temp_word}")
                                 break
                     if len(temp_words) > 0:
-                        # print(f"good word: {temp_words[0]}")
-                        replace.append(temp_words[0])
                         synonyms_dict[word] = " " + temp_words[0]
                     else:
                         synonyms_dict[word] = " ___"
-                    # break
         prev_sentence = sentence
     return synonyms_dict
-    # print(f"synonyms dict: {synonyms_dict}")
-    # return synonyms_dict
 
-def sentence_check(story, problems):
-    sentences = story.split(".")
-    new_story = ""
-    prev_sentence = sentences[0]
-    for sentence in sentences:
-        next_sentence = sentences[sentences.index(sentence) + 1] if sentences.index(sentence) < len(sentences) - 1 else ""
-        if "___" in sentence:
-            synonyms_dict = get_words(sentence, problems, prev_sentence, next_sentence)
-            updated_sentence = replace_words_in_story(sentence, synonyms_dict)
-            print('Updated Sentence: '+ updated_sentence)
-            if '___' in updated_sentence:
-                updated_sentence = get_words(updated_sentence, problems, prev_sentence, next_sentence)
-            else:
-                return updated_sentence
-            new_story += updated_sentence + ". "
-        else:
-            new_story += sentence + ". "
-
-        prev_sentence = sentence
-    return new_story
 
 def ultraformatting(text):
     # Normalize multiple underscores to '____'
@@ -210,17 +114,17 @@ def ultraformatting(text):
     
     return text
 
-def count_words_in_text(text):
+def count_words_in_text(text: str) -> int:
     words = text.split()
     return len(words)
 
-def correct_text(text):
+def correct_text(text: str) -> str:
     tool = language_tool_python.LanguageTool('en-US')
     matches = tool.check(text)
     corrected_text = language_tool_python.utils.correct(text, matches)
     return corrected_text
 
-def process_story(story, problems, apply_correction=False, spellcheck=False):
+def process_story(story, problems, apply_correction=False, spellcheck=False): 
     if apply_correction:
         print("Applying grammar correction...")
         story = correct_text(story)
