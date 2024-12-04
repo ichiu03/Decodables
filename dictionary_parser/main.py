@@ -135,16 +135,17 @@ def rewrite_sentences(story):
         
         # Form the prompt
         prompt = f"""
-            Rewrite this sentence so it sounds better and is more easily read: {sentence}
+            Rewrite this sentence so it is easier to read. Remember this is for a childrens book: {sentence}
 
             Here is the previous sentence and next sentence for context: Previous: {prev_sentence} Next: {next_sentence}
+
         """
         
         # Call the function to get the rewritten sentence (query function assumed)
         sentence_rev = query(prompt).strip()
         
         # Add the revised sentence to the final text
-        if sentence_rev:  # Avoid adding empty strings
+        if sentence_rev and sentence != prev_sentence and sentence !=next_sentence:  # Avoid adding empty strings
             finaltext += sentence_rev + " "
     
     return finaltext.strip()  # Strip trailing whitespace
