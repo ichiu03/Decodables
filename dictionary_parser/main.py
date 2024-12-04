@@ -172,6 +172,10 @@ def process_story(story, problems, apply_correction=False, spellcheck=False, com
         print("Skipping Spellcheck...")
         marker += " No Spellcheck"
         
+    if combined:
+        combo = "Combined Text"
+    else: 
+        combo =""
     
     # Continue with your processing
     print("Checking each word...")
@@ -224,7 +228,7 @@ def process_story(story, problems, apply_correction=False, spellcheck=False, com
 
     # Prepare the data for the file
     current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    decodability_entry = f"{decodability * 100:.2f}% {current_time} Word Count: {len(story.split())} {marker}\n"
+    decodability_entry = f"{decodability * 100:.2f}% {current_time} Word Count: {len(story.split())} {marker} {combo} \n"
 
     # Append the data to the file
     decodability_file = "dictionary_parser/decodability_measurements.txt"
@@ -288,6 +292,12 @@ if __name__ == "__main__":
     main()
 
 
-#b,l,p,j,ck,wh,aw,tch,igh,ir,oi
+#b/l/p/j/ck/wh/aw/tch/igh/ir/oi  
+#wh/aw/tch/igh/ir/oi/kn/ur/dge/tion/war/ph/eigh/wor/ough  
+#s/l/r/b/sh/ar/ai/-ing, -ong, -ang, -ung/ea as in eat  
+#t/p/n/m/th/ch/oo as in school/ow as in plow/y as in dry  
+#k/j/v/f/-ank/-st/ur/oi/wh  
+#d/w/z/h/ck/s blends/l blends/er/ea as in bread/igh  
+#r/v/l/qu/th/ay/ow as in snow/ear as in hear/y as in bumpy  
 
-#wh,aw,tch,igh,ir,oi,kn,ur,dge,tion,war,ph,eigh,wor,ough
+
