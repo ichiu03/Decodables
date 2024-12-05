@@ -284,7 +284,8 @@ def main():
     story3 = combine(story1, story2)
 
     # Process the combined story
-    process_story(story3, problems, apply_correction=True, spellcheck=True, combined=True)
+    story4 = process_story(story3, problems, apply_correction=True, spellcheck=True, combined=True)
+    print(f'\n\nFinal Story: {story4}')
 
 
 
