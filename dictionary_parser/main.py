@@ -153,103 +153,164 @@ def rewrite_sentences(story):
     return finaltext.strip()  # Strip trailing whitespace
    
 
-def process_story(story, problems, apply_correction=False, spellcheck=False, combined=False): 
-    if apply_correction:
-        print("Applying grammar correction...")
-        story = correct_text(story)
-        print("Corrected Story:")
-        print(story)
-        marker = "grammar corrected"
-    else:
-        print("Skipping grammar correction...")
-        marker = "grammar not corrected"
-    
-    if spellcheck:
-        print("Applying Spellcheck...")
-        prompt = f" You are a literary editor. Rewrite this story and make any necessary changes to the story to make it 100% readable and abide by proper english writing and reading standards: {story}. Return just the new fixed story."
-        story = query(prompt)
-        marker += " Spellcheck"
+def process_story(story, problems, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=False): 
+    if decodabilityTest:
+        print("Decodability Test Mode: Analyzing text without making changes.")
         
-    else:         
-        print("Skipping Spellcheck...")
-        marker += " No Spellcheck"
-        
-    if combined:
-        combo = "Combined Text"
-    else: 
-        combo =""
-    
-    # Continue with your processing
-    print("Checking each word...")
-    word_dict = parseAndProcessWords(story)
+        # Prepare sight words set
+        sight_words_set = set(word.lower().strip() for word in sight_words.split(','))
 
-    # Find synonyms
-    print("Finding synonyms...")
-    synonyms_dict = get_synonyms_dict(story, word_dict, problems)
+        # Tokenize the story into words and count occurrences
+        story_words = re.findall(r'\b\w+\b', story.lower())
+        story_word_counts = Counter(story_words)
 
-    # Replace problematic words with synonyms
-    print("Replacing synonyms...")
-    story = replace_words_in_story(story, synonyms_dict)
+        # Parse and process words to categorize them
+        word_dict = parseAndProcessWords(story)
 
-    # Rewrite problematic sentences
-    story = rewrite_sentences(story)
+        # Combine all bad words into a single set
+        all_bads = set()
+        for problem in problems:
+            problem = problem.strip()
+            if problem in word_dict:
+                problem_words = set(word.lower() for word in word_dict[problem] if word.lower() not in sight_words_set)
+                all_bads.update(problem_words)
+            else:
+                print(f"Warning: Problem '{problem}' not found in word dictionary.")
 
-    # Prepare sight words set
-    sight_words_set = set(word.lower().strip() for word in sight_words.split(','))
+        # Count occurrences of each unique bad word in the story
+        problemcount = 0
+        bad_occurrences = {}
+        for bad_word in all_bads:
+            count = story_word_counts.get(bad_word, 0)
+            if count > 0:
+                problemcount += count
+                bad_occurrences[bad_word] = count
 
-    # Tokenize the story into words and count occurrences
-    story_words = re.findall(r'\b\w+\b', story.lower())
-    story_word_counts = Counter(story_words)
+        # Calculate decodability
+        wordcount = len(story_words)
+        decodability = 1 - (problemcount / wordcount) if wordcount > 0 else 0
 
-    # Combine all bads into a single set
-    all_bads = set()
-    for problem in problems:
-        problem_words = set(word.lower() for word in word_dict[problem] if word.lower() not in sight_words_set)
-        all_bads.update(problem_words)
+        # Print the results
+        print("Bad Word Occurrences:")
+        for word, count in bad_occurrences.items():
+            print(f"{word}: {count}")
 
-    # Count occurrences of each unique bad word in the story
-    problemcount = 0
-    bad_occurrences = {}
-    for bad_word in all_bads:
-        count = story_word_counts.get(bad_word, 0)
-        if count > 0:
-            problemcount += count
-            bad_occurrences[bad_word] = count
+        print(f"This text is {decodability * 100:.2f}% decodable")
 
-    # Print the results for the final updated story
-    print("Bad Word Occurrences:")
-    for word, count in bad_occurrences.items():
-        print(f"{word}: {count}")
+        # Prepare the data for the file
+        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        decodability_entry = f"{decodability * 100:.2f}% {current_time} Word Count: {wordcount} Decodability Test\n"
 
-    # Calculate decodability
-    wordcount = count_words_in_text(story)
-    decodability = 1 - problemcount / wordcount
+        # Append the data to the file
+        decodability_file = "dictionary_parser/decodability_measurements.txt"
+        with open(decodability_file, "a") as file:
+            file.write(decodability_entry)
 
-    # Print decodability to the console
-    print(f"This text is {decodability * 100:.2f}% decodable")
+        # Return the original story without changes
+        return decodability
 
-    # Prepare the data for the file
-    current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    decodability_entry = f"{decodability * 100:.2f}% {current_time} Word Count: {len(story.split())} {marker} {combo} \n"
-
-    # Append the data to the file
-    decodability_file = "dictionary_parser/decodability_measurements.txt"
-    with open(decodability_file, "a") as file:
-        file.write(decodability_entry)
-
-    # Save the final story
-    if apply_correction and spellcheck and combined:
-        output_file = 'dictionary_parser/combined.txt'
-    elif apply_correction and spellcheck:
-        output_file = 'dictionary_parser/updated_story_transition.txt'
-    elif apply_correction:
-        output_file = 'dictionary_parser/updated_story_corrected.txt'
     else:
-        output_file = 'dictionary_parser/updated_story.txt'
-    story = ultraformatting(story)
-    save_updated_story(story, output_file)
-    print(f"Updated story has been saved to '{output_file}'.")
-    return story
+        # Existing code for processing the story
+        # Apply grammar correction and spellcheck if enabled
+        if apply_correction:
+            print("Applying grammar correction...")
+            story = correct_text(story)
+            print("Corrected Story:")
+            print(story)
+            marker = "grammar corrected"
+        else:
+            print("Skipping grammar correction...")
+            marker = "grammar not corrected"
+
+        if spellcheck:
+            print("Applying Spellcheck...")
+            prompt = f"You are a literary editor. Rewrite this story and make any necessary changes to the story to make it 100% readable and abide by proper English writing and reading standards: {story}. Return just the new fixed story."
+            story = query(prompt)
+            marker += " Spellcheck"
+        else:         
+            print("Skipping Spellcheck...")
+            marker += " No Spellcheck"
+
+        if combined:
+            combo = "Combined Text"
+        else: 
+            combo = ""
+
+        # Continue with processing
+        print("Checking each word...")
+        word_dict = parseAndProcessWords(story)
+
+        # Find synonyms
+        print("Finding synonyms...")
+        synonyms_dict = get_synonyms_dict(story, word_dict, problems)
+
+        # Replace problematic words with synonyms
+        print("Replacing synonyms...")
+        story = replace_words_in_story(story, synonyms_dict)
+
+        # Rewrite problematic sentences
+        story = rewrite_sentences(story)
+
+        # Prepare sight words set
+        sight_words_set = set(word.lower().strip() for word in sight_words.split(','))
+
+        # Tokenize the story into words and count occurrences
+        story_words = re.findall(r'\b\w+\b', story.lower())
+        story_word_counts = Counter(story_words)
+
+        # Combine all bad words into a single set
+        all_bads = set()
+        for problem in problems:
+            problem = problem.strip()
+            if problem in word_dict:
+                problem_words = set(word.lower() for word in word_dict[problem] if word.lower() not in sight_words_set)
+                all_bads.update(problem_words)
+            else:
+                print(f"Warning: Problem '{problem}' not found in word dictionary.")
+
+        # Count occurrences of each unique bad word in the story
+        problemcount = 0
+        bad_occurrences = {}
+        for bad_word in all_bads:
+            count = story_word_counts.get(bad_word, 0)
+            if count > 0:
+                problemcount += count
+                bad_occurrences[bad_word] = count
+
+        # Calculate decodability
+        wordcount = len(story_words)
+        decodability = 1 - (problemcount / wordcount) if wordcount > 0 else 0
+
+        # Print the results for the final updated story
+        print("Bad Word Occurrences:")
+        for word, count in bad_occurrences.items():
+            print(f"{word}: {count}")
+
+        print(f"This text is {decodability * 100:.2f}% decodable")
+
+        # Prepare the data for the file
+        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        decodability_entry = f"{decodability * 100:.2f}% {current_time} Word Count: {wordcount} {marker} {combo}\n"
+
+        # Append the data to the file
+        decodability_file = "dictionary_parser/decodability_measurements.txt"
+        with open(decodability_file, "a") as file:
+            file.write(decodability_entry)
+
+        # Save the final story
+        if apply_correction and spellcheck and combined:
+            output_file = 'dictionary_parser/combined.txt'
+        elif apply_correction and spellcheck:
+            output_file = 'dictionary_parser/updated_story_transition.txt'
+        elif apply_correction:
+            output_file = 'dictionary_parser/updated_story_corrected.txt'
+        else:
+            output_file = 'dictionary_parser/updated_story.txt'
+        story = ultraformatting(story)
+        save_updated_story(story, output_file)
+        print(f"Updated story has been saved to '{output_file}'.")
+        return story
+
 
 def combine(story1, story2):
     prompt = f"""
@@ -271,15 +332,16 @@ def main():
     global sight_words
     sight_words = "a,at,any,many,and,on,is,are,the,was,were,it,am,be,go,to,out,been,come,some,do,does,done,what,who,you,your,both,buy,door,floor,four,none,once,one,only,pull,push,sure,talk,walk,their,there,they're,very,want,again,against,always,among,busy,could,should,would,enough,rough,tough,friend,move,prove,ocean,people,she,other,above,father,usually,special,front,thought,he,we,they,nothing,learned,toward,put,hour,beautiful,whole,trouble,of,off,use,have,our,say,make,take,see,think,look,give,how,ask,boy,girl,us,him,his,her,by,where,were,wear,hers,don't,which,just,know,into,good,other,than,then,now,even,also,after,know,because,most,day,these,two,already,through,though,like,said,too,has,in,brother,sister,that,them,from,for,with,doing,well,before,tonight,down,about,but,up,around,goes,gone,build,built,cough,lose,loose,truth,daughter,son"
 
-    print("Generating story...")
     gendec = input("Would you like to generate a story (g) or input a story (i): ")
     if gendec == "g":
         topic, problems = get_input()
         story = generate_story(topic, problems)
+        print("Generating story...")
     elif gendec == "i":
         problems = input("Enter the problem letters separated by /: ").split("/")  
         file = input("Copy and Paste your text here: ")
         story =  file
+        decodabuilityog = process_story(story, problems, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=True)
     print(story)
 
     # First Run: Without Grammar Correction
@@ -294,6 +356,7 @@ def main():
 
     # Process the combined story
     story4 = process_story(story3, problems, apply_correction=True, spellcheck=True, combined=True)
+
     print(f'\n\nFinal Story: {story4}')
 
 
