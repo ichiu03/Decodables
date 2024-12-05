@@ -137,6 +137,8 @@ def rewrite_sentences(story):
         prompt = f"""
             Rewrite this sentence so it is easier to read. Remember this is for a childrens book: {sentence}
 
+            If it makes sense to, trim down the sentence so it is not redundant.
+
             Here is the previous sentence and next sentence for context: Previous: {prev_sentence} Next: {next_sentence}
 
         """
@@ -270,7 +272,12 @@ def main():
     sight_words = "a,at,any,many,and,on,is,are,the,was,were,it,am,be,go,to,out,been,come,some,do,does,done,what,who,you,your,both,buy,door,floor,four,none,once,one,only,pull,push,sure,talk,walk,their,there,they're,very,want,again,against,always,among,busy,could,should,would,enough,rough,tough,friend,move,prove,ocean,people,she,other,above,father,usually,special,front,thought,he,we,they,nothing,learned,toward,put,hour,beautiful,whole,trouble,of,off,use,have,our,say,make,take,see,think,look,give,how,ask,boy,girl,us,him,his,her,by,where,were,wear,hers,don't,which,just,know,into,good,other,than,then,now,even,also,after,know,because,most,day,these,two,already,through,though,like,said,too,has,in,brother,sister,that,them,from,for,with,doing,well,before,tonight,down,about,but,up,around,goes,gone,build,built,cough,lose,loose,truth,daughter,son"
 
     print("Generating story...")
-    story = generate_story(topic, problems)
+    gendec = input("Would you like to generate a story (g) or input a story (i): ")
+    if gendec == "g":
+        story = generate_story(topic, problems)
+    elif gendec == "i":
+        file = input("Copy and Paste your text here: ")
+        story =  file
     print(story)
 
     # First Run: Without Grammar Correction
