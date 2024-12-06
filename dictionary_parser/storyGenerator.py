@@ -63,7 +63,7 @@ def get_input_and_save():
     clear_json_file()  # Clear the file before saving new data
     
     topic = input("Enter your story topic: ")
-    problems = input("Enter the problem letters separated by commas: ").split(",")
+    problems = input("Enter the problem letters separated by /: ").split("/")
     problems = [problem.strip() for problem in problems]  # Clean up whitespace
     
     # Ensure "fail" is always included
@@ -89,7 +89,7 @@ def get_input():
     story_length = int(input("Enter the length of the story: "))
     topic = input("Enter your story topic: ")
     readingLevel = input("Enter the grade level of the reader (Only the grade number): ")
-    problems = input("Enter the problem letters separated by commas: ").split(",")
+    problems = input("Enter the problem letters separated by /: ").split("/")
     # sight_words = input("Enter the sight words separated by commas: ")
     problems = [problem.strip() for problem in problems]  # Clean up whitespace
 

@@ -608,8 +608,8 @@ def getTopWords(num: int, output_path: str) -> None:
     print(f"Data successfully written to truncated_dictionary.json")
 
 def main():
-    input_path = os.path.join(script_dir, 'WordDatav4.txt')
-    output_path = os.path.join(script_dir, 'categorized_words.json')
+    input_path = os.path.join(script_dir, 'Dictionary.txt')
+    output_path = os.path.join(script_dir, 'dictionary_categorized.json')
     output_path2 = os.path.join(script_dir, 'truncated_dictionary.json')
     with open(input_path, 'r') as f:
         story = f.read()

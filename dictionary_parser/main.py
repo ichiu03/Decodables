@@ -33,7 +33,8 @@ def get_synonyms_dict(story: str, word_dict: dict, problems: list) -> dict:
 
                         return only the 10 words separated by commas. Like this: "word1,word2,word3,word4,word5"
                         order the words so the best fit is first
-
+                        Remember, a change in tense or form of the word is not an acceptable synonym. Maintain tense and form as these words are going to replace the original word in a story.
+                        
                         RETURN ONLY THE LIST OF WORDS
                         """
                     response = query(prompt)
@@ -123,114 +124,240 @@ def correct_text(text: str) -> str:
     corrected_text = language_tool_python.utils.correct(text, matches)
     return corrected_text
 
-def process_story(story, problems, apply_correction=False, spellcheck=False): 
-    if apply_correction:
-        print("Applying grammar correction...")
-        story = correct_text(story)
-        print("Corrected Story:")
-        print(story)
-        marker = "grammar corrected"
-    else:
-        print("Skipping grammar correction...")
-        marker = "grammar not corrected"
+def rewrite_sentences(story):
+    sentences = story.split(".")  # Split sentences by period
+    finaltext = ""  # To store the revised story
     
-    if spellcheck:
-        print("Applying Spellcheck...")
-        prompt = f" You are a literary editor. Rewrite this story and make any necessary changes to the story to make it 100% readable and abide by proper english writing and reading standards: {story}. Return just the new fixed story."
-        story = query(prompt)
-        marker += " Spellcheck"
+    for i, sentence in enumerate(sentences):
+        # Get previous and next sentence for context
+        prev_sentence = sentences[i - 1] if i > 0 else ""
+        next_sentence = sentences[i + 1] if i < len(sentences) - 1 else ""
         
-    else:         
-        print("Skipping Spellcheck...")
-        marker += " No Spellcheck"
+        # Form the prompt
+        prompt = f"""
+            Rewrite this sentence so it is easier to read. Remember this is for a childrens book: {sentence}
+
+            If it makes sense to, trim down the sentence so it is not redundant.
+
+            Here is the previous sentence and next sentence for context: Previous: {prev_sentence} Next: {next_sentence}
+
+        """
         
-    promptgrade =f"What is the quality of this story ranked on a grading scale of A-F: {story}. Return only the letter grade (A,B,C,D,F) and nothing else."
-    graded = query(promptgrade)
+        # Call the function to get the rewritten sentence (query function assumed)
+        sentence_rev = query(prompt).strip()
+        
+        # Add the revised sentence to the final text
+        if sentence_rev and sentence != prev_sentence and sentence !=next_sentence:  # Avoid adding empty strings
+            finaltext += sentence_rev + " "
     
+    return finaltext.strip()  # Strip trailing whitespace
+   
 
-    # Continue with your processing
-    print("Checking each word...")
-    word_dict = parseAndProcessWords(story)
+def process_story(story, problems, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=False): 
+    if decodabilityTest:
+        print("Decodability Test Mode: Analyzing text without making changes.")
+        
+        # Prepare sight words set
+        sight_words_set = set(word.lower().strip() for word in sight_words.split(','))
 
-    # Find synonyms
-    print("Finding synonyms...")
-    synonyms_dict = get_synonyms_dict(story, word_dict, problems)
+        # Tokenize the story into words and count occurrences
+        story_words = re.findall(r'\b\w+\b', story.lower())
+        story_word_counts = Counter(story_words)
 
-    # Replace problematic words with synonyms
-    print("Replacing synonyms...")
-    story = replace_words_in_story(story, synonyms_dict)
+        # Parse and process words to categorize them
+        word_dict = parseAndProcessWords(story)
 
-    # Prepare sight words set
-    sight_words_set = set(word.lower().strip() for word in sight_words.split(','))
+        # Combine all bad words into a single set
+        all_bads = set()
+        for problem in problems:
+            problem = problem.strip()
+            if problem in word_dict:
+                problem_words = set(word.lower() for word in word_dict[problem] if word.lower() not in sight_words_set)
+                all_bads.update(problem_words)
+            else:
+                print(f"Warning: Problem '{problem}' not found in word dictionary.")
 
-    # Tokenize the story into words and count occurrences
-    story_words = re.findall(r'\b\w+\b', story.lower())
-    story_word_counts = Counter(story_words)
+        # Count occurrences of each unique bad word in the story
+        problemcount = 0
+        bad_occurrences = {}
+        for bad_word in all_bads:
+            count = story_word_counts.get(bad_word, 0)
+            if count > 0:
+                problemcount += count
+                bad_occurrences[bad_word] = count
 
-    # Combine all bads into a single set
-    all_bads = set()
-    for problem in problems:
-        problem_words = set(word.lower() for word in word_dict[problem] if word.lower() not in sight_words_set)
-        all_bads.update(problem_words)
+        # Calculate decodability
+        wordcount = len(story_words)
+        decodability = 1 - (problemcount / wordcount) if wordcount > 0 else 0
 
-    # Count occurrences of each unique bad word in the story
-    problemcount = 0
-    bad_occurrences = {}
-    for bad_word in all_bads:
-        count = story_word_counts.get(bad_word, 0)
-        if count > 0:
-            problemcount += count
-            bad_occurrences[bad_word] = count
+        # Print the results
+        print("Bad Word Occurrences:")
+        for word, count in bad_occurrences.items():
+            print(f"{word}: {count}")
 
-    # Print the results for the final updated story
-    print("Bad Word Occurrences:")
-    for word, count in bad_occurrences.items():
-        print(f"{word}: {count}")
+        print(f"This text is {decodability * 100:.2f}% decodable")
 
-    # Calculate decodability
-    wordcount = count_words_in_text(story)
-    decodability = 1 - problemcount / wordcount
+        # Prepare the data for the file
+        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        decodability_entry = f"{decodability * 100:.2f}% {current_time} Word Count: {wordcount} Decodability Test\n"
 
-    # Print decodability to the console
-    print(f"This text is {decodability * 100:.2f}% decodable")
+        # Append the data to the file
+        decodability_file = "dictionary_parser/decodability_measurements.txt"
+        with open(decodability_file, "a") as file:
+            file.write(decodability_entry)
 
-    # Prepare the data for the file
-    current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    decodability_entry = f"{decodability * 100:.2f}% {current_time} Word Count: {len(story.split())} Grade: {graded} {marker}\n"
+        # Return the original story without changes
+        return decodability
 
-    # Append the data to the file
-    decodability_file = "dictionary_parser/decodability_measurements.txt"
-    with open(decodability_file, "a") as file:
-        file.write(decodability_entry)
-
-    # Save the final story
-    if apply_correction and spellcheck:
-        output_file = 'dictionary_parser/updated_story_transition.txt'
-    elif apply_correction:
-        output_file = 'dictionary_parser/updated_story_corrected.txt'
     else:
-        output_file = 'dictionary_parser/updated_story.txt'
-    story = ultraformatting(story)
-    save_updated_story(story, output_file)
-    print(f"Updated story has been saved to '{output_file}'.")
+        # Existing code for processing the story
+        # Apply grammar correction and spellcheck if enabled
+        if apply_correction:
+            print("Applying grammar correction...")
+            story = correct_text(story)
+            print("Corrected Story:")
+            print(story)
+            marker = "grammar corrected"
+        else:
+            print("Skipping grammar correction...")
+            marker = "grammar not corrected"
+
+        if spellcheck:
+            print("Applying Spellcheck...")
+            prompt = f"You are a literary editor. Rewrite this story and make any necessary changes to the story to make it 100% readable and abide by proper English writing and reading standards: {story}. Return just the new fixed story."
+            story = query(prompt)
+            marker += " Spellcheck"
+        else:         
+            print("Skipping Spellcheck...")
+            marker += " No Spellcheck"
+
+        if combined:
+            combo = "Combined Text"
+        else: 
+            combo = ""
+
+        # Continue with processing
+        print("Checking each word...")
+        word_dict = parseAndProcessWords(story)
+
+        # Find synonyms
+        print("Finding synonyms...")
+        synonyms_dict = get_synonyms_dict(story, word_dict, problems)
+
+        # Replace problematic words with synonyms
+        print("Replacing synonyms...")
+        story = replace_words_in_story(story, synonyms_dict)
+
+        # Rewrite problematic sentences
+        story = rewrite_sentences(story)
+
+        # Prepare sight words set
+        sight_words_set = set(word.lower().strip() for word in sight_words.split(','))
+
+        # Tokenize the story into words and count occurrences
+        story_words = re.findall(r'\b\w+\b', story.lower())
+        story_word_counts = Counter(story_words)
+
+        # Combine all bad words into a single set
+        all_bads = set()
+        for problem in problems:
+            problem = problem.strip()
+            if problem in word_dict:
+                problem_words = set(word.lower() for word in word_dict[problem] if word.lower() not in sight_words_set)
+                all_bads.update(problem_words)
+            else:
+                print(f"Warning: Problem '{problem}' not found in word dictionary.")
+
+        # Count occurrences of each unique bad word in the story
+        problemcount = 0
+        bad_occurrences = {}
+        for bad_word in all_bads:
+            count = story_word_counts.get(bad_word, 0)
+            if count > 0:
+                problemcount += count
+                bad_occurrences[bad_word] = count
+
+        # Calculate decodability
+        wordcount = len(story_words)
+        decodability = 1 - (problemcount / wordcount) if wordcount > 0 else 0
+
+        # Print the results for the final updated story
+        print("Bad Word Occurrences:")
+        for word, count in bad_occurrences.items():
+            print(f"{word}: {count}")
+
+        print(f"This text is {decodability * 100:.2f}% decodable")
+
+        # Prepare the data for the file
+        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        decodability_entry = f"{decodability * 100:.2f}% {current_time} Word Count: {wordcount} {marker} {combo}\n"
+
+        # Append the data to the file
+        decodability_file = "dictionary_parser/decodability_measurements.txt"
+        with open(decodability_file, "a") as file:
+            file.write(decodability_entry)
+
+        # Save the final story
+        if apply_correction and spellcheck and combined:
+            output_file = 'dictionary_parser/combined.txt'
+        elif apply_correction and spellcheck:
+            output_file = 'dictionary_parser/updated_story_transition.txt'
+        elif apply_correction:
+            output_file = 'dictionary_parser/updated_story_corrected.txt'
+        else:
+            output_file = 'dictionary_parser/updated_story.txt'
+        story = ultraformatting(story)
+        save_updated_story(story, output_file)
+        print(f"Updated story has been saved to '{output_file}'.")
+        return story
 
 
+def combine(story1, story2):
+    prompt = f"""
+    Take the two versions of the story provided below and combine their sentences into one improved version. 
+    Retain the original plot and key details. 
+    Keep the creative language from both versions.
+    Ensure the final story maintains the same narrative structure but uses the best phrases from each version. 
+    Do not invent new plot elements or diverge from the original stories.
+
+    Version 1: {story1}
+
+    Version 2: {story2}
+    """
+    ultstory = query(prompt)
+    return ultstory
 
 def main():
-    topic, problems = get_input()
-    global sight_words
-    sight_words = "a,any,many,and,on,is,are,the,was,were,it,am,be,go,to,been,come,some,do,does,done,what,who,you,your,both,buy,door,floor,four,none,once,one,only,pull,push,sure,talk,walk,their,there,they're,very,want,again,against,always,among,busy,could,should,would,enough,rough,tough,friend,move,prove,ocean,people,she,other,above,father,usually,special,front,thought,he,we,they,nothing,learned,toward,put,hour,beautiful,whole,trouble,of,off,use,have,our,say,make,take,see,think,look,give,how,ask,boy,girl,us,him,his,her,by,where,were,wear,hers,don't,which,just,know,into,good,other,than,then,now,even,also,after,know,because,most,day,these,two,already,through,though,like,said,too,has,in,brother,sister,that,them,from,for,with,doing,well,before,tonight,down,about,but,up,around,goes,gone,build,built,cough,lose,loose,truth,daughter,son"
     
-    print("Generating story...")
-    story = generate_story(topic, problems)
+    global sight_words
+    sight_words = "a,at,any,many,and,on,is,are,the,was,were,it,am,be,go,to,out,been,come,some,do,does,done,what,who,you,your,both,buy,door,floor,four,none,once,one,only,pull,push,sure,talk,walk,their,there,they're,very,want,again,against,always,among,busy,could,should,would,enough,rough,tough,friend,move,prove,ocean,people,she,other,above,father,usually,special,front,thought,he,we,they,nothing,learned,toward,put,hour,beautiful,whole,trouble,of,off,use,have,our,say,make,take,see,think,look,give,how,ask,boy,girl,us,him,his,her,by,where,were,wear,hers,don't,which,just,know,into,good,other,than,then,now,even,also,after,know,because,most,day,these,two,already,through,though,like,said,too,has,in,brother,sister,that,them,from,for,with,doing,well,before,tonight,down,about,but,up,around,goes,gone,build,built,cough,lose,loose,truth,daughter,son"
+
+    gendec = input("Would you like to generate a story (g) or input a story (i): ")
+    if gendec == "g":
+        topic, problems = get_input()
+        story = generate_story(topic, problems)
+        print("Generating story...")
+    elif gendec == "i":
+        problems = input("Enter the problem letters separated by /: ").split("/")  
+        file = input("Copy and Paste your text here: ")
+        story =  file
+        decodabuilityog = process_story(story, problems, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=True)
     print(story)
 
     # First Run: Without Grammar Correction
     print("\n--- Processing Without Grammar Correction ---")
-    process_story(story, problems, apply_correction=False, spellcheck=False)
-    
-    print("\n--- Processing With Grammar Correction and Spell Check words---")
-    process_story(story, problems, apply_correction=True, spellcheck=True)
+    story1 = process_story(story, problems, apply_correction=False, spellcheck=False, combined=False)
+
+    print("\n--- Processing With Grammar Correction and Spell Check ---")
+    story2 = process_story(story, problems, apply_correction=True, spellcheck=True, combined=False)
+
+    # Now, combine the two stories
+    story3 = combine(story1, story2)
+
+    # Process the combined story
+    story4 = process_story(story3, problems, apply_correction=True, spellcheck=True, combined=True)
+
+    print(f'\n\nFinal Story: {story4}')
 
 
 
@@ -238,6 +365,12 @@ if __name__ == "__main__":
     main()
 
 
-#b,l,p,j,ck,wh,aw,tch,igh,ir,oi
+#b/l/p/j/ck/wh/aw/tch/igh/ir/oi  
+#wh/aw/tch/igh/ir/oi/kn/ur/dge/tion/war/ph/eigh/wor/ough  
+#s/l/r/b/sh/ar/ai/-ing, -ong, -ang, -ung/ea as in eat  
+#t/p/n/m/th/ch/oo as in school/ow as in plow/y as in dry  
+#k/j/v/f/-ank/-st/ur/oi/wh  
+#d/w/z/h/ck/s blends/l blends/er/ea as in bread/igh  
+#r/v/l/qu/th/ay/ow as in snow/ear as in hear/y as in bumpy  
 
-#wh,aw,tch,igh,ir,oi,kn,ur,dge,tion,war,ph,eigh,wor,ough
+
