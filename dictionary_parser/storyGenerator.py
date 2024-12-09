@@ -29,9 +29,13 @@ chapters = 1
 good_words = []
 bad_words = []
 
-# Opening JSON file
+# Opening JSON file for words categorized by problems
 with open('dictionary_parser/categorized_words.json') as json_file:
     words = json.load(json_file)
+
+# Opening JSON file for guidewords
+with open('dictionary_parser/truncated_dictionary.json') as json_file:
+    guidewords = json.load(json_file)
 
 ### Function to get all words
 def get_all_words():
@@ -108,19 +112,13 @@ def get_words(problems):
     good_words = [word for word in all_words if word not in bad_words]
     return bad_words
 
-### Function to write the story to a file as a list of words
-### Function to write the story to a file with each word on a new line
-import re
-
-# Function to write the original and stripped-down versions of the story to separate files
+### Function to write the story to a file
 def write_story_to_file(story):
     # Write the original story to 'generated_story.txt'
     with open('dictionary_parser/generated_story.txt', 'w', encoding='utf-8') as file:
         file.write(story)
     print("\nOriginal story written to 'generated_story.txt'.")
 
-    # Tokenize the story using NLTK's word_tokenize
-### Function to delete the file before generating a new one
 ### Function to delete the files before generating new ones
 def delete_old_file():
     file_paths = ['generated_story.txt']
@@ -129,8 +127,25 @@ def delete_old_file():
             os.remove(path)
             print(f"Previous file '{path}' deleted.")
 
+def generate_chapter(outline, chapter_number, length, story, problems):
+    # Collect guidewords for all problem sounds
+    problem_examples = {}
+    for problem in problems:
+        problem = problem.strip()
+        if problem in guidewords:
+            problem_examples[problem] = guidewords[problem][:5]  # Limit to 5 examples for brevity
+        else:
+            print(f"Warning: Problem '{problem}' not found in guidewords dictionary.")
 
-def generate_chapter(outline, chapter_number, length, story):
+    # Format the examples for the prompt
+    examples_str_list = []
+    for problem, examples in problem_examples.items():
+        formatted_examples = ", ".join([f"'{word}'" for word in examples])
+        examples_str = f"The '{problem}' sound in {formatted_examples}"
+        examples_str_list.append(examples_str)
+    examples_str = "; ".join(examples_str_list)
+
+    # Now, create the prompt including the examples_str
     prompt = f"""
     You are a creative author tasked with writing chapter {chapter_number} of a children's story for a child at a {readingLevel} grade reading level.
 
@@ -142,83 +157,59 @@ def generate_chapter(outline, chapter_number, length, story):
 
     {story}
 
+    Please avoid using words that contain these sounds: {', '.join(problems)}.
+
+    Some examples of words to avoid are: {examples_str}.
+
     Write a {length} word chapter.
 
     Please ensure that you use proper punctuation and include spaces after punctuation marks.
 
     Return only the new chapter.
     """
-    story = query(prompt)
-    return story
+    # Generate the chapter using the query function
+    new_chapter = query(prompt)
+    return new_chapter
 
-def generate_outline(topic,name):
-    
+def generate_outline(topic, name):
     prompt = f"""
     You are a creative author.
 
-    Create an outline for a children's story about {topic} of a children's story for a child at a {readingLevel} grade reading level.
+    Create an outline for a children's story about {topic} for a child at a {readingLevel} grade reading level.
 
     The story should be about {story_length} words long.
 
     The story should have a clear beginning, middle, and end and have a lesson.
 
-    The story should be {chapters}  chapters long.
+    The story should be {chapters} chapter(s) long.
 
     The main character should be named {name}.
 
-    Return only the outline
+    Return only the outline.
     """
     outline = query(prompt)
     return outline
 
-
 ### Main function
 def generate_story(topic, problems):
-    
+    global readingLevel
     dictionary = get_words(problems)
-    name = input("What do you want the main charachter's name to be: ")
+    name = input("What do you want the main character's name to be: ")
+    readingLevel = input("Enter the grade level of the reader (Only the grade number): ")
     outline = generate_outline(topic, name)
     story = ""
     
     for chapter in range(chapters):
         print(f"Generating chapter {chapter + 1}")
-        new_chapter = generate_chapter(outline, chapter + 1, story_length // chapters, story)
-        # temp_chapter = new_chapter
-        # temp_chapter = sentence_check(temp_chapter, dictionary, problems)
-        # temp_chapter = edit(new_chapter)
-        story += new_chapter + "\n"  # Add a space between chapters
+        new_chapter = generate_chapter(outline, chapter + 1, story_length // chapters, story, problems)
+        story += new_chapter + "\n"  # Add a newline between chapters
     print(story)
-    # Fix missing spaces after punctuation
-    # story = fix_spacing(story)
-
-    # story = sentence_check(story)
-
-
-    # print("\nFinal story:")
-    # print(story)
     return story
-
 
 ### Main function
 def main():
     topic, problems = get_input_and_save()
-    dictionary = get_words(problems)
-    outline = generate_outline(topic)
-    story = ""
-
-
-    for chapter in range(chapters):
-        print(f"Generating chapter {chapter + 1}")
-        new_chapter = generate_chapter(outline, chapter + 1, story_length // chapters, story)
-        temp_chapter = new_chapter
-        #temp_chapter = sentence_check(temp_chapter, dictionary, problems)
-        #temp_chapter = edit(temp_chapter)
-        story += temp_chapter + " "  # Add a space between chapters
-
-    # Fix missing spaces after punctuation
-    #story = fix_spacing(story)
-
-    #story = sentence_check(story)
+    story = generate_story(topic, problems)
 
     # Delete any existing output files only after the entire story is generated
     delete_old_file()
@@ -228,8 +219,6 @@ def main():
 
     print("\nFinal story:")
     print(story)
-    return 0
-
 
 if __name__ == "__main__":
     main()
