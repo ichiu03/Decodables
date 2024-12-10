@@ -150,7 +150,7 @@ def verificationToAdd(word: str, arpabet: str, letters: str, desired_pho: list, 
 def xInWordCheck(word: str, arpabet: str) -> None:
     tokens = arpabet.split()
     keys = ['m', 'l', 'p', 'v', 'z', 'f', 'sh', 'ay', 'ck', 'ee', 'th', 'oy', 
-        'wh', 'er', 'aw', 'tch', 'ai', 'oa', 'ur', 'dge', 'tion', 'au', 
+        'wh', 'er', 'aw', 'tch', 'ai', 'oa', 'dge', 'tion', 'au', 
         'ough', 'wor', 'wr', 'eigh', 'augh', 'oe', 'ui', 'wa', 'eu', 'gh',
         'mb', 'mn', 'que', 'gn', 'stle', 'rh', 'gue', 'alk', 'alt', 'qua', 'sc', 'ph']
 
@@ -169,6 +169,12 @@ def xInWordCheck(word: str, arpabet: str) -> None:
     if 'qu' in word and 'K W' in arpabet: categories['qu'].append(word)
     if 'ch' in word and 'CH' in tokens: categories['ch'].append(word)
     if 'or' in word and 'AO R' in arpabet: categories['or'].append(word)
+    if 'ur' in word and 'ER' in tokens:
+        index = word.find('ur')
+        if word[index-1] == 'o': pass
+        elif index+1 == len(word): categories['ur'].append(word) # Are last two letters
+        elif len(word) > index+2:
+            if word[index+2] in CONSONANTS: categories['ur'].append(word) # Is followed by a consonant
     if 'ar' in word and 'AA R' in arpabet: categories['ar'].append(word)
     if word.endswith('ed'):
         root_word = word[:-1]  # Remove last letter, for words that end with e
@@ -378,7 +384,8 @@ def ewCheck(word: str, arpabet: str) -> None:
 
 def ouCheck(word: str, arpabet: str) -> None:
     if 'ou' not in word: return
-    if 'AW' in arpabet: categories['ou as in south'].append(word)
+    if 'AW' in arpabet and verificationToAdd(word, arpabet, 'ou', ['AW'], ['AH']): 
+        categories['ou as in south'].append(word)
 
 def ueCheck(word: str, arpabet: str) -> None:
     if 'ue' not in word: return
@@ -550,7 +557,39 @@ def yRuleSuffix(word: str) -> bool:
     return 
 
 def eRuleSuffix(word: str) -> None:
+    # Suffixes that require dropping 'e'
+    drop_e_suffixes = ['ing', 'er']
     
+    # Check for suffixes that drop 'e'
+    for suffix in drop_e_suffixes:
+        if word.endswith(suffix):
+            root_without_e = word[:-len(suffix)]
+            root_with_e = root_without_e + 'e'
+            
+            if (len(root_without_e) <= 2 or  
+                not any(c in 'aeiou' for c in root_without_e)):
+                continue
+                
+            if (root_with_e in valid_words and 
+                root_without_e not in valid_words):
+                categories['e rule-suffixes'].append(word)
+                return
+    
+    # Suffixes that keep 'e'
+    keep_e_suffixes = ['able', 'ible', 'ous', 'est']
+    
+    # Check for suffixes that keep 'e'
+    for suffix in keep_e_suffixes:
+        if word.endswith(suffix):
+            root = word[:-len(suffix)]
+            
+            if (len(root) <= 2 or
+                not any(c in 'aeiou' for c in root)):
+                continue
+            
+            if root + 'e' in valid_words:
+                categories['e rule-suffixes'].append(word)
+                return
 
 def getWords(text: str) -> set:
     words = re.findall(r'\b[A-Za-z]+\'?[A-Za-z]*\b', text.lower())
@@ -585,6 +624,7 @@ def callCategorizationFunctions(word: str, arpabet: str, syllable_count: int) ->
     vvCheck(word, arpabet)
     vcccvCheck(word, syllable_count)
     yRuleSuffix(word)
+    eRuleSuffix(word)
     vrlCheck(word)
     vceCheck(word)
     xInWordCheck(word, arpabet)
@@ -645,9 +685,6 @@ def main():
         story = f.read()
     parseAndProcessWords(story, syllable_limit=1000, output_path=output_path)
     #getTopWords(20, output_path2)
-
-print(mapChunksToPhonemes('knowing'))
-print(mapChunksToPhonemes('weakness'))
 
 if __name__ == "__main__":
     main()
