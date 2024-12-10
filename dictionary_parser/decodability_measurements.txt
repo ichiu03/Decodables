@@ -1,0 +1,13 @@
+100.00% 2024-12-03 11:28:10 Word Count: 96 Grade: B grammar not corrected No Spellcheck
+100.00% 2024-12-03 11:35:20 Word Count: 94 Grade: A grammar not corrected No Spellcheck
+100.00% 2024-12-03 11:35:30 Word Count: 94 Grade: B grammar corrected Spellcheck 
+100.00% 2024-12-03 11:40:39 Word Count: 81 Grade: B grammar not corrected No Spellcheck
+100.00% 2024-12-03 11:42:09 Word Count: 88 Grade: B grammar not corrected No Spellcheck
+100.00% 2024-12-03 11:42:19 Word Count: 88 Grade: B grammar corrected Spellcheck
+99.24% 2024-12-03 12:25:56 Word Count: 394 Grade: B grammar not corrected No Spellcheck
+99.23% 2024-12-03 12:26:35 Word Count: 391 Grade: B grammar corrected Spellcheck
+92.35% 2024-12-03 13:04:13 Word Count: 379 Grade: B grammar not corrected No Spellcheck
+93.65% 2024-12-03 13:05:58 Word Count: 378 Grade: B grammar corrected Spellcheck
+96.36% 2024-12-05 19:44:04 Word Count: 275 grammar not corrected No Spellcheck 
+95.95% 2024-12-05 19:44:30 Word Count: 222 grammar corrected Spellcheck 
+95.17% 2024-12-05 19:44:57 Word Count: 207 grammar corrected Spellcheck Combined Text

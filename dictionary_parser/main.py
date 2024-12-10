@@ -268,6 +268,25 @@ def process_story(story, problems, apply_correction=False, spellcheck=False, com
             else:
                 print(f"Warning: Problem '{problem}' not found in word dictionary.")
 
+        # Load existing word counts from file if it exists
+        word_counts = {}
+        try:
+            with open('dictionary_parser/non_decodable_words.txt', 'r') as f:
+                for line in f:
+                    word, count = line.strip().split(': ')
+                    word_counts[word] = int(count)
+        except FileNotFoundError:
+            pass
+
+        # Update counts with new bad words
+        for word in all_bads:
+            word_counts[word] = word_counts.get(word, 0) + 1
+
+        # Write updated counts back to file
+        with open('dictionary_parser/non_decodable_words.txt', 'w') as f:
+            for word, count in sorted(word_counts.items()):
+                f.write(f'{word}: {count}\n')
+
         # Count occurrences of each unique bad word in the story
         problemcount = 0
         bad_occurrences = {}
@@ -331,14 +350,15 @@ def main():
     
     global sight_words
     sight_words = "a,at,any,many,and,on,is,are,the,was,were,it,am,be,go,to,out,been,come,some,do,does,done,what,who,you,your,both,buy,door,floor,four,none,once,one,only,pull,push,sure,talk,walk,their,there,they're,very,want,again,against,always,among,busy,could,should,would,enough,rough,tough,friend,move,prove,ocean,people,she,other,above,father,usually,special,front,thought,he,we,they,nothing,learned,toward,put,hour,beautiful,whole,trouble,of,off,use,have,our,say,make,take,see,think,look,give,how,ask,boy,girl,us,him,his,her,by,where,were,wear,hers,don't,which,just,know,into,good,other,than,then,now,even,also,after,know,because,most,day,these,two,already,through,though,like,said,too,has,in,brother,sister,that,them,from,for,with,doing,well,before,tonight,down,about,but,up,around,goes,gone,build,built,cough,lose,loose,truth,daughter,son"
-
     gendec = input("Would you like to generate a story (g) or input a story (i): ")
     if gendec == "g":
         topic, problems = get_input()
+        problems.append("too many syllables")
         story = generate_story(topic, problems)
         print("Generating story...")
     elif gendec == "i":
-        problems = input("Enter the problem letters separated by /: ").split("/")  
+        problems = input("Enter the problem letters separated by /: ").split("/")
+        problems.append("too many syllables")
         file = input("Copy and Paste your text here: ")
         story =  file
         decodabuilityog = process_story(story, problems, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=True)
