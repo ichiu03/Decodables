@@ -11,44 +11,76 @@ sight_words = ""
 with open('dictionary_parser/dictionary.txt', 'r', encoding='utf-8') as file:
     large_dictionary = set(word.strip().lower() for word in file.readlines())
 
+with open('dictionary_parser/truncated_dictionary.json') as json_file:
+    guidewords = json.load(json_file)
+
 def get_synonyms_dict(story: str, word_dict: dict, problems: list) -> dict:
     sentences = story.split(".")
-    prev_sentence = sentences[0]
+    prev_sentence = ""
     synonyms_dict = {}
-    for sentence in sentences:
-        next_sentence = sentences[sentences.index(sentence) + 1] if sentences.index(sentence) < len(sentences) - 1 else ""
+    
+    # Create a mapping from problem sound to example words
+    problem_examples = {}
+    for problem in problems:
+        problem = problem.strip()
+        if problem in guidewords:
+            problem_examples[problem] = guidewords[problem][:5]  # Limit to 5 examples for brevity
+        else:
+            print(f"Warning: Problem '{problem}' not found in guidewords dictionary.")
+    
+    # Format the examples for the prompt
+    examples_str_list = []
+    for problem, examples in problem_examples.items():
+        formatted_examples = ", ".join([f"'{word}'" for word in examples])
+        examples_str = f"The '{problem}' sound in {formatted_examples}"
+        examples_str_list.append(examples_str)
+    examples_str = "; ".join(examples_str_list)
+
+    for idx, sentence in enumerate(sentences):
+        sentence = sentence.strip()
+        next_sentence = sentences[idx + 1].strip() if idx + 1 < len(sentences) else ""
         words = sentence.split(" ")
         for word in words:
-            word = "".join(re.findall("[a-zA-Z]", word)).lower()
+            # Remove punctuation and make lowercase
+            clean_word = "".join(re.findall("[a-zA-Z]", word)).lower()
             for problem in problems:
-                if word in word_dict[problem] and word not in sight_words:
-                    
+                problem = problem.strip()
+                if problem in word_dict and clean_word in word_dict[problem] and clean_word not in sight_words:
+                    # Prepare the prompt
                     prompt = f"""
-                        Give 10 words that would make sense as replacements for the following word in the sentence and don't include these sounds: {problems}:
+                        Give 10 synonyms for the word '{word}' that would fit naturally in the following sentence, and **do not** include any words containing these sounds: {', '.join(problems)}.
 
-                        word: {word}.
-                        previous sentence (for context): {prev_sentence}.
-                        sentence to fix: {sentence}.
-                        next sentence (for context): {next_sentence}.
+                        Some examples of words to **avoid** are: {examples_str}.
 
-                        return only the 10 words separated by commas. Like this: "word1,word2,word3,word4,word5"
-                        order the words so the best fit is first
-                        Remember, a change in tense or form of the word is not an acceptable synonym. Maintain tense and form as these words are going to replace the original word in a story.
-                        
-                        RETURN ONLY THE LIST OF WORDS
+                        Previous sentence (for context): {prev_sentence}
+                        Sentence to fix: {sentence}
+                        Next sentence (for context): {next_sentence}
+
+                        Return only the 10 words separated by commas, like this: "word1, word2, word3, word4, word5".
+                        Order the words so the best fit is first.
+                        Remember, a change in tense or form of the word is not acceptable. Maintain tense and form as these words are going to replace the original word in a story.
+
+                        **RETURN ONLY THE LIST OF WORDS**
                         """
-                    response = query(prompt)
-                    temp_words = response.split(",")
+                    response = query(prompt).strip()
+                    temp_words = [w.strip() for w in response.split(",") if w.strip()]
                     temp_words_dict = parseAndProcessWords(response)
+                    # Remove words containing problem sounds
+                    filtered_temp_words = []
                     for temp_word in temp_words:
-                        for problem in problems:
-                            if temp_word in temp_words_dict[problem]:
-                                temp_words.remove(temp_word)
+                        temp_word_lower = temp_word.lower()
+                        contains_problem = False
+                        for problem_check in problems:
+                            problem_check = problem_check.strip()
+                            if problem_check in temp_words_dict and temp_word_lower in temp_words_dict[problem_check]:
+                                contains_problem = True
                                 break
-                    if len(temp_words) > 0:
-                        synonyms_dict[word] = " " + temp_words[0]
+                        if not contains_problem:
+                            filtered_temp_words.append(temp_word)
+                    if filtered_temp_words:
+                        synonyms_dict[clean_word] = " " + filtered_temp_words[0]
                     else:
-                        synonyms_dict[word] = " ___"
+                        synonyms_dict[clean_word] = " ____"
         prev_sentence = sentence
     return synonyms_dict
 
@@ -331,13 +363,15 @@ def process_story(story, problems, apply_correction=False, spellcheck=False, com
         return story
 
 
-def combine(story1, story2):
+def combine(story1, story2, problems):
     prompt = f"""
     Take the two versions of the story provided below and combine their sentences into one improved version. 
-    Retain the original plot and key details. 
+    Retain the original plot and key details.
     Keep the creative language from both versions.
+    Try to avoid run-on sentences.
     Ensure the final story maintains the same narrative structure but uses the best phrases from each version. 
     Do not invent new plot elements or diverge from the original stories.
+    **Most Importantly** Try to avoid including these sounds: {problems}.
 
     Version 1: {story1}
 
@@ -349,7 +383,25 @@ def combine(story1, story2):
 def main():
     
     global sight_words
+<<<<<<< HEAD
     sight_words = "a,at,any,many,and,on,is,are,the,was,were,it,am,be,go,to,out,been,come,some,do,does,done,what,who,you,your,both,buy,door,floor,four,none,once,one,only,pull,push,sure,talk,walk,their,there,they're,very,want,again,against,always,among,busy,could,should,would,enough,rough,tough,friend,move,prove,ocean,people,she,other,above,father,usually,special,front,thought,he,we,they,nothing,learned,toward,put,hour,beautiful,whole,trouble,of,off,use,have,our,say,make,take,see,think,look,give,how,ask,boy,girl,us,him,his,her,by,where,were,wear,hers,don't,which,just,know,into,good,other,than,then,now,even,also,after,know,because,most,day,these,two,already,through,though,like,said,too,has,in,brother,sister,that,them,from,for,with,doing,well,before,tonight,down,about,but,up,around,goes,gone,build,built,cough,lose,loose,truth,daughter,son"
+=======
+    sight_words = "a,at,any,many,and,on,is,are,the,was,were,it,am,be,go,to,out,been,this,come,some,do,does,done,what,who,you,your,both,buy,door,floor,four,none,once,one,only,pull,push,sure,talk,walk,their,there,they're,very,want,again,against,always,among,busy,could,should,would,enough,rough,tough,friend,move,prove,ocean,people,she,other,above,father,usually,special,front,thought,he,we,they,nothing,learned,toward,put,hour,beautiful,whole,trouble,of,off,use,have,our,say,make,take,see,think,look,give,how,ask,boy,girl,us,him,his,her,by,where,were,wear,hers,don't,which,just,know,into,good,other,than,then,now,even,also,after,know,because,most,day,these,two,already,through,though,like,said,too,has,in,brother,sister,that,them,from,for,with,doing,well,before,tonight,down,about,but,up,around,goes,gone,build,built,cough,lose,loose,truth,daughter,son"
+    probsight_words = input("What sight words does the student not know (use only words and commas): ")
+
+    # Remove the problematic words from sight_words
+    sight_words_list = sight_words.split(",")
+    probsight_words_list = probsight_words.split(",")
+
+    # Remove words in probsight_words from sight_words
+    for word in probsight_words_list:
+        if word in sight_words_list:
+            sight_words_list.remove(word)
+
+    # Join the updated list back into a comma-separated string
+    sight_words = ",".join(sight_words_list)
+
+>>>>>>> 3bcfff82f6f27117acfcd1ad1f6af2565cbfa507
     gendec = input("Would you like to generate a story (g) or input a story (i): ")
     if gendec == "g":
         topic, problems = get_input()
@@ -372,7 +424,7 @@ def main():
     story2 = process_story(story, problems, apply_correction=True, spellcheck=True, combined=False)
 
     # Now, combine the two stories
-    story3 = combine(story1, story2)
+    story3 = combine(story1, story2, problems)
 
     # Process the combined story
     story4 = process_story(story3, problems, apply_correction=True, spellcheck=True, combined=True)
@@ -389,8 +441,9 @@ if __name__ == "__main__":
 #wh/aw/tch/igh/ir/oi/kn/ur/dge/tion/war/ph/eigh/wor/ough  
 #s/l/r/b/sh/ar/ai/-ing, -ong, -ang, -ung/ea as in eat  
 #t/p/n/m/th/ch/oo as in school/ow as in plow/y as in dry  
-#k/j/v/f/-ank/-st/ur/oi/wh  
 #d/w/z/h/ck/s blends/l blends/er/ea as in bread/igh  
 #r/v/l/qu/th/ay/ow as in snow/ear as in hear/y as in bumpy  
 
+#New idea if word appears 2+ times prompt the bot to find alternative words that could work in the context but may be different in their meaning
+#Could reduce decodability
 
