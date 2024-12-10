@@ -380,24 +380,21 @@ def combine(story1, story2, problems):
     ultstory = query(prompt)
     return ultstory
 
-def main():
-    
-    global sight_words
-    sight_words = "a,at,any,many,and,on,is,are,the,was,were,it,am,be,go,to,out,been,this,come,some,do,does,done,what,who,you,your,both,buy,door,floor,four,none,once,one,only,pull,push,sure,talk,walk,their,there,they're,very,want,again,against,always,among,busy,could,should,would,enough,rough,tough,friend,move,prove,ocean,people,she,other,above,father,usually,special,front,thought,he,we,they,nothing,learned,toward,put,hour,beautiful,whole,trouble,of,off,use,have,our,say,make,take,see,think,look,give,how,ask,boy,girl,us,him,his,her,by,where,were,wear,hers,don't,which,just,know,into,good,other,than,then,now,even,also,after,know,because,most,day,these,two,already,through,though,like,said,too,has,in,brother,sister,that,them,from,for,with,doing,well,before,tonight,down,about,but,up,around,goes,gone,build,built,cough,lose,loose,truth,daughter,son"
-    probsight_words = input("What sight words does the student not know (use only words and commas): ")
-
-    # Remove the problematic words from sight_words
-    sight_words_list = sight_words.split(",")
-    probsight_words_list = probsight_words.split(",")
-
-    # Remove words in probsight_words from sight_words
+def handle_sight_words(default_sight_words: str, problematic_words: str) -> str:
+    sight_words_list = default_sight_words.split(",")
+    probsight_words_list = problematic_words.split(",")
     for word in probsight_words_list:
         if word in sight_words_list:
             sight_words_list.remove(word)
+    return ",".join(sight_words_list)
 
-    # Join the updated list back into a comma-separated string
-    sight_words = ",".join(sight_words_list)
-
+def main():
+    global sight_words
+    default_sight_words = "a,at,any,many,and,on,is,are,the,was,were,it,am,be,go,to,out,been,this,come,some,do,does,done,what,who,you,your,both,buy,door,floor,four,none,once,one,only,pull,push,sure,talk,walk,their,there,they're,very,want,again,against,always,among,busy,could,should,would,enough,rough,tough,friend,move,prove,ocean,people,she,other,above,father,usually,special,front,thought,he,we,they,nothing,learned,toward,put,hour,beautiful,whole,trouble,of,off,use,have,our,say,make,take,see,think,look,give,how,ask,boy,girl,us,him,his,her,by,where,were,wear,hers,don't,which,just,know,into,good,other,than,then,now,even,also,after,know,because,most,day,these,two,already,through,though,like,said,too,has,in,brother,sister,that,them,from,for,with,doing,well,before,tonight,down,about,but,up,around,goes,gone,build,built,cough,lose,loose,truth,daughter,son"
+    probsight_words = input("What sight words does the student not know (use only words and commas): ")
+    
+    sight_words = handle_sight_words(default_sight_words, probsight_words)
+    
     gendec = input("Would you like to generate a story (g) or input a story (i): ")
     if gendec == "g":
         topic, problems = get_input()
