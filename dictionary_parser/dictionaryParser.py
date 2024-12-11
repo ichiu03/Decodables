@@ -169,7 +169,11 @@ def xInWordCheck(word: str, arpabet: str) -> None:
     if 'qu' in word and 'K W' in arpabet: categories['qu'].append(word)
     if 'ch' in word and 'CH' in tokens: categories['ch'].append(word)
     if 'or' in word and 'AO R' in arpabet: categories['or'].append(word)
-    if 'au' in word and 'AW' in arpabet: categories['au'].append(word)
+    if 'au' in word and 'AH' in arpabet:
+        index = word.find('au')
+        if len(word) > index+2:
+            if word[index+2] != 'r':
+                categories['au'].append(word)
     if 'eigh' in word and 'EY' in arpabet: categories['eigh'].append(word)
     if 'oe' in word and not (is_vv('oe', arpabet)): categories['oe'].append(word)
     if 'eu' in word and not (is_vv('eu', arpabet)): categories['eu'].append(word)
