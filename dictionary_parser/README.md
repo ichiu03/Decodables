@@ -1,2 +1,11 @@
 # Dictionary Parser API
-python -m uvicorn api:app --reload --port 5000
+
+Run backend:
+
+python dictionary_parser/api.py
+
+
+Run frontend:
+cd frontend
+npm install
+npm start

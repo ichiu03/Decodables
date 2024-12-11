@@ -221,3 +221,5 @@
 94.75% 2024-12-11 14:24:29 Word Count: 438 Decodability Test
 90.92% 2024-12-11 14:36:43 Word Count: 573 grammar not corrected Spellcheck Combined Text
 86.91% 2024-12-11 14:36:43 Word Count: 573 Decodability Test
+100.00% 2024-12-11 14:53:40 Word Count: 109 grammar not corrected Spellcheck Combined Text
+100.00% 2024-12-11 14:53:40 Word Count: 109 Decodability Test

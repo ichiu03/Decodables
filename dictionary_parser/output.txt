@@ -275,7 +275,39 @@
         "its",
         "squirrels",
         "spent",
-        "previous"
+        "previous",
+        "science",
+        "questions",
+        "answering",
+        "max's",
+        "solved",
+        "soon",
+        "adventurous",
+        "best",
+        "himself",
+        "school",
+        "question",
+        "curious",
+        "nervous",
+        "answer",
+        "lesson",
+        "test",
+        "surfaced",
+        "stirred",
+        "science",
+        "questions",
+        "answering",
+        "max's",
+        "solving",
+        "soon",
+        "best",
+        "school",
+        "question",
+        "curious",
+        "nervous",
+        "answer",
+        "started",
+        "test"
     ],
     "t": [
         "captain",
@@ -652,7 +684,40 @@
         "its",
         "spent",
         "water",
-        "completing"
+        "completing",
+        "chapter",
+        "today",
+        "excited",
+        "at",
+        "determination",
+        "best",
+        "favorite",
+        "teacher's",
+        "felt",
+        "didn't",
+        "try",
+        "encountered",
+        "out",
+        "difficult",
+        "bit",
+        "test",
+        "experiment",
+        "stirred",
+        "chapter",
+        "today",
+        "excited",
+        "at",
+        "best",
+        "favorite",
+        "teacher's",
+        "felt",
+        "little",
+        "didn't",
+        "try",
+        "got",
+        "started",
+        "test",
+        "experiment"
     ],
     "b": [
         "brook",
@@ -793,7 +858,16 @@
         "beads",
         "symbols",
         "pebbles",
-        "obstacles"
+        "obstacles",
+        "best",
+        "problem",
+        "remembering",
+        "bit",
+        "began",
+        "best",
+        "problems",
+        "remembering",
+        "remembered"
     ],
     "m": [
         "companions",
@@ -979,7 +1053,21 @@
         "elements",
         "marveled",
         "trim",
-        "completing"
+        "completing",
+        "max's",
+        "max",
+        "determination",
+        "problem",
+        "himself",
+        "remembering",
+        "experiment",
+        "emerged",
+        "max's",
+        "max",
+        "problems",
+        "remembering",
+        "remembered",
+        "experiment"
     ],
     "l": [
         "final",
@@ -1357,7 +1445,30 @@
         "dell",
         "place",
         "squirrels",
-        "completing"
+        "completing",
+        "solved",
+        "loves",
+        "problem",
+        "himself",
+        "learning",
+        "closed",
+        "school",
+        "knowledge",
+        "feeling",
+        "recalled",
+        "felt",
+        "difficult",
+        "lesson",
+        "old",
+        "solving",
+        "problems",
+        "loved",
+        "learning",
+        "closed",
+        "school",
+        "felt",
+        "little",
+        "old"
     ],
     "d": [
         "intrigued",
@@ -1683,7 +1794,42 @@
         "world",
         "marveled",
         "dell",
-        "friendship"
+        "friendship",
+        "today",
+        "proud",
+        "excited",
+        "advice",
+        "solved",
+        "determination",
+        "adventurous",
+        "adventure",
+        "closed",
+        "handed",
+        "had",
+        "friends",
+        "recalled",
+        "didn't",
+        "encountered",
+        "difficult",
+        "old",
+        "roused",
+        "emerged",
+        "awakened",
+        "aroused",
+        "stirred",
+        "proud",
+        "today",
+        "excited",
+        "advice",
+        "loved",
+        "adventure",
+        "closed",
+        "friends",
+        "confidence",
+        "didn't",
+        "remembered",
+        "started",
+        "old"
     ],
     "n": [
         "captain",
@@ -2019,7 +2165,47 @@
         "friendship",
         "new",
         "spent",
-        "when"
+        "when",
+        "science",
+        "questions",
+        "answering",
+        "soon",
+        "determination",
+        "finished",
+        "adventurous",
+        "adventure",
+        "learning",
+        "handed",
+        "question",
+        "friends",
+        "knowledge",
+        "nervous",
+        "answer",
+        "didn't",
+        "encountered",
+        "lesson",
+        "new",
+        "when",
+        "began",
+        "experiment",
+        "awakened",
+        "science",
+        "questions",
+        "answering",
+        "soon",
+        "adventure",
+        "learning",
+        "question",
+        "friends",
+        "confidence",
+        "nervous",
+        "answer",
+        "didn't",
+        "knew",
+        "finishing",
+        "new",
+        "when",
+        "experiment"
     ],
     "p": [
         "captain",
@@ -2403,7 +2589,23 @@
         "previous",
         "previous",
         "completing",
-        "completing"
+        "completing",
+        "chapter",
+        "chapter",
+        "proud",
+        "proud",
+        "problem",
+        "problem",
+        "experiment",
+        "experiment",
+        "chapter",
+        "chapter",
+        "proud",
+        "proud",
+        "problems",
+        "problems",
+        "experiment",
+        "experiment"
     ],
     "k": [
         "neck",
@@ -2474,7 +2676,9 @@
         "makes",
         "tricky",
         "walked",
-        "rock"
+        "rock",
+        "woke",
+        "awakened"
     ],
     "j": [
         "joy",
@@ -2584,7 +2788,23 @@
         "bravely",
         "every",
         "marveled",
-        "previous"
+        "previous",
+        "advice",
+        "solved",
+        "loves",
+        "adventurous",
+        "adventure",
+        "favorite",
+        "nervous",
+        "however",
+        "arriving",
+        "advice",
+        "solving",
+        "loved",
+        "adventure",
+        "favorite",
+        "nervous",
+        "arriving"
     ],
     "z": [
         "puzzles",
@@ -2705,7 +2925,21 @@
         "followed",
         "feel",
         "further",
-        "friendship"
+        "friendship",
+        "finished",
+        "himself",
+        "favorite",
+        "friends",
+        "feeling",
+        "felt",
+        "difficult",
+        "surfaced",
+        "favorite",
+        "friends",
+        "confidence",
+        "felt",
+        "finishing",
+        "faced"
     ],
     "hard c": [
         "captain",
@@ -2835,7 +3069,14 @@
         "clue",
         "obstacles",
         "rock",
-        "completing"
+        "completing",
+        "closed",
+        "curious",
+        "recalled",
+        "encountered",
+        "difficult",
+        "closed",
+        "curious"
     ],
     "hard g": [
         "intrigued",
@@ -2916,7 +3157,9 @@
         "dog",
         "grove",
         "big",
-        "snuggled"
+        "snuggled",
+        "began",
+        "got"
     ],
     "r": [
         "intricate",
@@ -3201,7 +3444,27 @@
         "air",
         "friendship",
         "rock",
-        "previous"
+        "previous",
+        "proud",
+        "year",
+        "problem",
+        "remembering",
+        "friends",
+        "curious",
+        "recalled",
+        "try",
+        "experiment",
+        "roused",
+        "proud",
+        "year",
+        "problems",
+        "remembering",
+        "friends",
+        "curious",
+        "try",
+        "remembered",
+        "started",
+        "experiment"
     ],
     "h": [
         "had",
@@ -3250,7 +3513,11 @@
         "helpful",
         "home",
         "happiness",
-        "ahead"
+        "ahead",
+        "himself",
+        "handed",
+        "had",
+        "however"
     ],
     "w": [
         "warmth",
@@ -3326,7 +3593,9 @@
         "world",
         "worn",
         "walked",
-        "water"
+        "water",
+        "woke",
+        "awakened"
     ],
     "x": [
         "next",
@@ -3345,7 +3614,15 @@
         "explore",
         "excited",
         "explored",
-        "exciting"
+        "exciting",
+        "excited",
+        "max's",
+        "max",
+        "experiment",
+        "excited",
+        "max's",
+        "max",
+        "experiment"
     ],
     "y as in yes": [
         "loyal",
@@ -3451,7 +3728,14 @@
         "strange",
         "paper",
         "raced",
-        "place"
+        "place",
+        "today",
+        "determination",
+        "favorite",
+        "awakened",
+        "today",
+        "favorite",
+        "faced"
     ],
     "short a": [
         "captain",
@@ -3717,7 +4001,29 @@
         "sang",
         "pattern",
         "obstacles",
-        "marveled"
+        "marveled",
+        "chapter",
+        "advice",
+        "answering",
+        "max's",
+        "max",
+        "at",
+        "adventurous",
+        "adventure",
+        "handed",
+        "had",
+        "answer",
+        "began",
+        "awakened",
+        "chapter",
+        "advice",
+        "answering",
+        "max's",
+        "max",
+        "at",
+        "adventure",
+        "answer",
+        "started"
     ],
     "long i": [
         "night",
@@ -3785,7 +4091,15 @@
         "wise",
         "sunlight",
         "triumphant",
-        "exciting"
+        "exciting",
+        "science",
+        "excited",
+        "advice",
+        "arriving",
+        "science",
+        "excited",
+        "advice",
+        "arriving"
     ],
     "short i": [
         "intricate",
@@ -4123,7 +4437,31 @@
         "exciting",
         "its",
         "friendship",
-        "completing"
+        "completing",
+        "answering",
+        "finished",
+        "things",
+        "himself",
+        "learning",
+        "remembering",
+        "favorite",
+        "using",
+        "feeling",
+        "didn't",
+        "arriving",
+        "difficult",
+        "bit",
+        "answering",
+        "solving",
+        "things",
+        "learning",
+        "remembering",
+        "favorite",
+        "using",
+        "little",
+        "didn't",
+        "finishing",
+        "arriving"
     ],
     "long o": [
         "stone",
@@ -4202,7 +4540,13 @@
         "billow",
         "home",
         "cozy",
-        "followed"
+        "followed",
+        "closed",
+        "woke",
+        "old",
+        "arose",
+        "closed",
+        "old"
     ],
     "short o": [
         "companions",
@@ -4402,7 +4746,27 @@
         "obstacles",
         "worn",
         "rock",
-        "completing"
+        "completing",
+        "today",
+        "questions",
+        "solved",
+        "determination",
+        "loves",
+        "adventurous",
+        "problem",
+        "question",
+        "knowledge",
+        "nervous",
+        "lesson",
+        "today",
+        "questions",
+        "solving",
+        "problems",
+        "loved",
+        "question",
+        "confidence",
+        "nervous",
+        "got"
     ],
     "long u": [
         "peculiar",
@@ -4434,7 +4798,9 @@
         "usual",
         "nutrient",
         "clue",
-        "true"
+        "true",
+        "using",
+        "using"
     ],
     "short u": [
         "puzzles",
@@ -4539,7 +4905,13 @@
         "snuggled",
         "sunlight",
         "sunny",
-        "previous"
+        "previous",
+        "adventurous",
+        "curious",
+        "nervous",
+        "difficult",
+        "curious",
+        "nervous"
     ],
     "long e": [
         "crafted",
@@ -4621,7 +4993,21 @@
         "redundant",
         "repeating",
         "determination",
-        "exciting"
+        "exciting",
+        "excited",
+        "determination",
+        "year",
+        "remembering",
+        "recalled",
+        "began",
+        "experiment",
+        "emerged",
+        "excited",
+        "year",
+        "remembering",
+        "remembered",
+        "started",
+        "experiment"
     ],
     "short e": [
         "neck",
@@ -4850,7 +5236,37 @@
         "dell",
         "squirrels",
         "spent",
-        "when"
+        "when",
+        "science",
+        "excited",
+        "determination",
+        "best",
+        "problem",
+        "adventure",
+        "remembering",
+        "handed",
+        "friends",
+        "knowledge",
+        "felt",
+        "however",
+        "test",
+        "when",
+        "experiment",
+        "awakened",
+        "science",
+        "excited",
+        "best",
+        "problems",
+        "adventure",
+        "remembering",
+        "friends",
+        "confidence",
+        "felt",
+        "little",
+        "remembered",
+        "test",
+        "when",
+        "experiment"
     ],
     "fszl": [
         "swell",
@@ -4868,7 +5284,11 @@
         "quick",
         "quivering",
         "quickly",
-        "squirrels"
+        "squirrels",
+        "questions",
+        "question",
+        "questions",
+        "question"
     ],
     "sh": [
         "shimmered",
@@ -4904,7 +5324,9 @@
         "rushing",
         "shiny",
         "workshop",
-        "friendship"
+        "friendship",
+        "finished",
+        "finishing"
     ],
     "ay": [
         "pathway",
@@ -4918,7 +5340,9 @@
         "playful",
         "swaying",
         "swaying",
-        "playful"
+        "playful",
+        "today",
+        "today"
     ],
     "ck": [
         "neck",
@@ -4969,7 +5393,8 @@
         "breeze",
         "trees",
         "deep",
-        "feel"
+        "feel",
+        "feeling"
     ],
     "ch": [
         "charm",
@@ -5013,7 +5438,11 @@
         "each",
         "chapter",
         "challenge",
-        "rich"
+        "rich",
+        "chapter",
+        "teacher's",
+        "chapter",
+        "teacher's"
     ],
     "or": [
         "support",
@@ -5105,7 +5534,11 @@
         "spurt",
         "snuggled",
         "sparkled",
-        "spent"
+        "spent",
+        "science",
+        "stirred",
+        "science",
+        "started"
     ],
     "l blends": [
         "clues",
@@ -5162,7 +5595,9 @@
         "flowers",
         "climbed",
         "clue",
-        "place"
+        "place",
+        "closed",
+        "closed"
     ],
     "r blends": [
         "crafted",
@@ -5253,7 +5688,13 @@
         "true",
         "trim",
         "friendship",
-        "previous"
+        "previous",
+        "proud",
+        "problem",
+        "friends",
+        "proud",
+        "problems",
+        "friends"
     ],
     "-ing, -ong, -ang, -ung": [
         "unwavering",
@@ -5264,7 +5705,9 @@
         "hung",
         "something",
         "being",
-        "sang"
+        "sang",
+        "using",
+        "using"
     ],
     "all": [
         "captain",
@@ -6342,7 +6785,121 @@
         "previous",
         "water",
         "when",
-        "completing"
+        "completing",
+        "chapter",
+        "science",
+        "today",
+        "proud",
+        "questions",
+        "excited",
+        "advice",
+        "answering",
+        "max's",
+        "max",
+        "solved",
+        "soon",
+        "at",
+        "determination",
+        "loves",
+        "year",
+        "finished",
+        "things",
+        "adventurous",
+        "best",
+        "problem",
+        "himself",
+        "adventure",
+        "learning",
+        "remembering",
+        "closed",
+        "favorite",
+        "using",
+        "handed",
+        "eyes",
+        "school",
+        "had",
+        "question",
+        "friends",
+        "knowledge",
+        "feeling",
+        "curious",
+        "recalled",
+        "nervous",
+        "teacher's",
+        "felt",
+        "answer",
+        "didn't",
+        "however",
+        "try",
+        "encountered",
+        "out",
+        "arriving",
+        "difficult",
+        "bit",
+        "woke",
+        "lesson",
+        "new",
+        "test",
+        "when",
+        "began",
+        "old",
+        "experiment",
+        "roused",
+        "surfaced",
+        "emerged",
+        "arose",
+        "awakened",
+        "aroused",
+        "stirred",
+        "chapter",
+        "science",
+        "proud",
+        "today",
+        "questions",
+        "excited",
+        "advice",
+        "answering",
+        "max's",
+        "max",
+        "solving",
+        "soon",
+        "at",
+        "year",
+        "things",
+        "best",
+        "problems",
+        "loved",
+        "adventure",
+        "learning",
+        "remembering",
+        "closed",
+        "favorite",
+        "using",
+        "eyes",
+        "school",
+        "question",
+        "friends",
+        "confidence",
+        "curious",
+        "nervous",
+        "teacher's",
+        "felt",
+        "little",
+        "answer",
+        "didn't",
+        "try",
+        "knew",
+        "got",
+        "finishing",
+        "arriving",
+        "faced",
+        "remembered",
+        "new",
+        "started",
+        "test",
+        "when",
+        "old",
+        "experiment"
     ],
     "th": [
         "warmth",
@@ -6378,7 +6935,9 @@
         "something",
         "path",
         "things",
-        "further"
+        "further",
+        "things",
+        "things"
     ],
     "oy": [
         "joy",
@@ -6444,7 +7003,11 @@
         "find",
         "forest",
         "found",
-        "fast"
+        "fast",
+        "best",
+        "test",
+        "best",
+        "test"
     ],
     "-sp, -nt, -mp": [
         "moment",
@@ -6478,7 +7041,9 @@
         "redundant",
         "triumphant",
         "nutrient",
-        "spent"
+        "spent",
+        "experiment",
+        "experiment"
     ],
     "-sk, -lt, -lk": [
         "felt",
@@ -6487,7 +7052,10 @@
         "halt",
         "halt",
         "felt",
-        "task"
+        "task",
+        "felt",
+        "difficult",
+        "felt"
     ],
     "-ct, -pt": [
         "prompt",
@@ -6495,7 +7063,11 @@
     ],
     "y as in dry": [
         "electrifying",
-        "typhoon"
+        "typhoon",
+        "eyes",
+        "try",
+        "eyes",
+        "try"
     ],
     "ar": [
         "charm",
@@ -6531,13 +7103,16 @@
         "charm",
         "heart",
         "sparkled",
-        "marveled"
+        "marveled",
+        "started"
     ],
     "wh": [
         "whispering",
         "whirlwind",
         "whispering",
         "whispering",
+        "when",
+        "when",
         "when"
     ],
     "oo as in school": [
@@ -6549,7 +7124,11 @@
         "roosting",
         "blooms",
         "blooms",
-        "drooping"
+        "drooping",
+        "soon",
+        "school",
+        "soon",
+        "school"
     ],
     "oo as in book": [
         "brook",
@@ -6636,7 +7215,15 @@
         "breeze",
         "wise",
         "home",
-        "place"
+        "place",
+        "advice",
+        "adventure",
+        "favorite",
+        "woke",
+        "arose",
+        "advice",
+        "adventure",
+        "favorite"
     ],
     "er": [
         "shimmered",
@@ -6770,7 +7357,26 @@
         "paper",
         "pattern",
         "further",
-        "water"
+        "water",
+        "chapter",
+        "answering",
+        "determination",
+        "remembering",
+        "nervous",
+        "teacher's",
+        "answer",
+        "however",
+        "encountered",
+        "experiment",
+        "emerged",
+        "chapter",
+        "answering",
+        "remembering",
+        "nervous",
+        "teacher's",
+        "answer",
+        "remembered",
+        "experiment"
     ],
     "ow as in plow": [
         "owls",
@@ -6784,7 +7390,8 @@
         "willpower",
         "owls",
         "flowers",
-        "powerful"
+        "powerful",
+        "however"
     ],
     "ow as in snow": [
         "glowed",
@@ -6981,7 +7588,33 @@
         "followed",
         "pattern",
         "marveled",
-        "squirrels"
+        "squirrels",
+        "chapter",
+        "questions",
+        "advice",
+        "finished",
+        "problem",
+        "himself",
+        "learning",
+        "handed",
+        "question",
+        "knowledge",
+        "recalled",
+        "nervous",
+        "teacher's",
+        "lesson",
+        "surfaced",
+        "emerged",
+        "chapter",
+        "questions",
+        "advice",
+        "solving",
+        "problems",
+        "learning",
+        "question",
+        "nervous",
+        "teacher's",
+        "started"
     ],
     "Open syll.": [
         "clue",
@@ -7041,6 +7674,17 @@
         "an",
         "trim",
         "air",
+        "when",
+        "max",
+        "at",
+        "year",
+        "had",
+        "bit",
+        "when",
+        "max",
+        "at",
+        "year",
+        "got",
         "when"
     ],
     "contractions": [
@@ -7049,18 +7693,28 @@
         "children's",
         "nature's",
         "it's",
-        "wasn't"
+        "wasn't",
+        "max's",
+        "teacher's",
+        "didn't",
+        "max's",
+        "teacher's",
+        "didn't"
     ],
     "ear as in hear": [
         "clearing",
         "years",
-        "eared"
+        "eared",
+        "year",
+        "year"
     ],
     "ear as in early": [
         "earth",
         "unearthed",
         "searching",
-        "earth"
+        "earth",
+        "learning",
+        "learning"
     ],
     "y as in bumpy": [
         "friendly",
@@ -7109,7 +7763,8 @@
     "aw": [
         "awaited",
         "tawny",
-        "saw"
+        "saw",
+        "awakened"
     ],
     "ly": [
         "friendly",
@@ -7166,7 +7821,9 @@
         "weaved",
         "repeating",
         "stream",
-        "beads"
+        "beads",
+        "teacher's",
+        "teacher's"
     ],
     "ea as in bread": [
         "spread",
@@ -7408,7 +8065,28 @@
         "pattern",
         "sunny",
         "further",
-        "water"
+        "water",
+        "today",
+        "finished",
+        "learning",
+        "using",
+        "knowledge",
+        "feeling",
+        "recalled",
+        "nervous",
+        "teacher's",
+        "didn't",
+        "lesson",
+        "began",
+        "surfaced",
+        "emerged",
+        "today",
+        "learning",
+        "using",
+        "nervous",
+        "teacher's",
+        "little",
+        "didn't"
     ],
     "vcccv": [
         "intrigued",
@@ -7468,7 +8146,9 @@
         "snuggled",
         "sparkled",
         "pebbles",
-        "further"
+        "further",
+        "answer",
+        "answer"
     ],
     "tch": [
         "bewitched",
@@ -7502,7 +8182,13 @@
         "peaceful",
         "faced",
         "raced",
-        "place"
+        "place",
+        "science",
+        "advice",
+        "surfaced",
+        "science",
+        "advice",
+        "faced"
     ],
     "soft g": [
         "tangible",
@@ -7548,7 +8234,9 @@
         "magic",
         "challenge",
         "strange",
-        "edge"
+        "edge",
+        "knowledge",
+        "emerged"
     ],
     "ai": [
         "captain",
@@ -7735,7 +8423,26 @@
         "followed",
         "raced",
         "marveled",
-        "walked"
+        "walked",
+        "excited",
+        "solved",
+        "finished",
+        "closed",
+        "handed",
+        "recalled",
+        "encountered",
+        "roused",
+        "surfaced",
+        "emerged",
+        "awakened",
+        "aroused",
+        "stirred",
+        "excited",
+        "loved",
+        "closed",
+        "faced",
+        "remembered",
+        "started"
     ],
     "-ble, -cle, -dle, -fle, -gle, -kle, -ple, -tle, -zle": [
         "tangible",
@@ -7761,7 +8468,8 @@
         "touchable",
         "palpable",
         "touchable",
-        "palpable"
+        "palpable",
+        "little"
     ],
     "vrl syllables": [
         "marveled",
@@ -7845,10 +8553,15 @@
         "passing",
         "hopped",
         "sitting",
-        "filled"
+        "filled",
+        "recalled",
+        "stirred"
     ],
     "ew as in few/blew": [
         "new",
+        "new",
+        "new",
+        "knew",
         "new"
     ],
     "v/v pattern": [
@@ -7875,10 +8588,14 @@
         "actual",
         "realized",
         "usual",
-        "nutrient"
+        "nutrient",
+        "science",
+        "science"
     ],
     "kn": [
-        "knitting"
+        "knitting",
+        "knowledge",
+        "knew"
     ],
     "e rule-suffixes": [
         "weaving",
@@ -7938,7 +8655,15 @@
         "amazing",
         "forest",
         "exciting",
-        "completing"
+        "completing",
+        "adventurous",
+        "curious",
+        "nervous",
+        "arriving",
+        "solving",
+        "curious",
+        "nervous",
+        "arriving"
     ],
     "ou as in south": [
         "mound",
@@ -7967,7 +8692,13 @@
         "ground",
         "out",
         "house",
-        "found"
+        "found",
+        "proud",
+        "encountered",
+        "out",
+        "roused",
+        "aroused",
+        "proud"
     ],
     "ur": [
         "surge",
@@ -7990,13 +8721,15 @@
         "bursting",
         "currents",
         "spurt",
-        "further"
+        "further",
+        "surfaced"
     ],
     "dge": [
         "edges",
         "edge",
         "edges",
-        "edge"
+        "edge",
+        "knowledge"
     ],
     "y rule suffixes": [
         "possibilities",
@@ -8051,7 +8784,12 @@
         "relationship",
         "information",
         "connection",
-        "determination"
+        "determination",
+        "questions",
+        "determination",
+        "question",
+        "questions",
+        "question"
     ],
     "au": [],
     "war": [
@@ -8069,7 +8807,9 @@
     ],
     "ey as in they": [
         "journeyed",
-        "journey"
+        "journey",
+        "eyes",
+        "eyes"
     ],
     "ph": [
         "periphery",
@@ -8117,7 +8857,9 @@
         "symbol",
         "beyond",
         "mysterious",
-        "symbols"
+        "symbols",
+        "year",
+        "year"
     ],
     "wr": [
         "rewritten"
@@ -8159,7 +8901,9 @@
         "michaela",
         "orchids",
         "witchcraft",
-        "michaela"
+        "michaela",
+        "school",
+        "school"
     ],
     "wa": [
         "warmth",
@@ -8216,7 +8960,9 @@
         "ascended",
         "effervescent",
         "effervescent",
-        "descended"
+        "descended",
+        "science",
+        "science"
     ],
     "failed to categorize": [
         "dappled",
@@ -8281,7 +9027,9 @@
         "crinkled",
         "michaela's",
         "upwelling",
-        "map's"
+        "map's",
+        "uprose",
+        "wakened"
     ],
     "too many syllables": []
 }
