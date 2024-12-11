@@ -64,7 +64,7 @@ def get_synonyms_dict(story: str, word_dict: dict, problems: list) -> dict:
                         """
                     response = query(prompt).strip()
                     temp_words = [w.strip() for w in response.split(",") if w.strip()]
-                    temp_words_dict = parseAndProcessWords(response)
+                    temp_words_dict = parseAndProcessWords(response, 10, "dictionary_parser/output.txt")
                     # Remove words containing problem sounds
                     filtered_temp_words = []
                     for temp_word in temp_words:
@@ -151,10 +151,14 @@ def count_words_in_text(text: str) -> int:
     return len(words)
 
 def correct_text(text: str) -> str:
-    tool = language_tool_python.LanguageTool('en-US')
-    matches = tool.check(text)
-    corrected_text = language_tool_python.utils.correct(text, matches)
-    return corrected_text
+    try:
+        tool = language_tool_python.LanguageTool('en-US')
+        matches = tool.check(text)
+        corrected_text = language_tool_python.utils.correct(text, matches)
+        return corrected_text
+    except Exception as e:
+        print(f"Warning: Grammar correction failed ({str(e)}). Proceeding with original text.")
+        return text
 
 def rewrite_sentences(story):
     sentences = story.split(".")  # Split sentences by period
@@ -197,7 +201,7 @@ def process_story(story, problems, apply_correction=False, spellcheck=False, com
         story_word_counts = Counter(story_words)
 
         # Parse and process words to categorize them
-        word_dict = parseAndProcessWords(story)
+        word_dict = parseAndProcessWords(story, 10, "dictionary_parser/output.txt")
 
         # Combine all bad words into a single set
         all_bads = set()
@@ -270,7 +274,7 @@ def process_story(story, problems, apply_correction=False, spellcheck=False, com
 
         # Continue with processing
         print("Checking each word...")
-        word_dict = parseAndProcessWords(story)
+        word_dict = parseAndProcessWords(story, 10, "dictionary_parser/output.txt")
 
         # Find synonyms
         print("Finding synonyms...")
@@ -397,9 +401,9 @@ def main():
     
     gendec = input("Would you like to generate a story (g) or input a story (i): ")
     if gendec == "g":
-        topic, problems = get_input()
+        story_length, topic, problems,name,readingLevel = get_input()
         problems.append("too many syllables")
-        story = generate_story(topic, problems)
+        story = generate_story(topic, problems, name, readingLevel, story_length)
         print("Generating story...")
     elif gendec == "i":
         problems = input("Enter the problem letters separated by /: ").split("/")
