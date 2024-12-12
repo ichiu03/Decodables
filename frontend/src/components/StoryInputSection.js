@@ -9,6 +9,7 @@ const StoryInputSection = ({ storyInput, onChange }) => (
       value={storyInput}
       onChange={onChange}
       rows="6"
+      placeholder="e.g., Once upon a time, there was..."
     />
   </div>
 );

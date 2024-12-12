@@ -37,7 +37,7 @@ function App() {
     storyTopic: '',
     storyLength: '',
     readingLevel: '',
-    characterName: 'Max'
+    characterName: ''
   });
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -157,6 +157,7 @@ function App() {
               name="readingLevel"
               value={formData.readingLevel}
               onChange={handleInputChange}
+              placeholder="e.g., 5"
               min="1"
               max="12"
             />
