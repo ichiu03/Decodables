@@ -279,3 +279,6 @@
 75.74% 2024-12-12 13:40:30 Word Count: 169 grammar corrected Spellcheck 
 77.54% 2024-12-12 13:41:20 Word Count: 138 grammar not corrected Spellcheck 
 76.09% 2024-12-12 13:41:20 Word Count: 138 Decodability Test
+84.09% 2024-12-12 14:42:40 Word Count: 88 grammar not corrected No Spellcheck 
+91.76% 2024-12-12 14:43:21 Word Count: 85 grammar corrected Spellcheck 
+89.25% 2024-12-12 14:43:59 Word Count: 93 grammar corrected Spellcheck Combined Text
