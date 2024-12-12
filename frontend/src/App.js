@@ -1,13 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import ProblemLettersSection from './components/ProblemLettersSection';
 import StoryInputSection from './components/StoryInputSection';
 import StoryGenerationSection from './components/StoryGenerationSection';
 import StoryChoiceSection from './components/StoryChoiceSection';
-import { processStory, getDecodability } from './services/api';
 import CharacterNameInput from './components/CharacterNameInput';
+import Login from './components/Login';
+import { processStory, getDecodability } from './services/api';
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  
+  // Check if user was previously authenticated
+  useEffect(() => {
+    const auth = localStorage.getItem('isAuthenticated');
+    if (auth === 'true') {
+      setIsAuthenticated(true);
+    }
+  }, []);
+
+  const handleLogin = () => {
+    setIsAuthenticated(true);
+    localStorage.setItem('isAuthenticated', 'true');
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    localStorage.removeItem('isAuthenticated');
+  };
+
   const [formData, setFormData] = useState({
     unknownSightWords: '',
     storyChoice: 'i',
@@ -69,10 +90,17 @@ function App() {
     }
   };
 
+  if (!isAuthenticated) {
+    return <Login onLogin={handleLogin} />;
+  }
+
   return (
     <div className="App">
       <header className="App-header">
-        <h1>Story Decodability Tool</h1>
+        <h1>Decodables</h1>
+        <button onClick={handleLogout} className="logout-button">
+          Logout
+        </button>
       </header>
       <main className="App-main">
         <form onSubmit={handleSubmit} className="story-form">

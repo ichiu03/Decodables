@@ -171,12 +171,16 @@ def rewrite_sentences(story):
         
         # Form the prompt
         prompt = f"""
-            Rewrite this sentence so it is easier to read. Remember this is for a childrens book: {sentence}
-
+            Rewrite this sentence so it is easier to read if necessary. Remember this is for a childrens book: {sentence}
+            
+            If no rewrite is needed, return the same sentence.
             If it makes sense to, trim down the sentence so it is not redundant.
 
             Here is the previous sentence and next sentence for context: Previous: {prev_sentence} Next: {next_sentence}
 
+            Return only the rewritten sentence, nothing else.
+
+            *** RETURN ONLY THE NEW SENTENCE OR THE SAME SENTENCE IF NO CHANGE IS NEEDED ***
         """
         
         # Call the function to get the rewritten sentence (query function assumed)

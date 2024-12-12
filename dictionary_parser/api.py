@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import List, Optional
-from main import process_story, generate_story, handle_sight_words
+from main import process_story, generate_story, handle_sight_words, combine
 
 app = FastAPI()
 
@@ -40,7 +40,7 @@ async def process_story_endpoint(request: ProcessStoryRequest):
         global sight_words
         sight_words = handle_sight_words(default_sight_words, ','.join(request.unknownSightWords))
         print(f"request: {request}")
-        
+        problems = request.problemLetters 
         if request.storyChoice == 'g':
             # Generate story
             if not request.storyTopic or not request.storyLength:
@@ -51,7 +51,7 @@ async def process_story_endpoint(request: ProcessStoryRequest):
             
             story = generate_story(
                 request.storyTopic, 
-                request.problemLetters, 
+                problems, 
                 request.characterName,
                 request.readingLevel,
                 request.storyLength
@@ -65,18 +65,26 @@ async def process_story_endpoint(request: ProcessStoryRequest):
                 )
             
             story = request.storyInput
+        
+        print("\n--- Processing Without Grammar Correction ---")
+        story = process_story(story, problems, apply_correction=False, spellcheck=False, combined=False)
 
-        # Process the story
+        print("\n--- Processing With Grammar Correction and Spell Check ---")
+        story1 = process_story(story, problems, apply_correction=True, spellcheck=True, combined=False)
+        
+        story = combine(story, story1, problems)
+
         processed_story = process_story(
-            story, 
-            request.problemLetters,
-            apply_correction=False,
-            spellcheck=True,
-            combined=True
+                story, 
+                request.problemLetters,
+                apply_correction=False,
+                spellcheck=True,
+                combined=False
         )
 
         # For input stories, calculate decodability immediately
         if request.storyChoice == 'i':
+            
             decodability = process_story(
                 processed_story,
                 request.problemLetters,
