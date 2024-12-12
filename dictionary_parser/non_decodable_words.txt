@@ -54,7 +54,7 @@ adept: 11
 adjacent: 3
 adjusted: 3
 adjusting: 1
-admiration: 6
+admiration: 9
 admired: 11
 admiring: 3
 adolescent: 3
@@ -77,14 +77,15 @@ affable: 1
 affection: 3
 affectionate: 3
 affectionately: 3
-affiliation: 1
+affiliation: 4
+affiliations: 2
 affirmed: 8
 affirming: 1
 afforded: 3
 aft: 5
 aftermath: 1
 afternoon: 12
-afterward: 6
+afterward: 9
 afterwards: 9
 age: 6
 aged: 3
@@ -148,6 +149,7 @@ anything: 8
 apart: 3
 apartment: 1
 apex: 1
+apologizing: 1
 apparatus: 4
 apparitions: 4
 appeared: 4
@@ -159,7 +161,7 @@ appointed: 3
 appreciate: 2
 appreciated: 7
 appreciating: 3
-appreciation: 6
+appreciation: 9
 appreciative: 12
 apprehended: 1
 apprehensive: 6
@@ -215,7 +217,8 @@ assimilated: 3
 assist: 6
 assistant: 1
 associate: 1
-association: 2
+association: 5
+associations: 2
 assuage: 3
 assumed: 5
 assuming: 8
@@ -252,8 +255,8 @@ avowed: 3
 awaited: 2
 awaiting: 3
 awakened: 2
-awareness: 2
-away: 3
+awareness: 5
+away: 4
 awe: 5
 awestruck: 1
 azure: 3
@@ -362,6 +365,7 @@ boris: 3
 bosom: 3
 botched: 1
 bottlenecks: 7
+bought: 3
 bounce: 3
 bounced: 3
 boundary: 5
@@ -389,7 +393,7 @@ breathtaking: 10
 breeze: 8
 bridge: 6
 briefing: 3
-bright: 9
+bright: 12
 brightened: 4
 brightly: 3
 brightness: 3
@@ -410,7 +414,7 @@ broad: 2
 broadcasting: 3
 brooding: 3
 brook: 4
-brought: 1
+brought: 4
 brunch: 3
 brushed: 8
 bud: 5
@@ -470,6 +474,7 @@ ceaselessly: 3
 cedar: 3
 celebration: 1
 celestial: 8
+cellphone: 3
 cemented: 3
 center: 10
 centered: 2
@@ -550,7 +555,7 @@ cluttered: 1
 coach: 3
 coaching: 3
 cobble: 1
-cognition: 3
+cognition: 6
 cohesion: 1
 cohort: 10
 cohorts: 9
@@ -579,6 +584,7 @@ common: 3
 communicate: 1
 communicated: 1
 communication: 3
+communicator: 3
 community: 9
 companion: 1
 companions: 10
@@ -640,7 +646,8 @@ conjunction: 3
 conjuring: 1
 connect: 3
 connected: 1
-connection: 4
+connection: 7
+connections: 3
 conquered: 1
 consciously: 3
 consequence: 1
@@ -760,6 +767,7 @@ curiosity: 12
 curious: 13
 current: 3
 currently: 5
+curve: 3
 curving: 3
 cushy: 8
 custody: 1
@@ -882,7 +890,7 @@ dimming: 3
 dip: 1
 dipped: 1
 direct: 3
-direction: 1
+direction: 3
 directions: 3
 disappear: 1
 disappeared: 1
@@ -1166,11 +1174,13 @@ expectation: 7
 expected: 5
 expecting: 9
 expedition: 4
+expeditions: 2
 expeditious: 6
 expeditiously: 3
 expel: 1
 experience: 2
 experienced: 5
+experiences: 3
 experiencing: 3
 expert: 6
 expertise: 6
@@ -1225,6 +1235,7 @@ faintly: 8
 faithfulness: 4
 faltered: 6
 faltering: 2
+familiarity: 3
 families: 3
 family: 4
 famously: 1
@@ -1266,6 +1277,7 @@ fervent: 3
 fervently: 17
 fervor: 7
 fetch: 3
+fetched: 3
 field: 3
 fiery: 4
 fights: 3
@@ -1394,11 +1406,13 @@ fumbled: 6
 fume: 1
 fumes: 6
 fundamental: 10
-further: 7
+further: 8
 fuse: 3
 futile: 1
 future: 3
 gabbing: 1
+gadget: 3
+gadgetry: 2
 gadgets: 9
 gaining: 3
 gala: 3
@@ -1412,6 +1426,7 @@ gather: 3
 gathered: 1
 gatherer: 2
 gave: 1
+gawking: 1
 gazing: 3
 gem: 4
 gems: 3
@@ -1622,6 +1637,7 @@ home: 12
 homelike: 2
 homestead: 9
 homeward: 2
+homework: 3
 homey: 7
 hone: 3
 honest: 2
@@ -1670,14 +1686,14 @@ illuminate: 1
 illuminated: 2
 illustrations: 1
 imagination: 6
-imaginative: 2
+imaginative: 5
 imaginatively: 11
 imagined: 5
 imaging: 1
 imbibed: 1
 imitating: 1
 immediate: 8
-immediately: 3
+immediately: 5
 immense: 8
 immerse: 3
 immersed: 11
@@ -1757,7 +1773,8 @@ inscrutable: 4
 insecurity: 4
 inseparable: 4
 inside: 7
-insight: 1
+insight: 4
+insightful: 2
 insights: 1
 insignificant: 3
 inspection: 3
@@ -1822,6 +1839,7 @@ invigorating: 8
 invisible: 3
 invite: 1
 inviting: 9
+iphone: 3
 iridescent: 10
 iris: 3
 isolated: 3
@@ -1887,7 +1905,7 @@ knew: 6
 knitting: 1
 knotty: 8
 knowing: 3
-knowledge: 3
+knowledge: 6
 knowledgeable: 2
 laborious: 8
 labyrinthine: 5
@@ -2055,7 +2073,7 @@ meadow: 11
 meadowland: 1
 mealtime: 3
 mean: 2
-meanwhile: 4
+meanwhile: 7
 mechanisms: 1
 meditating: 4
 melancholy: 1
@@ -2114,6 +2132,7 @@ mistress: 3
 mitigate: 3
 mix: 6
 modality: 5
+moderation: 3
 modern: 3
 modulation: 5
 moisture: 2
@@ -2188,7 +2207,7 @@ newly: 3
 news: 3
 next: 13
 nibble: 3
-night: 3
+night: 6
 nightfall: 2
 nighttime: 3
 nimble: 4
@@ -2241,6 +2260,7 @@ occult: 1
 occupancy: 1
 occupied: 11
 occupying: 1
+occurrences: 3
 odd: 1
 odyssey: 8
 offbeat: 3
@@ -2252,18 +2272,22 @@ onerous: 3
 oneself: 2
 onset: 4
 onto: 10
+onward: 1
+onwards: 1
 open: 6
 opened: 1
 operating: 2
 operation: 6
 opined: 3
 opportune: 3
+opportunities: 3
 opportunity: 3
 opt: 1
 opted: 1
 optimal: 6
 optimistic: 7
 option: 3
+options: 3
 orb: 3
 orbit: 3
 orbiter: 1
@@ -2385,7 +2409,7 @@ per: 3
 perceive: 3
 perceived: 7
 perceiving: 6
-perception: 6
+perception: 9
 perchance: 3
 perched: 1
 percolated: 1
@@ -2421,6 +2445,7 @@ phantoms: 1
 phase: 16
 phenomenally: 1
 philosophy: 3
+phone: 3
 phosphorescence: 1
 physics: 3
 picked: 3
@@ -2507,6 +2532,7 @@ positive: 2
 positively: 2
 possession: 1
 possessions: 3
+possibilities: 3
 possibility: 5
 possible: 1
 post: 1
@@ -2655,6 +2681,7 @@ pulsing: 3
 pumped: 5
 puny: 3
 pups: 3
+purchased: 3
 purged: 1
 purpose: 4
 purposefully: 3
@@ -2718,6 +2745,7 @@ read: 3
 reading: 3
 ready: 9
 reagan: 3
+realization: 2
 realize: 2
 realized: 7
 realizing: 4
@@ -2737,7 +2765,7 @@ recited: 3
 reckon: 2
 reckoned: 3
 recline: 2
-recognition: 5
+recognition: 8
 recognized: 5
 recoil: 3
 recollect: 3
@@ -2765,13 +2793,15 @@ region: 2
 regional: 3
 registered: 4
 regular: 3
+regulation: 3
 reignited: 1
 rejoiced: 2
 rejoinder: 1
 rejoined: 5
 rejuvenating: 1
 relations: 1
-relationship: 1
+relationship: 4
+relationships: 3
 relatives: 3
 relax: 4
 relaxation: 3
@@ -2955,7 +2985,7 @@ scholar: 4
 school: 12
 schooling: 3
 schoolroom: 3
-schoolwork: 3
+schoolwork: 6
 science: 6
 scooped: 3
 scope: 2
@@ -3069,6 +3099,7 @@ singularly: 3
 sink: 3
 sipped: 1
 sitting: 2
+situations: 3
 sizable: 4
 skilled: 5
 skillful: 7
@@ -3094,6 +3125,7 @@ smacks: 3
 small: 5
 smaller: 3
 smart: 6
+smartphone: 3
 smell: 3
 smelling: 3
 smells: 2
@@ -3191,7 +3223,7 @@ spell: 14
 spellbinding: 5
 spending: 2
 spent: 4
-sphere: 1
+sphere: 4
 spheres: 1
 spices: 3
 spied: 9
@@ -3229,7 +3261,7 @@ sprinkle: 13
 sprinkles: 1
 sprinting: 1
 sprouting: 3
-spurring: 3
+spurring: 6
 spurt: 2
 squad: 4
 squandering: 1
@@ -3421,6 +3453,7 @@ surrounding: 3
 surroundings: 1
 survey: 3
 surveyed: 2
+surveying: 3
 suspected: 6
 sustenance: 3
 swallowed: 4
@@ -3442,6 +3475,7 @@ swiftly: 22
 swinging: 1
 swirled: 3
 swirling: 4
+switch: 3
 switching: 3
 swung: 8
 symbolizing: 1
@@ -3654,6 +3688,7 @@ tulip: 12
 tumbled: 4
 tummy: 3
 tunnel: 5
+turn: 3
 turned: 1
 tutorial: 7
 twilight: 3
@@ -3758,7 +3793,7 @@ upsurge: 1
 upward: 5
 upwardly: 3
 upwards: 6
-urging: 3
+urging: 6
 usher: 3
 using: 3
 usual: 3
@@ -3830,7 +3865,7 @@ warm: 7
 warmish: 2
 washed: 1
 watchful: 3
-watching: 4
+watching: 7
 water: 8
 wavering: 2
 waving: 2
@@ -3844,11 +3879,12 @@ welcomed: 1
 welcoming: 7
 welling: 1
 whatever: 4
-when: 1
+when: 4
+whenever: 2
 whereas: 1
 whiff: 2
-while: 4
-whilst: 1
+while: 7
+whilst: 4
 whimsical: 2
 whirled: 3
 whirlwind: 1
@@ -3892,10 +3928,13 @@ woods: 6
 word: 2
 words: 6
 workbook: 3
+worksheets: 3
 workshop: 1
 workspace: 3
 workstation: 3
+world: 3
 worried: 4
+worry: 3
 worshipped: 4
 worth: 5
 wouldn't: 1
