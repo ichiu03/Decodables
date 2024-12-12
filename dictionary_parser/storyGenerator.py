@@ -109,7 +109,7 @@ def get_input():
     # sight_words = input("Enter the sight words separated by commas: ")
     problems = [problem.strip() for problem in problems]  # Clean up whitespace
 
-    return story_length, topic, problems,name,readingLevel, maxsyllable
+    return story_length, topic, problems, name, readingLevel, maxsyllable
 
 ### Function to get words
 def get_words(problems):
