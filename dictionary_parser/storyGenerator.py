@@ -4,7 +4,6 @@ import json
 import os
 import nltk
 from nltk.corpus import words
-from dotenv import load_dotenv
 
 load_dotenv()
 
