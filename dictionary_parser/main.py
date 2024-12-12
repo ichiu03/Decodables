@@ -8,7 +8,7 @@ import language_tool_python
 
 sight_words = ""
 
-with open('dictionary.txt', 'r', encoding='utf-8') as file:
+with open('Dictionary.txt', 'r', encoding='utf-8') as file:
     large_dictionary = set(word.strip().lower() for word in file.readlines())
 
 with open('truncated_dictionary.json') as json_file:
