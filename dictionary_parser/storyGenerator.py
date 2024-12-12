@@ -95,7 +95,18 @@ def get_input():
     problems = input("Enter the problem letters separated by /: ").split("/")
     name = input("What do you want the main character's name to be: ")
     readingLevel = input("Enter the grade level of the reader (Only the grade number): ")
-    maxsyllable = input("Enter the max amount of syllables per word: ")
+    if int(readingLevel) <= 1:
+        maxsyllable = 1
+    elif int(readingLevel) <= 3:
+        maxsyllable = 2
+    elif int(readingLevel) <= 5:
+        maxsyllable = 3
+    elif int(readingLevel) <= 7:
+        maxsyllable = 4
+    elif int(readingLevel) <= 9: 
+        maxsyllable = 5
+    else:
+        maxsyllable = 10
     # sight_words = input("Enter the sight words separated by commas: ")
     problems = [problem.strip() for problem in problems]  # Clean up whitespace
 

@@ -64,7 +64,7 @@ def get_synonyms_dict(story: str, word_dict: dict, problems: list) -> dict:
                         """
                     response = query(prompt).strip()
                     temp_words = [w.strip() for w in response.split(",") if w.strip()]
-                    temp_words_dict = parseAndProcessWords(response, 100, "categorized_words.json")
+                    temp_words_dict = parseAndProcessWords(response, maxsyllable, "categorized_words.json")
                     # Remove words containing problem sounds
                     filtered_temp_words = []
                     for temp_word in temp_words:
