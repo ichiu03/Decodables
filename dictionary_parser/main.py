@@ -205,7 +205,7 @@ def process_story(story, problems, apply_correction=False, spellcheck=False, com
         story_word_counts = Counter(story_words)
 
         # Parse and process words to categorize them
-        word_dict = parseAndProcessWords(story, 1000, "categorized_words.json")
+        word_dict = parseAndProcessWords(story, maxsyllable, "categorized_words.json")
 
         # Combine all bad words into a single set
         all_bads = set()
@@ -278,7 +278,7 @@ def process_story(story, problems, apply_correction=False, spellcheck=False, com
 
         # Continue with processing
         print("Checking each word...")
-        word_dict = parseAndProcessWords(story, 1000, "categorized_words.json")
+        word_dict = parseAndProcessWords(story, maxsyllable, "categorized_words.json")
 
         # Find synonyms
         print("Finding synonyms...")
@@ -405,7 +405,7 @@ def main():
     
     gendec = input("Would you like to generate a story (g) or input a story (i): ")
     if gendec == "g":
-        story_length, topic, problems,name,readingLevel = get_input()
+        story_length, topic, problems,name,readingLevel,maxsyllable = get_input()
         problems.append("too many syllables")
         story = generate_story(topic, problems, name, readingLevel, story_length)
         print("Generating story...")

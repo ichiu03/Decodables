@@ -89,16 +89,17 @@ def get_input_and_save():
 def get_input():
     global sight_words
     global readingLevel
-    
+    global maxsyllable
     story_length = int(input("Enter the length of the story: "))
     topic = input("Enter your story topic: ")
     problems = input("Enter the problem letters separated by /: ").split("/")
     name = input("What do you want the main character's name to be: ")
     readingLevel = input("Enter the grade level of the reader (Only the grade number): ")
+    maxsyllable = input("Enter the max amount of syllables per word: ")
     # sight_words = input("Enter the sight words separated by commas: ")
     problems = [problem.strip() for problem in problems]  # Clean up whitespace
 
-    return story_length, topic, problems,name,readingLevel
+    return story_length, topic, problems,name,readingLevel, maxsyllable
 
 ### Function to get words
 def get_words(problems):
