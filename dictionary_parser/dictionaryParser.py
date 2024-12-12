@@ -16,6 +16,7 @@ try:
     valid_words = set(words.words())
 except LookupError:
     nltk.download('words') # If it’s not available, attempt to download it
+    valid_words = set(words.words())
 
 categories = {
     # Column 1 - Consonant Sounds
