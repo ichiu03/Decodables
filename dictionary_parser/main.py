@@ -242,7 +242,7 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
         decodability_entry = f"{decodability * 100:.2f}% {current_time} Word Count: {wordcount} Decodability Test\n"
 
         # Append the data to the file
-        decodability_file = "dictionary_parser/decodability_measurements.txt"
+        decodability_file = "decodability_measurements.txt"
         with open(decodability_file, "a") as file:
             file.write(decodability_entry)
 
@@ -311,7 +311,7 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
         # Load existing word counts from file if it exists
         word_counts = {}
         try:
-            with open('dictionary_parser/non_decodable_words.txt', 'r') as f:
+            with open('non_decodable_words.txt', 'r') as f:
                 for line in f:
                     word, count = line.strip().split(': ')
                     word_counts[word] = int(count)
@@ -323,7 +323,7 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
             word_counts[word] = word_counts.get(word, 0) + 1
 
         # Write updated counts back to file
-        with open('dictionary_parser/non_decodable_words.txt', 'w') as f:
+        with open('non_decodable_words.txt', 'w') as f:
             for word, count in sorted(word_counts.items()):
                 f.write(f'{word}: {count}\n')
 
@@ -352,19 +352,19 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
         decodability_entry = f"{decodability * 100:.2f}% {current_time} Word Count: {wordcount} {marker} {combo}\n"
 
         # Append the data to the file
-        decodability_file = "dictionary_parser/decodability_measurements.txt"
+        decodability_file = "decodability_measurements.txt"
         with open(decodability_file, "a") as file:
             file.write(decodability_entry)
 
         # Save the final story
         if apply_correction and spellcheck and combined:
-            output_file = 'dictionary_parser/combined.txt'
+            output_file = 'combined.txt'
         elif apply_correction and spellcheck:
-            output_file = 'dictionary_parser/updated_story_transition.txt'
+            output_file = 'updated_story_transition.txt'
         elif apply_correction:
-            output_file = 'dictionary_parser/updated_story_corrected.txt'
+            output_file = 'updated_story_corrected.txt'
         else:
-            output_file = 'dictionary_parser/updated_story.txt'
+            output_file = 'updated_story.txt'
         story = ultraformatting(story)
         save_updated_story(story, output_file)
         print(f"Updated story has been saved to '{output_file}'.")
