@@ -30,7 +30,7 @@ good_words = []
 bad_words = []
 
 # Opening JSON file for words categorized by problems
-with open('dictionary_parser/categorized_words.json') as json_file:
+with open('dictionary_parser\categorized_words.json') as json_file:
     words = json.load(json_file)
 
 # Opening JSON file for guidewords
@@ -87,17 +87,18 @@ def get_input_and_save():
     return topic, problems
 
 def get_input():
-    global story_length
     global sight_words
     global readingLevel
+    
     story_length = int(input("Enter the length of the story: "))
     topic = input("Enter your story topic: ")
-    readingLevel = input("Enter the grade level of the reader (Only the grade number): ")
     problems = input("Enter the problem letters separated by /: ").split("/")
+    name = input("What do you want the main character's name to be: ")
+    readingLevel = input("Enter the grade level of the reader (Only the grade number): ")
     # sight_words = input("Enter the sight words separated by commas: ")
     problems = [problem.strip() for problem in problems]  # Clean up whitespace
 
-    return topic, problems
+    return story_length, topic, problems,name,readingLevel
 
 ### Function to get words
 def get_words(problems):
@@ -127,7 +128,7 @@ def delete_old_file():
             os.remove(path)
             print(f"Previous file '{path}' deleted.")
 
-def generate_chapter(outline, chapter_number, length, story, problems):
+def generate_chapter(outline, chapter_number, length, story, problems, readingLevel):
     # Collect guidewords for all problem sounds
     problem_examples = {}
     for problem in problems:
@@ -171,7 +172,7 @@ def generate_chapter(outline, chapter_number, length, story, problems):
     new_chapter = query(prompt)
     return new_chapter
 
-def generate_outline(topic, name):
+def generate_outline(topic, name, readingLevel, story_length = 500):
     prompt = f"""
     You are a creative author.
 
@@ -191,17 +192,14 @@ def generate_outline(topic, name):
     return outline
 
 ### Main function
-def generate_story(topic, problems):
-    global readingLevel
+def generate_story(topic, problems, name, readingLevel, story_length=500):
     dictionary = get_words(problems)
-    name = input("What do you want the main character's name to be: ")
-    readingLevel = input("Enter the grade level of the reader (Only the grade number): ")
-    outline = generate_outline(topic, name)
+    outline = generate_outline(topic, name, readingLevel)
     story = ""
     
     for chapter in range(chapters):
         print(f"Generating chapter {chapter + 1}")
-        new_chapter = generate_chapter(outline, chapter + 1, story_length // chapters, story, problems)
+        new_chapter = generate_chapter(outline, chapter + 1, story_length // chapters, story, problems, readingLevel)
         story += new_chapter + "\n"  # Add a newline between chapters
     print(story)
     return story

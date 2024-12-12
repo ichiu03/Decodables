@@ -151,10 +151,14 @@ def count_words_in_text(text: str) -> int:
     return len(words)
 
 def correct_text(text: str) -> str:
-    tool = language_tool_python.LanguageTool('en-US')
-    matches = tool.check(text)
-    corrected_text = language_tool_python.utils.correct(text, matches)
-    return corrected_text
+    try:
+        tool = language_tool_python.LanguageTool('en-US')
+        matches = tool.check(text)
+        corrected_text = language_tool_python.utils.correct(text, matches)
+        return corrected_text
+    except Exception as e:
+        print(f"Warning: Grammar correction failed ({str(e)}). Proceeding with original text.")
+        return text
 
 def rewrite_sentences(story):
     sentences = story.split(".")  # Split sentences by period
@@ -167,12 +171,16 @@ def rewrite_sentences(story):
         
         # Form the prompt
         prompt = f"""
-            Rewrite this sentence so it is easier to read. Remember this is for a childrens book: {sentence}
-
+            Rewrite this sentence so it is easier to read if necessary. Remember this is for a childrens book: {sentence}
+            
+            If no rewrite is needed, return the same sentence.
             If it makes sense to, trim down the sentence so it is not redundant.
 
             Here is the previous sentence and next sentence for context: Previous: {prev_sentence} Next: {next_sentence}
 
+            Return only the rewritten sentence, nothing else.
+
+            *** RETURN ONLY THE NEW SENTENCE OR THE SAME SENTENCE IF NO CHANGE IS NEEDED ***
         """
         
         # Call the function to get the rewritten sentence (query function assumed)
@@ -397,9 +405,9 @@ def main():
     
     gendec = input("Would you like to generate a story (g) or input a story (i): ")
     if gendec == "g":
-        topic, problems = get_input()
+        story_length, topic, problems,name,readingLevel = get_input()
         problems.append("too many syllables")
-        story = generate_story(topic, problems)
+        story = generate_story(topic, problems, name, readingLevel, story_length)
         print("Generating story...")
     elif gendec == "i":
         problems = input("Enter the problem letters separated by /: ").split("/")
