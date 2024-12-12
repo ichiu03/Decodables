@@ -64,7 +64,7 @@ def get_synonyms_dict(story: str, word_dict: dict, problems: list) -> dict:
                         """
                     response = query(prompt).strip()
                     temp_words = [w.strip() for w in response.split(",") if w.strip()]
-                    temp_words_dict = parseAndProcessWords(response, maxsyllable, "categorized_words.json")
+                    temp_words_dict = parseAndProcessWords(response, maxsyllable, "dictionary_parser/categorized_words.json")
                     # Remove words containing problem sounds
                     filtered_temp_words = []
                     for temp_word in temp_words:
@@ -205,7 +205,7 @@ def process_story(story, problems, apply_correction=False, spellcheck=False, com
         story_word_counts = Counter(story_words)
 
         # Parse and process words to categorize them
-        word_dict = parseAndProcessWords(story, maxsyllable, "categorized_words.json")
+        word_dict = parseAndProcessWords(story, maxsyllable, "dictionary_parser/categorized_words.json")
 
         # Combine all bad words into a single set
         all_bads = set()
@@ -278,7 +278,7 @@ def process_story(story, problems, apply_correction=False, spellcheck=False, com
 
         # Continue with processing
         print("Checking each word...")
-        word_dict = parseAndProcessWords(story, maxsyllable, "categorized_words.json")
+        word_dict = parseAndProcessWords(story, maxsyllable, "dictionary_parser/categorized_words.json")
 
         # Find synonyms
         print("Finding synonyms...")
