@@ -29,7 +29,7 @@ good_words = []
 bad_words = []
 
 # Opening JSON file for words categorized by problems
-with open('dictionary_parser\categorized_words.json') as json_file:
+with open('dictionary_parser/categorized_words.json') as json_file:
     words = json.load(json_file)
 
 # Opening JSON file for guidewords
@@ -88,16 +88,28 @@ def get_input_and_save():
 def get_input():
     global sight_words
     global readingLevel
-    
+    global maxsyllable
     story_length = int(input("Enter the length of the story: "))
     topic = input("Enter your story topic: ")
     problems = input("Enter the problem letters separated by /: ").split("/")
     name = input("What do you want the main character's name to be: ")
     readingLevel = input("Enter the grade level of the reader (Only the grade number): ")
+    if int(readingLevel) <= 1:
+        maxsyllable = 1
+    elif int(readingLevel) <= 3:
+        maxsyllable = 2
+    elif int(readingLevel) <= 5:
+        maxsyllable = 3
+    elif int(readingLevel) <= 7:
+        maxsyllable = 4
+    elif int(readingLevel) <= 9: 
+        maxsyllable = 5
+    else:
+        maxsyllable = 10
     # sight_words = input("Enter the sight words separated by commas: ")
     problems = [problem.strip() for problem in problems]  # Clean up whitespace
 
-    return story_length, topic, problems,name,readingLevel
+    return story_length, topic, problems,name,readingLevel, maxsyllable
 
 ### Function to get words
 def get_words(problems):
