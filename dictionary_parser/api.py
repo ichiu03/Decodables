@@ -93,7 +93,7 @@ async def process_story_endpoint(request: ProcessStoryRequest):
                 maxsyllable,
                 apply_correction=False,
                 spellcheck=True,
-                combined=False
+                combined=True
         )
 
         # For input stories, calculate decodability immediately
