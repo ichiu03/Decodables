@@ -671,7 +671,7 @@ def callCategorizationFunctions(word: str, arpabet: str, syllable_count: int) ->
         OCECheck(word, arpabet)
         fszlCheck(word, arpabet)
 
-def parseAndProcessWords(story: str, syllable_limit: int, output_path: str) -> dict:
+def parseAndProcessWords(story: str, syllable_limit:str, output_path: str) -> dict:
     try:
         words = getWords(story)
         unique_words = set(words)

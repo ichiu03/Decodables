@@ -14,7 +14,7 @@ with open('Dictionary.txt', 'r', encoding='utf-8') as file:
 with open('truncated_dictionary.json') as json_file:
     guidewords = json.load(json_file)
 
-def get_synonyms_dict(story: str, word_dict: dict, problems: list) -> dict:
+def get_synonyms_dict(story: str, word_dict: dict, problems: list, maxsyllable: int) -> dict:
     sentences = story.split(".")
     prev_sentence = ""
     synonyms_dict = {}
@@ -193,7 +193,7 @@ def rewrite_sentences(story):
     return finaltext.strip()  # Strip trailing whitespace
    
 
-def process_story(story, problems, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=False): 
+def process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=False): 
     if decodabilityTest:
         print("Decodability Test Mode: Analyzing text without making changes.")
         
@@ -282,7 +282,7 @@ def process_story(story, problems, apply_correction=False, spellcheck=False, com
 
         # Find synonyms
         print("Finding synonyms...")
-        synonyms_dict = get_synonyms_dict(story, word_dict, problems)
+        synonyms_dict = get_synonyms_dict(story, word_dict, problems, maxsyllable)
 
         # Replace problematic words with synonyms
         print("Replacing synonyms...")
@@ -408,22 +408,22 @@ def main():
     if gendec == "g":
         story_length, topic, problems,name,readingLevel,maxsyllable = get_input()
         problems.append("too many syllables")
-        story = generate_story(topic, problems, name, readingLevel, story_length)
+        story= generate_story(topic, problems, name, readingLevel, story_length)
         print("Generating story...")
     elif gendec == "i":
         problems = input("Enter the problem letters separated by /: ").split("/")
         problems.append("too many syllables")
         file = input("Copy and Paste your text here: ")
         story =  file
-        decodabuilityog = process_story(story, problems, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=True)
+        decodabuilityog = process_story(story, problems, 10, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=True)
     print(story)
 
     # First Run: Without Grammar Correction
     print("\n--- Processing Without Grammar Correction ---")
-    story1 = process_story(story, problems, apply_correction=False, spellcheck=False, combined=False)
+    story1 = process_story(story, problems, 10, apply_correction=False, spellcheck=False, combined=False)
 
     print("\n--- Processing With Grammar Correction and Spell Check ---")
-    story2 = process_story(story, problems, apply_correction=True, spellcheck=True, combined=False)
+    story2 = process_story(story, problems, 10,apply_correction=True, spellcheck=True, combined=False)
 
     # Now, combine the two stories
     story3 = combine(story1, story2, problems)

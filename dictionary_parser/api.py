@@ -41,6 +41,19 @@ async def process_story_endpoint(request: ProcessStoryRequest):
         sight_words = handle_sight_words(default_sight_words, ','.join(request.unknownSightWords))
         print(f"request: {request}")
         problems = request.problemLetters 
+        readingLevel = request.readingLevel
+        if int(readingLevel) <= 1:
+            maxsyllable = 2
+        elif int(readingLevel) <= 3:
+            maxsyllable = 3
+        elif int(readingLevel) <= 5:
+            maxsyllable = 4
+        elif int(readingLevel) <= 7:
+            maxsyllable = 5
+        elif int(readingLevel) <= 9: 
+            maxsyllable = 6
+        else:
+            maxsyllable = 10
         if request.storyChoice == 'g':
             # Generate story
             if not request.storyTopic or not request.storyLength:
@@ -67,16 +80,17 @@ async def process_story_endpoint(request: ProcessStoryRequest):
             story = request.storyInput
         
         print("\n--- Processing Without Grammar Correction ---")
-        story = process_story(story, problems, apply_correction=False, spellcheck=False, combined=False)
+        story = process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False)
 
         print("\n--- Processing With Grammar Correction and Spell Check ---")
-        story1 = process_story(story, problems, apply_correction=True, spellcheck=True, combined=False)
+        story1 = process_story(story, problems, maxsyllable, apply_correction=True, spellcheck=True, combined=False)
         
         story = combine(story, story1, problems)
 
         processed_story = process_story(
                 story, 
                 request.problemLetters,
+                maxsyllable,
                 apply_correction=False,
                 spellcheck=True,
                 combined=False
@@ -88,6 +102,7 @@ async def process_story_endpoint(request: ProcessStoryRequest):
             decodability = process_story(
                 processed_story,
                 request.problemLetters,
+                maxsyllable,
                 apply_correction=False,
                 spellcheck=False,
                 combined=False,
@@ -113,6 +128,7 @@ async def get_decodability_endpoint(request: DecodabilityRequest):
         decodability = process_story(
             request.text,
             request.problems,
+            10,
             apply_correction=False,
             spellcheck=False,
             combined=False,

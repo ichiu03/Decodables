@@ -1,4 +1,4 @@
-const API_BASE_URL = process.env.NODE_ENV === 'production' ? 'https://decodables-backend.onrender.com/api' : 'http://localhost:5000/api';
+const API_BASE_URL = process.env.NODE_ENV === 'production' ? 'https://decodables.onrender.com/api' : 'http://localhost:5000/api';
 
 export const processStory = async (formData) => {
   try {
