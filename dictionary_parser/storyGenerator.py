@@ -33,12 +33,12 @@ with open('categorized_words.json') as json_file:
     words = json.load(json_file)
 
 # Opening JSON file for guidewords
-with open('dictionary_parser/truncated_dictionary.json') as json_file:
+with open('truncated_dictionary.json') as json_file:
     guidewords = json.load(json_file)
 
 ### Function to get all words
 def get_all_words():
-    with open("dictionary_parser/WordDatav4.txt", "r") as f:
+    with open("WordDatav4.txt", "r") as f:
         words = f.read().split("\n")
     return words[:2000]
 
