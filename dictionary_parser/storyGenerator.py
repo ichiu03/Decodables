@@ -29,7 +29,7 @@ good_words = []
 bad_words = []
 
 # Opening JSON file for words categorized by problems
-with open('dictionary_parser/categorized_words.json') as json_file:
+with open('categorized_words.json') as json_file:
     words = json.load(json_file)
 
 # Opening JSON file for guidewords
