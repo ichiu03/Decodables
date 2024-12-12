@@ -1,5 +1,6 @@
 .env
 venv/
+.venv/
 __pycache__/
 dictionary_parser/updated_story.txt
 dictionary_parser/word_synonyms.txt
