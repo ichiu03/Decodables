@@ -236,7 +236,7 @@ def xInWordCheck(word: str, arpabet: str) -> None:
         if 'IH' in tokens and verificationToAdd(word, arpabet, 'e', ['IH'], ['EH', 'AH']):
             categories['long e'].append(word)
         if ('EH' in tokens or 'AH' in tokens):
-            if verificationToAdd(word, arpabet, 'e', ['IH', 'AH'],['IH']):
+            if verificationToAdd(word, arpabet, 'e', ['EH', 'AH'], ['IH']):
                 categories['short e'].append(word)
     if 'i' in word:
         if 'AY' in tokens and verificationToAdd(word, arpabet, 'i', ['AY'], ['IH']): 
@@ -353,9 +353,9 @@ def ingongangungCheck(word: str) -> None:
 def allCheck(word: str) -> None:
     if word.endswith('ly'):
         root_word = word[:-2]
-        if 'all' in root_word:
+        if 'all' not in root_word:  
             categories['all'].append(word)
-    else:
+    elif 'all' in word:
         categories['all'].append(word)
 
 def hardVsSoftC(word: str, arpabet: str) -> None:
