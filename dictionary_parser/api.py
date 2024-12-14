@@ -80,18 +80,18 @@ async def process_story_endpoint(request: ProcessStoryRequest):
             story = request.storyInput
         
         print("\n--- Processing Without Grammar Correction ---")
-        story = process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False)
+        story1 = process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False)
 
         print("\n--- Processing With Grammar Correction and Spell Check ---")
-        story1 = process_story(story, problems, maxsyllable, apply_correction=True, spellcheck=True, combined=False)
+        story2 = process_story(story, problems, maxsyllable, apply_correction=True, spellcheck=True, combined=False)
         
-        story = combine(story, story1, problems)
+        story = combine(story1, story2, problems)
 
         processed_story = process_story(
                 story, 
                 request.problemLetters,
                 maxsyllable,
-                apply_correction=False,
+                apply_correction=True,
                 spellcheck=True,
                 combined=True
         )
