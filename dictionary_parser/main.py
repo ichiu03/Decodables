@@ -49,6 +49,7 @@ def get_synonyms_dict(story: str, word_dict: dict, problems: list, maxsyllable: 
                     # Prepare the prompt
                     prompt = f"""
                         Give 10 synonyms for the word '{word}' that would fit naturally in the following sentence, and **do not** include any words containing these sounds: {', '.join(problems)}.
+                        A change in tense or form of the word is not acceptable. Maintain tense and form as these words are going to replace the original word in a story.
 
                         Some examples of words to **avoid** are: {examples_str}.
 
@@ -58,7 +59,6 @@ def get_synonyms_dict(story: str, word_dict: dict, problems: list, maxsyllable: 
 
                         Return only the 10 words separated by commas, like this: "word1, word2, word3, word4, word5".
                         Order the words so the best fit is first.
-                        Remember, a change in tense or form of the word is not acceptable. Maintain tense and form as these words are going to replace the original word in a story.
 
                         **RETURN ONLY THE LIST OF WORDS**
                         """
