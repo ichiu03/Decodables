@@ -178,13 +178,14 @@ def rewrite_sentences(story):
 
             Here is the previous sentence and next sentence for context: Previous: {prev_sentence} Next: {next_sentence}
 
-            Return only the rewritten sentence, nothing else.
-
             *** RETURN ONLY THE NEW SENTENCE OR THE SAME SENTENCE IF NO CHANGE IS NEEDED ***
         """
         
         # Call the function to get the rewritten sentence (query function assumed)
         sentence_rev = query(prompt).strip()
+
+        if "return" in sentence_rev and "sentence" in sentence_rev:
+            sentence_rev = query(prompt).strip()
         
         # Add the revised sentence to the final text
         if sentence_rev and sentence != prev_sentence and sentence !=next_sentence:  # Avoid adding empty strings
