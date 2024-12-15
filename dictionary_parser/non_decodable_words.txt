@@ -3,7 +3,7 @@ abandoned: 6
 abate: 2
 abet: 9
 abilities: 1
-able: 7
+able: 9
 abode: 11
 abruptly: 20
 absconded: 3
@@ -323,16 +323,17 @@ believed: 7
 believing: 1
 bella: 3
 belly: 3
+belonged: 2
 belonging: 3
 belongs: 3
-beloved: 4
+beloved: 5
 below: 2
 beluga: 1
 beneath: 5
 benefit: 3
 benefits: 2
 beside: 3
-best: 8
+best: 9
 bewilderment: 1
 bewitched: 6
 beyond: 9
@@ -469,7 +470,7 @@ campo: 2
 campus: 9
 canopy: 8
 capability: 1
-capable: 5
+capable: 7
 capacity: 5
 capstone: 1
 captivated: 12
@@ -523,7 +524,7 @@ chaperone: 1
 chapter: 15
 charged: 3
 charm: 1
-charming: 1
+charming: 2
 chart: 3
 charts: 3
 chasing: 4
@@ -827,6 +828,7 @@ dancing: 9
 danger: 3
 dangling: 1
 dare: 5
+darling: 1
 dashing: 3
 date: 3
 daunting: 3
@@ -1501,6 +1503,7 @@ galley: 3
 galvanizing: 1
 gambits: 1
 gang: 3
+garden: 1
 garnished: 1
 gather: 3
 gathered: 1
@@ -1684,6 +1687,7 @@ headed: 7
 heard: 3
 hearing: 3
 heart: 6
+heartwarming: 1
 heath: 9
 heavenly: 2
 heavens: 3
@@ -1789,7 +1793,7 @@ imagining: 7
 imbibed: 1
 imitating: 1
 immediate: 8
-immediately: 5
+immediately: 7
 immense: 8
 immerse: 3
 immersed: 11
@@ -2487,8 +2491,8 @@ parallel: 5
 paramount: 3
 paraphernalia: 3
 parchment: 1
-park: 3
-part: 14
+park: 4
+part: 15
 participating: 3
 participation: 3
 particular: 2
@@ -4067,12 +4071,12 @@ welcomed: 1
 welcoming: 7
 welling: 1
 whatever: 4
-when: 4
+when: 6
 whenever: 2
 whereas: 1
 whiff: 2
 while: 7
-whilst: 4
+whilst: 6
 whimsical: 2
 whirled: 3
 whirlwind: 1
@@ -4130,6 +4134,7 @@ worth: 5
 wouldn't: 1
 wrestles: 3
 writings: 3
+yard: 1
 yearned: 1
 yearning: 3
 yesteryear: 3

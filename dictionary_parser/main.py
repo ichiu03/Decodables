@@ -193,6 +193,16 @@ def rewrite_sentences(story):
     
     return finaltext.strip()  # Strip trailing whitespace
    
+def rewrite_paragraph(story):
+    prompt = f"""
+        This paragraph was written by an inferior chatbot: {story}.
+
+        You are a much better writer than this. You have a PHD in English and are very good at writing for children.
+
+        Fix all of its flaws and return the entire new story.
+    """
+    fixed = query(prompt)
+    return(fixed)
 
 def process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=False): 
     if decodabilityTest:
@@ -284,13 +294,21 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
         # Find synonyms
         print("Finding synonyms...")
         synonyms_dict = get_synonyms_dict(story, word_dict, problems, maxsyllable)
+        
+        story = rewrite_sentences(story)
 
+        story = rewrite_paragraph(story)
+        
         # Replace problematic words with synonyms
         print("Replacing synonyms...")
         story = replace_words_in_story(story, synonyms_dict)
 
-        # Rewrite problematic sentences
         story = rewrite_sentences(story)
+
+        story = rewrite_paragraph(story)
+        
+
+        # Rewrite problematic sentences
 
         # Prepare sight words set
         sight_words_set = set(word.lower().strip() for word in sight_words.split(','))
@@ -367,6 +385,7 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
         else:
             output_file = 'updated_story.txt'
         story = ultraformatting(story)
+        story += "TESTING TESTING 123"
         save_updated_story(story, output_file)
         print(f"Updated story has been saved to '{output_file}'.")
         return story
