@@ -205,12 +205,13 @@ def rewrite_paragraph(story):
     return(fixed)
 
 def process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=False): 
-    if decodabilityTest:
-        print("Decodability Test Mode: Analyzing text without making changes.")
-        
+    def categorize_and_validate_words(story, problems, maxsyllable):
         # Prepare sight words set
         sight_words_set = set(word.lower().strip() for word in sight_words.split(','))
 
+        story = rewrite_sentences(story)
+        story = rewrite_paragraph(story)
+        
         # Tokenize the story into words and count occurrences
         story_words = re.findall(r'\b\w+\b', story.lower())
         story_word_counts = Counter(story_words)
@@ -241,92 +242,27 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
         wordcount = len(story_words)
         decodability = 1 - (problemcount / wordcount) if wordcount > 0 else 0
 
-        # Print the results
-        print("Bad Word Occurrences:")
-        for word, count in bad_occurrences.items():
-            print(f"{word}: {count}")
+        # Return results
+        return {
+            "decodability": decodability,
+            "bad_occurrences": bad_occurrences,
+            "wordcount": wordcount,
+            "all_bads": all_bads,
+        }
 
-        print(f"This text is {decodability * 100:.2f}% decodable")
-
+    def save_decodability_metrics(decodability, wordcount, marker, combo):
         # Prepare the data for the file
         current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        decodability_entry = f"{decodability * 100:.2f}% {current_time} Word Count: {wordcount} Decodability Test\n"
+        decodability_entry = f"{decodability * 100:.2f}% {current_time} Word Count: {wordcount} {marker} {combo}\n"
+        print(f"{decodability * 100:.2f}%")
+        print(f"Word Count: {wordcount}")
 
         # Append the data to the file
         decodability_file = "decodability_measurements.txt"
         with open(decodability_file, "a") as file:
             file.write(decodability_entry)
 
-        # Return the original story without changes
-        return decodability
-
-    else:
-        # Existing code for processing the story
-        # Apply grammar correction and spellcheck if enabled
-        if apply_correction:
-            print("Applying grammar correction...")
-            story = correct_text(story)
-            print("Corrected Story:")
-            print(story)
-            marker = "grammar corrected"
-        else:
-            print("Skipping grammar correction...")
-            marker = "grammar not corrected"
-
-        if spellcheck:
-            print("Applying Spellcheck...")
-            prompt = f"You are a literary editor. Rewrite this story and make any necessary changes to the story to make it 100% readable and abide by proper English writing and reading standards: {story}. Return just the new fixed story."
-            story = query(prompt)
-            marker += " Spellcheck"
-        else:         
-            print("Skipping Spellcheck...")
-            marker += " No Spellcheck"
-
-        if combined:
-            combo = "Combined Text"
-        else: 
-            combo = ""
-
-        # Continue with processing
-        print("Checking each word...")
-        word_dict = parseAndProcessWords(story, maxsyllable, "categorized_words.json")
-
-        # Find synonyms
-        print("Finding synonyms...")
-        synonyms_dict = get_synonyms_dict(story, word_dict, problems, maxsyllable)
-        
-        story = rewrite_sentences(story)
-
-        story = rewrite_paragraph(story)
-        
-        # Replace problematic words with synonyms
-        print("Replacing synonyms...")
-        story = replace_words_in_story(story, synonyms_dict)
-
-        story = rewrite_sentences(story)
-
-        story = rewrite_paragraph(story)
-        
-
-        # Rewrite problematic sentences
-
-        # Prepare sight words set
-        sight_words_set = set(word.lower().strip() for word in sight_words.split(','))
-
-        # Tokenize the story into words and count occurrences
-        story_words = re.findall(r'\b\w+\b', story.lower())
-        story_word_counts = Counter(story_words)
-
-        # Combine all bad words into a single set
-        all_bads = set()
-        for problem in problems:
-            problem = problem.strip()
-            if problem in word_dict:
-                problem_words = set(word.lower() for word in word_dict[problem] if word.lower() not in sight_words_set)
-                all_bads.update(problem_words)
-            else:
-                print(f"Warning: Problem '{problem}' not found in word dictionary.")
-
+    def save_bad_word_counts(all_bads):
         # Load existing word counts from file if it exists
         word_counts = {}
         try:
@@ -346,50 +282,58 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
             for word, count in sorted(word_counts.items()):
                 f.write(f'{word}: {count}\n')
 
-        # Count occurrences of each unique bad word in the story
-        problemcount = 0
-        bad_occurrences = {}
-        for bad_word in all_bads:
-            count = story_word_counts.get(bad_word, 0)
-            if count > 0:
-                problemcount += count
-                bad_occurrences[bad_word] = count
-
-        # Calculate decodability
-        wordcount = len(story_words)
-        decodability = 1 - (problemcount / wordcount) if wordcount > 0 else 0
-
-        # Print the results for the final updated story
+    def display_bad_words(bad_occurrences):
         print("Bad Word Occurrences:")
-        for word, count in bad_occurrences.items():
+        for word, count in sorted(bad_occurrences.items()):
             print(f"{word}: {count}")
 
-        print(f"This text is {decodability * 100:.2f}% decodable")
+    if decodabilityTest:
+        print("Decodability Test Mode: Analyzing text without making changes.")
+        results = categorize_and_validate_words(story, problems, maxsyllable)
 
-        # Prepare the data for the file
-        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        decodability_entry = f"{decodability * 100:.2f}% {current_time} Word Count: {wordcount} {marker} {combo}\n"
+        # Display and save bad word occurrences
+        display_bad_words(results["bad_occurrences"])
+        save_decodability_metrics(results["decodability"], results["wordcount"], "Decodability Test", "")
+        save_bad_word_counts(results["all_bads"])
 
-        # Append the data to the file
-        decodability_file = "decodability_measurements.txt"
-        with open(decodability_file, "a") as file:
-            file.write(decodability_entry)
+        print(f"This text is {results['decodability'] * 100:.2f}% decodable")
+        return results["decodability"]
+    else:
+        # Process and apply corrections if enabled
+        if apply_correction:
+            print("Applying grammar correction...")
+            story = correct_text(story)
+        if spellcheck:
+            print("Applying Spellcheck...")
+            prompt = f"You are a literary editor. Rewrite this story and make any necessary changes to the story to make it 100% readable and abide by proper English writing and reading standards: {story}. Return just the new fixed story."
+            story = query(prompt)
 
-        # Save the final story
-        if apply_correction and spellcheck and combined:
-            output_file = 'combined.txt'
-        elif apply_correction and spellcheck:
-            output_file = 'updated_story_transition.txt'
-        elif apply_correction:
-            output_file = 'updated_story_corrected.txt'
-        else:
-            output_file = 'updated_story.txt'
+        print("Checking and categorizing words...")
+        results = categorize_and_validate_words(story, problems, maxsyllable)
+
+        # Display bad words in the terminal
+        display_bad_words(results["bad_occurrences"])
+
+        print("Replacing problematic words...")
+        synonyms_dict = get_synonyms_dict(story, results["all_bads"], problems, maxsyllable)
+        story = replace_words_in_story(story, synonyms_dict)
+        print("Formatting the story...")
         story = ultraformatting(story)
-        story += "TESTING TESTING 123"
+
+        # Save results
+        save_decodability_metrics(results["decodability"], results["wordcount"], "Processed", "")
+        save_bad_word_counts(results["all_bads"])
+
+        # Save the updated story
+        output_file = (
+            'combined.txt' if combined else 
+            'updated_story_corrected.txt' if apply_correction else 
+            'updated_story.txt'
+        )
         save_updated_story(story, output_file)
         print(f"Updated story has been saved to '{output_file}'.")
-        return story
 
+        return story
 
 def combine(story1, story2, problems):
     prompt = f"""
