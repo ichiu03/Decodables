@@ -1,6 +1,7 @@
 import re
 from openai import OpenAI
 import os
+from main import path
 
 client = OpenAI(
     api_key= os.getenv('OPENAI_API_KEY')

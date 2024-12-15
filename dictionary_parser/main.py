@@ -1,4 +1,11 @@
 ### Imports
+import os
+
+if os.path.exists('dictionary_parser/'):
+    path = "dictionary_parser/"
+else:
+    path = ""
+
 from dictionaryParser import *
 from storyGenerator import *
 from replace_synonyms import *
@@ -8,10 +15,10 @@ import language_tool_python
 
 sight_words = ""
 
-with open('Dictionary.txt', 'r', encoding='utf-8') as file:
+with open(path + 'Dictionary.txt', 'r', encoding='utf-8') as file:
     large_dictionary = set(word.strip().lower() for word in file.readlines())
 
-with open('truncated_dictionary.json') as json_file:
+with open(path + 'truncated_dictionary.json') as json_file:
     guidewords = json.load(json_file)
 
 def get_synonyms_dict(story: str, word_dict: dict, problems: list, maxsyllable: int) -> dict:
@@ -407,7 +414,7 @@ def main():
     
     gendec = input("Would you like to generate a story (g) or input a story (i): ")
     if gendec == "g":
-        story_length, topic, problems,name,readingLevel,maxsyllable = get_input()
+        story_length, topic, problems,name,readingLevel = get_input()
         problems.append("too many syllables")
         story= generate_story(topic, problems, name, readingLevel, story_length)
         print("Generating story...")

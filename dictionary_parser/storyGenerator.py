@@ -4,6 +4,7 @@ import json
 import os
 import nltk
 from nltk.corpus import words
+from main import path
 
 load_dotenv()
 
@@ -12,11 +13,11 @@ nltk.download('punkt_tab')
 nltk.download('wordnet')
 nltk.download('omw-1.4')
 
-if os.path.exists('dictionary_parser/edited_generated_story.txt'):
-    open('dictionary_parser/edited_generated_story.txt', 'w').close()
+if os.path.exists(path + 'edited_generated_story.txt'):
+    open(path + 'edited_generated_story.txt', 'w').close()
 
-if os.path.exists('dictionary_parser/generated_story.txt'):
-    open('dictionary_parser/generated_story.txt', 'w').close()
+if os.path.exists(path + 'generated_story.txt'):
+    open(path + 'generated_story.txt', 'w').close()
 
 client = OpenAI(
     api_key= os.getenv('OPENAI_API_KEY')
@@ -29,16 +30,16 @@ good_words = []
 bad_words = []
 
 # Opening JSON file for words categorized by problems
-with open('categorized_words.json') as json_file:
+with open(path + 'categorized_words.json') as json_file:
     words = json.load(json_file)
 
 # Opening JSON file for guidewords
-with open('truncated_dictionary.json') as json_file:
+with open(path + 'truncated_dictionary.json') as json_file:
     guidewords = json.load(json_file)
 
 ### Function to get all words
 def get_all_words():
-    with open("WordDatav4.txt", "r") as f:
+    with open(path + "WordDatav4.txt", "r") as f:
         words = f.read().split("\n")
     return words[:2000]
 
@@ -55,7 +56,7 @@ def query(prompt):
 
 ### Function to get user input
 
-input_data_path = 'dictionary_parser/problemsounds.json'
+input_data_path = path + 'problemsounds.json'
 
 def clear_json_file():
     # Clear the contents of the JSON file
@@ -98,7 +99,7 @@ def get_input():
     # sight_words = input("Enter the sight words separated by commas: ")
     problems = [problem.strip() for problem in problems]  # Clean up whitespace
 
-    return story_length, topic, problems, name, readingLevel, maxsyllable
+    return story_length, topic, problems, name, readingLevel
 
 ### Function to get words
 def get_words(problems):
