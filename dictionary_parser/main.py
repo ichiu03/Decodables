@@ -415,6 +415,18 @@ def main():
     gendec = input("Would you like to generate a story (g) or input a story (i): ")
     if gendec == "g":
         story_length, topic, problems,name,readingLevel = get_input()
+        if int(readingLevel) <= 1:
+            maxsyllable = 2
+        elif int(readingLevel) <= 3:
+            maxsyllable = 3
+        elif int(readingLevel) <= 5:
+            maxsyllable = 4
+        elif int(readingLevel) <= 7:
+            maxsyllable = 5
+        elif int(readingLevel) <= 9: 
+            maxsyllable = 6
+        else:
+            maxsyllable = 10
         problems.append("too many syllables")
         story= generate_story(topic, problems, name, readingLevel, story_length)
         print("Generating story...")
@@ -423,21 +435,22 @@ def main():
         problems.append("too many syllables")
         file = input("Copy and Paste your text here: ")
         story =  file
+        maxsyllable = 10
         decodabuilityog = process_story(story, problems, 10, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=True)
     print(story)
 
     # First Run: Without Grammar Correction
     print("\n--- Processing Without Grammar Correction ---")
-    story1 = process_story(story, problems, 10, apply_correction=False, spellcheck=False, combined=False)
+    story1 = process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False)
 
     print("\n--- Processing With Grammar Correction and Spell Check ---")
-    story2 = process_story(story, problems, 10,apply_correction=True, spellcheck=True, combined=False)
+    story2 = process_story(story, problems, maxsyllable, apply_correction=True, spellcheck=True, combined=False)
 
     # Now, combine the two stories
     story3 = combine(story1, story2, problems)
 
     # Process the combined story
-    story4 = process_story(story3, problems, apply_correction=True, spellcheck=True, combined=True)
+    story4 = process_story(story3, problems, maxsyllable, apply_correction=True, spellcheck=True, combined=True)
 
     print(f'\n\nFinal Story: {story4}')
 

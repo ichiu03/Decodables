@@ -5,3 +5,4 @@
 96.98% 2024-12-15 15:22:01 Word Count: 199 grammar corrected Spellcheck Combined Text
 94.97% 2024-12-15 15:22:01 Word Count: 199 Decodability Test
 95.40% 2024-12-15 15:22:38 Word Count: 87 grammar not corrected No Spellcheck 
+92.80% 2024-12-15 15:23:06 Word Count: 125 grammar corrected Spellcheck 
