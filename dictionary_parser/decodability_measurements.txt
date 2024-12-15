@@ -289,3 +289,41 @@
 92.05% 2024-12-12 16:33:05 Word Count: 88 grammar corrected Spellcheck 
 90.32% 2024-12-12 16:33:21 Word Count: 93 grammar not corrected Spellcheck 
 89.25% 2024-12-12 16:33:22 Word Count: 93 Decodability Test
+81.06% 2024-12-14 18:44:48 Word Count: 132 Decodability Test
+89.68% 2024-12-14 18:45:16 Word Count: 126 grammar not corrected No Spellcheck 
+91.45% 2024-12-14 18:45:51 Word Count: 117 grammar corrected Spellcheck 
+81.06% 2024-12-14 18:50:41 Word Count: 132 Decodability Test
+91.67% 2024-12-14 19:00:34 Word Count: 12 Decodability Test
+100.00% 2024-12-14 19:00:36 Word Count: 9 grammar not corrected No Spellcheck 
+100.00% 2024-12-14 19:00:44 Word Count: 6 grammar corrected Spellcheck 
+81.06% 2024-12-14 19:03:11 Word Count: 132 Decodability Test
+91.47% 2024-12-14 19:03:36 Word Count: 129 grammar not corrected No Spellcheck 
+89.86% 2024-12-14 19:04:23 Word Count: 138 grammar corrected Spellcheck 
+81.06% 2024-12-14 19:08:02 Word Count: 132 Decodability Test
+87.12% 2024-12-14 19:08:30 Word Count: 132 grammar not corrected No Spellcheck 
+89.47% 2024-12-14 19:09:11 Word Count: 133 grammar corrected Spellcheck 
+87.86% 2024-12-14 19:09:59 Word Count: 140 grammar corrected Spellcheck Combined Text
+100.00% 2024-12-14 20:28:08 Word Count: 100 grammar not corrected No Spellcheck 
+98.56% 2024-12-14 20:28:29 Word Count: 139 grammar corrected Spellcheck 
+99.45% 2024-12-14 20:28:59 Word Count: 181 grammar corrected Spellcheck Combined Text
+94.20% 2024-12-14 20:59:04 Word Count: 138 Processed 
+94.12% 2024-12-14 20:59:14 Word Count: 136 Processed 
+96.50% 2024-12-14 20:59:27 Word Count: 143 Processed 
+91.92% 2024-12-14 21:02:25 Word Count: 99 Processed 
+91.75% 2024-12-14 21:02:34 Word Count: 97 Processed 
+91.74% 2024-12-14 21:02:47 Word Count: 109 Processed 
+100.00% 2024-12-14 21:34:26 Word Count: 51 Processed 
+100.00% 2024-12-14 21:34:35 Word Count: 51 Processed 
+100.00% 2024-12-14 21:34:49 Word Count: 57 Processed 
+96.97% 2024-12-14 21:37:11 Word Count: 33 Processed 
+98.90% 2024-12-14 21:37:22 Word Count: 91 Processed 
+97.73% 2024-12-14 21:37:37 Word Count: 88 Processed 
+100.00% 2024-12-14 21:40:18 Word Count: 58 Processed 
+100.00% 2024-12-14 21:40:25 Word Count: 56 Processed 
+98.39% 2024-12-14 21:40:35 Word Count: 62 Processed 
+94.50% 2024-12-14 22:04:15 Word Count: 218 Processed 
+93.57% 2024-12-14 22:04:36 Word Count: 249 Processed 
+93.63% 2024-12-14 22:04:58 Word Count: 204 Processed 
+79.82% 2024-12-14 22:17:57 Word Count: 332 Processed 
+76.85% 2024-12-14 22:18:22 Word Count: 298 Processed 
+76.22% 2024-12-14 22:18:51 Word Count: 349 Processed 
