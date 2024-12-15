@@ -392,6 +392,7 @@ def main():
         else:
             maxsyllable = 10
         problems.append("too many syllables")
+        sight_words += name
         story= generate_story(topic, problems, name, readingLevel, story_length)
         print("Generating story...")
     elif gendec == "i":
