@@ -400,6 +400,7 @@ def handle_sight_words(default_sight_words: str, problematic_words: str) -> str:
 def main():
     global sight_words
     global maxsyllable
+    maxsyllable = 2
     default_sight_words = "a,at,any,many,and,on,is,are,the,was,were,it,am,be,go,to,out,been,this,come,some,do,does,done,what,who,you,your,both,buy,door,floor,four,none,once,one,only,pull,push,sure,talk,walk,their,there,they're,very,want,again,against,always,among,busy,could,should,would,enough,rough,tough,friend,move,prove,ocean,people,she,other,above,father,usually,special,front,thought,he,we,they,nothing,learned,toward,put,hour,beautiful,whole,trouble,of,off,use,have,our,say,make,take,see,think,look,give,how,ask,boy,girl,us,him,his,her,by,where,were,wear,hers,don't,which,just,know,into,good,other,than,then,now,even,also,after,know,because,most,day,these,two,already,through,though,like,said,too,has,in,brother,sister,that,them,from,for,with,doing,well,before,tonight,down,about,but,up,around,goes,gone,build,built,cough,lose,loose,truth,daughter,son"
     probsight_words = input("What sight words does the student not know (use only words and commas): ")
     
@@ -412,6 +413,19 @@ def main():
         story= generate_story(topic, problems, name, readingLevel, story_length)
         print("Generating story...")
     elif gendec == "i":
+        readingLevel = input("Enter the grade level of the reader (Only the grade number): ")
+        if int(readingLevel) <= 1:
+            maxsyllable = 2
+        elif int(readingLevel) <= 3:
+            maxsyllable = 3
+        elif int(readingLevel) <= 5:
+            maxsyllable = 4
+        elif int(readingLevel) <= 7:
+            maxsyllable = 5
+        elif int(readingLevel) <= 9: 
+            maxsyllable = 6
+        else:
+            maxsyllable = 10
         problems = input("Enter the problem letters separated by /: ").split("/")
         problems.append("too many syllables")
         file = input("Copy and Paste your text here: ")
@@ -421,16 +435,16 @@ def main():
 
     # First Run: Without Grammar Correction
     print("\n--- Processing Without Grammar Correction ---")
-    story1 = process_story(story, problems, 10, apply_correction=False, spellcheck=False, combined=False)
+    story1 = process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False)
 
     print("\n--- Processing With Grammar Correction and Spell Check ---")
-    story2 = process_story(story, problems, 10,apply_correction=True, spellcheck=True, combined=False)
+    story2 = process_story(story, problems, maxsyllable,apply_correction=True, spellcheck=True, combined=False)
 
     # Now, combine the two stories
     story3 = combine(story1, story2, problems)
 
     # Process the combined story
-    story4 = process_story(story3, problems, apply_correction=True, spellcheck=True, combined=True)
+    story4 = process_story(story3, problems, maxsyllable,apply_correction=True, spellcheck=True, combined=True)
 
     print(f'\n\nFinal Story: {story4}')
 

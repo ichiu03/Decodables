@@ -289,3 +289,17 @@
 92.05% 2024-12-12 16:33:05 Word Count: 88 grammar corrected Spellcheck 
 90.32% 2024-12-12 16:33:21 Word Count: 93 grammar not corrected Spellcheck 
 89.25% 2024-12-12 16:33:22 Word Count: 93 Decodability Test
+81.06% 2024-12-14 18:44:48 Word Count: 132 Decodability Test
+89.68% 2024-12-14 18:45:16 Word Count: 126 grammar not corrected No Spellcheck 
+91.45% 2024-12-14 18:45:51 Word Count: 117 grammar corrected Spellcheck 
+81.06% 2024-12-14 18:50:41 Word Count: 132 Decodability Test
+91.67% 2024-12-14 19:00:34 Word Count: 12 Decodability Test
+100.00% 2024-12-14 19:00:36 Word Count: 9 grammar not corrected No Spellcheck 
+100.00% 2024-12-14 19:00:44 Word Count: 6 grammar corrected Spellcheck 
+81.06% 2024-12-14 19:03:11 Word Count: 132 Decodability Test
+91.47% 2024-12-14 19:03:36 Word Count: 129 grammar not corrected No Spellcheck 
+89.86% 2024-12-14 19:04:23 Word Count: 138 grammar corrected Spellcheck 
+81.06% 2024-12-14 19:08:02 Word Count: 132 Decodability Test
+87.12% 2024-12-14 19:08:30 Word Count: 132 grammar not corrected No Spellcheck 
+89.47% 2024-12-14 19:09:11 Word Count: 133 grammar corrected Spellcheck 
+87.86% 2024-12-14 19:09:59 Word Count: 140 grammar corrected Spellcheck Combined Text
