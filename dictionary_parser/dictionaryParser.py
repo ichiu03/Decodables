@@ -693,12 +693,12 @@ def parseAndProcessWords(story: str, syllable_limit:str, output_path: str) -> di
             arpabet = re.sub(r'\d', '', phones[0])
             callCategorizationFunctions(word, arpabet, syllable_count)
             
-        if os.path.exists(output_path):
-            os.remove(output_path)
-        with open(output_path, 'w') as file:
-            json.dump(categories, file, indent=4)
+        # if os.path.exists(output_path):
+        #     os.remove(output_path)
+        # with open(output_path, 'w') as file:
+        #     json.dump(categories, file, indent=4)
 
-        print(f"\nData successfully written to {output_path}")
+        # print(f"\nData successfully written to {output_path}")
 
     except Exception as e:
         print(f"An error occurred: {e}")

@@ -2,3 +2,31 @@
 90.32% 2024-12-16 12:48:03 Word Count: 186 Processed 
 91.07% 2024-12-16 12:48:20 Word Count: 112 Processed 
 89.92% 2024-12-16 12:48:39 Word Count: 119 Processed 
+94.21% 2024-12-17 11:04:32 Word Count: 190 grammar not corrected No Spellcheck 
+96.88% 2024-12-17 11:04:56 Word Count: 96 grammar corrected Spellcheck 
+99.13% 2024-12-17 11:05:13 Word Count: 115 grammar corrected Spellcheck Combined Text
+99.13% 2024-12-17 11:05:13 Word Count: 115 Decodability Test
+89.58% 2024-12-17 11:07:49 Word Count: 96 grammar not corrected No Spellcheck 
+85.26% 2024-12-17 11:08:37 Word Count: 95 grammar corrected Spellcheck 
+89.47% 2024-12-17 11:09:20 Word Count: 114 grammar corrected Spellcheck Combined Text
+88.60% 2024-12-17 11:09:20 Word Count: 114 Decodability Test
+97.50% 2024-12-17 11:12:10 Word Count: 80 grammar not corrected No Spellcheck 
+93.71% 2024-12-17 11:12:49 Word Count: 159 grammar corrected Spellcheck 
+94.24% 2024-12-17 11:13:15 Word Count: 139 grammar corrected Spellcheck Combined Text
+93.53% 2024-12-17 11:13:15 Word Count: 139 Decodability Test
+84.56% 2024-12-17 11:14:59 Word Count: 136 grammar not corrected No Spellcheck 
+79.43% 2024-12-17 11:16:12 Word Count: 141 grammar corrected Spellcheck 
+78.79% 2024-12-17 11:17:23 Word Count: 132 grammar corrected Spellcheck Combined Text
+72.73% 2024-12-17 11:17:23 Word Count: 132 Decodability Test
+70.50% 2024-12-17 11:17:23 Word Count: 139 Decodability Test
+57.26% 2024-12-17 11:19:40 Word Count: 241 Processed 
+67.00% 2024-12-17 11:19:52 Word Count: 203 Processed 
+59.05% 2024-12-17 11:20:05 Word Count: 232 Processed 
+64.71% 2024-12-17 11:20:12 Word Count: 187 Decodability Test 
+65.87% 2024-12-17 11:20:22 Word Count: 252 Decodability Test 
+63.59% 2024-12-17 11:22:38 Word Count: 217 Processed 
+57.03% 2024-12-17 11:22:50 Word Count: 249 Processed 
+59.43% 2024-12-17 11:23:03 Word Count: 212 Processed 
+57.78% 2024-12-17 11:23:12 Word Count: 270 Decodability Test 
+55.69% 2024-12-17 11:23:21 Word Count: 246 Decodability Test 
+75.66% 2024-12-17 11:25:57 Word Count: 341 Processed 

@@ -72,18 +72,22 @@ function App() {
     
     try {
       const response = await processStory(formData);
+      console.log('Response in handleSubmit:', response);
       
       if (formData.storyChoice === 'g' && response.generatedStory) {
         // For generated stories, get decodability after generation
         const decodabilityResult = await getDecodability(response.generatedStory, formData.problemLetters);
+        console.log('Decodability Result in handleSubmit:', decodabilityResult);
         setResult({
           ...response,
-          decodability: decodabilityResult.decodability
+          decodability: decodabilityResult.decodability,
+          badWords: decodabilityResult.badWords || []
         });
       } else {
         // For input stories, decodability is already included in the response
         setResult(response);
       }
+      console.log('Final Result State:', result);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -204,12 +208,14 @@ function App() {
               <div className="decodability">
                 <h3>Decodability Score:</h3>
                 <p>{(result.decodability * 100).toFixed(2)}%</p>
-                {result.badWords && result.badWords.length > 0 && (
+                {result.badWords && Object.keys(result.badWords).length > 0 && (
                   <div className="bad-words-list">
                     <h4>Words with Problem Letters:</h4>
                     <div className="bad-words-grid">
-                      {result.badWords.map((word, index) => (
-                        <span key={index} className="bad-word">{word}</span>
+                      {Object.entries(result.badWords).map(([word, count], index) => (
+                        <span key={index} className="bad-word">
+                          {word} ({count})
+                        </span>
                       ))}
                     </div>
                   </div>

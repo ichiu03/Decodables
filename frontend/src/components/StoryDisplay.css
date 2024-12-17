@@ -2,6 +2,9 @@
   line-height: 1.6;
   font-size: 1.1em;
   white-space: pre-wrap;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
 }
 
 .bad-word {
@@ -12,6 +15,8 @@
   cursor: help;
   position: relative;
   display: inline-block;
+  font-weight: bold;
+  border-bottom: 2px solid #d32f2f;
 }
 
 .bad-word:hover::after {
@@ -27,4 +32,6 @@
   font-size: 14px;
   white-space: nowrap;
   z-index: 1000;
+  margin-bottom: 5px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 } 

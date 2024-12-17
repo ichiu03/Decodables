@@ -297,14 +297,13 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
     if decodabilityTest:
         print("Decodability Test Mode: Analyzing text without making changes.")
         results = categorize_and_validate_words(story, problems, maxsyllable)
-
         # Display and save bad word occurrences
         display_bad_words(results["bad_occurrences"])
         save_decodability_metrics(results["decodability"], results["wordcount"], "Decodability Test", "")
         save_bad_word_counts(results["all_bads"])
 
         print(f"This text is {results['decodability'] * 100:.2f}% decodable")
-        return results["decodability"], results["all_bads"]
+        return results["decodability"], results["bad_occurrences"]
     else:
         # Process and apply corrections if enabled
         if apply_correction:
