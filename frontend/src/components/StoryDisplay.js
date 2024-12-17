@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './StoryDisplay.css';
 
 const StoryDisplay = ({ story, badWords, onFoundWords }) => {
-  console.log('StoryDisplay Props:', { story, badWords });
+//   console.log('StoryDisplay Props:', { story, badWords });
 
   useEffect(() => {
     if (story && badWords) {
@@ -13,7 +13,11 @@ const StoryDisplay = ({ story, badWords, onFoundWords }) => {
         const regex = new RegExp(`\\b${word}\\b`, 'gi');
         const matches = story.match(regex);
         if (matches) {
-          foundWords[word] = matches.length;
+          const uniqueCategories = [...new Set(badWords[word].categories)];
+          foundWords[word] = {
+            count: matches.length,
+            categories: uniqueCategories
+          };
         }
       });
       
@@ -35,9 +39,18 @@ const StoryDisplay = ({ story, badWords, onFoundWords }) => {
     const parts = text.split(regex);
 
     return parts.map((part, i) => {
-      const isBadWord = badWordsArray.some(word => word.toLowerCase() === part.toLowerCase());
-      if (isBadWord) {
-        return <span key={i} className="bad-word" title="This word contains problem letters">{part}</span>;
+      if (badWords[part.toLowerCase()]) {
+        const uniqueCategories = [...new Set(badWords[part.toLowerCase()].categories)];
+        const tooltip = `Problem categories: ${uniqueCategories.join(', ')}`;
+        return (
+          <span 
+            key={i} 
+            className="bad-word" 
+            title={tooltip}
+          >
+            {part}
+          </span>
+        );
       }
       return part;
     });

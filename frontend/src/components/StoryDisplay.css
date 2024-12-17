@@ -15,23 +15,34 @@
   cursor: help;
   position: relative;
   display: inline-block;
-  font-weight: bold;
-  border-bottom: 2px solid #d32f2f;
 }
 
 .bad-word:hover::after {
-  content: "This word contains problem letters";
+  content: attr(title);
   position: absolute;
   bottom: 100%;
   left: 50%;
   transform: translateX(-50%);
   background-color: #333;
   color: white;
-  padding: 5px 10px;
+  padding: 8px 12px;
   border-radius: 4px;
   font-size: 14px;
   white-space: nowrap;
   z-index: 1000;
   margin-bottom: 5px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  max-width: 300px;
+  text-align: center;
+}
+
+.bad-word:hover::before {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: #333;
+  margin-bottom: -1px;
 } 

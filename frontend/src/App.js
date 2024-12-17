@@ -74,21 +74,7 @@ function App() {
     try {
       const response = await processStory(formData);
       console.log('Response in handleSubmit:', response);
-      
-      if (formData.storyChoice === 'g' && response.generatedStory) {
-        // For generated stories, get decodability after generation
-        const decodabilityResult = await getDecodability(response.generatedStory, formData.problemLetters);
-        console.log('Decodability Result in handleSubmit:', decodabilityResult);
-        setResult({
-          ...response,
-          decodability: decodabilityResult.decodability,
-          badWords: decodabilityResult.badWords || []
-        });
-      } else {
-        // For input stories, decodability is already included in the response
-        setResult(response);
-      }
-      console.log('Final Result State:', result);
+      setResult(response);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -211,7 +197,7 @@ function App() {
                 />
               </div>
             )}
-            {result.decodability !== undefined && (
+            {result && result.decodability !== undefined && (
               <div className="decodability">
                 <h3>Decodability Score:</h3>
                 <p>{(result.decodability * 100).toFixed(2)}%</p>
@@ -219,9 +205,13 @@ function App() {
                   <div className="bad-words-list">
                     <h4>Words with Problem Letters:</h4>
                     <div className="bad-words-grid">
-                      {Object.entries(foundBadWords).map(([word, count], index) => (
-                        <span key={index} className="bad-word">
-                          {word} ({count})
+                      {Object.entries(foundBadWords).map(([word, data], index) => (
+                        <span 
+                          key={index} 
+                          className="bad-word"
+                          title={`Problem categories: ${data.categories.join(', ')}`}
+                        >
+                          {word} ({data.count})
                         </span>
                       ))}
                     </div>

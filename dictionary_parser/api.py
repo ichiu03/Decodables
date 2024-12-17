@@ -3,6 +3,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import List, Optional
 from main import process_story, generate_story, handle_sight_words, combine
+import re
+from dictionaryParser import parseAndProcessWords
+from collections import Counter
 
 app = FastAPI()
 
@@ -39,7 +42,7 @@ async def process_story_endpoint(request: ProcessStoryRequest):
         # Update sight_words
         global sight_words
         sight_words = handle_sight_words(default_sight_words, ','.join(request.unknownSightWords))
-        print(f"request: {request}")
+        
         problems = request.problemLetters 
         readingLevel = request.readingLevel
         if int(readingLevel) <= 1:
@@ -54,14 +57,14 @@ async def process_story_endpoint(request: ProcessStoryRequest):
             maxsyllable = 6
         else:
             maxsyllable = 10
+
+        # Process the story
         if request.storyChoice == 'g':
-            # Generate story
             if not request.storyTopic or not request.storyLength:
                 raise HTTPException(
                     status_code=400, 
                     detail="Story topic and length required for story generation"
                 )
-            
             story = generate_story(
                 request.storyTopic, 
                 problems, 
@@ -70,54 +73,68 @@ async def process_story_endpoint(request: ProcessStoryRequest):
                 request.storyLength
             )
         else:
-            # Process input story
             if not request.storyInput:
                 raise HTTPException(
                     status_code=400, 
                     detail="Story input required for processing"
                 )
-            
             story = request.storyInput
-        
-        print("\n--- Processing Without Grammar Correction ---")
-        story1 = process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False)
 
-        print("\n--- Processing With Grammar Correction and Spell Check ---")
-        story2 = process_story(story, problems, maxsyllable, apply_correction=True, spellcheck=True, combined=False)
+        # Process the story and get word categories
+        word_dict = parseAndProcessWords(story, maxsyllable, "categorized_words.json")
         
-        story = combine(story1, story2, problems)
+        # Create a mapping of words to their problem categories
+        bad_words_with_categories = {}
+        story_words = re.findall(r'\b\w+\b', story.lower())
+        word_counts = Counter(story_words)
 
+        for problem in problems:
+            problem = problem.strip()
+            if problem in word_dict:
+                for word in word_dict[problem]:
+                    word_lower = word.lower()
+                    if word_lower in word_counts and word_lower not in sight_words:
+                        if word_lower not in bad_words_with_categories:
+                            bad_words_with_categories[word_lower] = {
+                                "categories": [problem],
+                                "count": word_counts[word_lower]
+                            }
+                        else:
+                            bad_words_with_categories[word_lower]["categories"].append(problem)
+
+        # Process the story with corrections if needed
         processed_story = process_story(
-                story, 
-                request.problemLetters,
-                maxsyllable,
-                apply_correction=True,
-                spellcheck=True,
-                combined=True
+            story, 
+            request.problemLetters,
+            maxsyllable,
+            apply_correction=True,
+            spellcheck=True,
+            combined=True
+        )
+        decodability, _ = process_story(
+            story, 
+            request.problemLetters,
+            maxsyllable,
+            apply_correction=False,
+            spellcheck=False,
+            combined=False,
+            decodabilityTest=True
         )
 
-        # For input stories, calculate decodability immediately
+        # Return appropriate response based on story choice
         if request.storyChoice == 'i':
-            
-            decodability, bad_words = process_story(
-                processed_story,
-                request.problemLetters,
-                maxsyllable,
-                apply_correction=False,
-                spellcheck=False,
-                combined=False,
-                decodabilityTest=True
-            )
             return {
                 "success": True,
                 "processedStory": processed_story,
                 "decodability": decodability,
-                "badWords": bad_words
+                "badWords": bad_words_with_categories
             }
         else:
             return {
                 "success": True,
-                "generatedStory": processed_story
+                "generatedStory": processed_story,
+                "decodability": decodability,
+                "badWords": bad_words_with_categories
             }
 
     except Exception as e:
@@ -126,8 +143,29 @@ async def process_story_endpoint(request: ProcessStoryRequest):
 @app.post("/api/decodability")
 async def get_decodability_endpoint(request: DecodabilityRequest):
     try:
-        decodability, bad_words = process_story(
-            request.text,
+        # Process the text and get word categories
+        word_dict = parseAndProcessWords(request.text, 10, "categorized_words.json")
+        
+        # Create a mapping of words to their problem categories
+        bad_words_with_categories = {}
+        story_words = re.findall(r'\b\w+\b', request.text.lower())
+        word_counts = Counter(story_words)
+
+        for problem in request.problems:
+            problem = problem.strip()
+            if problem in word_dict:
+                for word in word_dict[problem]:
+                    word_lower = word.lower()
+                    if word_lower in word_counts and word_lower not in sight_words:
+                        if word_lower not in bad_words_with_categories:
+                            bad_words_with_categories[word_lower] = {
+                                "categories": [problem],
+                                "count": word_counts[word_lower]
+                            }
+                        else:
+                            bad_words_with_categories[word_lower]["categories"].append(problem)
+        decodability, _ = process_story(
+            request.text, 
             request.problems,
             10,
             apply_correction=False,
@@ -135,11 +173,11 @@ async def get_decodability_endpoint(request: DecodabilityRequest):
             combined=False,
             decodabilityTest=True
         )
-
+        
         return {
             "success": True,
             "decodability": decodability,
-            "badWords": bad_words
+            "badWords": bad_words_with_categories
         }
 
     except Exception as e:
