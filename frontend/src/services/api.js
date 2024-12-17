@@ -33,19 +33,20 @@ export const processStory = async (formData) => {
     const data = await response.json();
     console.log('API Response:', data);
     
-    // If it's a generated story, get decodability after generation
-    if (formData.storyChoice === 'g' && data.generatedStory) {
-      const decodabilityResult = await getDecodability(data.generatedStory, formData.problemLetters);
+    // Get decodability for both generated and input stories if not provided
+    if (!data.decodability) {
+      const storyText = data.generatedStory || data.processedStory;
+      const decodabilityResult = await getDecodability(storyText, formData.problemLetters);
       return {
         ...data,
-        decodability: decodabilityResult.decodability,  // Use the decodability API's result
-        badWords: decodabilityResult.badWords  // Use the bad words from decodability API
+        decodability: decodabilityResult.decodability,
+        badWords: decodabilityResult.badWords
       };
     }
     
     return {
       ...data,
-      decodability: data.decodability,  // Use the API's decodability score
+      decodability: data.decodability,
       badWords: data.badWords || {}
     };
   } catch (error) {
