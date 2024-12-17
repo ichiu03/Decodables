@@ -37,7 +37,8 @@ export const processStory = async (formData) => {
       const decodabilityResult = await getDecodability(formData.storyInput, formData.problemLetters);
       return {
         ...data,
-        decodability: decodabilityResult.decodability
+        decodability: decodabilityResult.decodability,
+        badWords: decodabilityResult.badWords || []
       };
     }
     

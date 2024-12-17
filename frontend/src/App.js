@@ -7,6 +7,7 @@ import StoryChoiceSection from './components/StoryChoiceSection';
 import CharacterNameInput from './components/CharacterNameInput';
 import Login from './components/Login';
 import { processStory, getDecodability } from './services/api';
+import StoryDisplay from './components/StoryDisplay';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -184,19 +185,35 @@ function App() {
             {result.processedStory && (
               <div className="processed-story">
                 <h3>Processed Story:</h3>
-                <p>{result.processedStory}</p>
+                <StoryDisplay 
+                  story={result.processedStory} 
+                  badWords={result.badWords || []}
+                />
               </div>
             )}
             {result.generatedStory && (
               <div className="generated-story">
                 <h3>Generated Story:</h3>
-                <p>{result.generatedStory}</p>
+                <StoryDisplay 
+                  story={result.generatedStory}
+                  badWords={result.badWords || []}
+                />
               </div>
             )}
             {result.decodability !== undefined && (
               <div className="decodability">
                 <h3>Decodability Score:</h3>
                 <p>{(result.decodability * 100).toFixed(2)}%</p>
+                {result.badWords && result.badWords.length > 0 && (
+                  <div className="bad-words-list">
+                    <h4>Words with Problem Letters:</h4>
+                    <div className="bad-words-grid">
+                      {result.badWords.map((word, index) => (
+                        <span key={index} className="bad-word">{word}</span>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </div>

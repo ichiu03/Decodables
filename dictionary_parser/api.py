@@ -99,7 +99,7 @@ async def process_story_endpoint(request: ProcessStoryRequest):
         # For input stories, calculate decodability immediately
         if request.storyChoice == 'i':
             
-            decodability = process_story(
+            decodability, bad_words = process_story(
                 processed_story,
                 request.problemLetters,
                 maxsyllable,
@@ -111,7 +111,8 @@ async def process_story_endpoint(request: ProcessStoryRequest):
             return {
                 "success": True,
                 "processedStory": processed_story,
-                "decodability": decodability
+                "decodability": decodability,
+                "badWords": bad_words
             }
         else:
             return {
@@ -125,7 +126,7 @@ async def process_story_endpoint(request: ProcessStoryRequest):
 @app.post("/api/decodability")
 async def get_decodability_endpoint(request: DecodabilityRequest):
     try:
-        decodability = process_story(
+        decodability, bad_words = process_story(
             request.text,
             request.problems,
             10,
@@ -137,7 +138,8 @@ async def get_decodability_endpoint(request: DecodabilityRequest):
 
         return {
             "success": True,
-            "decodability": decodability
+            "decodability": decodability,
+            "badWords": bad_words
         }
 
     except Exception as e:

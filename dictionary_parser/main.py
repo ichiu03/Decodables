@@ -304,7 +304,7 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
         save_bad_word_counts(results["all_bads"])
 
         print(f"This text is {results['decodability'] * 100:.2f}% decodable")
-        return results["decodability"]
+        return results["decodability"], results["all_bads"]
     else:
         # Process and apply corrections if enabled
         if apply_correction:
@@ -414,7 +414,7 @@ def main():
         file = input("Copy and Paste your text here: ")
         story =  file
         maxsyllable = 10
-        decodabuilityog = process_story(story, problems, 10, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=True)
+        decodabuilityog, _ = process_story(story, problems, 10, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=True)
     print(story)
 
     # First Run: Without Grammar Correction
