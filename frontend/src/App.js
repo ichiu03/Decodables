@@ -43,6 +43,7 @@ function App() {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [foundBadWords, setFoundBadWords] = useState({});
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -93,6 +94,10 @@ function App() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleFoundWords = (words) => {
+    setFoundBadWords(words);
   };
 
   if (!isAuthenticated) {
@@ -191,7 +196,8 @@ function App() {
                 <h3>Processed Story:</h3>
                 <StoryDisplay 
                   story={result.processedStory} 
-                  badWords={result.badWords || []}
+                  badWords={result.badWords || {}}
+                  onFoundWords={handleFoundWords}
                 />
               </div>
             )}
@@ -200,7 +206,8 @@ function App() {
                 <h3>Generated Story:</h3>
                 <StoryDisplay 
                   story={result.generatedStory}
-                  badWords={result.badWords || []}
+                  badWords={result.badWords || {}}
+                  onFoundWords={handleFoundWords}
                 />
               </div>
             )}
@@ -208,11 +215,11 @@ function App() {
               <div className="decodability">
                 <h3>Decodability Score:</h3>
                 <p>{(result.decodability * 100).toFixed(2)}%</p>
-                {result.badWords && Object.keys(result.badWords).length > 0 && (
+                {Object.keys(foundBadWords).length > 0 && (
                   <div className="bad-words-list">
                     <h4>Words with Problem Letters:</h4>
                     <div className="bad-words-grid">
-                      {Object.entries(result.badWords).map(([word, count], index) => (
+                      {Object.entries(foundBadWords).map(([word, count], index) => (
                         <span key={index} className="bad-word">
                           {word} ({count})
                         </span>

@@ -30,3 +30,6 @@
 57.78% 2024-12-17 11:23:12 Word Count: 270 Decodability Test 
 55.69% 2024-12-17 11:23:21 Word Count: 246 Decodability Test 
 75.66% 2024-12-17 11:25:57 Word Count: 341 Processed 
+81.45% 2024-12-17 11:26:12 Word Count: 275 Processed 
+77.45% 2024-12-17 11:26:26 Word Count: 235 Processed 
+77.01% 2024-12-17 11:26:33 Word Count: 187 Decodability Test 

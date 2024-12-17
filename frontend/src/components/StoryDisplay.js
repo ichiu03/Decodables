@@ -1,18 +1,30 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './StoryDisplay.css';
 
-const StoryDisplay = ({ story, badWords }) => {
+const StoryDisplay = ({ story, badWords, onFoundWords }) => {
   console.log('StoryDisplay Props:', { story, badWords });
+
+  useEffect(() => {
+    if (story && badWords) {
+      const foundWords = {};
+      const badWordsArray = Object.keys(badWords);
+      
+      badWordsArray.forEach(word => {
+        const regex = new RegExp(`\\b${word}\\b`, 'gi');
+        const matches = story.match(regex);
+        if (matches) {
+          foundWords[word] = matches.length;
+        }
+      });
+      
+      onFoundWords(foundWords);
+    }
+  }, [story, badWords, onFoundWords]);
 
   const highlightBadWords = (text) => {
     if (!text || !badWords) return text;
-    console.log('Processing text:', text);
-    console.log('Bad words:', badWords);
-
-    // Convert badWords object to array if it's an object
-    const badWordsArray = Array.isArray(badWords) ? badWords : Object.keys(badWords);
     
-    // Create a regex pattern from bad words, escaping special characters
+    const badWordsArray = Object.keys(badWords);
     const pattern = badWordsArray.map(word => 
       word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
     ).join('|');

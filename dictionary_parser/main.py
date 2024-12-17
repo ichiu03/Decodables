@@ -301,7 +301,7 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
         display_bad_words(results["bad_occurrences"])
         save_decodability_metrics(results["decodability"], results["wordcount"], "Decodability Test", "")
         save_bad_word_counts(results["all_bads"])
-
+        bad_words = results["bad_occurrences"]
         print(f"This text is {results['decodability'] * 100:.2f}% decodable")
         return results["decodability"], results["bad_occurrences"]
     else:
