@@ -111,18 +111,18 @@ async def process_story_endpoint(request: ProcessStoryRequest):
             spellcheck=True,
             combined=True
         )
-        decodability, _ = process_story(
-            story, 
-            request.problemLetters,
-            maxsyllable,
-            apply_correction=False,
-            spellcheck=False,
-            combined=False,
-            decodabilityTest=True
-        )
 
         # Return appropriate response based on story choice
         if request.storyChoice == 'i':
+            decodability, _ = process_story(
+                story, 
+                request.problemLetters,
+                maxsyllable,
+                apply_correction=False,
+                spellcheck=False,
+                combined=False,
+                decodabilityTest=True
+            )
             return {
                 "success": True,
                 "processedStory": processed_story,
@@ -133,7 +133,6 @@ async def process_story_endpoint(request: ProcessStoryRequest):
             return {
                 "success": True,
                 "generatedStory": processed_story,
-                "decodability": decodability,
                 "badWords": bad_words_with_categories
             }
 
