@@ -299,8 +299,8 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
         results = categorize_and_validate_words(story, problems, maxsyllable)
         # Display and save bad word occurrences
         display_bad_words(results["bad_occurrences"])
-        save_decodability_metrics(results["decodability"], results["wordcount"], "Decodability Test", "")
-        save_bad_word_counts(results["all_bads"])
+        # save_decodability_metrics(results["decodability"], results["wordcount"], "Decodability Test", "")
+        # save_bad_word_counts(results["all_bads"])
         bad_words = results["bad_occurrences"]
         print(f"This text is {results['decodability'] * 100:.2f}% decodable")
         return results["decodability"], results["bad_occurrences"]
@@ -327,17 +327,17 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
         story = ultraformatting(story)
 
         # Save results
-        save_decodability_metrics(results["decodability"], results["wordcount"], "Processed", "")
-        save_bad_word_counts(results["all_bads"])
+        # save_decodability_metrics(results["decodability"], results["wordcount"], "Processed", "")
+        # save_bad_word_counts(results["all_bads"])
 
-        # Save the updated story
-        output_file = (
-            'combined.txt' if combined else 
-            'updated_story_corrected.txt' if apply_correction else 
-            'updated_story.txt'
-        )
-        save_updated_story(story, output_file)
-        print(f"Updated story has been saved to '{output_file}'.")
+        # # Save the updated story
+        # output_file = (
+        #     'combined.txt' if combined else 
+        #     'updated_story_corrected.txt' if apply_correction else 
+        #     'updated_story.txt'
+        # )
+        # save_updated_story(story, output_file)
+        # print(f"Updated story has been saved to '{output_file}'.")
 
         return story
 

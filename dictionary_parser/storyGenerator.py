@@ -29,19 +29,14 @@ chapters = 1
 good_words = []
 bad_words = []
 
-# Opening JSON file for words categorized by problems
-with open(path + 'categorized_words.json') as json_file:
-    words = json.load(json_file)
+# # Opening JSON file for words categorized by problems
+# with open(path + 'categorized_words.json') as json_file:
+#     words = json.load(json_file)
 
 # Opening JSON file for guidewords
 with open(path + 'truncated_dictionary.json') as json_file:
     guidewords = json.load(json_file)
 
-### Function to get all words
-def get_all_words():
-    with open(path + "WordDatav4.txt", "r") as f:
-        words = f.read().split("\n")
-    return words[:2000]
 
 ### Function to query GPT-3.5
 def query(prompt): 
@@ -112,18 +107,7 @@ def get_input():
 
     return story_length, topic, problems, name, readingLevel
 
-### Function to get words
-def get_words(problems):
-    global bad_words
-    global good_words
 
-    words_list = set(words[problems[0]]) if problems else set()
-    for problem in problems[1:]:
-        words_list.update(words[problem])
-    all_words = get_all_words()
-    bad_words = [word for word in all_words if word not in words_list]
-    good_words = [word for word in all_words if word not in bad_words]
-    return bad_words
 
 ### Function to write the story to a file
 def write_story_to_file(story):
@@ -205,7 +189,6 @@ def generate_outline(topic, name, readingLevel, story_length = 500):
 
 ### Main function
 def generate_story(topic, problems, name, readingLevel, story_length=500):
-    dictionary = get_words(problems)
     outline = generate_outline(topic, name, readingLevel)
     story = ""
     

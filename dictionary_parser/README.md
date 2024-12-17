@@ -9,3 +9,10 @@ Run frontend:
 cd frontend
 npm install
 npm start
+
+
+necessary files:
+
+Dictionary.txt -> full dictionary of accepted words
+truncated_dictionary.json -> truncated dictionary of accepted words for examples
+
