@@ -10,7 +10,6 @@ import traceback
 # Get the directory where `dictionaryParser.py` is located
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
-
 # Ensure the script checks locally for nltk_data
 os.environ['NLTK_DATA'] = os.path.expanduser('~/nltk_data')
 # Check if 'words' from nltk is already downloaded
@@ -19,7 +18,6 @@ try:
 except LookupError:
     nltk.download('words') # If it’s not available, attempt to download it
     valid_words = set(words.words())
-
 
 categories = {
     # Column 1 - Consonant Sounds
@@ -66,7 +64,6 @@ COMPOUND_SOUNDS = {
     'ey', 'oy', 'ew', 'ow', 'aw', 'ye', 'uie', 'oux', 'cally', 'ear'
     }
 
-
 ### Checks if compound vowel is a vowel/vowel -> yes is True
 def is_vv(compound: str, arp: str) -> bool:
     for vow, phonemes in vv_sounds.items():
@@ -75,7 +72,6 @@ def is_vv(compound: str, arp: str) -> bool:
                 if pho in arp:
                     return True
     return False
-
 
 ### Maps chunks of word to its phoneme, separating by VOWELS. Accounts for compound VOWELS as well.
 def mapChunksToPhonemes(word: str) -> dict:
@@ -161,7 +157,6 @@ def xInWordCheck(word: str, arpabet: str) -> None:
     keys = ['m', 'l', 'p', 'v', 'z', 'f', 'sh', 'ay', 'ck', 'ee', 'th', 'oy',
         'wh', 'er', 'aw', 'tch', 'ai', 'oa', 'dge', 'tion',
         'ough', 'wr', 'augh', 'stle', 'alk', 'ph']
-
 
     if 'k' in word and 'K' in arpabet: categories['k'].append(word)
     if 'j' in word and 'JH' in arpabet: categories['j'].append(word)
@@ -289,15 +284,12 @@ def xInWordCheck(word: str, arpabet: str) -> None:
     for key in keys:
         if key in word: categories[key].append(word)
 
-
 def warCheck(word: str) -> None:
     if 'war' in word and 'ware' not in word: categories['war'].append(word)
-
 
 def ghCheck(word: str, arpabet: str) -> None:
     if 'gh' not in word: return
     if 'G' in arpabet and verificationToAdd(word, arpabet, 'gh', ['G'], ['HH']): categories['gh'].append(word)
-
 
 def knCheck(word: str, arpabet: str) -> None:
     if 'kn' not in word: return
@@ -310,7 +302,6 @@ def knCheck(word: str, arpabet: str) -> None:
             elif 'N' in phoneme:
                 categories['kn'].append(word)
                 return
-
 
 ### Handles all words with 'y' and their categories
 def yCheck(word: str, arpabet: str) -> None:
@@ -334,7 +325,6 @@ def yCheck(word: str, arpabet: str) -> None:
     if 'ey' in word:
         if verificationToAdd(word, arpabet, 'ey', ['EY'], ['IH']):
             categories['ey as in they'].append(word)
-
 
 def ingongangungCheck(word: str) -> None:
     # For -ong, -ang, -ung endings
@@ -363,7 +353,6 @@ def ingongangungCheck(word: str) -> None:
         # If we get here, we should add the word
         categories['-ing, -ong, -ang, -ung'].append(word)
 
-
 def allCheck(word: str) -> None:
     if word.endswith('ly'):
         if len(word) > 5:
@@ -372,7 +361,6 @@ def allCheck(word: str) -> None:
                 categories['all'].append(word)
     elif 'all' in word:
         categories['all'].append(word)
-
 
 def hardVsSoftC(word: str, arpabet: str) -> None:
     if 'c' not in word: return
@@ -383,7 +371,6 @@ def hardVsSoftC(word: str, arpabet: str) -> None:
     elif hard_verification and soft_verification: return
     elif 'K' in tokens and hard_verification: categories['hard c'].append(word)
     elif 'S' in tokens and soft_verification: categories['soft c'].append(word)
-
 
 def hardVsSoftG(word: str, arpabet: str) -> None:
     if 'g' not in word: return
