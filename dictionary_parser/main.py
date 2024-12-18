@@ -225,9 +225,6 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
 
         # Parse and process words to categorize them
         word_dict = parseAndProcessWords(story, maxsyllable, "categorized_words.json")
-        
-        story = rewrite_sentences(story)
-        story = rewrite_paragraph(story)
 
         # Combine all bad words into a single set
         all_bads = set()
@@ -252,7 +249,6 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
         wordcount = len(story_words)
         decodability = 1 - (problemcount / wordcount) if wordcount > 0 else 0
 
-        
         # Return results
         return {
             "decodability": decodability,
@@ -262,7 +258,6 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
         }
 
     def save_decodability_metrics(decodability, wordcount, marker, combo):
-        # Ensure the directory exists
         # Prepare the data for the file
         current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         decodability_entry = f"{decodability * 100:.2f}% {current_time} Word Count: {wordcount} {marker} {combo}\n"
@@ -270,7 +265,7 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
         print(f"Word Count: {wordcount}")
 
         # Append the data to the file
-        decodability_file =  "decodability_measurements.txt"
+        decodability_file = "decodability_measurements.txt"
         with open(decodability_file, "a") as file:
             file.write(decodability_entry)
 
@@ -304,7 +299,7 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
         results = categorize_and_validate_words(story, problems, maxsyllable)
         # Display and save bad word occurrences
         display_bad_words(results["bad_occurrences"])
-        save_decodability_metrics(results["decodability"], results["wordcount"], "Decodability Test", "")
+        # save_decodability_metrics(results["decodability"], results["wordcount"], "Decodability Test", "")
         # save_bad_word_counts(results["all_bads"])
         bad_words = results["bad_occurrences"]
         print(f"This text is {results['decodability'] * 100:.2f}% decodable")
@@ -375,20 +370,7 @@ def main():
     global sight_words
     global maxsyllable
     maxsyllable = 2
-    default_sight_words = """
-        a,at,any,many,and,on,is,are,the,was,were,it,am,be,go,
-        to,out,been,this,come,some,do,does,done,what,who,you,your,
-        both,buy,door,floor,four,none,once,one,only,pull,push,sure,talk,walk,their,
-        there,they're,very,want,again,against,always,among,busy,could,should,would,
-        enough,rough,tough,friend,move,prove,ocean,people,she,other,above,father,
-        usually,special,front,thought,he,we,they,nothing,learned,toward,put,hour,
-        beautiful,whole,trouble,of,off,use,have,our,say,make,take,see,think,look,
-        give,how,ask,boy,girl,us,him,his,her,by,where,were,wear,hers,don't,which,
-        just,know,into,good,other,than,then,now,even,also,after,know,because,most,
-        day,these,two,already,through,though,like,said,too,has,in,brother,sister,
-        that,them,from,for,with,doing,well,before,tonight,down,about,but,up,around,
-        goes,gone,build,built,cough,lose,loose,truth,daughter,son"
-        """
+    default_sight_words = "a,at,any,many,and,on,is,are,the,was,were,it,am,be,go,to,out,been,this,come,some,do,does,done,what,who,you,your,both,buy,door,floor,four,none,once,one,only,pull,push,sure,talk,walk,their,there,they're,very,want,again,against,always,among,busy,could,should,would,enough,rough,tough,friend,move,prove,ocean,people,she,other,above,father,usually,special,front,thought,he,we,they,nothing,learned,toward,put,hour,beautiful,whole,trouble,of,off,use,have,our,say,make,take,see,think,look,give,how,ask,boy,girl,us,him,his,her,by,where,were,wear,hers,don't,which,just,know,into,good,other,than,then,now,even,also,after,know,because,most,day,these,two,already,through,though,like,said,too,has,in,brother,sister,that,them,from,for,with,doing,well,before,tonight,down,about,but,up,around,goes,gone,build,built,cough,lose,loose,truth,daughter,son"
     probsight_words = input("What sight words does the student not know (use only words and commas): ")
     
     sight_words = handle_sight_words(default_sight_words, probsight_words)
@@ -436,18 +418,19 @@ def main():
 
     # First Run: Without Grammar Correction
     print("\n--- Processing Without Grammar Correction ---")
-    story1 = process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=True)
-    story1 = process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=True)
+    story1 = process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False)
+    story1 = process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False)
 
     print("\n--- Processing With Grammar Correction and Spell Check ---")
-    story2 = process_story(story, problems, maxsyllable, apply_correction=True, spellcheck=True, combined=False, decodabilityTest=True)
+    story2 = process_story(story, problems, maxsyllable, apply_correction=True, spellcheck=True, combined=False)
 
     # Now, combine the two stories
     story3 = combine(story1, story2, problems)
 
     # Process the combined story
+    story4 = process_story(story3, problems, maxsyllable, apply_correction=True, spellcheck=True, combined=True)
 
-    print(f'\n\nFinal Story: {story3}')
+    print(f'\n\nFinal Story: {story4}')
 
 
 
@@ -461,7 +444,6 @@ if __name__ == "__main__":
 #t/p/n/m/th/ch/oo as in school/ow as in plow/y as in dry  
 #d/w/z/h/ck/s blends/l blends/er/ea as in bread/igh  
 #r/v/l/qu/th/ay/ow as in snow/ear as in hear/y as in bumpy  
-#z/x/long u/-ink, -ank, -onk, -unk/wh/oa/igh/oe/gn/mb
 
 #New idea if word appears 2+ times prompt the bot to find alternative words that could work in the context but may be different in their meaning
 #Could reduce decodability
