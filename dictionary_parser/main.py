@@ -21,9 +21,7 @@ with open(path + 'Dictionary.txt', 'r', encoding='utf-8') as file:
 with open(path + 'truncated_dictionary.json') as json_file:
     guidewords = json.load(json_file)
 
-
-def get_synonyms_dict(story: str, problems: list, maxsyllable: int) -> dict:
-    word_dict = parseAndProcessWords(story, maxsyllable, "categorized_words.json")
+def get_synonyms_dict(story: str, word_dict: dict, problems: list, maxsyllable: int) -> dict:
     sentences = story.split(".")
     prev_sentence = ""
     synonyms_dict = {}
@@ -92,7 +90,6 @@ def get_synonyms_dict(story: str, problems: list, maxsyllable: int) -> dict:
                         synonyms_dict[clean_word] = " ____"
         prev_sentence = sentence
     return synonyms_dict
-
 
 
 def ultraformatting(text):
@@ -219,12 +216,18 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
         # Prepare sight words set
         sight_words_set = set(word.lower().strip() for word in sight_words.split(','))
 
+        story = rewrite_sentences(story)
+        story = rewrite_paragraph(story)
+        
         # Tokenize the story into words and count occurrences
         story_words = re.findall(r'\b\w+\b', story.lower())
         story_word_counts = Counter(story_words)
 
         # Parse and process words to categorize them
         word_dict = parseAndProcessWords(story, maxsyllable, "categorized_words.json")
+        
+        story = rewrite_sentences(story)
+        story = rewrite_paragraph(story)
 
         # Combine all bad words into a single set
         all_bads = set()
@@ -235,7 +238,7 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
                 all_bads.update(problem_words)
             else:
                 print(f"Warning: Problem '{problem}' not found in word dictionary.")
-        
+
         # Count occurrences of each unique bad word in the story
         problemcount = 0
         bad_occurrences = {}
@@ -249,6 +252,7 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
         wordcount = len(story_words)
         decodability = 1 - (problemcount / wordcount) if wordcount > 0 else 0
 
+        
         # Return results
         return {
             "decodability": decodability,
@@ -256,22 +260,39 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
             "wordcount": wordcount,
             "all_bads": all_bads,
         }
-    
+
     def save_decodability_metrics(decodability, wordcount, marker, combo):
         # Ensure the directory exists
         # Prepare the data for the file
         current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         decodability_entry = f"{decodability * 100:.2f}% {current_time} Word Count: {wordcount} {marker} {combo}\n"
+        print(f"{decodability * 100:.2f}%")
         print(f"Word Count: {wordcount}")
 
         # Append the data to the file
-        decodability_file = "decodability_measurements.txt"
         decodability_file =  "decodability_measurements.txt"
         with open(decodability_file, "a") as file:
             file.write(decodability_entry)
 
+    def save_bad_word_counts(all_bads):
+        # Load existing word counts from file if it exists
+        word_counts = {}
+        try:
+            with open('non_decodable_words.txt', 'r') as f:
+                for line in f:
+                    word, count = line.strip().split(': ')
+                    word_counts[word] = int(count)
+        except FileNotFoundError:
+            pass
 
+        # Update counts with new bad words
+        for word in all_bads:
+            word_counts[word] = word_counts.get(word, 0) + 1
 
+        # Write updated counts back to file
+        with open('non_decodable_words.txt', 'w') as f:
+            for word, count in sorted(word_counts.items()):
+                f.write(f'{word}: {count}\n')
 
     def display_bad_words(bad_occurrences):
         print("Bad Word Occurrences:")
@@ -297,18 +318,31 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
             print("Applying Spellcheck...")
             prompt = f"You are a literary editor. Rewrite this story and make any necessary changes to the story to make it 100% readable and abide by proper English writing and reading standards: {story}. Return just the new fixed story."
             story = query(prompt)
-        
-        decodability = categorize_and_validate_words(story, problems, maxsyllable)["decodability"]
-        while decodability < 0.9:
-            print(f"Decodability: {decodability}")
-            print("Checking and categorizing words...")
-            results = categorize_and_validate_words(story, problems, maxsyllable)
 
-            print("Formatting the story...")
-            story = ultraformatting(story)
-            decodability = categorize_and_validate_words(story, problems, maxsyllable)["decodability"]
-        
-        story = rewrite_sentences(story)
+        print("Checking and categorizing words...")
+        results = categorize_and_validate_words(story, problems, maxsyllable)
+
+        # Display bad words in the terminal
+        display_bad_words(results["bad_occurrences"])
+
+        print("Replacing problematic words...")
+        synonyms_dict = get_synonyms_dict(story, results["all_bads"], problems, maxsyllable)
+        story = replace_words_in_story(story, synonyms_dict)
+        print("Formatting the story...")
+        story = ultraformatting(story)
+
+        # Save results
+        # save_decodability_metrics(results["decodability"], results["wordcount"], "Processed", "")
+        # save_bad_word_counts(results["all_bads"])
+
+        # # Save the updated story
+        # output_file = (
+        #     'combined.txt' if combined else 
+        #     'updated_story_corrected.txt' if apply_correction else 
+        #     'updated_story.txt'
+        # )
+        # save_updated_story(story, output_file)
+        # print(f"Updated story has been saved to '{output_file}'.")
 
         return story
 
@@ -341,7 +375,20 @@ def main():
     global sight_words
     global maxsyllable
     maxsyllable = 2
-    default_sight_words = "a,at,any,many,and,on,is,are,the,was,were,it,am,be,go,to,out,been,this,come,some,do,does,done,what,who,you,your,both,buy,door,floor,four,none,once,one,only,pull,push,sure,talk,walk,their,there,they're,very,want,again,against,always,among,busy,could,should,would,enough,rough,tough,friend,move,prove,ocean,people,she,other,above,father,usually,special,front,thought,he,we,they,nothing,learned,toward,put,hour,beautiful,whole,trouble,of,off,use,have,our,say,make,take,see,think,look,give,how,ask,boy,girl,us,him,his,her,by,where,were,wear,hers,don't,which,just,know,into,good,other,than,then,now,even,also,after,know,because,most,day,these,two,already,through,though,like,said,too,has,in,brother,sister,that,them,from,for,with,doing,well,before,tonight,down,about,but,up,around,goes,gone,build,built,cough,lose,loose,truth,daughter,son"
+    default_sight_words = """
+        a,at,any,many,and,on,is,are,the,was,were,it,am,be,go,
+        to,out,been,this,come,some,do,does,done,what,who,you,your,
+        both,buy,door,floor,four,none,once,one,only,pull,push,sure,talk,walk,their,
+        there,they're,very,want,again,against,always,among,busy,could,should,would,
+        enough,rough,tough,friend,move,prove,ocean,people,she,other,above,father,
+        usually,special,front,thought,he,we,they,nothing,learned,toward,put,hour,
+        beautiful,whole,trouble,of,off,use,have,our,say,make,take,see,think,look,
+        give,how,ask,boy,girl,us,him,his,her,by,where,were,wear,hers,don't,which,
+        just,know,into,good,other,than,then,now,even,also,after,know,because,most,
+        day,these,two,already,through,though,like,said,too,has,in,brother,sister,
+        that,them,from,for,with,doing,well,before,tonight,down,about,but,up,around,
+        goes,gone,build,built,cough,lose,loose,truth,daughter,son"
+        """
     probsight_words = input("What sight words does the student not know (use only words and commas): ")
     
     sight_words = handle_sight_words(default_sight_words, probsight_words)
@@ -389,19 +436,19 @@ def main():
 
     # First Run: Without Grammar Correction
     print("\n--- Processing Without Grammar Correction ---")
-    story1 = process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False)
+    story1 = process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=True)
+    story1 = process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=True)
 
     print("\n--- Processing With Grammar Correction and Spell Check ---")
-    story2 = process_story(story, problems, maxsyllable, apply_correction=True, spellcheck=True, combined=False)
+    story2 = process_story(story, problems, maxsyllable, apply_correction=True, spellcheck=True, combined=False, decodabilityTest=True)
 
     # Now, combine the two stories
     story3 = combine(story1, story2, problems)
 
     # Process the combined story
-    story4 = process_story(story3, problems, maxsyllable, apply_correction=True, spellcheck=True, combined=True)
+    story4 = process_story(story3, problems, maxsyllable, apply_correction=True, spellcheck=True, combined=True, decodabilityTest=True)
 
-    decodability, bad_words = process_story(story4, problems, maxsyllable, apply_correction=True, spellcheck=True, combined=True, decodabilityTest=True)
-    print(f'\n\nFinal Story: {story4}')
+    print(f'\n\nFinal Story: {story3}')
 
 
 
@@ -412,3 +459,11 @@ if __name__ == "__main__":
 #b/l/p/j/ck/wh/aw/tch/igh/ir/oi  
 #wh/aw/tch/igh/ir/oi/kn/ur/dge/tion/war/ph/eigh/wor/ough  
 #s/l/r/b/sh/ar/ai/-ing, -ong, -ang, -ung/ea as in eat  
+#t/p/n/m/th/ch/oo as in school/ow as in plow/y as in dry  
+#d/w/z/h/ck/s blends/l blends/er/ea as in bread/igh  
+#r/v/l/qu/th/ay/ow as in snow/ear as in hear/y as in bumpy  
+#z/x/long u/-ink, -ank, -onk, -unk/wh/oa/igh/oe/gn/mb
+
+#New idea if word appears 2+ times prompt the bot to find alternative words that could work in the context but may be different in their meaning
+#Could reduce decodability
+
