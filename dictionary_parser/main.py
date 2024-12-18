@@ -235,8 +235,7 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
                 all_bads.update(problem_words)
             else:
                 print(f"Warning: Problem '{problem}' not found in word dictionary.")
-        print('############################################')
-        print(f'all_bads: {all_bads}\n\n problems: {problems}')
+        
         # Count occurrences of each unique bad word in the story
         problemcount = 0
         bad_occurrences = {}
@@ -283,31 +282,19 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
             print("Applying Spellcheck...")
             prompt = f"You are a literary editor. Rewrite this story and make any necessary changes to the story to make it 100% readable and abide by proper English writing and reading standards: {story}. Return just the new fixed story."
             story = query(prompt)
+        
+        decodability = categorize_and_validate_words(story, problems, maxsyllable)["decodability"]
+        while decodability < 0.85:
+            print(f"Decodability: {decodability}")
+            print("Checking and categorizing words...")
+            results = categorize_and_validate_words(story, problems, maxsyllable)
 
-        print("Checking and categorizing words...")
-        results = categorize_and_validate_words(story, problems, maxsyllable)
-
-        # Display bad words in the terminal
-        display_bad_words(results["bad_occurrences"])
-
-        print("Replacing problematic words...")
-        synonyms_dict = get_synonyms_dict(story, problems, maxsyllable)
-        story = replace_words_in_story(story, synonyms_dict)
-        print("Formatting the story...")
-        story = ultraformatting(story)
-
-        # Save results
-        # save_decodability_metrics(results["decodability"], results["wordcount"], "Processed", "")
-        # save_bad_word_counts(results["all_bads"])
-
-        # # Save the updated story
-        # output_file = (
-        #     'combined.txt' if combined else 
-        #     'updated_story_corrected.txt' if apply_correction else 
-        #     'updated_story.txt'
-        # )
-        # save_updated_story(story, output_file)
-        # print(f"Updated story has been saved to '{output_file}'.")
+            print("Replacing problematic words...")
+            synonyms_dict = get_synonyms_dict(story, problems, maxsyllable)
+            story = replace_words_in_story(story, synonyms_dict)
+            print("Formatting the story...")
+            story = ultraformatting(story)
+            decodability = categorize_and_validate_words(story, problems, maxsyllable)["decodability"]
 
         return story
 
