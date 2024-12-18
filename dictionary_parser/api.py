@@ -80,53 +80,63 @@ async def process_story_endpoint(request: ProcessStoryRequest):
                 )
             story = request.storyInput
 
-        # First Run: Without Grammar Correction
-        print("\n--- Processing Without Grammar Correction ---")
-        story1 = process_story(
+        # Process the story and get word categories
+        word_dict = parseAndProcessWords(story, maxsyllable, "categorized_words.json")
+        
+        # Create a mapping of words to their problem categories
+        bad_words_with_categories = {}
+        story_words = re.findall(r'\b\w+\b', story.lower())
+        word_counts = Counter(story_words)
+
+        for problem in problems:
+            problem = problem.strip()
+            if problem in word_dict:
+                for word in word_dict[problem]:
+                    word_lower = word.lower()
+                    if word_lower in word_counts and word_lower not in sight_words:
+                        if word_lower not in bad_words_with_categories:
+                            bad_words_with_categories[word_lower] = {
+                                "categories": [problem],
+                                "count": word_counts[word_lower]
+                            }
+                        else:
+                            bad_words_with_categories[word_lower]["categories"].append(problem)
+
+        # Process the story with corrections if needed
+        processed_story = process_story(
             story, 
-            request.problemLetters,
-            maxsyllable,
-            apply_correction=False,
-            spellcheck=False,
-            combined=False
-        )
-
-        # Second Run: With Grammar Correction and Spell Check
-        print("\n--- Processing With Grammar Correction and Spell Check ---")
-        story2 = process_story(
-            story, 
-            request.problemLetters,
-            maxsyllable,
-            apply_correction=True,
-            spellcheck=True,
-            combined=False
-        )
-
-        # Now, combine the two stories
-        print("\n--- Combining the Two Stories ---")
-        story3 = combine(story1, story2, request.problemLetters)
-
-        # Process the combined story
-        story4 = process_story(
-            story3, 
             request.problemLetters,
             maxsyllable,
             apply_correction=True,
             spellcheck=True,
             combined=True
         )
-        
+
+        decodability, _ = process_story(
+                story, 
+                request.problemLetters,
+                maxsyllable,
+                apply_correction=False,
+                spellcheck=False,
+                combined=False,
+                decodabilityTest=True
+            )
+
         # Return appropriate response based on story choice
         if request.storyChoice == 'i':
             
             return {
                 "success": True,
-                "processedStory": story4
+                "processedStory": processed_story,
+                "decodability": decodability,
+                "badWords": bad_words_with_categories
             }
         else:
             return {
                 "success": True,
-                "generatedStory": story4
+                "generatedStory": processed_story,
+                "decodability": decodability,
+                "badWords": bad_words_with_categories
             }
 
     except Exception as e:
@@ -146,11 +156,9 @@ async def get_decodability_endpoint(request: DecodabilityRequest):
         for problem in request.problems:
             problem = problem.strip()
             if problem in word_dict:
-                print(word_dict[problem])
                 for word in word_dict[problem]:
                     word_lower = word.lower()
-                    # if word_lower in story_words and word_lower not in sight_words:
-                    if word_lower not in sight_words:
+                    if word_lower in word_counts and word_lower not in sight_words:
                         if word_lower not in bad_words_with_categories:
                             bad_words_with_categories[word_lower] = {
                                 "categories": [problem],

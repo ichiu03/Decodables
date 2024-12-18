@@ -11,6 +11,7 @@ import StoryDisplay from './components/StoryDisplay';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  
   // Check if user was previously authenticated
   useEffect(() => {
     const auth = localStorage.getItem('isAuthenticated');
