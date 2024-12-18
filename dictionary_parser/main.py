@@ -21,7 +21,7 @@ with open(path + 'Dictionary.txt', 'r', encoding='utf-8') as file:
 with open(path + 'truncated_dictionary.json') as json_file:
     guidewords = json.load(json_file)
 
-def get_synonyms_dict(story: str, word_dict: dict, problems: list, maxsyllable: int) -> dict:
+def get_synonyms_dict(story: str, bad_words: set, problems: list, maxsyllable: int) -> dict:
     sentences = story.split(".")
     prev_sentence = ""
     synonyms_dict = {}
@@ -50,44 +50,43 @@ def get_synonyms_dict(story: str, word_dict: dict, problems: list, maxsyllable: 
         for word in words:
             # Remove punctuation and make lowercase
             clean_word = "".join(re.findall("[a-zA-Z]", word)).lower()
-            for problem in problems:
-                problem = problem.strip()
-                if problem in word_dict and clean_word in word_dict[problem] and clean_word not in sight_words:
-                    # Prepare the prompt
-                    prompt = f"""
-                        Give 10 synonyms for the word '{word}' that would fit naturally in the following sentence, and **do not** include any words containing these sounds: {', '.join(problems)}.
-                        A change in tense or form of the word is not acceptable. Maintain tense and form as these words are going to replace the original word in a story.
+            # Check if the word is in our set of bad words
+            if clean_word in bad_words and clean_word not in sight_words:
+                # Prepare the prompt
+                prompt = f"""
+                    Give 10 synonyms for the word '{word}' that would fit naturally in the following sentence, and **do not** include any words containing these sounds: {', '.join(problems)}.
+                    A change in tense or form of the word is not acceptable. Maintain tense and form as these words are going to replace the original word in a story.
 
-                        Some examples of words to **avoid** are: {examples_str}.
+                    Some examples of words to **avoid** are: {examples_str}.
 
-                        Previous sentence (for context): {prev_sentence}
-                        Sentence to fix: {sentence}
-                        Next sentence (for context): {next_sentence}
+                    Previous sentence (for context): {prev_sentence}
+                    Sentence to fix: {sentence}
+                    Next sentence (for context): {next_sentence}
 
-                        Return only the 10 words separated by commas, like this: "word1, word2, word3, word4, word5".
-                        Order the words so the best fit is first.
+                    Return only the 10 words separated by commas, like this: "word1, word2, word3, word4, word5".
+                    Order the words so the best fit is first.
 
-                        **RETURN ONLY THE LIST OF WORDS**
-                        """
-                    response = query(prompt).strip()
-                    temp_words = [w.strip() for w in response.split(",") if w.strip()]
-                    temp_words_dict = parseAndProcessWords(response, maxsyllable, "categorized_words.json")
-                    # Remove words containing problem sounds
-                    filtered_temp_words = []
-                    for temp_word in temp_words:
-                        temp_word_lower = temp_word.lower()
-                        contains_problem = False
-                        for problem_check in problems:
-                            problem_check = problem_check.strip()
-                            if problem_check in temp_words_dict and temp_word_lower in temp_words_dict[problem_check]:
-                                contains_problem = True
-                                break
-                        if not contains_problem:
-                            filtered_temp_words.append(temp_word)
-                    if filtered_temp_words:
-                        synonyms_dict[clean_word] = " " + filtered_temp_words[0]
-                    else:
-                        synonyms_dict[clean_word] = " ____"
+                    **RETURN ONLY THE LIST OF WORDS**
+                    """
+                response = query(prompt).strip()
+                temp_words = [w.strip() for w in response.split(",") if w.strip()]
+                temp_words_dict = parseAndProcessWords(response, maxsyllable, "categorized_words.json")
+                # Remove words containing problem sounds
+                filtered_temp_words = []
+                for temp_word in temp_words:
+                    temp_word_lower = temp_word.lower()
+                    contains_problem = False
+                    for problem_check in problems:
+                        problem_check = problem_check.strip()
+                        if problem_check in temp_words_dict and temp_word_lower in temp_words_dict[problem_check]:
+                            contains_problem = True
+                            break
+                    if not contains_problem:
+                        filtered_temp_words.append(temp_word)
+                if filtered_temp_words:
+                    synonyms_dict[clean_word] = " " + filtered_temp_words[0]
+                else:
+                    synonyms_dict[clean_word] = " ____"
         prev_sentence = sentence
     return synonyms_dict
 
@@ -216,9 +215,6 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
         # Prepare sight words set
         sight_words_set = set(word.lower().strip() for word in sight_words.split(','))
 
-        story = rewrite_sentences(story)
-        story = rewrite_paragraph(story)
-        
         # Tokenize the story into words and count occurrences
         story_words = re.findall(r'\b\w+\b', story.lower())
         story_word_counts = Counter(story_words)
@@ -257,37 +253,6 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
             "all_bads": all_bads,
         }
 
-    def save_decodability_metrics(decodability, wordcount, marker, combo):
-        # Prepare the data for the file
-        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        decodability_entry = f"{decodability * 100:.2f}% {current_time} Word Count: {wordcount} {marker} {combo}\n"
-        print(f"{decodability * 100:.2f}%")
-        print(f"Word Count: {wordcount}")
-
-        # Append the data to the file
-        decodability_file = "decodability_measurements.txt"
-        with open(decodability_file, "a") as file:
-            file.write(decodability_entry)
-
-    def save_bad_word_counts(all_bads):
-        # Load existing word counts from file if it exists
-        word_counts = {}
-        try:
-            with open('non_decodable_words.txt', 'r') as f:
-                for line in f:
-                    word, count = line.strip().split(': ')
-                    word_counts[word] = int(count)
-        except FileNotFoundError:
-            pass
-
-        # Update counts with new bad words
-        for word in all_bads:
-            word_counts[word] = word_counts.get(word, 0) + 1
-
-        # Write updated counts back to file
-        with open('non_decodable_words.txt', 'w') as f:
-            for word, count in sorted(word_counts.items()):
-                f.write(f'{word}: {count}\n')
 
     def display_bad_words(bad_occurrences):
         print("Bad Word Occurrences:")

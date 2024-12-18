@@ -113,7 +113,7 @@ async def process_story_endpoint(request: ProcessStoryRequest):
         )
 
         decodability, _ = process_story(
-                story, 
+                processed_story, 
                 request.problemLetters,
                 maxsyllable,
                 apply_correction=False,
