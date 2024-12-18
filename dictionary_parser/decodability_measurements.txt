@@ -326,7 +326,7 @@
 93.63% 2024-12-14 22:04:58 Word Count: 204 Processed 
 79.82% 2024-12-14 22:17:57 Word Count: 332 Processed 
 76.85% 2024-12-14 22:18:22 Word Count: 298 Processed 
-76.22% 2024-12-14 22:18:51 Word Count: 349 Processed 91.62% 2024-12-18 15:07:14 Word Count: 167 Decodability Test 
-90.62% 2024-12-18 15:07:39 Word Count: 192 Decodability Test 
-91.71% 2024-12-18 15:08:02 Word Count: 193 Decodability Test 
-79.31% 2024-12-18 15:08:12 Word Count: 87 Decodability Test 
+76.22% 2024-12-14 22:18:51 Word Count: 349 Processed 
+91.62% 2024-12-18 15:07:14 Word Count: 167 Decodability Test 
+
+100.00% 2024-12-18 15:19:46 Word Count: 123 Decodability Test 
