@@ -21,7 +21,8 @@ with open(path + 'Dictionary.txt', 'r', encoding='utf-8') as file:
 with open(path + 'truncated_dictionary.json') as json_file:
     guidewords = json.load(json_file)
 
-def get_synonyms_dict(story: str, bad_words: set, problems: list, maxsyllable: int) -> dict:
+    
+def get_synonyms_dict(story: str, word_dict: dict, problems: list, maxsyllable: int) -> dict:
     sentences = story.split(".")
     prev_sentence = ""
     synonyms_dict = {}
@@ -50,45 +51,47 @@ def get_synonyms_dict(story: str, bad_words: set, problems: list, maxsyllable: i
         for word in words:
             # Remove punctuation and make lowercase
             clean_word = "".join(re.findall("[a-zA-Z]", word)).lower()
-            # Check if the word is in our set of bad words
-            if clean_word in bad_words and clean_word not in sight_words:
-                # Prepare the prompt
-                prompt = f"""
-                    Give 10 synonyms for the word '{word}' that would fit naturally in the following sentence, and **do not** include any words containing these sounds: {', '.join(problems)}.
-                    A change in tense or form of the word is not acceptable. Maintain tense and form as these words are going to replace the original word in a story.
+            for problem in problems:
+                problem = problem.strip()
+                if problem in word_dict and clean_word in word_dict[problem] and clean_word not in sight_words:
+                    # Prepare the prompt
+                    prompt = f"""
+                        Give 10 synonyms for the word '{word}' that would fit naturally in the following sentence, and **do not** include any words containing these sounds: {', '.join(problems)}.
+                        A change in tense or form of the word is not acceptable. Maintain tense and form as these words are going to replace the original word in a story.
 
-                    Some examples of words to **avoid** are: {examples_str}.
+                        Some examples of words to **avoid** are: {examples_str}.
 
-                    Previous sentence (for context): {prev_sentence}
-                    Sentence to fix: {sentence}
-                    Next sentence (for context): {next_sentence}
+                        Previous sentence (for context): {prev_sentence}
+                        Sentence to fix: {sentence}
+                        Next sentence (for context): {next_sentence}
 
-                    Return only the 10 words separated by commas, like this: "word1, word2, word3, word4, word5".
-                    Order the words so the best fit is first.
+                        Return only the 10 words separated by commas, like this: "word1, word2, word3, word4, word5".
+                        Order the words so the best fit is first.
 
-                    **RETURN ONLY THE LIST OF WORDS**
-                    """
-                response = query(prompt).strip()
-                temp_words = [w.strip() for w in response.split(",") if w.strip()]
-                temp_words_dict = parseAndProcessWords(response, maxsyllable, "categorized_words.json")
-                # Remove words containing problem sounds
-                filtered_temp_words = []
-                for temp_word in temp_words:
-                    temp_word_lower = temp_word.lower()
-                    contains_problem = False
-                    for problem_check in problems:
-                        problem_check = problem_check.strip()
-                        if problem_check in temp_words_dict and temp_word_lower in temp_words_dict[problem_check]:
-                            contains_problem = True
-                            break
-                    if not contains_problem:
-                        filtered_temp_words.append(temp_word)
-                if filtered_temp_words:
-                    synonyms_dict[clean_word] = " " + filtered_temp_words[0]
-                else:
-                    synonyms_dict[clean_word] = " ____"
+                        **RETURN ONLY THE LIST OF WORDS**
+                        """
+                    response = query(prompt).strip()
+                    temp_words = [w.strip() for w in response.split(",") if w.strip()]
+                    temp_words_dict = parseAndProcessWords(response, maxsyllable, "categorized_words.json")
+                    # Remove words containing problem sounds
+                    filtered_temp_words = []
+                    for temp_word in temp_words:
+                        temp_word_lower = temp_word.lower()
+                        contains_problem = False
+                        for problem_check in problems:
+                            problem_check = problem_check.strip()
+                            if problem_check in temp_words_dict and temp_word_lower in temp_words_dict[problem_check]:
+                                contains_problem = True
+                                break
+                        if not contains_problem:
+                            filtered_temp_words.append(temp_word)
+                    if filtered_temp_words:
+                        synonyms_dict[clean_word] = " " + filtered_temp_words[0]
+                    else:
+                        synonyms_dict[clean_word] = " ____"
         prev_sentence = sentence
     return synonyms_dict
+
 
 
 def ultraformatting(text):
@@ -231,7 +234,8 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
                 all_bads.update(problem_words)
             else:
                 print(f"Warning: Problem '{problem}' not found in word dictionary.")
-
+        print('############################################')
+        print(f'all_bads: {all_bads}\n\n problems: {problems}')
         # Count occurrences of each unique bad word in the story
         problemcount = 0
         bad_occurrences = {}
@@ -384,7 +388,6 @@ def main():
     # First Run: Without Grammar Correction
     print("\n--- Processing Without Grammar Correction ---")
     story1 = process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False)
-    story1 = process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False)
 
     print("\n--- Processing With Grammar Correction and Spell Check ---")
     story2 = process_story(story, problems, maxsyllable, apply_correction=True, spellcheck=True, combined=False)
@@ -395,6 +398,7 @@ def main():
     # Process the combined story
     story4 = process_story(story3, problems, maxsyllable, apply_correction=True, spellcheck=True, combined=True)
 
+    decodability, bad_words = process_story(story4, problems, maxsyllable, apply_correction=True, spellcheck=True, combined=True, decodabilityTest=True)
     print(f'\n\nFinal Story: {story4}')
 
 
