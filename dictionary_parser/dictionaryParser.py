@@ -352,9 +352,10 @@ def ingongangungCheck(word: str) -> None:
 
 def allCheck(word: str) -> None:
     if word.endswith('ly'):
-        root_word = word[:-2]
-        if 'all' not in root_word:  
-            categories['all'].append(word)
+        if len(word) > 5:
+            root_word = word[:-2]
+            if 'all' in root_word:  
+                categories['all'].append(word)
     elif 'all' in word:
         categories['all'].append(word)
 
@@ -676,14 +677,14 @@ def parseAndProcessWords(story: str, syllable_limit:str, output_path: str) -> di
     try:
         words = getWords(story)
         unique_words = set(words)
-        print('parsing through words. . .\n')
+        # print('parsing through words. . .\n')
         for word in unique_words:
             word.lower()
             if word in sight_words:
                 continue
             phones = pronouncing.phones_for_word(word)
             if not phones:
-                print(f"\t'{word}' not found in the pronouncing library's dictionary.")
+                # print(f"\t'{word}' not found in the pronouncing library's dictionary.")
                 categories['failed to categorize'].append(word)
                 continue
             syllable_count = pronouncing.syllable_count(phones[0])
