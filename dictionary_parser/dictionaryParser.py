@@ -352,9 +352,10 @@ def ingongangungCheck(word: str) -> None:
 
 def allCheck(word: str) -> None:
     if word.endswith('ly'):
-        root_word = word[:-2]
-        if 'all' not in root_word:  
-            categories['all'].append(word)
+        if len(word) > 5:
+            root_word = word[:-2]
+            if 'all' in root_word:  
+                categories['all'].append(word)
     elif 'all' in word:
         categories['all'].append(word)
 
