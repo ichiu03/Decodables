@@ -308,6 +308,108 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
 
         return story
 
+def combine(story1, story2, problems):
+    prompt = f"""
+    Take the two versions of the story provided below and combine their sentences into one improved version. 
+    Retain the original plot and key details.
+    Keep the creative language from both versions.
+    Try to avoid run-on sentences.
+    Ensure the final story maintains the same narrative structure but uses the best phrases from each version. 
+    Do not invent new plot elements or diverge from the original stories.
+    **Most Importantly** Try to avoid including these sounds: {problems}.
+
+    Version 1: {story1}
+
+    Version 2: {story2}
+    """
+    ultstory = query(prompt)
+    return ultstory
+
+def handle_sight_words(default_sight_words: str, problematic_words: str) -> str:
+    sight_words_list = default_sight_words.split(",")
+    probsight_words_list = problematic_words.split(",")
+    for word in probsight_words_list:
+        if word in sight_words_list:
+            sight_words_list.remove(word)
+    return ",".join(sight_words_list)
+
+def main():
+    global sight_words
+    global maxsyllable
+    maxsyllable = 2
+    default_sight_words = "a,at,any,many,and,on,is,are,the,was,were,it,am,be,go,to,out,been,this,come,some,do,does,done,what,who,you,your,both,buy,door,floor,four,none,once,one,only,pull,push,sure,talk,walk,their,there,they're,very,want,again,against,always,among,busy,could,should,would,enough,rough,tough,friend,move,prove,ocean,people,she,other,above,father,usually,special,front,thought,he,we,they,nothing,learned,toward,put,hour,beautiful,whole,trouble,of,off,use,have,our,say,make,take,see,think,look,give,how,ask,boy,girl,us,him,his,her,by,where,were,wear,hers,don't,which,just,know,into,good,other,than,then,now,even,also,after,know,because,most,day,these,two,already,through,though,like,said,too,has,in,brother,sister,that,them,from,for,with,doing,well,before,tonight,down,about,but,up,around,goes,gone,build,built,cough,lose,loose,truth,daughter,son"
+    probsight_words = input("What sight words does the student not know (use only words and commas): ")
+    
+    sight_words = handle_sight_words(default_sight_words, probsight_words)
+    
+    gendec = input("Would you like to generate a story (g) or input a story (i): ")
+    if gendec == "g":
+        story_length, topic, problems,name,readingLevel = get_input()
+        if int(readingLevel) <= 1:
+            maxsyllable = 2
+            maxsyllable = 3
+        elif int(readingLevel) <= 5:
+            maxsyllable = 4
+        elif int(readingLevel) <= 7:
+            maxsyllable = 5
+        elif int(readingLevel) <= 9: 
+            maxsyllable = 6
+        else:
+            maxsyllable = 10
+        problems.append("too many syllables")
+        sight_words += name
+        story= generate_story(topic, problems, name, readingLevel, story_length)
+        print("Generating story...")
+    elif gendec == "i":
+        readingLevel = input("Enter the grade level of the reader (Only the grade number): ")
+        if int(readingLevel) <= 1:
+            maxsyllable = 2
+        elif int(readingLevel) <= 3:
+            maxsyllable = 3
+        elif int(readingLevel) <= 5:
+            maxsyllable = 4
+        elif int(readingLevel) <= 7:
+            maxsyllable = 5
+        elif int(readingLevel) <= 9: 
+            maxsyllable = 6
+        else:
+            maxsyllable = 10
+        problems = input("Enter the problem letters separated by /: ").split("/")
+        problems.append("too many syllables")
+        file = input("Copy and Paste your text here: ")
+        story =  file
+        maxsyllable = 10
+        decodabuilityog, _ = process_story(story, problems, 10, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=True)
+    print(story)
+    
+    print("\n--- Processing Without Grammar Correction ---")
+    story1 = process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False)
+
+    print("\n--- Processing With Grammar Correction and Spell Check ---")
+    story2 = process_story(story, problems, maxsyllable, apply_correction=True, spellcheck=True, combined=False)
+
+    # Now, combine the two stories
+    story3 = combine(story1, story2, problems)
+
+    # Process the combined story
+    story4 = process_story(story3, problems, maxsyllable, apply_correction=True, spellcheck=True, combined=True)
+
+    decodability, bad_words = process_story(story4, problems, maxsyllable, apply_correction=True, spellcheck=True, combined=True, decodabilityTest=True)
+    print(f'\n\nFinal Story: {story4}')
+
+if __name__ == "__main__":
+    main()
+
+
+#b/l/p/j/ck/wh/aw/tch/igh/ir/oi  
+#wh/aw/tch/igh/ir/oi/kn/ur/dge/tion/war/ph/eigh/wor/ough  
+#s/l/r/b/sh/ar/ai/-ing, -ong, -ang, -ung/ea as in eat  
+#t/p/n/m/th/ch/oo as in school/ow as in plow/y as in dry  
+#d/w/z/h/ck/s blends/l blends/er/ea as in bread/igh  
+#r/v/l/qu/th/ay/ow as in snow/ear as in hear/y as in bumpy  
+
+#New idea if word appears 2+ times prompt the bot to find alternative words that could work in the context but may be different in their meaning
+#Could reduce decodability
 
 #b/l/p/j/ck/wh/aw/tch/igh/ir/oi  
 #wh/aw/tch/igh/ir/oi/kn/ur/dge/tion/war/ph/eigh/wor/ough  
