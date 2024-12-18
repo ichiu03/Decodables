@@ -21,8 +21,9 @@ with open(path + 'Dictionary.txt', 'r', encoding='utf-8') as file:
 with open(path + 'truncated_dictionary.json') as json_file:
     guidewords = json.load(json_file)
 
-    
-def get_synonyms_dict(story: str, word_dict: dict, problems: list, maxsyllable: int) -> dict:
+
+def get_synonyms_dict(story: str, problems: list, maxsyllable: int) -> dict:
+    word_dict = parseAndProcessWords(story, maxsyllable, "categorized_words.json")
     sentences = story.split(".")
     prev_sentence = ""
     synonyms_dict = {}
@@ -290,7 +291,7 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
         display_bad_words(results["bad_occurrences"])
 
         print("Replacing problematic words...")
-        synonyms_dict = get_synonyms_dict(story, results["all_bads"], problems, maxsyllable)
+        synonyms_dict = get_synonyms_dict(story, problems, maxsyllable)
         story = replace_words_in_story(story, synonyms_dict)
         print("Formatting the story...")
         story = ultraformatting(story)
