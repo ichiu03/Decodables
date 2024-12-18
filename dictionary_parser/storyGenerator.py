@@ -6,40 +6,66 @@ import nltk
 from nltk.corpus import words
 from main import path
 
-load_dotenv()
+
+# Get absolute path to the root directory and .env file
+parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+env_path = os.path.join(parent_dir, '.env')
+
+
+# Force load from .env file
+load_dotenv(env_path, override=True)  # override=True will force it to override existing env variables
+
+
+# Get API key directly from .env file as backup
+from dotenv import dotenv_values
+config = dotenv_values(env_path)
+api_key = config.get('OPENAI_API_KEY') or os.getenv('OPENAI_API_KEY')
+
+
+# Use this specific key when creating the client
+client = OpenAI(
+    api_key=api_key  # Use our explicitly loaded key
+)
+
+
+
 
 nltk.download('punkt')
 nltk.download('punkt_tab')
 nltk.download('wordnet')
 nltk.download('omw-1.4')
 
+
 if os.path.exists(path + 'edited_generated_story.txt'):
     open(path + 'edited_generated_story.txt', 'w').close()
+
 
 if os.path.exists(path + 'generated_story.txt'):
     open(path + 'generated_story.txt', 'w').close()
 
-client = OpenAI(
-    api_key= os.getenv('OPENAI_API_KEY')
-)
 
 story_length = 500
 chapters = 1
 
+
 good_words = []
 bad_words = []
+
 
 # # Opening JSON file for words categorized by problems
 # with open(path + 'categorized_words.json') as json_file:
 #     words = json.load(json_file)
+
 
 # Opening JSON file for guidewords
 with open(path + 'truncated_dictionary.json') as json_file:
     guidewords = json.load(json_file)
 
 
+
+
 ### Function to query GPT-3.5
-def query(prompt): 
+def query(prompt):
     messages = [
         {"role": "system", "content": prompt},
     ]
@@ -49,25 +75,30 @@ def query(prompt):
     )
     return response.choices[0].message.content
 
+
 ### Function to get user input
 
+
 input_data_path = path + 'problemsounds.json'
+
 
 def clear_json_file():
     # Clear the contents of the JSON file
     with open(input_data_path, 'w', encoding='utf-8') as file:
         file.write('{}')  # Write an empty JSON object
 
+
 def get_input_and_save():
     clear_json_file()  # Clear the file before saving new data
-    
+   
     topic = input("Enter your story topic: ")
     problems = input("Enter the problem letters separated by /: ").split("/")
     problems = [problem.strip() for problem in problems]  # Clean up whitespace
-    
+   
     # Ensure "fail" is always included
     if "fail" not in problems:
         problems.append("fail")
+
 
     # Create a dictionary to store the input
     input_data = {
@@ -75,11 +106,14 @@ def get_input_and_save():
         "problems": problems
     }
 
+
     # Save the data to a JSON file
     with open(input_data_path, 'w', encoding='utf-8') as file:
         json.dump(input_data, file, indent=4)
 
+
     return topic, problems
+
 
 def get_input():
     global sight_words
@@ -98,14 +132,18 @@ def get_input():
         maxsyllable = 4
     elif int(readingLevel) <= 7:
         maxsyllable = 5
-    elif int(readingLevel) <= 9: 
+    elif int(readingLevel) <= 9:
         maxsyllable = 6
     else:
         maxsyllable = 10
     # sight_words = input("Enter the sight words separated by commas: ")
     problems = [problem.strip() for problem in problems]  # Clean up whitespace
 
+
     return story_length, topic, problems, name, readingLevel
+
+
+
 
 
 
@@ -116,6 +154,7 @@ def write_story_to_file(story):
         file.write(story)
     print("\nOriginal story written to 'generated_story.txt'.")
 
+
 ### Function to delete the files before generating new ones
 def delete_old_file():
     file_paths = ['generated_story.txt']
@@ -123,6 +162,7 @@ def delete_old_file():
         if os.path.exists(path):
             os.remove(path)
             print(f"Previous file '{path}' deleted.")
+
 
 def generate_chapter(outline, chapter_number, length, story, problems, readingLevel):
     # Collect guidewords for all problem sounds
@@ -134,6 +174,7 @@ def generate_chapter(outline, chapter_number, length, story, problems, readingLe
         else:
             print(f"Warning: Problem '{problem}' not found in guidewords dictionary.")
 
+
     # Format the examples for the prompt
     examples_str_list = []
     for problem, examples in problem_examples.items():
@@ -142,25 +183,35 @@ def generate_chapter(outline, chapter_number, length, story, problems, readingLe
         examples_str_list.append(examples_str)
     examples_str = "; ".join(examples_str_list)
 
+
     # Now, create the prompt including the examples_str
     prompt = f"""
     You are a creative author tasked with writing chapter {chapter_number} of a children's story for a child at a {readingLevel} grade reading level.
 
+
     Here is the outline:
+
 
     {outline}
 
+
     Here is the story so far:
+
 
     {story}
 
+
     Please avoid using words that contain these sounds: {', '.join(problems)}.
+
 
     Some examples of words to avoid are: {examples_str}.
 
+
     Write a {length} word chapter.
 
+
     Please ensure that you use proper punctuation and include spaces after punctuation marks.
+
 
     Return only the new chapter.
     """
@@ -168,30 +219,38 @@ def generate_chapter(outline, chapter_number, length, story, problems, readingLe
     new_chapter = query(prompt)
     return new_chapter
 
+
 def generate_outline(topic, name, readingLevel, story_length = 500):
     prompt = f"""
     You are a creative author.
 
+
     Create an outline for a children's story about {topic} for a child at a {readingLevel} grade reading level.
+
 
     The story should be about {story_length} words long.
 
+
     The story should have a clear beginning, middle, and end and have a lesson.
+
 
     The story should be {chapters} chapter(s) long.
 
+
     The main character should be named {name}.
+
 
     Return only the outline.
     """
     outline = query(prompt)
     return outline
 
+
 ### Main function
 def generate_story(topic, problems, name, readingLevel, story_length=500):
     outline = generate_outline(topic, name, readingLevel)
     story = ""
-    
+   
     for chapter in range(chapters):
         print(f"Generating chapter {chapter + 1}")
         new_chapter = generate_chapter(outline, chapter + 1, story_length // chapters, story, problems, readingLevel)
@@ -199,19 +258,24 @@ def generate_story(topic, problems, name, readingLevel, story_length=500):
     print(story)
     return story
 
+
 ### Main function
 def main():
     topic, problems = get_input_and_save()
     story = generate_story(topic, problems)
 
+
     # Delete any existing output files only after the entire story is generated
     delete_old_file()
+
 
     # Write the final story to the file
     write_story_to_file(story)
 
+
     print("\nFinal story:")
     print(story)
+
 
 if __name__ == "__main__":
     main()

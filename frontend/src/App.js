@@ -9,9 +9,9 @@ import Login from './components/Login';
 import { processStory, getDecodability } from './services/api';
 import StoryDisplay from './components/StoryDisplay';
 
+
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  
   // Check if user was previously authenticated
   useEffect(() => {
     const auth = localStorage.getItem('isAuthenticated');
@@ -20,15 +20,18 @@ function App() {
     }
   }, []);
 
+
   const handleLogin = () => {
     setIsAuthenticated(true);
     localStorage.setItem('isAuthenticated', 'true');
   };
 
+
   const handleLogout = () => {
     setIsAuthenticated(false);
     localStorage.removeItem('isAuthenticated');
   };
+
 
   const [formData, setFormData] = useState({
     unknownSightWords: '',
@@ -44,6 +47,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [foundBadWords, setFoundBadWords] = useState({});
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -66,11 +70,12 @@ function App() {
     }
   };
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    
+   
     try {
       const response = await processStory(formData);
       console.log('Response in handleSubmit:', response);
@@ -82,13 +87,16 @@ function App() {
     }
   };
 
+
   const handleFoundWords = (words) => {
     setFoundBadWords(words);
   };
 
+
   if (!isAuthenticated) {
     return <Login onLogin={handleLogin} />;
   }
+
 
   return (
     <div className="App">
@@ -114,15 +122,18 @@ function App() {
             />
           </div>
 
-          <StoryChoiceSection 
+
+          <StoryChoiceSection
             storyChoice={formData.storyChoice}
             onChange={handleInputChange}
           />
+
 
           <ProblemLettersSection
             selectedProblems={formData.problemLetters}
             onChange={handleInputChange}
           />
+
 
           {formData.storyChoice === 'i' ? (
             <StoryInputSection
@@ -143,6 +154,7 @@ function App() {
             </>
           )}
 
+
           <div className="form-group">
             <label htmlFor="readingLevel">
               Enter the grade level of the reader (only the grade number):
@@ -159,8 +171,9 @@ function App() {
             />
           </div>
 
-          <button 
-            type="submit" 
+
+          <button
+            type="submit"
             className="submit-button"
             disabled={loading}
           >
@@ -168,11 +181,13 @@ function App() {
           </button>
         </form>
 
+
         {error && (
           <div className="error-message">
             Error: {error}
           </div>
         )}
+
 
         {result && (
           <div className="result-section">
@@ -180,8 +195,8 @@ function App() {
             {result.processedStory && (
               <div className="processed-story">
                 <h3>Processed Story:</h3>
-                <StoryDisplay 
-                  story={result.processedStory} 
+                <StoryDisplay
+                  story={result.processedStory}
                   badWords={result.badWords || {}}
                   onFoundWords={handleFoundWords}
                 />
@@ -190,7 +205,7 @@ function App() {
             {result.generatedStory && (
               <div className="generated-story">
                 <h3>Generated Story:</h3>
-                <StoryDisplay 
+                <StoryDisplay
                   story={result.generatedStory}
                   badWords={result.badWords || {}}
                   onFoundWords={handleFoundWords}
@@ -206,8 +221,8 @@ function App() {
                     <h4>Words with Problem Letters:</h4>
                     <div className="bad-words-grid">
                       {Object.entries(foundBadWords).map(([word, data], index) => (
-                        <span 
-                          key={index} 
+                        <span
+                          key={index}
                           className="bad-word"
                           title={`Problem categories: ${data.categories.join(', ')}`}
                         >
@@ -225,5 +240,6 @@ function App() {
     </div>
   );
 }
+
 
 export default App;
