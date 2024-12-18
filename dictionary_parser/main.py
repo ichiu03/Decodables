@@ -21,7 +21,9 @@ with open(path + 'Dictionary.txt', 'r', encoding='utf-8') as file:
 with open(path + 'truncated_dictionary.json') as json_file:
     guidewords = json.load(json_file)
 
-def get_synonyms_dict(story: str, word_dict: dict, problems: list, maxsyllable: int) -> dict:
+
+def get_synonyms_dict(story: str, problems: list, maxsyllable: int) -> dict:
+    word_dict = parseAndProcessWords(story, maxsyllable, "categorized_words.json")
     sentences = story.split(".")
     prev_sentence = ""
     synonyms_dict = {}
@@ -90,6 +92,7 @@ def get_synonyms_dict(story: str, word_dict: dict, problems: list, maxsyllable: 
                         synonyms_dict[clean_word] = " ____"
         prev_sentence = sentence
     return synonyms_dict
+
 
 
 def ultraformatting(text):
@@ -216,9 +219,6 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
         # Prepare sight words set
         sight_words_set = set(word.lower().strip() for word in sight_words.split(','))
 
-        story = rewrite_sentences(story)
-        story = rewrite_paragraph(story)
-        
         # Tokenize the story into words and count occurrences
         story_words = re.findall(r'\b\w+\b', story.lower())
         story_word_counts = Counter(story_words)
@@ -235,7 +235,7 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
                 all_bads.update(problem_words)
             else:
                 print(f"Warning: Problem '{problem}' not found in word dictionary.")
-
+        
         # Count occurrences of each unique bad word in the story
         problemcount = 0
         bad_occurrences = {}
@@ -256,8 +256,9 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
             "wordcount": wordcount,
             "all_bads": all_bads,
         }
-
+    
     def save_decodability_metrics(decodability, wordcount, marker, combo):
+        # Ensure the directory exists
         # Prepare the data for the file
         current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         decodability_entry = f"{decodability * 100:.2f}% {current_time} Word Count: {wordcount} {marker} {combo}\n"
@@ -265,29 +266,9 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
         print(f"Word Count: {wordcount}")
 
         # Append the data to the file
-        decodability_file = "decodability_measurements.txt"
+        decodability_file =  "decodability_measurements.txt"
         with open(decodability_file, "a") as file:
             file.write(decodability_entry)
-
-    def save_bad_word_counts(all_bads):
-        # Load existing word counts from file if it exists
-        word_counts = {}
-        try:
-            with open('non_decodable_words.txt', 'r') as f:
-                for line in f:
-                    word, count = line.strip().split(': ')
-                    word_counts[word] = int(count)
-        except FileNotFoundError:
-            pass
-
-        # Update counts with new bad words
-        for word in all_bads:
-            word_counts[word] = word_counts.get(word, 0) + 1
-
-        # Write updated counts back to file
-        with open('non_decodable_words.txt', 'w') as f:
-            for word, count in sorted(word_counts.items()):
-                f.write(f'{word}: {count}\n')
 
     def display_bad_words(bad_occurrences):
         print("Bad Word Occurrences:")
@@ -299,7 +280,7 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
         results = categorize_and_validate_words(story, problems, maxsyllable)
         # Display and save bad word occurrences
         display_bad_words(results["bad_occurrences"])
-        # save_decodability_metrics(results["decodability"], results["wordcount"], "Decodability Test", "")
+        save_decodability_metrics(results["decodability"], results["wordcount"], "Decodability Test", "")
         # save_bad_word_counts(results["all_bads"])
         bad_words = results["bad_occurrences"]
         print(f"This text is {results['decodability'] * 100:.2f}% decodable")
@@ -313,129 +294,19 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
             print("Applying Spellcheck...")
             prompt = f"You are a literary editor. Rewrite this story and make any necessary changes to the story to make it 100% readable and abide by proper English writing and reading standards: {story}. Return just the new fixed story."
             story = query(prompt)
-
-        print("Checking and categorizing words...")
-        results = categorize_and_validate_words(story, problems, maxsyllable)
-
-        # Display bad words in the terminal
-        display_bad_words(results["bad_occurrences"])
-
-        print("Replacing problematic words...")
-        synonyms_dict = get_synonyms_dict(story, results["all_bads"], problems, maxsyllable)
-        story = replace_words_in_story(story, synonyms_dict)
-        print("Formatting the story...")
-        story = ultraformatting(story)
-
-        # Save results
-        # save_decodability_metrics(results["decodability"], results["wordcount"], "Processed", "")
-        # save_bad_word_counts(results["all_bads"])
-
-        # # Save the updated story
-        # output_file = (
-        #     'combined.txt' if combined else 
-        #     'updated_story_corrected.txt' if apply_correction else 
-        #     'updated_story.txt'
-        # )
-        # save_updated_story(story, output_file)
-        # print(f"Updated story has been saved to '{output_file}'.")
+        
+        decodability = categorize_and_validate_words(story, problems, maxsyllable)["decodability"]
+        while decodability < 0.9:
+            print(f"Decodability: {decodability}")
+            print("Checking and categorizing words...")
+            results = categorize_and_validate_words(story, problems, maxsyllable)
+            print("Formatting the story...")
+            story = ultraformatting(story)
+            decodability = categorize_and_validate_words(story, problems, maxsyllable)["decodability"]
+        
+        story = rewrite_sentences(story)
 
         return story
-
-def combine(story1, story2, problems):
-    prompt = f"""
-    Take the two versions of the story provided below and combine their sentences into one improved version. 
-    Retain the original plot and key details.
-    Keep the creative language from both versions.
-    Try to avoid run-on sentences.
-    Ensure the final story maintains the same narrative structure but uses the best phrases from each version. 
-    Do not invent new plot elements or diverge from the original stories.
-    **Most Importantly** Try to avoid including these sounds: {problems}.
-
-    Version 1: {story1}
-
-    Version 2: {story2}
-    """
-    ultstory = query(prompt)
-    return ultstory
-
-def handle_sight_words(default_sight_words: str, problematic_words: str) -> str:
-    sight_words_list = default_sight_words.split(",")
-    probsight_words_list = problematic_words.split(",")
-    for word in probsight_words_list:
-        if word in sight_words_list:
-            sight_words_list.remove(word)
-    return ",".join(sight_words_list)
-
-def main():
-    global sight_words
-    global maxsyllable
-    maxsyllable = 2
-    default_sight_words = "a,at,any,many,and,on,is,are,the,was,were,it,am,be,go,to,out,been,this,come,some,do,does,done,what,who,you,your,both,buy,door,floor,four,none,once,one,only,pull,push,sure,talk,walk,their,there,they're,very,want,again,against,always,among,busy,could,should,would,enough,rough,tough,friend,move,prove,ocean,people,she,other,above,father,usually,special,front,thought,he,we,they,nothing,learned,toward,put,hour,beautiful,whole,trouble,of,off,use,have,our,say,make,take,see,think,look,give,how,ask,boy,girl,us,him,his,her,by,where,were,wear,hers,don't,which,just,know,into,good,other,than,then,now,even,also,after,know,because,most,day,these,two,already,through,though,like,said,too,has,in,brother,sister,that,them,from,for,with,doing,well,before,tonight,down,about,but,up,around,goes,gone,build,built,cough,lose,loose,truth,daughter,son"
-    probsight_words = input("What sight words does the student not know (use only words and commas): ")
-    
-    sight_words = handle_sight_words(default_sight_words, probsight_words)
-    
-    gendec = input("Would you like to generate a story (g) or input a story (i): ")
-    if gendec == "g":
-        story_length, topic, problems,name,readingLevel = get_input()
-        if int(readingLevel) <= 1:
-            maxsyllable = 2
-        elif int(readingLevel) <= 3:
-            maxsyllable = 3
-        elif int(readingLevel) <= 5:
-            maxsyllable = 4
-        elif int(readingLevel) <= 7:
-            maxsyllable = 5
-        elif int(readingLevel) <= 9: 
-            maxsyllable = 6
-        else:
-            maxsyllable = 10
-        problems.append("too many syllables")
-        sight_words += name
-        story= generate_story(topic, problems, name, readingLevel, story_length)
-        print("Generating story...")
-    elif gendec == "i":
-        readingLevel = input("Enter the grade level of the reader (Only the grade number): ")
-        if int(readingLevel) <= 1:
-            maxsyllable = 2
-        elif int(readingLevel) <= 3:
-            maxsyllable = 3
-        elif int(readingLevel) <= 5:
-            maxsyllable = 4
-        elif int(readingLevel) <= 7:
-            maxsyllable = 5
-        elif int(readingLevel) <= 9: 
-            maxsyllable = 6
-        else:
-            maxsyllable = 10
-        problems = input("Enter the problem letters separated by /: ").split("/")
-        problems.append("too many syllables")
-        file = input("Copy and Paste your text here: ")
-        story =  file
-        maxsyllable = 10
-        decodabuilityog, _ = process_story(story, problems, 10, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=True)
-    print(story)
-
-    # First Run: Without Grammar Correction
-    print("\n--- Processing Without Grammar Correction ---")
-    story1 = process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False)
-    story1 = process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False)
-
-    print("\n--- Processing With Grammar Correction and Spell Check ---")
-    story2 = process_story(story, problems, maxsyllable, apply_correction=True, spellcheck=True, combined=False)
-
-    # Now, combine the two stories
-    story3 = combine(story1, story2, problems)
-
-    # Process the combined story
-    story4 = process_story(story3, problems, maxsyllable, apply_correction=True, spellcheck=True, combined=True)
-
-    print(f'\n\nFinal Story: {story4}')
-
-
-
-if __name__ == "__main__":
-    main()
 
 
 #b/l/p/j/ck/wh/aw/tch/igh/ir/oi  
