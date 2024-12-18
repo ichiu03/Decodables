@@ -6,7 +6,23 @@ import nltk
 from nltk.corpus import words
 from main import path
 
-load_dotenv()
+# Get absolute path to the root directory and .env file
+parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+env_path = os.path.join(parent_dir, '.env')
+
+# Force load from .env file
+load_dotenv(env_path, override=True)  # override=True will force it to override existing env variables
+
+# Get API key directly from .env file as backup
+from dotenv import dotenv_values
+config = dotenv_values(env_path)
+api_key = config.get('OPENAI_API_KEY') or os.getenv('OPENAI_API_KEY')
+
+# Use this specific key when creating the client
+client = OpenAI(
+    api_key=api_key  # Use our explicitly loaded key
+)
+
 
 nltk.download('punkt')
 nltk.download('punkt_tab')
@@ -18,10 +34,6 @@ if os.path.exists(path + 'edited_generated_story.txt'):
 
 if os.path.exists(path + 'generated_story.txt'):
     open(path + 'generated_story.txt', 'w').close()
-
-client = OpenAI(
-    api_key= os.getenv('OPENAI_API_KEY')
-)
 
 story_length = 500
 chapters = 1

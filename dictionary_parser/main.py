@@ -446,6 +446,7 @@ def main():
     story3 = combine(story1, story2, problems)
 
     # Process the combined story
+    story4 = process_story(story3, problems, maxsyllable, apply_correction=True, spellcheck=True, combined=True, decodabilityTest=True)
 
     print(f'\n\nFinal Story: {story3}')
 
