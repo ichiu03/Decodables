@@ -7,9 +7,7 @@ import re
 from dictionaryParser import parseAndProcessWords
 from collections import Counter
 
-
 app = FastAPI()
-
 
 # Configure CORS
 app.add_middleware(
@@ -19,7 +17,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 
 # Define request models with more specific validation
 class ProcessStoryRequest(BaseModel):
