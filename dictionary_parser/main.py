@@ -14,7 +14,6 @@ from collections import Counter
 from datetime import datetime
 import language_tool_python
 
-
 sight_words = ""
 
 with open(path + 'Dictionary.txt', 'r', encoding='utf-8') as file:
@@ -102,7 +101,6 @@ def get_synonyms_dict(story: str, problems: list, maxsyllable: int) -> dict:
     return synonyms_dict
 
 
-
 def ultraformatting(text):
     # Normalize multiple underscores to '____'
     text = re.sub(r'_{2,}', '____', text)
@@ -164,11 +162,9 @@ def ultraformatting(text):
    
     return text
 
-
 def count_words_in_text(text: str) -> int:
     words = text.split()
     return len(words)
-
 
 def correct_text(text: str) -> str:
     try:
@@ -179,7 +175,6 @@ def correct_text(text: str) -> str:
     except Exception as e:
         print(f"Warning: Grammar correction failed ({str(e)}). Proceeding with original text.")
         return text
-
 
 def rewrite_sentences(story):
     sentences = story.split(".")  # Split sentences by period
@@ -230,7 +225,6 @@ def rewrite_paragraph(story):
     fixed = query(prompt)
     return(fixed)
 
-
 def process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=False):
     def categorize_and_validate_words(story, problems, maxsyllable):
         # Prepare sight words set
@@ -269,7 +263,6 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
         # Calculate decodability
         wordcount = len(story_words)
         decodability = 1 - (problemcount / wordcount) if wordcount > 0 else 0
-
 
         # Return results
         return {
@@ -332,7 +325,6 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
 
         return story
 
-
 def combine(story1, story2, problems):
     prompt = f"""
     Take the two versions of the story provided below and combine their sentences into one improved version.
@@ -352,7 +344,6 @@ def combine(story1, story2, problems):
     ultstory = query(prompt)
     return ultstory
 
-
 def handle_sight_words(default_sight_words: str, problematic_words: str) -> str:
     sight_words_list = default_sight_words.split(",")
     probsight_words_list = problematic_words.split(",")
@@ -360,7 +351,6 @@ def handle_sight_words(default_sight_words: str, problematic_words: str) -> str:
         if word in sight_words_list:
             sight_words_list.remove(word)
     return ",".join(sight_words_list)
-
 
 def main():
     global sight_words
@@ -412,7 +402,6 @@ def main():
         decodabuilityog, _ = process_story(story, problems, 10, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=True)
     print(story)
 
-
     # First Run: Without Grammar Correction
     print("\n--- Processing Without Grammar Correction ---")
     story1 = process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False)
@@ -432,11 +421,6 @@ def main():
 
     decodability, bad_words = process_story(story4, problems, maxsyllable, apply_correction=True, spellcheck=True, combined=True, decodabilityTest=True)
     print(f'\n\nFinal Story: {story4}')
-
-
-
-
-
 
 if __name__ == "__main__":
     main()
