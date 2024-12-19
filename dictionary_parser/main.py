@@ -196,6 +196,7 @@ def rewrite_sentences(story, problems):
 
             Here is the previous sentence and next sentence for context: Previous: {prev_sentence} Next: {next_sentence}
 
+            If the sentence is similar to the previous sentence, return a blank sentence. like this: " "
 
             *** RETURN ONLY THE NEW SENTENCE OR THE SAME SENTENCE IF NO CHANGE IS NEEDED ***
         """
@@ -315,12 +316,11 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
             story = query(prompt)
        
         decodability = categorize_and_validate_words(story, problems, maxsyllable)["decodability"]
+        count = 0
         while decodability < 0.85:
             print(f"Decodability: {decodability}")
             print("Checking and categorizing words...")
             results = categorize_and_validate_words(story, problems, maxsyllable)
-
-
             print("Replacing problematic words...")
             synonyms_dict = get_synonyms_dict(story, problems, maxsyllable)
             story = replace_words_in_story(story, synonyms_dict)
@@ -328,9 +328,9 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
             story = ultraformatting(story)
             story = rewrite_sentences(story, problems)
             decodability = categorize_and_validate_words(story, problems, maxsyllable)["decodability"]
-       
-        
-
+            count += 1
+            if count > 10:
+                break
 
         return story
 
