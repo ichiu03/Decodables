@@ -293,10 +293,51 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
         for word, count in sorted(bad_occurrences.items()):
             print(f"{word}: {count}")
 
+    def save_problem_words_by_sound(word_dict, problems, story):
+        problem_words_file = "problem_words_by_sound.txt"
+        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        
+        # Get all unique words from the story
+        story_words = set(re.findall(r'\b\w+\b', story.lower()))
+        
+        # Create a mapping of words to their categories
+        word_categories = {}
+        for word in story_words:
+            categories = []
+            for problem in problems:
+                problem = problem.strip()
+                if problem in word_dict and word in word_dict[problem]:
+                    categories.append(problem)
+            word_categories[word] = categories
+        
+        with open(problem_words_file, "a") as file:
+            file.write(f"\n--- Problem Words Analysis {current_time} ---\n")
+            
+            # Write all story words with their categories
+            file.write("\nAll words in story and their sound categories:\n")
+            for word in sorted(story_words):
+                categories = word_categories[word]
+                if categories:
+                    file.write(f"{word}: [{', '.join(categories)}]\n")
+                else:
+                    file.write(f"{word}: [no problem sounds]\n")
+            
+            file.write("\nProblem words by sound:\n")
+            # Then write problem words by sound
+            for problem in problems:
+                problem = problem.strip()
+                if problem in word_dict:
+                    problem_words = [word for word in word_dict[problem] 
+                                   if word.lower() not in sight_words.split(',') and word.lower() in story_words]
+                    if problem_words:
+                        file.write(f"{problem}: {', '.join(sorted(set(problem_words)))}\n")
 
     if decodabilityTest:
         print("Decodability Test Mode: Analyzing text without making changes.")
         results = categorize_and_validate_words(story, problems, maxsyllable)
+        # Get word_dict for problem words
+        word_dict = parseAndProcessWords(story, maxsyllable, "categorized_words.json")
+        save_problem_words_by_sound(word_dict, problems, story)
         # Display and save bad word occurrences
         display_bad_words(results["bad_occurrences"])
         if original_decodability is not None:

@@ -2,3 +2,4 @@
 Original Decodability: 75.79% Processed Decodability: 74.55% 2024-12-19 10:04:39 Word Count: 110 Decodability Test  Problems: ['s', 'd', 'too many syllables']
 Original Decodability: 98.02% Processed Decodability: 97.22% 2024-12-19 10:06:56 Word Count: 72 Decodability Test  Problems: ['wh', 'aw', 'tch', 'igh', 'ir', 'oi', 'kn', 'ur', 'dge', 'tion', 'war', 'ph', 'eigh', 'wor', 'ough', 'too many syllables']
 Original Decodability: 72.90% Processed Decodability: 91.92% 2024-12-19 10:20:42 Word Count: 99 Decodability Test  Problems: ['s', 'd', 'too many syllables']
+Difference: 3.30% Original Decodability: 96.15% Processed Decodability: 92.86% 2024-12-19 11:08:41 Word Count: 98 Decodability Test  Problems: ['s', 'too many syllables']

@@ -1,0 +1,157 @@
+
+--- Problem Words Analysis 2024-12-19 11:08:16 ---
+
+All words in story:
+1, a, adventure, ancient, and, around, as, began, begun, believe, birthday, book, caterpillar, challenges, chapter, colors, could, counting, danced, division, dolphin, everything, flipped, for, found, from, games, gift, giggled, grandmother, guided, had, happen, he, him, himself, his, in, into, it, just, land, leaped, looked, luck, math, max, met, monkey, multiplying, no, not, numbers, of, off, ordinary, pages, present, pulling, received, s, settled, strange, swirled, that, the, things, through, to, vibrant, was, when, where, whirlwind, who, with, world
+
+Problem words by sound:
+s: himself, himself, max's, max's, settled, settled, strange, strange, swirled, swirled
+
+--- Problem Words Analysis 2024-12-19 11:08:41 ---
+
+All words in story:
+a, adventure, alive, amazed, ancient, and, around, as, attention, begun, beyond, birthday, book, came, caterpillar, caught, challenges, colors, counting, discovered, division, dolphin, finally, flipped, for, frolicked, games, grandmother, grateful, had, he, him, himself, his, immediately, in, its, journey, just, kaleidoscope, land, laughed, leading, look, math, max, monkey, multiplying, numbers, of, on, only, pages, playful, presented, s, so, subsided, swirling, the, through, vibrant, was, welcomed, when, where, whirlwind, with, world
+
+Problem words by sound:
+s: book's, book's, book's, disbelief, discovered, discovered, discovered, discovered, himself, himself, himself, himself, himself, himself, himself, its, its, its, kaleidoscope, kaleidoscope, kaleidoscope, max's, max's, max's, max's, max's, max's, max's, settled, settled, settled, settled, so, so, so, so, started, strange, strange, strange, subsided, subsided, subsided, swirled, swirled, swirled, swirled, swirling, swirling, swirling
+
+--- Problem Words Analysis 2024-12-19 11:12:05 ---
+
+All words in story:
+a, adored, against, all, amidst, and, as, basking, boy, by, came, challenges, challenging, classroom, competition, concepts, cracked, curious, day, delved, determination, determined, down, each, eagerly, emerge, emily, filled, final, focused, formidable, found, friends, from, geometry, glory, guidance, he, himself, his, idea, in, indeed, into, it, key, last, math, max, mental, mix, mr, nerves, numbers, of, on, opponent, perseverance, precision, problem, push, puzzles, realized, remained, revealed, riddles, round, seeking, signed, skillful, teacher, tension, that, the, thrilled, to, took, triumph, up, various, victorious, was, where, who, with
+
+Problem words by sound:
+s: amidst, basking, classroom, concepts, curious, despite, focused, himself, last, nervous, perseverance, precision, seeking, signed, skilled, skillful, solved, stayed, studied, success, various, victorious
+
+--- Problem Words Analysis 2024-12-19 11:15:08 ---
+
+All words in story and their sound categories:
+a: [no problem sounds]
+abilities: [no problem sounds]
+adventurous: [s]
+after: [no problem sounds]
+aids: [no problem sounds]
+and: [no problem sounds]
+announced: [no problem sounds]
+approaching: [no problem sounds]
+at: [no problem sounds]
+be: [no problem sounds]
+bee: [no problem sounds]
+boy: [no problem sounds]
+burgeoned: [no problem sounds]
+challenge: [no problem sounds]
+competition: [no problem sounds]
+comprehension: [no problem sounds]
+confidence: [no problem sounds]
+confronted: [no problem sounds]
+curious: [s]
+daunting: [no problem sounds]
+despite: [s]
+diagrams: [no problem sounds]
+dissecting: [s]
+each: [no problem sounds]
+eager: [no problem sounds]
+employing: [no problem sounds]
+enhance: [no problem sounds]
+first: [s]
+found: [no problem sounds]
+fractions: [no problem sounds]
+frustrated: [s]
+geometry: [no problem sounds]
+guiding: [no problem sounds]
+he: [no problem sounds]
+him: [no problem sounds]
+his: [no problem sounds]
+impending: [no problem sounds]
+in: [no problem sounds]
+incapable: [no problem sounds]
+intricate: [no problem sounds]
+left: [no problem sounds]
+like: [no problem sounds]
+limits: [s]
+mastering: [s]
+math: [no problem sounds]
+mathematical: [no problem sounds]
+max: [no problem sounds]
+methodically: [no problem sounds]
+nemesis: [s]
+of: [no problem sounds]
+often: [no problem sounds]
+on: [no problem sounds]
+opportunity: [no problem sounds]
+persisted: [s]
+prepping: [no problem sounds]
+problem: [no problem sounds]
+problems: [no problem sounds]
+push: [no problem sounds]
+puzzles: [no problem sounds]
+realms: [no problem sounds]
+refused: [no problem sounds]
+relished: [no problem sounds]
+riddles: [no problem sounds]
+s: [no problem sounds]
+sarah: [s]
+savvy: [s]
+school: [s]
+seized: [s]
+sister: [no problem sounds]
+take: [no problem sounds]
+teacher: [no problem sounds]
+that: [no problem sounds]
+the: [no problem sounds]
+them: [no problem sounds]
+throw: [no problem sounds]
+to: [no problem sounds]
+towel: [no problem sounds]
+visual: [no problem sounds]
+when: [no problem sounds]
+who: [no problem sounds]
+with: [no problem sounds]
+
+Problem words by sound:
+s: adventurous, curious, despite, dissecting, first, frustrated, himself, limits, mastering, max's, nemesis, persisted, sarah, savvy, school, seized, skills, solving, step, struggles, understand
+
+--- Problem Words Analysis 2024-12-19 11:20:28 ---
+
+All words in story and their sound categories:
+a: [no problem sounds]
+adored: [no problem sounds]
+adventure: [no problem sounds]
+always: [no problem sounds]
+and: [no problem sounds]
+backed: [no problem sounds]
+challenge: [no problem sounds]
+contest: [s]
+daily: [no problem sounds]
+dodge: [no problem sounds]
+down: [no problem sounds]
+explore: [no problem sounds]
+for: [no problem sounds]
+friend: [no problem sounds]
+from: [no problem sounds]
+he: [no problem sounds]
+his: [no problem sounds]
+madam: [no problem sounds]
+math: [no problem sounds]
+max: [no problem sounds]
+multiplication: [no problem sounds]
+nearby: [no problem sounds]
+never: [no problem sounds]
+practiced: [no problem sounds]
+prepared: [no problem sounds]
+puzzles: [s]
+ready: [no problem sounds]
+realm: [no problem sounds]
+set: [s]
+skills: [s]
+solving: [s]
+test: [s]
+the: [no problem sounds]
+to: [no problem sounds]
+up: [no problem sounds]
+was: [no problem sounds]
+with: [no problem sounds]
+
+Problem words by sound:
+wor: groundwork, worked, worker, working, workshop, world
+s: abilities, acquaintances, addressing, adventurous, allies, alongside, amidst, amigos, amounts, analysis, answer, answering, appraisal, appraise, as, assess, assessment, associate, benders, beside, buddies, bustling, challenges, chums, circumstance, clash, classroom, close, cohorts, colleagues, companions, compatriots, competencies, comrades, confidants, console, contest, cosmos, courageous, cronies, curious, desk, digits, dilemmas, discipline, disconnection, dissection, disunion, division, expertise, eyes, fascinated, figures, finesse, first, flashed, forecast, friends, games, gawkers, gifts, glances, glistened, guise, hosted, inquisitive, inscrutable, inspection, instructional, integers, interested, jackson, james, jasper, jensen, johnson, jones, joseph, joust, lamps, lookers, looks, luminous, mademoiselle, mastery, mates, max's, measure, meddlesome, miss, mission, missus, mrs, mysteries, nosy, numbers, numerals, observation, ogles, onset, oversaw, pals, past, peeps, peers, preparations, presence, present, presented, problems, prospect, prowess, pupils, puzzles, quandaries, quantities, quest, questioning, questions, quizzes, rehearsal, resolve, resolving, rested, riddles, same, sat, scenario, schoolroom, scores, screen, scrimmage, scrutinize, scrutiny, secrets, section, seeing, seeming, segment, segmentation, segregation, seminar, separation, set, settled, severance, share, shelf, shimmered, shined, shining, shone, showdown, shut, side, sight, sights, similarly, since, singular, situation, skills, slab, slumped, smith, snug, solutions, solving, sorting, space, sparkled, sparkling, speculative, sphere, split, splitting, sprawled, stand, stare, stares, start, started, station, stationed, stats, study, subdivision, such, sum, sums, sunny, sunrise, supervised, supporter, talents, task, test, testing, tests, thickness, this, totals, troubleshooting, universe, values, viewpoints, watchers, whilst, workshop
