@@ -61,6 +61,7 @@ with open(os.path.join(path, 'truncated_dictionary.json')) as json_file:
 ### Function to query the selected API
 def query(prompt, api='openai'):
     try:
+        api = 'openai'
         if api == 'openai':
             messages = [
                 {"role": "system", "content": prompt},
