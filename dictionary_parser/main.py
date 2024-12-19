@@ -313,7 +313,8 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
             story = query(prompt)
        
         decodability = categorize_and_validate_words(story, problems, maxsyllable)["decodability"]
-        while decodability < 0.9:
+        iteration = 0
+        while decodability < 0.9 and iteration < 10:
             print(f"Decodability: {decodability}")
             print("Checking and categorizing words...")
             results = categorize_and_validate_words(story, problems, maxsyllable)
@@ -325,7 +326,7 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
             print("Formatting the story...")
             story = ultraformatting(story)
             decodability = categorize_and_validate_words(story, problems, maxsyllable)["decodability"]
-       
+            iteration+=1
         story = rewrite_sentences(story)
 
 
