@@ -13,7 +13,7 @@ from replace_synonyms import *
 from collections import Counter
 from datetime import datetime
 import language_tool_python
-
+original_decodability = None
 sight_words = ""
 
 with open(path + 'Dictionary.txt', 'r', encoding='utf-8') as file:
@@ -272,11 +272,11 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
             "all_bads": all_bads,
         }
     decodability_file = "decodability_measurements.txt"
-    def save_decodability_metrics(decodability, wordcount, marker, combo):
+    def save_decodability_metrics(decodability, wordcount, marker, combo, problems):
         # Ensure the directory exists
         # Prepare the data for the file
         current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        decodability_entry = f"{decodability * 100:.2f}% {current_time} Word Count: {wordcount} {marker} {combo}\n"
+        decodability_entry = f"Original Decodability: {original_decodability * 100:.2f}% Processed Decodability: {decodability * 100:.2f}% {current_time} Word Count: {wordcount} {marker} {combo} Problems: {problems}\n"
         with open(decodability_file, "a") as file:
             file.write(decodability_entry)
             
@@ -291,7 +291,8 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
         results = categorize_and_validate_words(story, problems, maxsyllable)
         # Display and save bad word occurrences
         display_bad_words(results["bad_occurrences"])
-        save_decodability_metrics(results["decodability"], results["wordcount"], "Decodability Test", "")
+        if original_decodability is not None:
+            save_decodability_metrics(results["decodability"], results["wordcount"], "Decodability Test", "", problems)
         # save_bad_word_counts(results["all_bads"])
         bad_words = results["bad_occurrences"]
         print(f"This text is {results['decodability'] * 100:.2f}% decodable")
@@ -355,6 +356,7 @@ def handle_sight_words(default_sight_words: str, problematic_words: str) -> str:
 def main():
     global sight_words
     global maxsyllable
+    global original_decodability
     maxsyllable = 2
     default_sight_words = "a,at,any,many,and,on,is,are,the,was,were,it,am,be,go,to,out,been,this,come,some,do,does,done,what,who,you,your,both,buy,door,floor,four,none,once,one,only,pull,push,sure,talk,walk,their,there,they're,very,want,again,against,always,among,busy,could,should,would,enough,rough,tough,friend,move,prove,ocean,people,she,other,above,father,usually,special,front,thought,he,we,they,nothing,learned,toward,put,hour,beautiful,whole,trouble,of,off,use,have,our,say,make,take,see,think,look,give,how,ask,boy,girl,us,him,his,her,by,where,were,wear,hers,don't,which,just,know,into,good,other,than,then,now,even,also,after,know,because,most,day,these,two,already,through,though,like,said,too,has,in,brother,sister,that,them,from,for,with,doing,well,before,tonight,down,about,but,up,around,goes,gone,build,built,cough,lose,loose,truth,daughter,son"
     probsight_words = input("What sight words does the student not know (use only words and commas): ")
@@ -379,6 +381,7 @@ def main():
         problems.append("too many syllables")
         sight_words += name
         story= generate_story(topic, problems, name, readingLevel, story_length)
+        original_decodability = process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=True)
         print("Generating story...")
     elif gendec == "i":
         readingLevel = input("Enter the grade level of the reader (Only the grade number): ")
