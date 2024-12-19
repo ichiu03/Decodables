@@ -79,7 +79,7 @@ with open(os.path.join(path, 'truncated_dictionary.json')) as json_file:
 # 6. Define the Query Function
 # ====================================
 
-def query(prompt, model="chatgpt"):
+def query(prompt, model="anthropic"):
     """
     Queries the specified AI model (OpenAI or Anthropic) with the given prompt.
 
@@ -112,7 +112,7 @@ def query(prompt, model="chatgpt"):
             # Typically, Anthropic expects prompts to be prefixed with a HUMAN_PROMPT and suffixed with AI_PROMPT
             formatted_prompt = f"{anthropic.HUMAN_PROMPT} {prompt} {anthropic.AI_PROMPT}"
             
-            response = anthropic_client.complete(
+            response = anthropic_client.completion(
                 prompt=formatted_prompt,
                 model="claude-v1",  # Replace with the desired Claude model
                 max_tokens_to_sample=story_length,  # Adjust as needed
@@ -121,7 +121,7 @@ def query(prompt, model="chatgpt"):
             )
             
             # Extract the completion text
-            completion = response.completion.strip()
+            completion = response.get('completion', '').strip()
             return completion
         except Exception as e:
             print(f"Anthropic API error: {e}")
@@ -223,7 +223,7 @@ def delete_old_file():
             print(f"Previous file '{file_path}' deleted.")
 
 
-def generate_chapter(outline, chapter_number, length, story, problems, readingLevel, model="chatgpt"):
+def generate_chapter(outline, chapter_number, length, story, problems, readingLevel, model="anthropic"):
     """
     Generate a single chapter of the story.
 
@@ -284,7 +284,7 @@ def generate_chapter(outline, chapter_number, length, story, problems, readingLe
     return new_chapter
 
 
-def generate_outline(topic, name, readingLevel, story_length=500, model="chatgpt"):
+def generate_outline(topic, name, readingLevel, story_length=500, model="anthropic"):
     """
     Generate an outline for the story.
 
@@ -317,7 +317,7 @@ def generate_outline(topic, name, readingLevel, story_length=500, model="chatgpt
     return outline
 
 
-def generate_story(topic, problems, name, readingLevel, story_length=500, model="chatgpt"):
+def generate_story(topic, problems, name, readingLevel, story_length=500, model="anthropic"):
     """
     Generate the complete story based on user inputs.
 

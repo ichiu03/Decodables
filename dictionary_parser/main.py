@@ -294,6 +294,10 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
         problem_words_file = "problem_words_by_sound.txt"
         current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         
+        # Clear the file before writing
+        with open(problem_words_file, 'w') as file:
+            file.write("")
+        
         # Get all unique words from the story
         story_words = set(re.findall(r'\b\w+\b', story.lower()))
         
