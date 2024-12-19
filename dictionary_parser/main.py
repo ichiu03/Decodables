@@ -282,7 +282,8 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
             original_decodability = original_decodability[0] if isinstance(original_decodability, tuple) else original_decodability
         else:
             original_decodability = 0
-        decodability_entry = f"Original Decodability: {original_decodability * 100:.2f}% Processed Decodability: {decodability * 100:.2f}% {current_time} Word Count: {wordcount} {marker} {combo} Problems: {problems}\n"
+        difference = original_decodability - decodability
+        decodability_entry = f"Difference: {difference * 100:.2f}% Original Decodability: {original_decodability * 100:.2f}% Processed Decodability: {decodability * 100:.2f}% {current_time} Word Count: {wordcount} {marker} {combo} Problems: {problems}\n"
         with open(decodability_file, "a") as file:
             file.write(decodability_entry)
             
