@@ -169,6 +169,7 @@ async def get_decodability_endpoint(request: DecodabilityRequest):
                             }
                         else:
                             bad_words_with_categories[word_lower]["categories"].append(problem)
+                            
         decodability, _ = process_story(
             request.text,
             request.problems,
