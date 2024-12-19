@@ -276,6 +276,7 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
         # Ensure the directory exists
         # Prepare the data for the file
         current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        original_decodability = original_decodability[0] if isinstance(original_decodability, tuple) else original_decodability
         decodability_entry = f"Original Decodability: {original_decodability * 100:.2f}% Processed Decodability: {decodability * 100:.2f}% {current_time} Word Count: {wordcount} {marker} {combo} Problems: {problems}\n"
         with open(decodability_file, "a") as file:
             file.write(decodability_entry)
