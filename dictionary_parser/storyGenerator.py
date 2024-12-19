@@ -90,6 +90,7 @@ def query(prompt, model="anthropic"):
     Returns:
         str: The generated completion from the model.
     """
+    model = "chatgpt" #### Was getting issues with anthropic, setting to chatgpt for now so I can push to production
     if model == "chatgpt":
         messages = [
             {"role": "system", "content": prompt},
