@@ -1,4 +1,5 @@
 import openai  # Use the standard OpenAI library
+from openai import OpenAI  
 import anthropic
 from dotenv import load_dotenv, dotenv_values
 import json
@@ -34,7 +35,9 @@ openai.api_key = openai_api_key  # Set the OpenAI API key
 anthropic_client = anthropic.Client(
     api_key=anthropic_api_key  # Set the Anthropic API key
 )
-
+openai_client = OpenAI(
+    api_key=openai_api_key
+)
 # ====================================
 # 3. NLTK Setup
 # ====================================
@@ -96,7 +99,13 @@ def query(prompt, model="anthropic"):
             {"role": "system", "content": prompt},
         ]
         try:
-            response = openai.ChatCompletion.create(
+            # response = openai.ChatCompletion.create(
+            #     model="gpt-3.5-turbo",
+            #     messages=messages,
+            #     max_tokens=story_length,
+            #     temperature=0.7,
+            # )
+            response = openai_client.chat.completions.create(
                 model="gpt-3.5-turbo",
                 messages=messages,
                 max_tokens=story_length,
