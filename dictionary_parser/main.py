@@ -416,8 +416,11 @@ def main():
     sight_words = handle_sight_words(default_sight_words, probsight_words)
    
     gendec = input("Would you like to generate a story (g) or input a story (i): ")
-    if gendec == "g":
-        story_length, topic, problems,name,readingLevel = get_input()
+    if gendec.lower() == "g":
+        # Use get_input_and_save to retrieve api_choice
+        story_length, topic, problems, name, readingLevel, api_choice = get_input()
+        
+        # Adjust maxsyllable based on readingLevel
         if int(readingLevel) <= 1:
             maxsyllable = 2
         elif int(readingLevel) <= 3:
@@ -430,12 +433,13 @@ def main():
             maxsyllable = 6
         else:
             maxsyllable = 10
+        
         problems.append("too many syllables")
         sight_words += name
-        story= generate_story(topic, problems, name, readingLevel, story_length)
+        story = generate_story(topic, problems, name, readingLevel, api_choice, story_length)
         original_decodability = process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=True)
         print("Generating story...")
-    elif gendec == "i":
+    elif gendec.lower() == "i":
         readingLevel = input("Enter the grade level of the reader (Only the grade number): ")
         if int(readingLevel) <= 1:
             maxsyllable = 2
@@ -452,7 +456,7 @@ def main():
         problems = input("Enter the problem letters separated by /: ").split("/")
         problems.append("too many syllables")
         file = input("Copy and Paste your text here: ")
-        story =  file
+        story = file
         maxsyllable = 10
         decodabuilityog, _ = process_story(story, problems, 10, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=True)
     print(story)
