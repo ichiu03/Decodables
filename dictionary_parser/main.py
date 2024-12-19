@@ -176,7 +176,7 @@ def correct_text(text: str) -> str:
         print(f"Warning: Grammar correction failed ({str(e)}). Proceeding with original text.")
         return text
 
-def rewrite_sentences(story):
+def rewrite_sentences(story, problems):
     sentences = story.split(".")  # Split sentences by period
     finaltext = ""  # To store the revised story
    
@@ -188,6 +188,7 @@ def rewrite_sentences(story):
         # Form the prompt
         prompt = f"""
             Rewrite this sentence so it is easier to read if necessary. Remember this is for a childrens book: {sentence}
+            **Do not** include any words containing these sounds: {', '.join(problems)}.
            
             If no rewrite is needed, return the same sentence.
             If it makes sense to, trim down the sentence so it is not redundant.
@@ -313,7 +314,7 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
             story = query(prompt)
        
         decodability = categorize_and_validate_words(story, problems, maxsyllable)["decodability"]
-        while decodability < 0.9:
+        while decodability < 0.85:
             print(f"Decodability: {decodability}")
             print("Checking and categorizing words...")
             results = categorize_and_validate_words(story, problems, maxsyllable)
@@ -324,9 +325,10 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
             story = replace_words_in_story(story, synonyms_dict)
             print("Formatting the story...")
             story = ultraformatting(story)
+            story = rewrite_sentences(story, problems)
             decodability = categorize_and_validate_words(story, problems, maxsyllable)["decodability"]
        
-        story = rewrite_sentences(story)
+        
 
 
         return story
