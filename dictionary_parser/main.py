@@ -480,6 +480,8 @@ def main():
 
     decodability, bad_words = process_story(story4, problems, maxsyllable, apply_correction=True, spellcheck=True, combined=True, decodabilityTest=True)
     print(f'\n\nFinal Story: {story4}')
+    print(f"Decodability: {decodability}")
+    return decodability
 
 if __name__ == "__main__":
     main()

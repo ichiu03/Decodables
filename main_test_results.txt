@@ -1,0 +1,84 @@
+
+=== Test Results 2024-12-19 14:43:13 ===
+Test Configuration:
+  description: Generate story with s problems w/ openai
+  inputs: ['', 'g', '200', 'A day at the park', 's', 'Tom', '7', 'openai']
+
+Aggregate Results:
+  Average Initial Decodability: 85.51%
+  Average Final Decodability: 91.36%
+  Average Runtime: 103.03 seconds
+  Number of Runs: 3
+
+Detailed Results:
+
+Run 1:
+  Initial Decodability: 86.49%
+  Final Decodability: 92.95%
+  Runtime: 112.26 seconds
+  Final Story:
+  Tom, a lively 10-year-old boy, woke up feeling excited for a day at the park with his friends, looking forward to the fun that awaited them When they arrived, they started with a fun game of tag before exploring the park. They climbed wooden structures, balanced on cobbles and pendulums, and had a great time. During their exploration, Tom noticed a child struggling to climb a ladder. Without hesitation, he kindly helped and together they reached the top through teamwork. This act of compassion made Tom and his friends realize the power of working together, enhancing their park experience. At the end of the day, Tom felt joyful and proud for helping someone in need. On their way back home, Tom and his friend chatted and laughed about the fun they had that day. Tom was excited for more adventures with his friends, knowing that kindness and working together would make their experiences special.
+
+------------------------------
+
+Run 2:
+  Initial Decodability: 86.16%
+  Final Decodability: 89.57%
+  Runtime: 94.87 seconds
+  Final Story:
+  One morning, Tom was excited for a day at the park. He packed a bag with food, water, and his favorite book, his eyes sparkling with excitement. Arriving at the park, he fell in love with the colorful flowers and happy bird songs. His heart filled with joy when he found children playing tag. He eagerly joined in, laughter filling the air as new friendships formed. Throughout the day, Tom and his friends climbed rocks, had a picnic, and cleaned up the park. As the sun began to set, casting a golden glow over the park, he headed home, excited for his next park adventure. He thought happily about the fun teamwork of the day.
+
+------------------------------
+
+Run 3:
+  Initial Decodability: 83.87%
+  Final Decodability: 91.58%
+  Runtime: 101.96 seconds
+  Final Story:
+  Excited for a day at the park, Tom packed finger food, a ball, and his kite. Arriving at the park, he saw kids having fun playing. Tom played football and flew his kite, but it got stuck high in a tree. Realizing the height was too high, he tried to reach his kite in the tree and felt sad about not succeeding. Luckily, his friends came to help fix it. Using a long rod, they rescued the kite, returning it to Tom's thankful ____ Thanking his sidekicks for their help, the day ended happily.
+
+------------------------------
+
+==================================================
+
+=== Test Results 2024-12-19 14:49:58 ===
+Test Configuration:
+  description: Generate story with s problems w/ anthropic
+  inputs: ['', 'g', '200', 'A day at the park', 's', 'Tom', '7', 'anthropic']
+
+Aggregate Results:
+  Average Initial Decodability: 100.00%
+  Average Final Decodability: 92.60%
+  Average Runtime: 135.03 seconds
+  Number of Runs: 3
+
+Detailed Results:
+
+Run 1:
+  Initial Decodability: 100.00%
+  Final Decodability: 93.88%
+  Runtime: 118.04 seconds
+  Final Story:
+  Tom ran to the park, holding tightly to the remote control of his shiny red car, which glinted in the morning light. He had been eagerly looking forward to playing with his new toy. Children were scattered around the tall climbing frame, watching in awe as the car zoomed by. One of the kids walked up to Tom and said, "Wow, that car is amazing!"Ignoring the boy, Tom moved the car to the edge of the park to play alone. Expertly driving the car through the morning air, he ignored the sounds of children's laughter nearby and enjoyed the peace of the empty space he had found for himself. As he drove towards the climbing frame, Tom skillfully guided the car under a low bar just out of his reach. Extending his arm to reach for it, he wondered if the other children would help.
+
+------------------------------
+
+Run 2:
+  Initial Decodability: 100.00%
+  Final Decodability: 91.97%
+  Runtime: 133.06 seconds
+  Final Story:
+  Tom held the shiny ball tightly, admiring how it gleamed in the morning light. The new rubber ball had textured humps for a good grip. Excited to use his birthday present, he went to Parker Park where he found other kids playing with an old ball. Despite their laughter, he noticed their ball slipping away. "Hey, want to play?" called a tall boy, eyeing Tom's ball hopefully Tom hesitated but politely declined. Tom watched the children play on the bench, trying to bounce the ball alone but feeling unhappy. As time passed, a little boy approached Tom, bringing back memories of being left out. Feeling the boy's request, Tom offered the ball, saying, "Let me show you a cool trick." Tom offered the ball to the boy, saying, "Let me show you a cool trick."
+
+------------------------------
+
+Run 3:
+  Initial Decodability: 100.00%
+  Final Decodability: 91.96%
+  Runtime: 153.98 seconds
+  Final Story:
+  Tom held the shiny ball tightly, admiring its gleam in the morning light and feeling the new grip pattern. He headed to Parker Park, where children's laughter playing roundball echoed through the warm air. Approaching the court, he saw kids happily playing with an old ball, trying to score. "Hey, want to play?" a tall boy asked, but Tom said no because he was worried about his ball getting dirty. Perched on a bench, he dribbled the ball between his legs, determined to keep it in perfect condition. Watching the game, he started to feel empty inside. He realized that having a perfect ball meant nothing without someone to play with.
+
+------------------------------
+
+==================================================

@@ -71,11 +71,12 @@ async def process_story_endpoint(request: ProcessStoryRequest):
                     detail="Story topic and length required for story generation"
                 )
             story = generate_story(
-                request.storyTopic,
-                problems,
-                request.characterName,
-                request.readingLevel,
-                request.storyLength
+                topic=request.storyTopic,
+                problems=problems,
+                name=request.characterName,
+                readingLevel=request.readingLevel,
+                api='anthropic',
+                story_length=request.storyLength
             )
             
             original_decodability = process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=True)
