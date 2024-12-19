@@ -30,6 +30,12 @@ openai_client = OpenAI(
 anthropic_client = anthropic.Anthropic(
     api_key=anthropic_api_key  # Ensure you have set ANTHROPIC_API_KEY in your .env
 )
+openai_client = OpenAI(
+    api_key=openai_api_key
+)
+# ====================================
+# 3. NLTK Setup
+# ====================================
 
 nltk.download('punkt')
 nltk.download('punkt_tab')
