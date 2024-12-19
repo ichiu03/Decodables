@@ -3,6 +3,8 @@ venv/
 .venv/
 __pycache__/
 dictionary_parser/updated_story.txt
+dictionary_parser/decodability_measurements.txt
+decodability_measurements.txt
 dictionary_parser/word_synonyms.txt
 dictionary_parser/unknown_words.txt
 dictionary_parser/generated_story.txt
@@ -10,3 +12,9 @@ dictionary_parser/updated_story_transition.txt
 dictionary_parser/combined.txt
 output.json
 dictionary_parser/problemsounds.json
+categorized_words.json
+decodability_measurements.json
+non_decodable_words.json
+updated_story.txt
+updated_story_corrected.txt
+combined.txt

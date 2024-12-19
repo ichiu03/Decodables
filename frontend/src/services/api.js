@@ -31,17 +31,24 @@ export const processStory = async (formData) => {
     }
 
     const data = await response.json();
+    console.log('API Response:', data);
     
-    // If it's an input story, get decodability immediately
-    if (formData.storyChoice === 'i' && formData.storyInput) {
-      const decodabilityResult = await getDecodability(formData.storyInput, formData.problemLetters);
+    // Get decodability for both generated and input stories if not provided
+    if (!data.decodability) {
+      const storyText = data.generatedStory || data.processedStory;
+      const decodabilityResult = await getDecodability(storyText, formData.problemLetters);
       return {
         ...data,
-        decodability: decodabilityResult.decodability
+        decodability: decodabilityResult.decodability,
+        badWords: decodabilityResult.badWords
       };
     }
     
-    return data;
+    return {
+      ...data,
+      decodability: data.decodability,
+      badWords: data.badWords || {}
+    };
   } catch (error) {
     console.error('Error processing story:', error);
     throw error;

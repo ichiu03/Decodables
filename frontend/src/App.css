@@ -337,3 +337,41 @@ textarea {
   background-color: white;
   color: var(--header-bg);
 }
+
+.bad-words-list {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: #f8f8f8;
+  border-radius: 8px;
+}
+
+.bad-words-list h4 {
+  color: var(--error-color);
+  margin-bottom: 0.5rem;
+  font-size: 1.1em;
+}
+
+.bad-words-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0.5rem;
+}
+
+.bad-words-grid .bad-word {
+  background-color: #ffebee;
+  color: #d32f2f;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.bad-words-grid .bad-word span {
+  background-color: rgba(0, 0, 0, 0.1);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 0.8em;
+}

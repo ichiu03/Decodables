@@ -7,10 +7,11 @@ import StoryChoiceSection from './components/StoryChoiceSection';
 import CharacterNameInput from './components/CharacterNameInput';
 import Login from './components/Login';
 import { processStory, getDecodability } from './services/api';
+import StoryDisplay from './components/StoryDisplay';
+
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  
   // Check if user was previously authenticated
   useEffect(() => {
     const auth = localStorage.getItem('isAuthenticated');
@@ -19,15 +20,18 @@ function App() {
     }
   }, []);
 
+
   const handleLogin = () => {
     setIsAuthenticated(true);
     localStorage.setItem('isAuthenticated', 'true');
   };
 
+
   const handleLogout = () => {
     setIsAuthenticated(false);
     localStorage.removeItem('isAuthenticated');
   };
+
 
   const [formData, setFormData] = useState({
     unknownSightWords: '',
@@ -42,6 +46,8 @@ function App() {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [foundBadWords, setFoundBadWords] = useState({});
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -64,25 +70,16 @@ function App() {
     }
   };
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    
+   
     try {
       const response = await processStory(formData);
-      
-      if (formData.storyChoice === 'g' && response.generatedStory) {
-        // For generated stories, get decodability after generation
-        const decodabilityResult = await getDecodability(response.generatedStory, formData.problemLetters);
-        setResult({
-          ...response,
-          decodability: decodabilityResult.decodability
-        });
-      } else {
-        // For input stories, decodability is already included in the response
-        setResult(response);
-      }
+      console.log('Response in handleSubmit:', response);
+      setResult(response);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -90,9 +87,16 @@ function App() {
     }
   };
 
+
+  const handleFoundWords = (words) => {
+    setFoundBadWords(words);
+  };
+
+
   if (!isAuthenticated) {
     return <Login onLogin={handleLogin} />;
   }
+
 
   return (
     <div className="App">
@@ -118,15 +122,18 @@ function App() {
             />
           </div>
 
-          <StoryChoiceSection 
+
+          <StoryChoiceSection
             storyChoice={formData.storyChoice}
             onChange={handleInputChange}
           />
+
 
           <ProblemLettersSection
             selectedProblems={formData.problemLetters}
             onChange={handleInputChange}
           />
+
 
           {formData.storyChoice === 'i' ? (
             <StoryInputSection
@@ -147,6 +154,7 @@ function App() {
             </>
           )}
 
+
           <div className="form-group">
             <label htmlFor="readingLevel">
               Enter the grade level of the reader (only the grade number):
@@ -163,8 +171,9 @@ function App() {
             />
           </div>
 
-          <button 
-            type="submit" 
+
+          <button
+            type="submit"
             className="submit-button"
             disabled={loading}
           >
@@ -172,11 +181,13 @@ function App() {
           </button>
         </form>
 
+
         {error && (
           <div className="error-message">
             Error: {error}
           </div>
         )}
+
 
         {result && (
           <div className="result-section">
@@ -184,19 +195,43 @@ function App() {
             {result.processedStory && (
               <div className="processed-story">
                 <h3>Processed Story:</h3>
-                <p>{result.processedStory}</p>
+                <StoryDisplay
+                  story={result.processedStory}
+                  badWords={result.badWords || {}}
+                  onFoundWords={handleFoundWords}
+                />
               </div>
             )}
             {result.generatedStory && (
               <div className="generated-story">
                 <h3>Generated Story:</h3>
-                <p>{result.generatedStory}</p>
+                <StoryDisplay
+                  story={result.generatedStory}
+                  badWords={result.badWords || {}}
+                  onFoundWords={handleFoundWords}
+                />
               </div>
             )}
-            {result.decodability !== undefined && (
+            {result && result.decodability !== undefined && (
               <div className="decodability">
                 <h3>Decodability Score:</h3>
                 <p>{(result.decodability * 100).toFixed(2)}%</p>
+                {Object.keys(foundBadWords).length > 0 && (
+                  <div className="bad-words-list">
+                    <h4>Words with Problem Letters:</h4>
+                    <div className="bad-words-grid">
+                      {Object.entries(foundBadWords).map(([word, data], index) => (
+                        <span
+                          key={index}
+                          className="bad-word"
+                          title={`Problem categories: ${data.categories.join(', ')}`}
+                        >
+                          {word} ({data.count})
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -205,5 +240,6 @@ function App() {
     </div>
   );
 }
+
 
 export default App;
