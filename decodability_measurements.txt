@@ -8,3 +8,4 @@ Original Decodability: 0.00% Processed Decodability: 99.37% 2024-12-19 11:21:17 
 Original Decodability: 0.00% Processed Decodability: 100.00% 2024-12-19 11:25:09 Word Count: 73 Decodability Test  Problems: ['wh', 'aw', 'too many syllables']
 Original Decodability: 100.00% Processed Decodability: 100.00% 2024-12-19 12:07:12 Word Count: 75 Decodability Test  Problems: ['wh', 'aw', 'too many syllables']
 Original Decodability: 0.00% Processed Decodability: 98.91% 2024-12-19 12:17:33 Word Count: 184 Decodability Test  Problems: ['wh', 'aw', 'too many syllables']
+Original Decodability: 100.00% Processed Decodability: 98.90% 2024-12-19 12:57:17 Word Count: 91 Decodability Test  Problems: ['wh', 'aw', 'too many syllables']

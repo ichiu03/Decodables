@@ -54,40 +54,37 @@ with open(os.path.join(path, 'truncated_dictionary.json')) as json_file:
 
 ### Function to query the selected API
 def query(prompt, api='openai'):
-    try:
-        if api == 'openai':
-            messages = [
-                {"role": "system", "content": prompt},
+    if api == 'openai':
+        messages = [
+            {"role": "system", "content": prompt},
+        ]
+        response = openai_client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=messages,
+        )
+        return response.choices[0].message.content
+    elif api == 'anthropic':
+        message = anthropic_client.messages.create(
+            model="claude-3-5-sonnet-20241022",
+            max_tokens=1000,
+            temperature=0,
+            system="You are a creative author tasked with generating children's stories.",
+            messages=[
+                {
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": prompt
+                        }
+                    ]
+                }
             ]
-            response = openai_client.chat.completions.create(
-                model="gpt-3.5-turbo",
-                messages=messages,
-            )
-            return response.choices[0].message.content
-        elif api == 'anthropic':
-            response = anthropic_client.messages.create(
-                model="claude-3-5-sonnet-20241022",
-                max_tokens=1000,
-                temperature=0,
-                system="You are a creative author tasked with generating children's stories.",
-                messages=[
-                    {
-                        "role": "user",
-                        "content": [
-                            {
-                                "type": "text",
-                                "text": prompt
-                            }
-                        ]
-                    }
-                ]
-            )
-            return response['completion']
-        else:
-            raise ValueError("Unsupported API. Choose 'openai' or 'anthropic'.")
-    except Exception as e:
-        print(f"Error querying {api} API: {e}")
-        return ""
+        ) # Extract and join the text content from the response
+        response = "".join(block.text for block in message.content if hasattr(block, "text"))
+        print(message.content)
+        print(response)
+        return response
     
 ### Function to get user input and choose API
 def get_api_choice():
