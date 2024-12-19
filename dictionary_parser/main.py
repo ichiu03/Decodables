@@ -333,6 +333,7 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
         print("Decodability Test Mode: Analyzing text without making changes.")
         results = categorize_and_validate_words(story, problems, maxsyllable)
         # Get word_dict for problem words
+        story = story.lower()
         word_dict = parseAndProcessWords(story, maxsyllable, "categorized_words.json")
         save_problem_words_by_sound(word_dict, problems, story)
         # Display and save bad word occurrences

@@ -162,7 +162,7 @@ def xInWordCheck(word: str, arpabet: str) -> None:
     if 'j' in word and 'JH' in arpabet: categories['j'].append(word)
     if 'oi' in word and 'OY' in tokens: categories['oi'].append(word)
     if 'ir' in word and 'ER' in tokens and 'irr' not in word and 'ire' not in word: categories['ir'].append(word)
-    if 's' in word: categories['s'].append(word) # and 'S' in tokens
+    if 's' in word and 'S' in tokens: categories['s'].append(word)
     if 't' in word and 'T' in tokens: categories['t'].append(word)
     if 'b' in word and 'B' in tokens: categories['b'].append(word)
     if 'd' in word and 'D' in tokens: categories['d'].append(word)
