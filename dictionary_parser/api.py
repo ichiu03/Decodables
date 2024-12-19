@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import List, Optional
-from main import process_story, generate_story, handle_sight_words, combine
+from main import process_story, generate_story, handle_sight_words, combine, original_decodability
 import re
 from dictionaryParser import parseAndProcessWords
 from collections import Counter
@@ -44,6 +44,7 @@ async def process_story_endpoint(request: ProcessStoryRequest):
     try:
         # Update sight_words
         global sight_words
+        global original_decodability
         sight_words = handle_sight_words(default_sight_words, ','.join(request.unknownSightWords))
        
         problems = request.problemLetters
@@ -76,6 +77,8 @@ async def process_story_endpoint(request: ProcessStoryRequest):
                 request.readingLevel,
                 request.storyLength
             )
+            
+            original_decodability = process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=True)
         else:
             if not request.storyInput:
                 raise HTTPException(
@@ -83,6 +86,7 @@ async def process_story_endpoint(request: ProcessStoryRequest):
                     detail="Story input required for processing"
                 )
             story = request.storyInput
+            original_decodability = process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=True)
 
 
         # First Run: Without Grammar Correction
@@ -169,6 +173,7 @@ async def get_decodability_endpoint(request: DecodabilityRequest):
                             }
                         else:
                             bad_words_with_categories[word_lower]["categories"].append(problem)
+                            
         decodability, _ = process_story(
             request.text,
             request.problems,
