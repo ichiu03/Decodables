@@ -1,87 +1,87 @@
 
---- Problem Words Analysis 2024-12-20 15:41:22 ---
+--- Problem Words Analysis 2024-12-20 15:46:34 ---
 
 All words in story and their sound categories:
 1: [no problem sounds]
 a: [no problem sounds]
+all: [no problem sounds]
 and: [no problem sounds]
 as: [no problem sounds]
+asked: [ed]
+asleep: [no problem sounds]
 at: [no problem sounds]
-became: [vcv]
-bed: [ed]
+before: [no problem sounds]
+began: [vcv]
+beneath: [ea as in eat, vcv]
+blur: [no problem sounds]
 book: [no problem sounds]
 buttons: [vcv]
+carpet: [no problem sounds]
 chapter: [no problem sounds]
-deep: [no problem sounds]
+chores: [no problem sounds]
+controller: [no problem sounds]
 desk: [no problem sounds]
-distant: [no problem sounds]
-do: [no problem sounds]
-done: [no problem sounds]
-drifted: [ed]
-fade: [no problem sounds]
+dizzy: [y as in bumpy, vcv]
+excitement: [no problem sounds]
+eyes: [ey as in they]
 favorite: [no problem sounds]
 fell: [no problem sounds]
 felt: [no problem sounds]
 fourth: [no problem sounds]
 game: [no problem sounds]
-grabbed: [ed, double rule-suffixes]
 grew: [ew as in few/blew]
 half: [no problem sounds]
 hands: [no problem sounds]
 he: [no problem sounds]
-head: [ea as in bread]
 him: [no problem sounds]
 himself: [no problem sounds]
 his: [no problem sounds]
-homework: [wor]
+hit: [no problem sounds]
 i: [no problem sounds]
-into: [no problem sounds]
-it: [no problem sounds]
-later: [vcv]
 lit: [no problem sounds]
 ll: [no problem sounds]
-made: [no problem sounds]
+makes: [no problem sounds]
+making: [vcv, e rule-suffixes]
 math: [no problem sounds]
 max: [no problem sounds]
-mind: [-ild, -ind, -old, -ost]
-nap: [no problem sounds]
+music: [vcv]
+my: [no problem sounds]
 no: [no problem sounds]
-not: [no problem sounds]
+now: [no problem sounds]
 numbers: [no problem sounds]
-on: [no problem sounds]
-page: [soft g]
+picked: [ed]
 plus: [no problem sounds]
-pressed: [ed, double rule-suffixes]
 problem: [no problem sounds]
-remote: [vcv]
 room: [no problem sounds]
+s: [no problem sounds]
 said: [no problem sounds]
 sat: [no problem sounds]
 screen: [3-letter beg. blends]
 sense: [no problem sounds]
 soft: [no problem sounds]
+softer: [no problem sounds]
 soon: [no problem sounds]
-sounds: [ou as in south]
-spin: [no problem sounds]
+spun: [no problem sounds]
 staring: [vcv]
-started: [ed]
+stiff: [no problem sounds]
 still: [no problem sounds]
+stop: [no problem sounds]
 the: [no problem sounds]
+this: [no problem sounds]
 to: [no problem sounds]
-turned: [ed, ur]
-tv: [no problem sounds]
 up: [no problem sounds]
+waiting: [vcv, ai]
 with: [no problem sounds]
+work: [wor]
 
 Problem words by sound:
-wor: homework
-ea as in bread: head
+ey as in they: eyes
+wor: work
+y as in bumpy: dizzy
+ea as in eat: beneath
 3-letter beg. blends: screen
-vcv: became, buttons, later, remote, staring
-soft g: page
-ed: bed, drifted, grabbed, pressed, started, turned
--ild, -ind, -old, -ost: mind
-double rule-suffixes: grabbed, pressed
+vcv: began, beneath, buttons, dizzy, making, music, staring, waiting
+ai: waiting
+ed: asked, picked
 ew as in few/blew: grew
-ou as in south: sounds
-ur: turned
+e rule-suffixes: making

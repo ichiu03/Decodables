@@ -59,7 +59,6 @@ def query_anthropic(prompt):
 
 ### Function to query the selected API
 def query(prompt, api='anthropic'):
-    api = 'anthropic'
     if api == 'openai':
         try:
             return query_openai(prompt)
