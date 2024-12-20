@@ -5,4 +5,53 @@
 .categories-container {
   /* styles */
 }
+
+.category-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.category-header h3 {
+  margin: 0;
+  color: var(--accent-color);
+  font-size: 1.2em;
+  padding: 8px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  flex-grow: 1;
+}
+
+.problem-letters-section .category-header button.select-all-button {
+  background-color: var(--accent-color) !important;
+  color: white !important;
+  border: none !important;
+  padding: 8px 20px !important;
+  border-radius: 20px !important;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: all 0.2s;
+  margin-left: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.problem-letters-section .category-header button.select-all-button:hover {
+  background-color: #1976d2 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+}
+
+.problem-letters-section .category-header button.select-all-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.problem-letters-section .category-header button.select-all-button.selected {
+  background-color: var(--accent-color) !important;
+}
+
+.problem-letters-section .category-header button.select-all-button.selected:hover {
+  background-color: #1976d2 !important;
+}
 /* etc */ 

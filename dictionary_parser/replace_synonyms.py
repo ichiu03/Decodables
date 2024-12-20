@@ -2,7 +2,7 @@ import re
 from openai import OpenAI
 from dotenv import load_dotenv
 import os
-from main import path
+from main import path, query
 
 # Get absolute path to the root directory and .env file
 parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -76,17 +76,6 @@ def save_updated_story(updated_story, output_file):
     with open(output_file, 'w', encoding='utf-8') as file:
         file.write(updated_story)
     print(f"Updated story has been saved to '{output_file}'.")
-
-def query(prompt): 
-    messages = [
-        {"role": "system", "content": prompt},
-    ]
-    response = client.chat.completions.create(
-        model="gpt-3.5-turbo",
-        messages=messages,
-    )
-    return response.choices[0].message.content
-
 
 
 def format_punctuation_with_quotes(text):

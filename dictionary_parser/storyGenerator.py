@@ -88,12 +88,11 @@ def query_anthropic(prompt):
         ]
     ) # Extract and join the text content from the response
     response = "".join(block.text for block in message.content if hasattr(block, "text"))
-    print(message.content)
-    print(response)
     return response
 
 ### Function to query the selected API
-def query(prompt, api='openai'):
+def query(prompt, api='anthropic'):
+    api = 'anthropic'
     if api == 'openai':
         try:
             return query_openai(prompt)

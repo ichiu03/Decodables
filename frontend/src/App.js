@@ -52,16 +52,27 @@ function App() {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     if (name === 'problemLetters') {
-      const newProblemLetters = new Set(formData.problemLetters);
-      if (e.target.checked) {
-        newProblemLetters.add(value);
+      if (value instanceof Set) {
+        // Handle "Select All" case
+        setFormData(prevState => ({
+          ...prevState,
+          problemLetters: value
+        }));
       } else {
-        newProblemLetters.delete(value);
+        // Handle individual checkbox case
+        setFormData(prevState => {
+          const newProblemLetters = new Set(prevState.problemLetters);
+          if (e.target.checked) {
+            newProblemLetters.add(value);
+          } else {
+            newProblemLetters.delete(value);
+          }
+          return {
+            ...prevState,
+            problemLetters: newProblemLetters
+          };
+        });
       }
-      setFormData(prevState => ({
-        ...prevState,
-        problemLetters: newProblemLetters
-      }));
     } else {
       setFormData(prevState => ({
         ...prevState,

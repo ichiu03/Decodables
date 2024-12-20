@@ -364,8 +364,6 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
             print(f"Decodability: {decodability}")
             print("Checking and categorizing words...")
             results = categorize_and_validate_words(story, problems, maxsyllable)
-
-
             print("Replacing problematic words...")
             synonyms_dict = get_synonyms_dict(story, problems, maxsyllable)
             story = replace_words_in_story(story, synonyms_dict)
