@@ -79,7 +79,12 @@ async def process_story_endpoint(request: ProcessStoryRequest):
                 story_length=request.storyLength
             )
             
-            original_decodability = process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=True)
+            original_decodability, _ = process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=True)
+            if original_decodability > 0.97:
+                return {
+                    "success": True,
+                    "generatedStory": story
+                }
         else:
             if not request.storyInput:
                 raise HTTPException(
@@ -87,7 +92,12 @@ async def process_story_endpoint(request: ProcessStoryRequest):
                     detail="Story input required for processing"
                 )
             story = request.storyInput
-            original_decodability = process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=True)
+            original_decodability, _ = process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=True)
+            if original_decodability > 0.97:
+                return {
+                    "success": True,
+                    "processedStory": story
+                }
 
 
         # First Run: Without Grammar Correction

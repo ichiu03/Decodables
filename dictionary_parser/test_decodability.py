@@ -92,31 +92,31 @@ def main():
     
     test_configs = [
         {
-            'description': "Generate story with s problems w/ openai",
+            'description': "Generate story with these problems w/ openai and limited processing",
             'inputs': [
                 "",  # default sight words
                 "g",  # generate story
                 "200",  # story length
                 "A day at the park",  # topic
-                "s",  # problem sounds
+                "b/l/p/j/ck/wh/aw/tch/igh/ir/oi",  # problem sounds
                 "Tom",  # name
                 "7",  # reading level
                 "openai"   # API choice
             ]
-        },
-        {
-            'description': "Generate story with s problems w/ anthropic",
-            'inputs': [
-                "",  # default sight words
-                "g",  # generate story
-                "200",  # story length
-                "A day at the park",  # topic
-                "s",  # problem sounds
-                "Tom",  # name
-                "7",  # reading level
-                "anthropic"   # API choice
-            ]
         }
+        # {
+        #     'description': "Generate story with s problems w/ anthropic",
+        #     'inputs': [
+        #         "",  # default sight words
+        #         "g",  # generate story
+        #         "200",  # story length
+        #         "A day at the park",  # topic
+        #         "s",  # problem sounds
+        #         "Tom",  # name
+        #         "7",  # reading level
+        #         "anthropic"   # API choice
+        #     ]
+        # }
     ]
     
     # Run tests for each configuration

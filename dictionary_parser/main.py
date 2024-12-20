@@ -341,7 +341,7 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
         word_dict = parseAndProcessWords(story, maxsyllable, "categorized_words.json")
         save_problem_words_by_sound(word_dict, problems, story)
         # Display and save bad word occurrences
-        display_bad_words(results["bad_occurrences"])
+        #display_bad_words(results["bad_occurrences"])
         if original_decodability is not None:
             save_decodability_metrics(results["decodability"], results["wordcount"], "Decodability Test", "", problems)
         # save_bad_word_counts(results["all_bads"])
@@ -437,7 +437,12 @@ def main():
         problems.append("too many syllables")
         sight_words += name
         story = generate_story(topic, problems, name, readingLevel, api_choice, story_length)
-        original_decodability = process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=True)
+        original_decodability, _ = process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=True)
+        if original_decodability > 0.97:
+            print("Decodability is already high enough, no need to process further.")
+            print(f'\n\nFinal Story: {story4}')
+            print(f"Decodability: {decodability}")
+            return decodability
         print("Generating story...")
     elif gendec.lower() == "i":
         readingLevel = input("Enter the grade level of the reader (Only the grade number): ")
@@ -458,7 +463,12 @@ def main():
         file = input("Copy and Paste your text here: ")
         story = file
         maxsyllable = 10
-        decodabuilityog, _ = process_story(story, problems, 10, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=True)
+        original_decodability, _ = process_story(story, problems, 10, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=True)
+        if original_decodability > 0.97:
+            print("Decodability is already high enough, no need to process further.")
+            print(f'\n\nFinal Story: {story4}')
+            print(f"Decodability: {decodability}")
+            return decodability
     print(story)
 
     # First Run: Without Grammar Correction
@@ -475,7 +485,7 @@ def main():
 
 
     # Process the combined story
-    story4 = process_story(story3, problems, maxsyllable, apply_correction=True, spellcheck=True, combined=True)
+    story4 = process_story(story3, problems, maxsyllable, apply_correction=True, spellcheck=True, combined=False)
 
 
     decodability, bad_words = process_story(story4, problems, maxsyllable, apply_correction=True, spellcheck=True, combined=True, decodabilityTest=True)

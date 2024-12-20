@@ -82,3 +82,257 @@ Run 3:
 ------------------------------
 
 ==================================================
+
+=== Test Results 2024-12-19 14:58:37 ===
+Test Configuration:
+  description: Generate story with s problems w/ openai and basic processing
+  inputs: ['', 'g', '200', 'A day at the park', 's', 'Tom', '7', 'openai']
+
+Aggregate Results:
+  Average Initial Decodability: 85.28%
+  Average Final Decodability: 91.24%
+  Average Runtime: 50.12 seconds
+  Number of Runs: 3
+
+Detailed Results:
+
+Run 1:
+  Initial Decodability: 84.66%
+  Final Decodability: 94.01%
+  Runtime: 47.69 seconds
+  Final Story:
+  Chapter 1: The bright sun peeked through Tom's window, signaling a special day. Tom, an eager and brave 7-year-old, jumped out of bed excited for adventure. His eyes sparkled with excitement thinking about the fun at the park. With a bounce in his march, Tom arrived at the park with his family. There, he met a new friend full of joy and energy. They explored the playground, climbed birch, and had a cozy picnic under a shady tree. Abruptly, they found a vanished puppy. Without hesitation, Tom and his friend decided to help the little pup find her way home. Hand in hand, they explored the park with determination and care. Their hard work paid off when they reunited the puppy with her owner. Excitement filled the air. Tom and friend felt happy knowing they had made a difference that day As the sun started to set, Tom thanked his friend for a fun day at the park and looked forward to more adventures.
+
+------------------------------
+
+Run 2:
+  Initial Decodability: 85.16%
+  Final Decodability: 90.80%
+  Runtime: 53.67 seconds
+  Final Story:
+  Tom was an enthusiastic 8-year-old boy who loved exploring nature. On a bright weekend morning, he arrived at the park with Lara and Jake. They started playing on the 1. Teeter-totters and slides, as their laughter filled the air While running, Tom saw litter in the park. Determined to help, he took action. He started picking up trash, with Lara and Jake helping to sort reusable items and dispose of the garbage properly. During their cleanup, they found an injured bird. Together, they built a cozy den to keep the bird safe and comfortable. Together, they made sure the bird was well taken care of. After finishing their task, they looked at the now very clean park. The bird returned to his den, and Tom felt proud. He realized that small actions, like cleaning up trash, could make a big difference. This day at the park showed Tom the importance of taking care of nature and helping others in need It showed him how working together can make good things happen.
+
+------------------------------
+
+Run 3:
+  Initial Decodability: 86.03%
+  Final Decodability: 88.89%
+  Runtime: 49.01 seconds
+  Final Story:
+  Tom's eyes sparkled with joy as he stepped into the park. The sun shone brightly through the green grass, filling the air with laughter. He wanted to join the fun, but felt a bit shy. Watching the children play, his heart yearned to jump in. Frisbees flew, footballs danced, and dodgeball caught Tom's eye. Unsure, he watched until a cheerful face beckoned him to join. With a shy smile, Tom joined the game. Laughter filled the air as he played without fear. Confidence blossomed with the warmth of inclusion and laughter. As the game came to an end, his new friends' grateful expressions filled his heart. Tom discovered that courage led to joy and friendship. Filled with joy, he said goodbye to the park, happy that stepping out of his comfort zone had brought him a day of laughter and new friends.
+
+------------------------------
+
+==================================================
+
+=== Test Results 2024-12-19 15:04:13 ===
+Test Configuration:
+  description: Generate story with s problems w/ openai and basic processing
+  inputs: ['', 'g', '200', 'A day at the park', 'wh/aw/tch/igh/ir/oi/kn/ur/dge/tion/war/ph/eigh/wor/ough', 'Tom', '7', 'openai']
+
+Aggregate Results:
+  Average Initial Decodability: 96.51%
+  Average Final Decodability: 95.81%
+  Average Runtime: 32.27 seconds
+  Number of Runs: 3
+
+Detailed Results:
+
+Run 1:
+  Initial Decodability: 98.40%
+  Final Decodability: 96.88%
+  Runtime: 29.37 seconds
+  Final Story:
+  Tom ran through the park with a big smile. He loved playing outside with friends. Today, he was excited to explore the playground and have fun. Upon arriving, he saw his friends near the swings. Laughing and playing on the slides, having so much fun! Not far away, older kids caught Tom's attention as they played basketball. Excited to join, he approached the older kids playing basketball. Approaching the older kids, Tom asked to play with them. At first unsure, they finally decided. Tom tried his best but found the game challenging. The older kids teased him for not being as good as them. Feeling discouraged, Tom remembered his parents' advice to always try his hardest. He kept going, just focusing on having fun. By the end, the older kids were won over by his positive attitude and they had a great time together. Tom learned that trying your best and staying positive can make challenges easier to overcome.
+
+------------------------------
+
+Run 2:
+  Initial Decodability: 95.81%
+  Final Decodability: 97.08%
+  Runtime: 31.57 seconds
+  Final Story:
+  Tom and his friends ran through the park on a sunny day, eager to explore and have fun. They laughed while swinging and sliding, enjoying the warmth of the sun on their faces. Tom saw older kids bothering a younger child. Remembering his parents' advice about helping others, he knew what to do. With bravery, he confronted the bullies and demanded they stop. Impressed by Tom's courage, the bullies backed off. The smaller child thanked Tom with a big smile and they all played together, sharing laughs and happy moments. As the day ended, Tom understood how important it was to help others and be kind. Tom and his friends were proud of bringing positivity to the park. Tom learned that friendship, standing up to bullies, and spreading kindness were all important during his park adventure.
+
+------------------------------
+
+Run 3:
+  Initial Decodability: 95.31%
+  Final Decodability: 93.46%
+  Runtime: 35.86 seconds
+  Final Story:
+  Tom ran through the park, his sneakers thudding. He was a brave 10-year-old boy who enjoyed exploring new adventures. The sun shone as he arrived at the park on Saturday morning. In the distance, Tom saw older kids playing basketball. Intrigued and eager, he went to watch. His eyes sparkled with excitement as he decided to join them. At first, he had a hard time making a basket, the ball kept bouncing away from the hoop. But Tom was determined and refused to quit. He practiced dribbling and shooting diligently until the ball swished through the hoop with a swoosh. The older kids cheered, amazed by Tom's determination. They asked him to join in, and he grinned. They showed him some cool tricks and invited him to join their team. Tom felt a sense of accomplishment and friendship. Tom happily left the park, looking forward to his next basketball adventure.
+
+------------------------------
+
+==================================================
+
+
+
+=== Test Results 2024-12-19 15:15:13 ===
+Test Configuration:
+  description: Generate story with s problems w/ openai and basic processing
+  inputs: ['', 'g', '200', 'A day at the park', 'wh/aw/tch/igh/ir/oi/kn/ur/dge/tion/war/ph/eigh/wor/ough', 'Tom', '7', 'openai']
+
+Aggregate Results:
+  Average Initial Decodability: 96.08%
+  Average Final Decodability: 96.42%
+  Average Runtime: 70.80 seconds
+  Number of Runs: 3
+
+Detailed Results:
+
+Run 1:
+  Initial Decodability: 96.69%
+  Final Decodability: 97.25%
+  Runtime: 60.51 seconds
+  Final Story:
+  Excitedly, Tom and his friends went to the park on a sunny day. "Let's play!" Tom shouted, leading them to the swings where they laughed and soared higher. Amid the fun, Tom picked up trash near the slide to keep the park clean. Venturing further, they found a captivating butterfly garden and admired the colorful fluttering creatures. The park keeper emphasized the importance of conserving nature. Under the oak tree, they enjoyed a picnic and giggled together. As the sun began to set, Tom felt joy in preserving the park's beauty. Realizing the need to protect the environment to make a safe and enjoyable place for all.
+
+------------------------------
+
+Run 2:
+  Initial Decodability: 97.24%
+  Final Decodability: 97.20%
+  Runtime: 71.07 seconds
+  Final Story:
+  Tom and his friends were excited to be at the sunny park on Saturday morning. They laughed while playing hide and seek among the trees and bushes. Suddenly, Tom saw a small girl sitting alone on a bench, looking sad. "Excited, he invited her to play with them." With a smile from Tom, the girl stood up and agreed. Tom soon learned the new girl missed her old friends a lot. He showed her the best hiding spots and cheered her on, making sure she felt included As the day turned into evening, the girl approached Tom, grateful for all his help. She thanked him for making her feel welcomed. Tom beamed with joy as he made new friends. Promising to meet again next weekend, he and his friends left the park full of joy Their hearts were full of joy and hope.
+
+------------------------------
+
+Run 3:
+  Initial Decodability: 94.32%
+  Final Decodability: 94.80%
+  Runtime: 80.83 seconds
+  Final Story:
+  Tom and Sarah giggled happily after a fun lunch in the park. Excited for more fun, they hurried to the pond to watch the ducks gliding on the water. Sarah pointed at a butterfly dancing among the colorful wildflowers, making Tom smile at the beauty of the scene. On their way back to the playground, they saw an elderly lady struggling with a stubborn jar. Tom quickly loosened the lid with a firm twist. The lady's face lit up with gratitude as she thanked Tom sincerely. Sarah felt proud watching her friend's act of kindness. As the sun set, Tom felt content realizing the magic of kindness in making special connections and moments. Giving Sarah a tight hug goodbye, he promised to meet her again soon. Each step on the way home was filled with lessons and new friends, making Tom's heart happy for the adventures ahead. That night, with hearts full of happiness and excitement, Tom peacefully drifted off to sleep, eagerly anticipating the next day's park escapade.
+
+------------------------------
+
+==================================================
+
+=== Test Results 2024-12-19 15:18:54 ===
+Test Configuration:
+  description: Generate story with these problems w/ openai and basic processing
+  inputs: ['', 'g', '200', 'A day at the park', 'b/l/p/j/ck/wh/aw/tch/igh/ir/oi', 'Tom', '7', 'openai']
+
+Aggregate Results:
+  Average Initial Decodability: 75.12%
+  Average Final Decodability: 0.00%
+  Average Runtime: 5.55 seconds
+  Number of Runs: 3
+
+Detailed Results:
+
+Run 1:
+  Initial Decodability: 77.46%
+  Final Decodability: 0.00%
+  Runtime: 6.91 seconds
+  Final Story:
+  
+
+------------------------------
+
+Run 2:
+  Initial Decodability: 77.40%
+  Final Decodability: 0.00%
+  Runtime: 5.00 seconds
+  Final Story:
+  
+
+------------------------------
+
+Run 3:
+  Initial Decodability: 70.49%
+  Final Decodability: 0.00%
+  Runtime: 4.74 seconds
+  Final Story:
+  
+
+------------------------------
+
+==================================================
+
+=== Test Results 2024-12-19 15:29:20 ===
+Test Configuration:
+  description: Generate story with these problems w/ openai and basic processing
+  inputs: ['', 'g', '200', 'A day at the park', 'b/l/p/j/ck/wh/aw/tch/igh/ir/oi', 'Tom', '7', 'openai']
+
+Aggregate Results:
+  Average Initial Decodability: 75.69%
+  Average Final Decodability: 82.51%
+  Average Runtime: 149.05 seconds
+  Number of Runs: 3
+
+Detailed Results:
+
+Run 1:
+  Initial Decodability: 74.85%
+  Final Decodability: 84.40%
+  Runtime: 131.85 seconds
+  Final Story:
+  One sunny morning, Tom, a young boy full of curiosity and ready for adventure, woke up excited for a day in the yard with his friends. On the way, Tom admired the colorful flowers and listened to the birds singing. Arriving, they decided to play hide and seek. During the game, Tom saw a small child looking confused and scared. Without hesitation, he led the kid to his family. Tom's mother was grateful, his friends praised his bravery and kindness. As the sun set, Tom and his friends shared a treat on a seat. Tom's friends thanked him for helping the kid, praising his kindness and showing how a small act of kindness can brighten someone's day. Tom learned that simple acts of kindness can spread joy to everyone and make the day extra merry in the yard.
+
+------------------------------
+
+Run 2:
+  Initial Decodability: 72.22%
+  Final Decodability: 83.13%
+  Runtime: 186.02 seconds
+  Final Story:
+  Tom, tagged by his friends Sam and Meg, hurried to the yard, excited for a day of fun. Their laughter filled the air as they headed to the swings. Their joy soared as they swung back and forth, feeling the wind on their faces and cherishing the moment. Not far away, a little one was trying to reach a swing, catching Tom's eye. Without hesitation, he lifted the kid onto the swing, the tot's face lighting up with joy as Tom's encouragement grew, his grin shining as bright as the sun. Tom felt his heart warm with satisfaction as he saw the tot's cheer, understanding the immense impact of a simple act of kindness. Realizing how spreading happiness through small acts could make a big difference. As the sun began to set, Tom and his friends continued to spread kindness like the wind carries seeds. Tom learned that a helping hand can make a big difference, leaving him feeling happy and content.
+
+------------------------------
+
+Run 3:
+  Initial Decodability: 80.00%
+  Final Decodability: 80.00%
+  Runtime: 129.27 seconds
+  Final Story:
+  Tom saw Sam sitting in the yard, looking sad. "Hi, I'm Tom," Tom greeted with a grin as Sam looked up, surprised. "Hi, I'm Tom," Tom greeted with a smile. "Nice to meet you, I'm Sam." I'm new here. Tom's eyes sparkled As they played games and shared snacks, Sam's expression brightened. They laughed and played, becoming friends. As the sun set, they exchanged phone numbers. Tom knew being kind and making new friends was important. Excitedly, they waved, ready for their next adventure.
+
+------------------------------
+
+==================================================
+
+=== Test Results 2024-12-19 15:33:01 ===
+Test Configuration:
+  description: Generate story with these problems w/ openai and limited processing
+  inputs: ['', 'g', '200', 'A day at the park', 'b/l/p/j/ck/wh/aw/tch/igh/ir/oi', 'Tom', '7', 'openai']
+
+Aggregate Results:
+  Average Initial Decodability: 76.06%
+  Average Final Decodability: 83.40%
+  Average Runtime: 61.00 seconds
+  Number of Runs: 3
+
+Detailed Results:
+
+Run 1:
+  Initial Decodability: 76.51%
+  Final Decodability: 86.93%
+  Runtime: 65.16 seconds
+  Final Story:
+  Tom and his friends had an amazing time at the meadow. The sun was shining brightly, casting a radiant glow over everything. They had a blast on the swings, chute, and rainforest gym, snorting and having a great time. After all the fun, they decided to have an outing under a huge oak tree. Tom noticed a friendless girl named Orchid sitting alone on a seat. Orchid told Tom she missed her old friends because she was new in town. Tom invited Orchid to join them. Orchid's face brightened with happiness. They played together, running and snorting happily. Tom was happy to see Orchid having a good time. As the day neared its end, Tom learned how a simple act of kindness could make a big difference. He looked forward to more sunny days at the meadow with his new friend orchid Together, they happily walked home, eagerly anticipating their next adventure.
+
+------------------------------
+
+Run 2:
+  Initial Decodability: 77.36%
+  Final Decodability: 82.64%
+  Runtime: 58.45 seconds
+  Final Story:
+  Tom ran happily to the woods. The swings and slides were his favorite. The air was fresh that day. He swung freely, surrounded by snickering sounds. Tom's cheer began to dim quickly. On the other side of the woods, he saw a small kid looking sad. A crowd of kids surrounded the kid, being mean. Tom knew he had to step in. With determination, he advanced the crowd. "Stop!" he ordered. The bullies hesitated, then walked away with sad faces. Turning to the little kid, Tom smiled warmly. Together, they explored the woods in the warm sun. By the end of the day, Tom felt satisfied. He learned that kindness conquers harshness and good deeds can grow friendships. As the sun colored the sky with shades of orange and rose, Tom walked home feeling proud that standing up for others makes a hero.
+
+------------------------------
+
+Run 3:
+  Initial Decodability: 74.31%
+  Final Decodability: 80.62%
+  Runtime: 59.38 seconds
+  Final Story:
+  Tom rushed to the gardens, filled with excitement. The sun shone warmly in the sky, warming his face His friends cheered as they swayed on the swings. Tom and his friends planned an outing together. While playing tag, Tom accidentally bumped into a trash can, making garbage spread everywhere. Oops! Tom and his friends quickly came together to clean up the mess. They hurried to the gardens ranger to apologize. The gardens ranger happily explained why it's important to keep the gardens looking nice. After the gardens were tidied up, Tom and his friends continued to have fun. Tom understood the importance of admitting his mistakes and working together with his friends. As the sun set, Tom disappeared from the gardens feeling happy and accomplished with their teamwork.
+
+------------------------------
+
+==================================================
