@@ -58,39 +58,55 @@ bad_words = []
 with open(os.path.join(path, 'truncated_dictionary.json')) as json_file:
     guidewords = json.load(json_file)
 
+
+def query_openai(prompt):
+    messages = [
+        {"role": "system", "content": prompt},
+    ]
+    response = openai_client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=messages,
+    )
+    return response.choices[0].message.content
+
+def query_anthropic(prompt):
+    message = anthropic_client.messages.create(
+        model="claude-3-5-sonnet-20241022",
+        max_tokens=1000,
+        temperature=0,
+        system="You are a creative author tasked with generating children's stories.",
+        messages=[
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": prompt
+                    }
+                ]
+            }
+        ]
+    ) # Extract and join the text content from the response
+    response = "".join(block.text for block in message.content if hasattr(block, "text"))
+    print(message.content)
+    print(response)
+    return response
+
 ### Function to query the selected API
 def query(prompt, api='openai'):
     if api == 'openai':
-        messages = [
-            {"role": "system", "content": prompt},
-        ]
-        response = openai_client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=messages,
-        )
-        return response.choices[0].message.content
+        try:
+            return query_openai(prompt)
+        except Exception as e:
+            print(f"Error querying OpenAI: {e}\nTrying Anthropic...")
+            return query_anthropic(prompt)
+            return None
     elif api == 'anthropic':
-        message = anthropic_client.messages.create(
-            model="claude-3-5-sonnet-20241022",
-            max_tokens=1000,
-            temperature=0,
-            system="You are a creative author tasked with generating children's stories.",
-            messages=[
-                {
-                    "role": "user",
-                    "content": [
-                        {
-                            "type": "text",
-                            "text": prompt
-                        }
-                    ]
-                }
-            ]
-        ) # Extract and join the text content from the response
-        response = "".join(block.text for block in message.content if hasattr(block, "text"))
-        print(message.content)
-        print(response)
-        return response
+        try:
+            return query_anthropic(prompt)
+        except Exception as e:
+            print(f"Error querying Anthropic: {e}\nTrying OpenAI...")
+            return query_openai(prompt)
     
 ### Function to get user input and choose API
 def get_api_choice():
