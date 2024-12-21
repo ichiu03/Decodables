@@ -155,11 +155,6 @@ def verificationToAdd(word: str, arpabet: str, letters: str, desired_pho: list, 
         print('not added')
     return matches
 
-word = 'then'
-arpabet = pronouncing.phones_for_word(word)[0]
-print(arpabet)
-print(verificationToAdd(word, arpabet, 't', ['T'], ['TH']))
-
 
 ### The "easier" categories are categorized here
 def xInWordCheck(word: str, arpabet: str) -> None:
@@ -199,12 +194,12 @@ def xInWordCheck(word: str, arpabet: str) -> None:
     if 'gn' in word and 'G N' not in arpabet: categories['gn'].append(word)
     if 'qua' in word and 'K W A' in arpabet: categories['qua'].append(word)
     if 'sc' in word and 'S K' not in arpabet: categories['sc'].append(word)
-    if 'alt' in word:
+    '''if 'alt' in word:
         tokens = arpabet.split()
         for i in range(len(tokens)):
             if tokens[i] == 'AA' or tokens[i] == 'AH' or tokens[i] == 'AO':
                 if tokens[i+1] == 'L' and tokens[i+2] == 'T':
-                    categories['alt'].append(word)
+                    categories['alt'].append(word)'''
     if 'gue' in word:
         if 'G Y' not in arpabet: categories['gue'].append(word)
     if 'rh' in word:
@@ -505,8 +500,6 @@ def sionCheck(word: str, arpabet: str) -> None:
     if 'sion' not in word: return
     if 'SH' in arpabet:
         categories['-sion as in tension'].append(word)
-
-
     elif 'ZH' in arpabet:
         categories['-sion as in vision'].append(word)
 
@@ -749,13 +742,15 @@ def parseAndProcessWords(story: str, syllable_limit:str, output_path: str) -> di
             arpabet = re.sub(r'\d', '', phones[0])
             callCategorizationFunctions(word, arpabet, syllable_count)
 
+        with open(output_path, 'w') as f:
+            json.dump(categories, f, indent=4)
+
         # print(f"\nData successfully written to {output_path}")
 
     except Exception as e:
         print(f"An error occurred: {e}")
         print("Detailed traceback:")
         traceback.print_exc()
-
 
     return categories
 
@@ -768,10 +763,12 @@ def getTopWords(num: int, output_path: str) -> None:
 
 
 def main():
-    input_path = os.path.join(path, 'WordDatav4.txt')
+    input_path = os.path.join(path, 'Dictionary.txt')
     output_path = os.path.join(path, 'categorized_words.json')
     with open(input_path, 'r') as f:
         story = f.read()
     parseAndProcessWords(story, syllable_limit=1000, output_path=output_path)
-#if __name__ == "__main__":
-   # main()
+
+if __name__ == "__main__":
+    main()
+
