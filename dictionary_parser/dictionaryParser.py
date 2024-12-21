@@ -149,10 +149,6 @@ def verificationToAdd(word: str, arpabet: str, letters: str, desired_pho: list, 
                 if any(des in pho for des in tokens):
                     matches = True
 
-    if matches:
-        print('added')
-    else:
-        print('not added')
     return matches
 
 
@@ -330,8 +326,9 @@ def yCheck(word: str, arpabet: str) -> None:
         if verificationToAdd(word, arpabet, 'ey', ['IY'], ['EY']):
             categories['ey as in monkey'].append(word)
     if 'ey' in word:
-        if verificationToAdd(word, arpabet, 'ey', ['EY'], ['IH']):
-            categories['ey as in they'].append(word)
+        if 'EY' in arpabet:
+            if verificationToAdd(word, arpabet, 'ey', ['EY'], ['IH']):
+                categories['ey as in they'].append(word)
 
 def ingongangungCheck(word: str) -> None:
     # For -ong, -ang, -ung endings
@@ -721,7 +718,7 @@ def callCategorizationFunctions(word: str, arpabet: str, syllable_count: int) ->
         fszlCheck(word, arpabet)
 
 
-def parseAndProcessWords(story: str, syllable_limit:str, output_path: str) -> dict:
+def parseAndProcessWords(story: str, syllable_limit:str) -> dict:
     try:
         words = getWords(story)
         unique_words = set(words)
@@ -741,11 +738,6 @@ def parseAndProcessWords(story: str, syllable_limit:str, output_path: str) -> di
                 continue
             arpabet = re.sub(r'\d', '', phones[0])
             callCategorizationFunctions(word, arpabet, syllable_count)
-
-        with open(output_path, 'w') as f:
-            json.dump(categories, f, indent=4)
-
-        # print(f"\nData successfully written to {output_path}")
 
     except Exception as e:
         print(f"An error occurred: {e}")
@@ -767,7 +759,10 @@ def main():
     output_path = os.path.join(path, 'categorized_words.json')
     with open(input_path, 'r') as f:
         story = f.read()
-    parseAndProcessWords(story, syllable_limit=1000, output_path=output_path)
+    dictionary = parseAndProcessWords(story, syllable_limit=1000)
+    with open(output_path, 'w') as f:
+        json.dump(dictionary, f, indent=4)
+    getTopWords(10, output_path)
 
 if __name__ == "__main__":
     main()
