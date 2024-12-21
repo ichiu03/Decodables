@@ -50,10 +50,11 @@ categories = {
 vv_sounds = {
     'ai': ['AY IY'], 'ia': ['IY EY', 'IY AH', 'IY AE', 'AY AH'], 'ie': ['AY AH', 'AY IH', 'IY AH'],
     'io': ['AY AH', 'IY OW', 'IY AA'], 'ea': ['IY AH', 'IY EH'], 'iu': ['IY AH', 'IY IH', 'IY UW'],
-    'eo': ['IY ER', 'IY OW', 'IY AA'], 'ue': ['UW AH', 'UW EH'], 'eu': ['IY AH'], 'ao': ['EY AA'], 'ei': ['IY AH'],
+    'eo': ['IY ER', 'IY OW', 'IY AA'], 'ue': ['UW AH', 'UW EH'], 'eu': ['IY AH', 'IY UW'], 'ao': ['EY AA'], 'ei': ['IY AH', 'IY IH'],
     'ua': ['UW EH', 'UW EY', 'AH W AH', 'AH W EY', 'UW W AH', 'UW EY', 'UW AH', 'UW AE'],
+    'oe': ['UW EH', 'OW AH', 'AA IH', 'OW IH', 'UW ER', 'OW ER'], 'ui': ['UW IH', 'UW AH', 'Y UW AH', 'Y UW AY']
     }
-sight_words = {'a', 'any', 'many', 'and', 'on', 'is', 'are', 'the', 'was', 'were', 'it', 'am', 'be', 'go', 'to', 'been', 'come', 'some', 'do', 'does', 'done', 'what', 'who', 'you', 'your', 'both', 'buy', 'door', 'floor', 'four', 'none', 'once', 'one', 'only', 'pull', 'push', 'sure', 'talk', 'walk', 'their', 'there', "they're", 'very', 'want', 'again', 'against', 'always', 'among', 'busy', 'could', 'should', 'would', 'enough', 'rough', 'tough', 'friend', 'move', 'prove', 'ocean', 'people', 'she', 'other', 'above', 'father', 'usually', 'special', 'front', 'thought', 'he', 'we', 'they', 'nothing', 'learned', 'toward', 'put', 'hour', 'beautiful', 'whole', 'trouble', 'of', 'off', 'use', 'have', 'our', 'say', 'make', 'take', 'see', 'think', 'look', 'give', 'how', 'ask', 'boy', 'girl', 'us', 'him', 'his', 'her', 'by', 'where', 'were', 'wear', 'hers', "don't", 'which', 'just', 'into', 'good', 'other', 'than', 'then', 'now', 'even', 'also', 'after', 'know', 'because', 'most', 'day', 'these', 'two', 'already', 'through', 'though', 'like', 'said', 'too', 'has', 'in', 'brother', 'sister', 'that', 'them', 'from', 'for', 'with', 'doing', 'well', 'before', 'tonight', 'down', 'about', 'but', 'up', 'around', 'goes', 'gone', 'build', 'built', 'cough', 'lose', 'loose', 'truth', 'daughter', 'son'}
+sight_words = {'bouquet', 'building', 'builds', 'rebuild', 'builder', "doesn't", 'shoe', 'shoelace', 'laughter', 'laugh', 'laughed', 'laughs', 'roughly', 'although', 'thoroughly', 'throughout', 'dough', 'doughnut', 'sovereighnty', 'a', 'any', 'many', 'and', 'on', 'is', 'are', 'the', 'was', 'were', 'it', 'am', 'be', 'go', 'to', 'been', 'come', 'some', 'do', 'does', 'done', 'what', 'who', 'you', 'your', 'both', 'buy', 'door', 'floor', 'four', 'none', 'once', 'one', 'only', 'pull', 'push', 'sure', 'talk', 'walk', 'their', 'there', "they're", 'very', 'want', 'again', 'against', 'always', 'among', 'busy', 'could', 'should', 'would', 'enough', 'rough', 'tough', 'friend', 'move', 'prove', 'ocean', 'people', 'she', 'other', 'above', 'father', 'usually', 'special', 'front', 'thought', 'he', 'we', 'they', 'nothing', 'learned', 'toward', 'put', 'hour', 'beautiful', 'whole', 'trouble', 'of', 'off', 'use', 'have', 'our', 'say', 'make', 'take', 'see', 'think', 'look', 'give', 'how', 'ask', 'boy', 'girl', 'us', 'him', 'his', 'her', 'by', 'where', 'were', 'wear', 'hers', "don't", 'which', 'just', 'into', 'good', 'other', 'than', 'then', 'now', 'even', 'also', 'after', 'know', 'because', 'most', 'day', 'these', 'two', 'already', 'through', 'though', 'like', 'said', 'too', 'has', 'in', 'brother', 'sister', 'that', 'them', 'from', 'for', 'with', 'doing', 'well', 'before', 'tonight', 'down', 'about', 'but', 'up', 'around', 'goes', 'gone', 'build', 'built', 'cough', 'lose', 'loose', 'truth', 'daughter', 'son'}
 VOWELS = set('aeiou')
 CONSONANTS = set('bcdfghjklmnpqrstvwxyz')
 COMPOUND_SOUNDS = {
@@ -146,7 +147,7 @@ def verificationToAdd(word: str, arpabet: str, letters: str, desired_pho: list, 
         if letters in chunk:
             tokens = phoneme.split()
             for pho in desired_pho:
-                if any(des in pho for des in tokens):
+                if any(des in pho for des in desired_pho):
                     matches = True
 
     return matches
@@ -182,32 +183,35 @@ def xInWordCheck(word: str, arpabet: str) -> None:
             if word[index+2] != 'r':
                 categories['au'].append(word)
     if 'eigh' in word and 'EY' in arpabet: categories['eigh'].append(word)
-    if 'oe' in word and not (is_vv('oe', arpabet)): categories['oe'].append(word)
-    if 'eu' in word and not (is_vv('eu', arpabet)): categories['eu'].append(word)
+    if 'oe' in word and not (is_vv('oe', arpabet)) and 'OW' in arpabet: categories['oe'].append(word)
+    if 'eu' in word and not (is_vv('eu', arpabet)) and 'UW' in arpabet: categories['eu'].append(word)
     if 'mb' in word and 'M B' not in arpabet: categories['mb'].append(word)
     if 'mn' in word and 'M N' not in arpabet: categories['mn'].append(word)
     if 'que' in word and 'K W' not in arpabet: categories['que'].append(word)
     if 'gn' in word and 'G N' not in arpabet: categories['gn'].append(word)
     if 'qua' in word and 'K W A' in arpabet: categories['qua'].append(word)
-    if 'sc' in word and 'S K' not in arpabet: categories['sc'].append(word)
-    '''if 'alt' in word:
+    if 'sc' in word and 'S K' not in arpabet and 'SH' not in arpabet: categories['sc'].append(word)
+    if 'alt' in word:
         tokens = arpabet.split()
-        for i in range(len(tokens)):
+        for i in range(len(tokens)-2):  # Subtract 2 to avoid index out of range
             if tokens[i] == 'AA' or tokens[i] == 'AH' or tokens[i] == 'AO':
                 if tokens[i+1] == 'L' and tokens[i+2] == 'T':
-                    categories['alt'].append(word)'''
+                    categories['alt'].append(word)
     if 'gue' in word:
-        if 'G Y' not in arpabet: categories['gue'].append(word)
+        if 'G Y' not in arpabet and 'G EH' not in arpabet: categories['gue'].append(word)
     if 'rh' in word:
         tokens = arpabet.split()
         for token in tokens:
             if 'R' in token:
-                categories['rh'].append(word)
+                if verificationToAdd(word, arpabet, 'rh', ['R'], ['HH']):
+                    categories['rh'].append(word)
     if 'wa' in word:
-        if 'AA' in arpabet or 'AO' in arpabet: categories['wa'].append(word)
+        if 'AA' in arpabet or 'AO' in arpabet:
+            index = word.find('wa')
+            if word[index+2] != 'r' and word[index+2] != 'y': categories['wa'].append(word)
     if 'ui' in word and not (is_vv('ui', arpabet)):
         index = word.find('ui')
-        if word[index-1] != 'q': categories['ui'].append(word)
+        if word[index-1] != 'q' and word[index-1] != 'g' and word[index-1] != 'c': categories['ui'].append(word)
     if 'wor' in word:
         index = word.find('wor')
         if word[index+3] != 'e' and 'ER' in arpabet:
@@ -219,12 +223,6 @@ def xInWordCheck(word: str, arpabet: str) -> None:
         elif len(word) > index+2:
             if word[index+2] in CONSONANTS: categories['ur'].append(word) # Is followed by a consonant
     if 'ar' in word and 'AA R' in arpabet: categories['ar'].append(word)
-    if word.endswith('ed'):
-        root_word = word[:-1]  # Remove last letter, for words that end with e
-        root_word2 = word[:-2] # Remove last two letters, for words that end with ed
-        root_word3 = word[:-3] # Remove last three letters, for words that end with a doubled last letter and ed
-        if root_word in valid_words or root_word2 in valid_words or root_word3 in valid_words:
-            categories['ed'].append(word)
     if word[-2:] == 'ly' and tokens[-1] == 'IY':
         root_word = word[:-2]
         if root_word in valid_words: categories['ly'].append(word)
@@ -287,6 +285,15 @@ def xInWordCheck(word: str, arpabet: str) -> None:
     for key in keys:
         if key in word: categories[key].append(word)
 
+
+def edCheck(word: str) -> None:
+    if word.endswith('ed'):
+        root_word = word[:-1]  # Remove last letter, for words that end with e
+        root_word2 = word[:-2] # Remove last two letters, for words that end with ed
+        root_word3 = word[:-3] # Remove last three letters, for words that end with a doubled last letter and ed
+        if root_word in valid_words or root_word2 in valid_words or root_word3 in valid_words:
+            categories['ed'].append(word)
+
 def warCheck(word: str) -> None:
     if 'war' in word and 'ware' not in word: categories['war'].append(word)
 
@@ -320,15 +327,14 @@ def yCheck(word: str, arpabet: str) -> None:
             categories['y as in bumpy'].append(word)
     if 'IH' in arpabet:
         if verificationToAdd(word, arpabet, 'y', ['IH'], ['IY']):
-            if word != 'everything' or word != 'yearly':
+            if word != 'everything' and 'year' not in word:
                 categories['y as in gym'].append(word)
     if arpabet.endswith('IY') and word.endswith('ey'):
         if verificationToAdd(word, arpabet, 'ey', ['IY'], ['EY']):
             categories['ey as in monkey'].append(word)
-    if 'ey' in word:
-        if 'EY' in arpabet:
-            if verificationToAdd(word, arpabet, 'ey', ['EY'], ['IH']):
-                categories['ey as in they'].append(word)
+    if 'ey' in word and 'EY' in arpabet:
+        if verificationToAdd(word, arpabet, 'ey', ['EY'], ['IH']):
+            categories['ey as in they'].append(word)
 
 def ingongangungCheck(word: str) -> None:
     # For -ong, -ang, -ung endings
@@ -456,18 +462,19 @@ def ouCheck(word: str, arpabet: str) -> None:
 
 
 def ueCheck(word: str, arpabet: str) -> None:
-    if 'ue' not in word: return
-    if 'UW' in arpabet: categories['ue as in blue'].append(word)
+    if 'ue' not in word or is_vv('ue', arpabet): return
+    if 'UW' in arpabet and verificationToAdd(word, arpabet, 'ue', ['UW'], ['EH', 'AH']):
+        categories['ue as in blue'].append(word)
 
 
 def eiCheck(word: str, arpabet: str) -> None:
     if 'ei' not in word or is_vv('ei', arpabet): return
-    if 'IY' in arpabet: categories['ei as in receive'].append(word)
+    if 'IY' in arpabet and verificationToAdd(word, arpabet, 'ei', ['IY'], ['EY']): categories['ei as in receive'].append(word)
     elif 'EY' in arpabet: categories['ei as in vein'].append(word)
 
 
 def chCheck(word: str, arpabet: str) -> None:
-    if 'ch' not in word: return
+    if 'ch' not in word or 'xch' in word: return
     tokens = arpabet.split()
     if "K" in tokens and verificationToAdd(word, arpabet, 'ch', ['K'], ['CH']):
         categories['ch as in echo'].append(word)
@@ -694,6 +701,7 @@ def callCategorizationFunctions(word: str, arpabet: str, syllable_count: int) ->
     eiCheck(word, arpabet)
     ieCheck(word, arpabet)
     chCheck(word, arpabet)
+    edCheck(word)
     sionCheck(word, arpabet)
     aughCheck(word, arpabet)
     oughCheck(word, arpabet)
@@ -755,15 +763,15 @@ def getTopWords(num: int, output_path: str) -> None:
 
 
 def main():
-    input_path = os.path.join(path, 'Dictionary.txt')
-    output_path = os.path.join(path, 'categorized_words.json')
+    input_path = os.path.join(path, 'Resources/Dictionary.txt')
+    output_path = os.path.join(path, 'Resources/categorized_words.json')
     with open(input_path, 'r') as f:
         story = f.read()
     dictionary = parseAndProcessWords(story, syllable_limit=1000)
+    print("done parsing")
     with open(output_path, 'w') as f:
         json.dump(dictionary, f, indent=4)
-    getTopWords(10, output_path)
-
+    
 if __name__ == "__main__":
     main()
 
