@@ -138,16 +138,27 @@ def mapChunksToPhonemes(word: str) -> dict:
 
 ### Confirms whether to add a word to a category, based on troublesome phonemes
 def verificationToAdd(word: str, arpabet: str, letters: str, desired_pho: list, problem_pho: list) -> bool:
-    # Check if BOTH a desired phoneme AND a problem phoneme are present
+    # Check if BOTH a desired phoneme AND a problem phoneme are present. if not, then passes check to add
     if not (any(pho in arpabet for pho in desired_pho) or any(pho in arpabet for pho in problem_pho)): return True
     matches = False
     mapping = mapChunksToPhonemes(word)
     for chunk, phoneme in mapping.items():
         if letters in chunk:
+            tokens = phoneme.split()
             for pho in desired_pho:
-                if pho in phoneme:
+                if any(des in pho for des in tokens):
                     matches = True
+
+    if matches:
+        print('added')
+    else:
+        print('not added')
     return matches
+
+word = 'then'
+arpabet = pronouncing.phones_for_word(word)[0]
+print(arpabet)
+print(verificationToAdd(word, arpabet, 't', ['T'], ['TH']))
 
 
 ### The "easier" categories are categorized here
@@ -379,7 +390,15 @@ def hardVsSoftG(word: str, arpabet: str) -> None:
     hard_verification = verificationToAdd(word, arpabet, 'g', ['G'], ['JH'])
     soft_verification = verificationToAdd(word, arpabet, 'g', ['JH'], ['G'])
     if hard_verification and soft_verification: return
-    elif 'G' in tokens and hard_verification: categories['hard g'].append(word)
+    elif 'G' in tokens and hard_verification:
+        if 'ch' in word:
+            mapping = mapChunksToPhonemes(word)
+            for chunk, phoneme in mapping.items():
+                if 'ch' in chunk and 'K' in phoneme:
+                    pass
+                else:
+                    categories['hard g'].append(word)
+        categories['hard g'].append(word)
     elif 'JH' in arpabet and soft_verification: categories['soft g'].append(word)
 
 
@@ -729,15 +748,8 @@ def parseAndProcessWords(story: str, syllable_limit:str, output_path: str) -> di
                 continue
             arpabet = re.sub(r'\d', '', phones[0])
             callCategorizationFunctions(word, arpabet, syllable_count)
-           
-        # if os.path.exists(output_path):
-        #     os.remove(output_path)
-        # with open(output_path, 'w') as file:
-        #     json.dump(categories, file, indent=4)
-
 
         # print(f"\nData successfully written to {output_path}")
-
 
     except Exception as e:
         print(f"An error occurred: {e}")
@@ -758,10 +770,8 @@ def getTopWords(num: int, output_path: str) -> None:
 def main():
     input_path = os.path.join(path, 'WordDatav4.txt')
     output_path = os.path.join(path, 'categorized_words.json')
-    #output_path2 = os.path.join(script_dir, 'truncated_dictionary.json')
     with open(input_path, 'r') as f:
         story = f.read()
     parseAndProcessWords(story, syllable_limit=1000, output_path=output_path)
-    #getTopWords(20, output_path2)
-if __name__ == "__main__":
-    main()
+#if __name__ == "__main__":
+   # main()
