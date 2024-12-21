@@ -6,9 +6,8 @@ import nltk
 from nltk.corpus import words
 import traceback
 
-
 # Get the directory where `dictionaryParser.py` is located
-script_dir = os.path.dirname(os.path.abspath(__file__))
+path = os.path.dirname(os.path.abspath(__file__))
 
 # Ensure the script checks locally for nltk_data
 os.environ['NLTK_DATA'] = os.path.expanduser('~/nltk_data')
@@ -163,7 +162,8 @@ def xInWordCheck(word: str, arpabet: str) -> None:
     if 'oi' in word and 'OY' in tokens: categories['oi'].append(word)
     if 'ir' in word and 'ER' in tokens and 'irr' not in word and 'ire' not in word: categories['ir'].append(word)
     if 's' in word:
-        if 'S' in tokens or 'Z' in tokens: categories['s'].append(word)
+        if 'S' in tokens or 'Z' in tokens:
+            if verificationToAdd(word, arpabet, 's', ['S', 'Z'], ['SH']): categories['s'].append(word)
     if 't' in word and 'T' in tokens: categories['t'].append(word)
     if 'b' in word and 'B' in tokens: categories['b'].append(word)
     if 'd' in word and 'D' in tokens: categories['d'].append(word)
