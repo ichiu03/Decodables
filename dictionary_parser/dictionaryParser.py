@@ -568,37 +568,44 @@ def OCECheck(word: str, arpabet: str) -> None:
 
 
 def vcvCheck(word: str, arpabet: str, syllable_count: int) -> None:
-    if not (3 <= len(word) <= 8) or syllable_count != 2 or word.endswith('e'): return
+    if not (3 <= len(word) <= 8) or syllable_count != 2: return
     # Check for double letters
     for i in range(1, len(word) - 1):
         if word[i] == word[i+1]:
             return
     tokens = arpabet.split()
-    if not (4 <= len(tokens) <= 6): return
-    for i in range(len(tokens)-2):
-        if any(vowel in tokens[i] for vowel in VOWEL_PHONEMES):
-            if all(vowel not in tokens[i+1] for vowel in VOWEL_PHONEMES):
-                if any(vowel in tokens[i+2] for vowel in VOWEL_PHONEMES):
-                    categories['vcv'].append(word)
-                    return
+    if len(tokens) != 5: return
+    if (not (tokens[0] in VOWEL_PHONEMES) and
+        tokens[1] in VOWEL_PHONEMES and
+        not (tokens[2] in VOWEL_PHONEMES) and
+        tokens[3] in VOWEL_PHONEMES and
+        not (tokens[4] in VOWEL_PHONEMES)):
+        print('yesy')
+        categories['vcv'].append(word)
+
+
+word = 'robot'
+arpabet = pronouncing.phones_for_word(word)[0]
+vcvCheck(word, arpabet, 2)
 
 
 def vcccvCheck(word: str, arpabet: str, syllable_count: int) -> None:
-    if not (5 <= len(word) <= 9) or syllable_count != 2 or word.endswith('e'): return
+    if not (5 <= len(word) <= 9) or syllable_count != 2: return
     tokens = arpabet.split()
-    if not (5 <= len(tokens) <= 8): return
+    if len(tokens) != 7: return
     # Check for consecutive letters in the consonant cluster
     for i in range(1, len(word)-1):
         if word[i] == word[i+1]:
             return
-    for i in range(len(tokens)-4):
-        if any(vowel in tokens[i] for vowel in VOWEL_PHONEMES):
-            if (all(vowel not in tokens[i+1] for vowel in VOWEL_PHONEMES) and
-                all(vowel not in tokens[i+2] for vowel in VOWEL_PHONEMES) and 
-                all(vowel not in tokens[i+3] for vowel in VOWEL_PHONEMES)):
-                if any(vowel in tokens[i+4] for vowel in VOWEL_PHONEMES):
-                    categories['vcccv'].append(word)
-                    return
+    if (not (tokens[0] in VOWEL_PHONEMES) and
+        (tokens[1] in VOWEL_PHONEMES) and
+        not (tokens[2] in VOWEL_PHONEMES) and
+        not (tokens[3] in VOWEL_PHONEMES) and
+        not (tokens[4] in VOWEL_PHONEMES) and
+        (tokens[5] in VOWEL_PHONEMES) and
+        not (tokens[6] in VOWEL_PHONEMES)):
+        categories['vcccv'].append(word)
+        return
 
 
 def vrlCheck(word: str) -> None:
@@ -792,5 +799,5 @@ def main():
     with open(output_path, 'w') as f:
         json.dump(dictionary, f, indent=4)
     
-if __name__ == "__main__":
-    main()
+#if __name__ == "__main__":
+    #main()
