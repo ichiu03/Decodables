@@ -144,6 +144,8 @@ def verificationToAdd(word: str, arpabet: str, letters: str, desired_pho: list, 
     mapping = mapChunksToPhonemes(word)
     for chunk, phoneme in mapping.items():
         if letters in chunk:
+            if letters == 'c' and 'ch' in chunk:
+                continue
             tokens = phoneme.split()
             for pho in desired_pho:
                 if any(des in pho for des in tokens):
@@ -377,10 +379,10 @@ def allCheck(word: str) -> None:
 def hardVsSoftC(word: str, arpabet: str) -> None:
     if 'c' not in word: return
     tokens = arpabet.split()
-    hard_verification = verificationToAdd(word, arpabet, 'c', ['K'], ['S'])
+    hard_verification = verificationToAdd(word, arpabet, 'c', ['K'], ['S'])  # checks if word should be added to hard c
     soft_verification = verificationToAdd(word, arpabet, 'c', ['S'], ['K'])
     if 'exce' in word and 'S' in tokens: categories['soft c'].append(word)
-    elif hard_verification and soft_verification: return
+    elif hard_verification and soft_verification: return  # if it has hard c and soft c then don't categorize it at all
     elif 'K' in tokens and hard_verification: categories['hard c'].append(word)
     elif 'S' in tokens and soft_verification: categories['soft c'].append(word)
 
