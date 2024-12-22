@@ -18,11 +18,11 @@ import language_tool_python
 original_decodability = None
 sight_words = ""
 
-with open(path + 'Dictionary.txt', 'r', encoding='utf-8') as file:
+with open(path + '/Resources/Dictionary.txt', 'r', encoding='utf-8') as file:
     large_dictionary = set(word.strip().lower() for word in file.readlines())
 
 
-with open(path + 'truncated_dictionary.json') as json_file:
+with open(path + '/truncated_dictionary.json') as json_file:
     guidewords = json.load(json_file)
 
 

@@ -394,15 +394,7 @@ def hardVsSoftG(word: str, arpabet: str) -> None:
     hard_verification = verificationToAdd(word, arpabet, 'g', ['G'], ['JH'])
     soft_verification = verificationToAdd(word, arpabet, 'g', ['JH'], ['G'])
     if hard_verification and soft_verification: return
-    elif 'G' in tokens and hard_verification:
-        if 'ch' in word:
-            mapping = mapChunksToPhonemes(word)
-            for chunk, phoneme in mapping.items():
-                if 'ch' in chunk and 'K' in phoneme:
-                    pass
-                else:
-                    categories['hard g'].append(word)
-        categories['hard g'].append(word)
+    elif 'G' in tokens and hard_verification: categories['hard g'].append(word)
     elif 'JH' in arpabet and soft_verification: categories['soft g'].append(word)
 
 
@@ -580,13 +572,7 @@ def vcvCheck(word: str, arpabet: str, syllable_count: int) -> None:
         not (tokens[2] in VOWEL_PHONEMES) and
         tokens[3] in VOWEL_PHONEMES and
         not (tokens[4] in VOWEL_PHONEMES)):
-        print('yesy')
         categories['vcv'].append(word)
-
-
-word = 'robot'
-arpabet = pronouncing.phones_for_word(word)[0]
-vcvCheck(word, arpabet, 2)
 
 
 def vcccvCheck(word: str, arpabet: str, syllable_count: int) -> None:
@@ -799,5 +785,5 @@ def main():
     with open(output_path, 'w') as f:
         json.dump(dictionary, f, indent=4)
     
-#if __name__ == "__main__":
-    #main()
+if __name__ == "__main__":
+    main()
