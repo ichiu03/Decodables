@@ -27,7 +27,7 @@ with open(path + '/truncated_dictionary.json') as json_file:
 
 
 def get_synonyms_dict(story: str, problems: list, maxsyllable: int) -> dict:
-    word_dict = parseAndProcessWords(story, maxsyllable, "categorized_words.json")
+    word_dict = parseAndProcessWords(story, maxsyllable)
     sentences = story.split(".")
     prev_sentence = ""
     synonyms_dict = {}
@@ -82,7 +82,7 @@ def get_synonyms_dict(story: str, problems: list, maxsyllable: int) -> dict:
                         """
                     response = query(prompt).strip()
                     temp_words = [w.strip() for w in response.split(",") if w.strip()]
-                    temp_words_dict = parseAndProcessWords(response, maxsyllable, "categorized_words.json")
+                    temp_words_dict = parseAndProcessWords(response, maxsyllable)
                     # Remove words containing problem sounds
                     filtered_temp_words = []
                     for temp_word in temp_words:
@@ -239,7 +239,7 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
 
 
         # Parse and process words to categorize them
-        word_dict = parseAndProcessWords(story, maxsyllable, "categorized_words.json")
+        word_dict = parseAndProcessWords(story, maxsyllable)
 
 
         # Combine all bad words into a single set
@@ -340,7 +340,7 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
         results = categorize_and_validate_words(story, problems, maxsyllable)
         # Get word_dict for problem words
         story = story.lower()
-        word_dict = parseAndProcessWords(story, maxsyllable, "categorized_words.json")
+        word_dict = parseAndProcessWords(story, maxsyllable)
         save_problem_words_by_sound(word_dict, problems, story)
         # Display and save bad word occurrences
         #display_bad_words(results["bad_occurrences"])
@@ -410,7 +410,7 @@ def main():
     global maxsyllable
     global original_decodability
     maxsyllable = 2
-    default_sight_words = "a,at,any,many,and,on,is,are,the,was,were,it,am,be,go,to,out,been,this,come,some,do,does,done,what,who,you,your,both,buy,door,floor,four,none,once,one,only,pull,push,sure,talk,walk,their,there,they're,very,want,again,against,always,among,busy,could,should,would,enough,rough,tough,friend,move,prove,ocean,people,she,other,above,father,usually,special,front,thought,he,we,they,nothing,learned,toward,put,hour,beautiful,whole,trouble,of,off,use,have,our,say,make,take,see,think,look,give,how,ask,boy,girl,us,him,his,her,by,where,were,wear,hers,don't,which,just,know,into,good,other,than,then,now,even,also,after,know,because,most,day,these,two,already,through,though,like,said,too,has,in,brother,sister,that,them,from,for,with,doing,well,before,tonight,down,about,but,up,around,goes,gone,build,built,cough,lose,loose,truth,daughter,son"
+    default_sight_words = "beauty,bouquet,builder,rebuild,doesn't,shoe,shoelace,laughter,laugh,laughed,laughs,roughly,although,thoroughly,throughout,dough,doughnut,sovereighnty,a,at,any,many,and,on,is,are,the,was,were,it,am,be,go,to,out,been,this,come,some,do,does,done,what,who,you,your,both,buy,door,floor,four,none,once,one,only,pull,push,sure,talk,walk,their,there,they're,very,want,again,against,always,among,busy,could,should,would,enough,rough,tough,friend,move,prove,ocean,people,she,other,above,father,usually,special,front,thought,he,we,they,nothing,learned,toward,put,hour,beautiful,beautifully,whole,trouble,of,off,use,have,our,say,make,take,see,think,look,give,how,ask,boy,girl,us,him,his,her,by,where,were,wear,hers,don't,which,just,know,into,good,other,than,then,now,even,also,after,know,because,most,day,these,two,already,through,though,like,said,too,has,in,brother,sister,that,them,from,for,with,doing,well,before,tonight,down,about,but,up,around,goes,gone,build,built,cough,lose,loose,truth,daughter,son"
     probsight_words = input("What sight words does the student not know (use only words and commas): ")
    
     sight_words = handle_sight_words(default_sight_words, probsight_words)
