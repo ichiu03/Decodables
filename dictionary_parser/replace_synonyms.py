@@ -27,9 +27,24 @@ def replace_words_in_story(story, synonyms_dict):
             # Lookup without punctuation and replace if found
             stripped_token = token.lower()
 
+            # Check for both singular and plural forms
             if stripped_token in synonyms_dict:
                 # Replace with the synonym and preserve case
                 synonym = synonyms_dict[stripped_token]
+                if token[0].isupper():
+                    synonym = synonym.capitalize()
+                updated_tokens.append(synonym)
+            # Check for plural form if singular not found
+            elif stripped_token.endswith('s') and stripped_token[:-1] in synonyms_dict:
+                # Get the synonym for singular form and add 's'
+                synonym = synonyms_dict[stripped_token[:-1]] + 's'
+                if token[0].isupper():
+                    synonym = synonym.capitalize()
+                updated_tokens.append(synonym)
+            # Check for singular form if plural not found
+            elif stripped_token + 's' in synonyms_dict:
+                # Get the synonym without the 's'
+                synonym = synonyms_dict[stripped_token + 's'][:-1]
                 if token[0].isupper():
                     synonym = synonym.capitalize()
                 updated_tokens.append(synonym)
