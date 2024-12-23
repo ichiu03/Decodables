@@ -30,23 +30,6 @@ def get_synonyms_dict(story: str, problems: list, maxsyllable: int) -> dict:
     sentences = story.split(".")
     prev_sentence = ""
     synonyms_dict = {}
-   
-    # Create a mapping from problem sound to example words
-    problem_examples = {}
-    for problem in problems:
-        problem = problem.strip()
-        if problem in guidewords:
-            problem_examples[problem] = guidewords[problem][:5]  # Limit to 5 examples for brevity
-        else:
-            print(f"Warning: Problem '{problem}' not found in guidewords dictionary.")
-   
-    # Format the examples for the prompt
-    examples_str_list = []
-    for problem, examples in problem_examples.items():
-        formatted_examples = ", ".join([f"'{word}'" for word in examples])
-        examples_str = f"The '{problem}' sound in {formatted_examples}"
-        examples_str_list.append(examples_str)
-    examples_str = "; ".join(examples_str_list)
 
 
     for idx, sentence in enumerate(sentences):
@@ -64,14 +47,7 @@ def get_synonyms_dict(story: str, problems: list, maxsyllable: int) -> dict:
                         Give 3 synonyms for the word '{word}' that would fit naturally in the following sentence, and **do not** include any words containing these sounds: {', '.join(problems)}.
                         A change in tense or form of the word is not acceptable. Maintain tense and form as these words are going to replace the original word in a story.
 
-
-                        Some examples of words to **avoid** are: {examples_str}.
-
-
-                        Previous sentence (for context): {prev_sentence}
                         Sentence to fix: {sentence}
-                        Next sentence (for context): {next_sentence}
-
 
                         Return only the 3 words separated by commas, like this: "word1, word2, word3".
                         Order the words so the best fit is first.
