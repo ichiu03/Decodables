@@ -348,7 +348,7 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
             story = ultraformatting(story)
             decodability = categorize_and_validate_words(story, problems, maxsyllable)["decodability"]
             iteration+=1
-        story = rewrite_sentences(story)
+        # story = rewrite_sentences(story)
 
 
         return story

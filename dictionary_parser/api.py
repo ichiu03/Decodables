@@ -134,9 +134,9 @@ async def process_story_endpoint(request: ProcessStoryRequest):
             story,
             request.problemLetters,
             maxsyllable,
-            apply_correction=True,
-            spellcheck=True,
-            combined=True
+            apply_correction=False,
+            spellcheck=False,
+            combined=False
         )
        
         # Return appropriate response based on story choice
