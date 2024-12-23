@@ -144,23 +144,11 @@ def verificationToAdd(word: str, arpabet: str, letters: str, desired_pho: list, 
     mapping = mapChunksToPhonemes(word)
     for chunk, phoneme in mapping.items():
         if letters in chunk:
-            if letters == 'c' and 'ch' in chunk:
-                continue
-            tokens = phoneme.split()
-            for pho in desired_pho:
-                if any(des in pho for des in tokens):
-                    matches = True
+            phonemes = [re.sub(r'\d', '', p) for p in phoneme.split()]
+            if any(pho in phonemes for pho in desired_pho):
+               matches = True
 
-    if matches:
-        print('added')
-    else:
-        print('not added')
     return matches
-
-word = 'then'
-arpabet = pronouncing.phones_for_word(word)[0]
-print(arpabet)
-print(verificationToAdd(word, arpabet, 't', ['T'], ['TH']))
 
 
 ### The "easier" categories are categorized here
