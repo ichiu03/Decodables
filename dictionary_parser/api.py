@@ -161,7 +161,7 @@ async def process_story_endpoint(request: ProcessStoryRequest):
 async def get_decodability_endpoint(request: DecodabilityRequest):
     try:
         # Process the text and get word categories
-        word_dict = parseAndProcessWords(request.text, 10, "categorized_words.json")
+        word_dict = parseAndProcessWords(request.text, 10)
        
         # Create a mapping of words to their problem categories
         bad_words_with_categories = {}
