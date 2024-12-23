@@ -55,16 +55,16 @@ vv_sounds = {
     'oe': ['UW EH', 'OW AH', 'AA IH', 'OW IH', 'UW ER', 'OW ER'], 'ui': ['UW IH', 'UW AH', 'Y UW AH', 'Y UW AY']
     }
 sight_words = {'beauty', 'bouquet', 'building', 'builds', 'rebuild', 'builder', "doesn't", 'shoe', 'shoelace', 'laughter', 'laugh', 'laughed', 'laughs', 'roughly', 'although', 'thoroughly', 'throughout', 'dough', 'doughnut', 'sovereighnty', 'a', 'any', 'many', 'and', 'on', 'is', 'are', 'the', 'was', 'were', 'it', 'am', 'be', 'go', 'to', 'been', 'come', 'some', 'do', 'does', 'done', 'what', 'who', 'you', 'your', 'both', 'buy', 'door', 'floor', 'four', 'none', 'once', 'one', 'only', 'pull', 'push', 'sure', 'talk', 'walk', 'their', 'there', "they're", 'very', 'want', 'again', 'against', 'always', 'among', 'busy', 'could', 'should', 'would', 'enough', 'rough', 'tough', 'friend', 'move', 'prove', 'ocean', 'people', 'she', 'other', 'above', 'father', 'usually', 'special', 'front', 'thought', 'he', 'we', 'they', 'nothing', 'learned', 'toward', 'put', 'hour', 'beautiful', 'whole', 'trouble', 'of', 'off', 'use', 'have', 'our', 'say', 'make', 'take', 'see', 'think', 'look', 'give', 'how', 'ask', 'boy', 'girl', 'us', 'him', 'his', 'her', 'by', 'where', 'were', 'wear', 'hers', "don't", 'which', 'just', 'into', 'good', 'other', 'than', 'then', 'now', 'even', 'also', 'after', 'know', 'because', 'most', 'day', 'these', 'two', 'already', 'through', 'though', 'like', 'said', 'too', 'has', 'in', 'brother', 'sister', 'that', 'them', 'from', 'for', 'with', 'doing', 'well', 'before', 'tonight', 'down', 'about', 'but', 'up', 'around', 'goes', 'gone', 'build', 'built', 'cough', 'lose', 'loose', 'truth', 'daughter', 'son'}
-VOWELS = set('aeiou')
-CONSONANTS = set('bcdfghjklmnpqrstvwxyz')
-COMPOUND_SOUNDS = {
+VOWELS = frozenset('aeiou')
+CONSONANTS = frozenset('bcdfghjklmnpqrstvwxyz')
+COMPOUND_SOUNDS = frozenset({
     'ai', 'au', 'ay', 'ae', 'ao', 'ar', 'ea', 'ee', 'ei', 'eo', 'eu', 'er',
     'ia', 'ie', 'io', 'iu', 'ir', 'oa', 'oe', 'oi', 'oo', 'ou', 'or', 'ua',
     'ue', 'ui', 'uo', 'ur', 'ough', 'augh', 'igh', 'eigh', 'tio', 'sio',
-    'ey', 'oy', 'ew', 'ow', 'aw', 'ye', 'uie', 'oux', 'cally', 'ear'
-    }
+    'ey', 'oy', 'ew', 'ow', 'aw', 'ye', 'uie', 'oux', 'cally', 'ear', 'tch'
+    })
 # Vowel phonemes, without R controlled phonemes
-VOWEL_PHONEMES = {'AA', 'AE', 'AH', 'AO', 'AW', 'AY', 'EH', 'EY', 'IH', 'IY', 'OW', 'OY', 'UH', 'UW'}
+VOWEL_PHONEMES = frozenset({'AA', 'AE', 'AH', 'AO', 'AW', 'AY', 'EH', 'EY', 'IH', 'IY', 'OW', 'OY', 'UH', 'UW'})
 
 ### Checks if compound vowel is a vowel/vowel -> yes is True
 def is_vv(compound: str, arp: str) -> bool:
@@ -147,10 +147,9 @@ def verificationToAdd(word: str, arpabet: str, letters: str, desired_pho: list, 
     mapping = mapChunksToPhonemes(word)
     for chunk, phoneme in mapping.items():
         if letters in chunk:
-            tokens = phoneme.split()
-            for pho in desired_pho:
-                if any(des in pho for des in desired_pho):
-                    matches = True
+            phonemes = [re.sub(r'\d', '', p) for p in phoneme.split()]
+            if any(pho in phonemes for pho in desired_pho):
+               matches = True
 
     return matches
 
@@ -513,16 +512,18 @@ def threelBlends(word: str, arpabet: str) -> None:
         categories['3-letter beg. blends'].append(word)
 
 
-def vccvCheck(word: str, arpabet: str) -> None:
-    if len(word) < 4: return
-    for i in range(len(word) - 3):  # Changed to -3 since we need 4 characters (VCCV)
-        if (word[i] in VOWELS and
-            word[i+1] in CONSONANTS and
-            word[i+2] in CONSONANTS and
-            word[i+3] in VOWELS):
-            if len(word) > i + 4:
-                categories['vccv'].append(word)
-                return
+def vccvCheck(word: str, arpabet: str, syllable_count: int) -> None:
+    if (not (6 <= len(word) <= 7) or syllable_count != 2 or word.endswith('e') or 
+        any(sound in word for sound in COMPOUND_SOUNDS) or word.endswith('ed') or word.endswith('ing')): return
+    tokens = arpabet.split()
+    if len(tokens) != 6: return
+    if (tokens[0] not in VOWEL_PHONEMES and
+        tokens[1] in VOWEL_PHONEMES and
+        tokens[2] not in VOWEL_PHONEMES and
+        tokens[3] not in VOWEL_PHONEMES and
+        tokens[4] in VOWEL_PHONEMES and
+        tokens[5] not in VOWEL_PHONEMES):
+        categories['vccv'].append(word)
 
 
 def vceCheck(word: str) -> None:
@@ -532,8 +533,8 @@ def vceCheck(word: str) -> None:
         word[-1].lower() == 'e'):
         categories['vce'].append(word)
        
-def OCECheck(word: str, arpabet: str) -> None:
-    if len(word) < 2: return
+def OCECheck(word: str, arpabet: str, syllable_count: int) -> None:
+    if syllable_count != 1 or len(word) < 2: return
     tokens = arpabet.split()
     # Open syllables: Check if the last sound is a long vowel sound
     if tokens[-1] in ['AY', 'EY', 'IY', 'OW', 'UW'] and word[-1] in VOWELS:
@@ -560,38 +561,43 @@ def OCECheck(word: str, arpabet: str) -> None:
 
 
 def vcvCheck(word: str, arpabet: str, syllable_count: int) -> None:
-    if not (3 <= len(word) <= 8) or syllable_count != 2: return
+    if (not (5 <= len(word) <= 8) or syllable_count != 2 or word.endswith('e') or 
+        any(sound in word for sound in COMPOUND_SOUNDS) or word.endswith('ed') or word.endswith('ing')): return
     # Check for double letters
-    for i in range(1, len(word) - 1):
-        if word[i] == word[i+1]:
+    for i in range(1, len(word) - 2):
+        first = word[i]
+        second = word[i+1]
+        if first == second or first in VOWELS and second in VOWELS:
             return
     tokens = arpabet.split()
     if len(tokens) != 5: return
-    if (not (tokens[0] in VOWEL_PHONEMES) and
+    if (tokens[0] not in VOWEL_PHONEMES and
         tokens[1] in VOWEL_PHONEMES and
-        not (tokens[2] in VOWEL_PHONEMES) and
+        tokens[2] not in VOWEL_PHONEMES and
         tokens[3] in VOWEL_PHONEMES and
-        not (tokens[4] in VOWEL_PHONEMES)):
+        tokens[4] not in VOWEL_PHONEMES):
         categories['vcv'].append(word)
 
 
 def vcccvCheck(word: str, arpabet: str, syllable_count: int) -> None:
-    if not (5 <= len(word) <= 9) or syllable_count != 2: return
+    if (not (7 <= len(word) <= 9) or syllable_count != 2 or word.endswith('e') or 
+        any(sound in word for sound in COMPOUND_SOUNDS) or word.endswith('ed') or word.endswith('ing')) : return
     tokens = arpabet.split()
     if len(tokens) != 7: return
     # Check for consecutive letters in the consonant cluster
-    for i in range(1, len(word)-1):
-        if word[i] == word[i+1]:
+    for i in range(1, len(word)-2   ):
+        first = word[i]
+        second = word[i+1]
+        if first == second or first in VOWELS and second in VOWELS:
             return
-    if (not (tokens[0] in VOWEL_PHONEMES) and
-        (tokens[1] in VOWEL_PHONEMES) and
-        not (tokens[2] in VOWEL_PHONEMES) and
-        not (tokens[3] in VOWEL_PHONEMES) and
-        not (tokens[4] in VOWEL_PHONEMES) and
-        (tokens[5] in VOWEL_PHONEMES) and
-        not (tokens[6] in VOWEL_PHONEMES)):
+    if (tokens[0] not in VOWEL_PHONEMES and
+        tokens[1] in VOWEL_PHONEMES and
+        tokens[2] not in VOWEL_PHONEMES and
+        tokens[3] not in VOWEL_PHONEMES and
+        tokens[4] not in VOWEL_PHONEMES and
+        tokens[5] in VOWEL_PHONEMES and
+        tokens[6] not in VOWEL_PHONEMES):
         categories['vcccv'].append(word)
-        return
 
 
 def vrlCheck(word: str) -> None:
@@ -629,8 +635,8 @@ def shouldDoubleConsonant(word: str, arpabet: str) -> None:
             categories['double rule-suffixes'].append(word)
 
 
-def fszlCheck(word: str, arpabet: str) -> None:
-    if len(word) < 3 or word[-1] not in 'fszl' or word[-2] not in 'fszl' or word[-1] != word[-2]: return
+def fszlCheck(word: str, arpabet: str, syllable_count: int) -> None:
+    if len(word) < 3 or word[-1] not in 'fszl' or word[-2] not in 'fszl' or word[-1] != word[-2] or syllable_count != 1: return
     tokens = arpabet.split()
     for vowel in ['IH', 'EH', 'AH', 'UH', 'AA', 'AE']:
         if vowel in tokens[-2]:
@@ -731,12 +737,10 @@ def callCategorizationFunctions(word: str, arpabet: str, syllable_count: int) ->
     vceCheck(word)
     xInWordCheck(word, arpabet)
     ingongangungCheck(word)
-    contractionsCheck(word)
-    if syllable_count == 2:
-        vccvCheck(word, arpabet)
-    if syllable_count == 1:
-        OCECheck(word, arpabet)
-        fszlCheck(word, arpabet)
+    contractionsCheck(word) 
+    vccvCheck(word, arpabet, syllable_count)
+    OCECheck(word, arpabet, syllable_count)
+    fszlCheck(word, arpabet, syllable_count)
 
 
 def parseAndProcessWords(story: str, syllable_limit:str) -> dict:

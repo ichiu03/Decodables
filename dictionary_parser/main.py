@@ -61,7 +61,7 @@ def get_synonyms_dict(story: str, problems: list, maxsyllable: int) -> dict:
                 if problem in word_dict and clean_word in word_dict[problem] and clean_word not in sight_words:
                     # Prepare the prompt
                     prompt = f"""
-                        Give 10 synonyms for the word '{word}' that would fit naturally in the following sentence, and **do not** include any words containing these sounds: {', '.join(problems)}.
+                        Give 3 synonyms for the word '{word}' that would fit naturally in the following sentence, and **do not** include any words containing these sounds: {', '.join(problems)}.
                         A change in tense or form of the word is not acceptable. Maintain tense and form as these words are going to replace the original word in a story.
 
 
@@ -73,7 +73,7 @@ def get_synonyms_dict(story: str, problems: list, maxsyllable: int) -> dict:
                         Next sentence (for context): {next_sentence}
 
 
-                        Return only the 10 words separated by commas, like this: "word1, word2, word3, word4, word5".
+                        Return only the 3 words separated by commas, like this: "word1, word2, word3".
                         Order the words so the best fit is first.
 
 
@@ -470,21 +470,21 @@ def main():
             return decodability
     print(story)
 
-    # First Run: Without Grammar Correction
-    print("\n--- Processing Without Grammar Correction ---")
-    story1 = process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False)
+    # # First Run: Without Grammar Correction
+    # print("\n--- Processing Without Grammar Correction ---")
+    # story1 = process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False)
 
 
-    print("\n--- Processing With Grammar Correction and Spell Check ---")
-    story2 = process_story(story, problems, maxsyllable, apply_correction=True, spellcheck=True, combined=False)
+    # print("\n--- Processing With Grammar Correction and Spell Check ---")
+    # story2 = process_story(story, problems, maxsyllable, apply_correction=True, spellcheck=True, combined=False)
 
 
-    # Now, combine the two stories
-    story3 = combine(story1, story2, problems)
+    # # Now, combine the two stories
+    # story3 = combine(story1, story2, problems)
 
 
     # Process the combined story
-    story4 = process_story(story3, problems, maxsyllable, apply_correction=True, spellcheck=True, combined=False)
+    story4 = process_story(story, problems, maxsyllable, apply_correction=True, spellcheck=True, combined=False)
 
 
     decodability, bad_words = process_story(story4, problems, maxsyllable, apply_correction=True, spellcheck=True, combined=True, decodabilityTest=True)

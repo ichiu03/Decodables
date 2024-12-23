@@ -100,38 +100,38 @@ async def process_story_endpoint(request: ProcessStoryRequest):
                 }
 
 
-        # First Run: Without Grammar Correction
-        print("\n--- Processing Without Grammar Correction ---")
-        story1 = process_story(
-            story,
-            request.problemLetters,
-            maxsyllable,
-            apply_correction=False,
-            spellcheck=False,
-            combined=False
-        )
+        # # First Run: Without Grammar Correction
+        # print("\n--- Processing Without Grammar Correction ---")
+        # story1 = process_story(
+        #     story,
+        #     request.problemLetters,
+        #     maxsyllable,
+        #     apply_correction=False,
+        #     spellcheck=False,
+        #     combined=False
+        # )
 
 
-        # Second Run: With Grammar Correction and Spell Check
-        print("\n--- Processing With Grammar Correction and Spell Check ---")
-        story2 = process_story(
-            story,
-            request.problemLetters,
-            maxsyllable,
-            apply_correction=True,
-            spellcheck=True,
-            combined=False
-        )
+        # # Second Run: With Grammar Correction and Spell Check
+        # print("\n--- Processing With Grammar Correction and Spell Check ---")
+        # story2 = process_story(
+        #     story,
+        #     request.problemLetters,
+        #     maxsyllable,
+        #     apply_correction=True,
+        #     spellcheck=True,
+        #     combined=False
+        # )
 
 
-        # Now, combine the two stories
-        print("\n--- Combining the Two Stories ---")
-        story3 = combine(story1, story2, request.problemLetters)
+        # # Now, combine the two stories
+        # print("\n--- Combining the Two Stories ---")
+        # story3 = combine(story1, story2, request.problemLetters)
 
 
         # Process the combined story
         story4 = process_story(
-            story3,
+            story,
             request.problemLetters,
             maxsyllable,
             apply_correction=True,
