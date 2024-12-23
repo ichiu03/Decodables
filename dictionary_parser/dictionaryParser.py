@@ -144,6 +144,8 @@ def verificationToAdd(word: str, arpabet: str, letters: str, desired_pho: list, 
     mapping = mapChunksToPhonemes(word)
     for chunk, phoneme in mapping.items():
         if letters in chunk:
+            if letters == 'c' and 'ch' in chunk:
+                continue
             phonemes = [re.sub(r'\d', '', p) for p in phoneme.split()]
             if any(pho in phonemes for pho in desired_pho):
                matches = True
