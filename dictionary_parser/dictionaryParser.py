@@ -749,7 +749,7 @@ def parseAndProcessWords(story: str, syllable_limit:str) -> dict:
         unique_words = set(words)
         # print('parsing through words. . .\n')
         for word in unique_words:
-            word.lower()
+            word = word.lower()
             if word in sight_words:
                 continue
             phones = pronouncing.phones_for_word(word)
