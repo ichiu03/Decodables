@@ -65,6 +65,9 @@ COMPOUND_SOUNDS = frozenset({
     })
 # Vowel phonemes, without R controlled phonemes
 VOWEL_PHONEMES = frozenset({'AA', 'AE', 'AH', 'AO', 'AW', 'AY', 'EH', 'EY', 'IH', 'IY', 'OW', 'OY', 'UH', 'UW'})
+# Precompile the regex patterns
+yRulePatterns = re.compile(r'[^aeiou](ies|ied|ier|iest)$')
+vowelYPattern = re.compile(r'[aeiou]y')
 
 ### Checks if compound vowel is a vowel/vowel -> yes is True
 def is_vv(compound: str, arp: str) -> bool:
@@ -147,6 +150,10 @@ def verificationToAdd(word: str, arpabet: str, letters: str, desired_pho: list, 
     mapping = mapChunksToPhonemes(word)
     for chunk, phoneme in mapping.items():
         if letters in chunk:
+            if letters == 'c' and 'ch' in chunk and desired_pho == ['K']: # Edge cases
+                continue
+            elif letters == 'g' and 'dge' in chunk and desired_pho == ['JH']: 
+                continue
             phonemes = [re.sub(r'\d', '', p) for p in phoneme.split()]
             if any(pho in phonemes for pho in desired_pho):
                matches = True
@@ -590,6 +597,7 @@ def vcccvCheck(word: str, arpabet: str, syllable_count: int) -> None:
         second = word[i+1]
         if first == second or first in VOWELS and second in VOWELS:
             return
+    # VCCCV check
     if (tokens[0] not in VOWEL_PHONEMES and
         tokens[1] in VOWEL_PHONEMES and
         tokens[2] not in VOWEL_PHONEMES and
@@ -600,9 +608,9 @@ def vcccvCheck(word: str, arpabet: str, syllable_count: int) -> None:
         categories['vcccv'].append(word)
 
 
-def vrlCheck(word: str) -> None:
+def vrlCheck(word: str, syllable_count: int) -> None:
     """Check if word contains vowel + r + consonant + le pattern (e.g. sparkle)"""
-    if len(word) < 5: return
+    if len(word) < 5 or syllable_count != 1: return
     for r_sound in ['ar', 'er', 'ir', 'or', 'ur']:
         if r_sound not in word: continue
         r_pos = word.find(r_sound)
@@ -641,18 +649,12 @@ def fszlCheck(word: str, arpabet: str, syllable_count: int) -> None:
     for vowel in ['IH', 'EH', 'AH', 'UH', 'AA', 'AE']:
         if vowel in tokens[-2]:
             categories['fszl'].append(word)
-   
-# Precompile the regex patterns
-yRulePatterns = re.compile(r'[^aeiou](ies|ied|ier|iest)$')
-vowelYPattern = re.compile(r'[aeiou]y')
 
 
 def yRuleSuffix(word: str) -> bool:
     EXCEPTIONS = {'frontier', 'glacier', 'soldier', 'barrier', 'carrier', 'pier', 'priest', 'series', 'species'}
     if word in EXCEPTIONS:
         return
-
-
     if yRulePatterns.search(word): # Check for patterns where Y changes to I
         categories['y rule suffixes'].append(word)
     if word.endswith('ying'): # Check for "ying" suffix
@@ -663,7 +665,6 @@ def yRuleSuffix(word: str) -> bool:
     # Final check for "ies" pattern without VOWELS before "y"
     if word.endswith('ies') and not 'y' in word[:word.rfind('ies')]:
         categories['y rule suffixes'].append(word)
-    return
 
 
 def eRuleSuffix(word: str) -> None:
@@ -733,7 +734,7 @@ def callCategorizationFunctions(word: str, arpabet: str, syllable_count: int) ->
     vcccvCheck(word, arpabet, syllable_count)
     yRuleSuffix(word)
     eRuleSuffix(word)
-    vrlCheck(word)
+    vrlCheck(word, syllable_count)
     vceCheck(word)
     xInWordCheck(word, arpabet)
     ingongangungCheck(word)
