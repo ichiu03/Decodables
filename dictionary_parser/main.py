@@ -394,6 +394,9 @@ def main():
     if gendec.lower() == "g":
         # Use get_input_and_save to retrieve api_choice
         story_length, topic, problems, name, readingLevel, api_choice = get_input()
+        topic_words = topic.split()
+        for i in range(len(topic_words)):
+            sight_words+=(","+topic_words[i])
         
         # Adjust maxsyllable based on readingLevel
         if int(readingLevel) <= 1:
