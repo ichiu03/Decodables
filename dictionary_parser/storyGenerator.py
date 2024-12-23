@@ -130,7 +130,7 @@ def generate_chapter(outline, chapter_number, length, story, problems, readingLe
 
     # Now, create the prompt including the examples_str
     prompt = f"""
-    You are a creative author tasked with writing chapter {chapter_number} of a children's story for a child at a {readingLevel} grade reading level.
+    You are a creative author tasked with writing chapter {chapter_number} of an american children's story for a child at a {readingLevel} grade reading level.
 
     Here is the outline:
 
@@ -158,11 +158,9 @@ def generate_outline(topic, name, readingLevel, story_length=500, api='openai'):
     prompt = f"""
     You are a creative author.
 
-    Create an outline for a children's story about {topic} for a child at a {readingLevel} grade reading level.
+    Create an outline for a children's story about {topic} for an american child at a {readingLevel} grade reading level.
 
     The story should be about {story_length} words long.
-
-    The story should have a clear beginning, middle, and end and have a lesson.
 
     The story should be {chapters} chapter(s) long.
 
@@ -178,10 +176,12 @@ def generate_story(topic, problems, name, readingLevel, api, story_length=500):
     outline = generate_outline(topic, name, readingLevel, story_length, api)
     story = ""
    
-    for chapter in range(chapters):
+    chapter=0
+    while len(story.split()) < story_length:
         print(f"Generating chapter {chapter + 1} using {api}...")
         new_chapter = generate_chapter(outline, chapter + 1, story_length // chapters, story, problems, readingLevel, api)
         story += new_chapter + "\n"  # Add a newline between chapters
+        chapter+=1
     print(story)
     return story
 
