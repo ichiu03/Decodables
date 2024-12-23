@@ -36,7 +36,7 @@ categories = {
     'ea as in bread': [], '3-letter beg. blends': [], 'vcv': [], 'vcccv': [], 'tch': [], 'soft c': [],
     'soft g': [], 'ai': [], 'igh': [], 'ed': [], '-ble, -cle, -dle, -fle, -gle, -kle, -ple, -tle, -zle': [],
     'vrl syllables': [], 'oa': [], 'ir': [], '-ild, -ind, -old, -ost': [], 'oi': [], 'double rule-suffixes': [],
-    'ew as in few/blew': [], 'v/v pattern': [], 'kn': [], 'e rule-suffixes': [], 'ou as in south': [], 'ur': [],
+    'ew as in few/blew': [], 'v-v pattern': [], 'kn': [], 'e rule-suffixes': [], 'ou as in south': [], 'ur': [],
       'dge': [], 'y rule suffixes': [], 'tion': [],
     # Column 5
     'au': [], 'war': [], 'ey as in monkey': [], 'ey as in they': [], 'ph': [],
@@ -621,7 +621,7 @@ def vvCheck(word: str, arpabet: str) -> None:
             if word[i:i + len(comp)] == comp:
                 compound = word[i: i+len(comp)]
                 if is_vv(compound, arpabet):
-                    categories['v/v pattern'].append(word)
+                    categories['v-v pattern'].append(word)
         i += 1
 
 
