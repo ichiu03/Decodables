@@ -653,7 +653,7 @@ def vvCheck(word: str, arpabet: str) -> None:
             if word[i:i + len(comp)] == comp:
                 compound = word[i: i+len(comp)]
                 if is_vv(compound, arpabet):
-                    categories['v v pattern'].append(word)
+                    categories['v/v pattern'].append(word)
         i += 1
 
 
