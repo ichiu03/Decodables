@@ -1,7 +1,6 @@
 ### Imports
 import os
 
-
 if os.path.exists('dictionary_parser/'):
     path = "dictionary_parser/"
 else:
@@ -44,12 +43,12 @@ def get_synonyms_dict(story: str, problems: list, maxsyllable: int) -> dict:
                 if problem in word_dict and clean_word in word_dict[problem] and clean_word not in sight_words:
                     # Prepare the prompt
                     prompt = f"""
-                        Give 3 synonyms for the word '{word}' that would fit naturally in the following sentence, and **do not** include any words containing these sounds: {', '.join(problems)}.
+                        Give the 5 best words to replace this word '{word}' that would fit naturally in context to the following sentence, and **do not** include any words containing these sounds: {', '.join(problems)}.
                         A change in tense or form of the word is not acceptable. Maintain tense and form as these words are going to replace the original word in a story.
 
                         Sentence to fix: {sentence}
 
-                        Return only the 3 words separated by commas, like this: "word1, word2, word3".
+                        Return only the 5 words separated by commas, like this: "word1, word2, word3".
                         Order the words so the best fit is first.
 
 
