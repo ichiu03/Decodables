@@ -254,6 +254,35 @@ def xInWordCheck(word: str, arpabet: str, tokens: list) -> None:
         if 'ar' in word or 'er' in word or 'ir' in word or 'or' in word or 'ur' in word:
             pass
         categories['r'].append(word)
+    if 'w' in word and 'W' in tokens:
+        if 'wh' in word: # Check if there's 'w' and 'wh'
+            w_index = word.index('wh')
+            no_wh = word[: w_index] + word[w_index + 2:]
+            if 'w' in no_wh: # still a 'w', after removing 'wh'
+                categories['w'].append(word)
+        else:
+            categories['w'].append(word)
+    if 'ink' in word or 'ank' in word or 'onk' in word or 'unk' in word and 'unknown' not in word: categories['-ink, -ank, -onk, -unk'].append(word)
+    if word.endswith('ft') or word.endswith('st') or word.endswith('nd'): categories['-ft, -nd, -st'].append(word)
+    if word.endswith('sp') or word.endswith('nt') or word.endswith('mp'): categories['-sp, -nt, -mp'].append(word)
+    if word.endswith('sk') or word.endswith('lt') or word.endswith('lk'): categories['-sk, -lt, -lk'].append(word)
+    if word.endswith('ct') or word.endswith('pt'): categories['-ct, -pt'].append(word)
+    if 'igh' in word:
+        index = word.find('igh')
+        if word[index-1] not in 'eia':
+            categories['igh'].append(word)
+    if 'ild' in word or 'ind' in word:
+        if 'AY' in arpabet: categories['-ild, -ind, -old, -ost'].append(word)
+    if 'old' in word or 'ost' in word:
+        if 'OH' in arpabet:categories['-ild, -ind, -old, -ost'].append(word)
+    if 'aw' in word:
+        if 'AO' in arpabet or 'AH' in arpabet or 'AA' in arpabet:
+            if 'AH W' not in arpabet:
+                categories['aw'].append(word)
+    for key in keys:
+        if key in word: categories[key].append(word)
+
+def vowelCheck(word: str, arpabet: str, tokens: list) -> None:
     if 'a' in word:
         if 'EY' in tokens and verificationToAdd(word, arpabet, 'a', ['EY'], ['AA', 'AH', 'AE']):
             categories['long a'].append(word)
@@ -282,33 +311,6 @@ def xInWordCheck(word: str, arpabet: str, tokens: list) -> None:
             categories['long u'].append(word)
         if 'AH' in tokens and verificationToAdd(word, arpabet, 'u', ['AH'], ['UW']):
             categories['short u'].append(word)
-    if 'w' in word and 'W' in tokens:
-        if 'wh' in word: # Check if there's 'w' and 'wh'
-            w_index = word.index('wh')
-            no_wh = word[: w_index] + word[w_index + 2:]
-            if 'w' in no_wh: # still a 'w', after removing 'wh'
-                categories['w'].append(word)
-        else:
-            categories['w'].append(word)
-    if 'ink' in word or 'ank' in word or 'onk' in word or 'unk' in word and 'unknown' not in word: categories['-ink, -ank, -onk, -unk'].append(word)
-    if word.endswith('ft') or word.endswith('st') or word.endswith('nd'): categories['-ft, -nd, -st'].append(word)
-    if word.endswith('sp') or word.endswith('nt') or word.endswith('mp'): categories['-sp, -nt, -mp'].append(word)
-    if word.endswith('sk') or word.endswith('lt') or word.endswith('lk'): categories['-sk, -lt, -lk'].append(word)
-    if word.endswith('ct') or word.endswith('pt'): categories['-ct, -pt'].append(word)
-    if 'igh' in word:
-        index = word.find('igh')
-        if word[index-1] not in 'eia':
-            categories['igh'].append(word)
-    if 'ild' in word or 'ind' in word:
-        if 'AY' in arpabet: categories['-ild, -ind, -old, -ost'].append(word)
-    if 'old' in word or 'ost' in word:
-        if 'OH' in arpabet:categories['-ild, -ind, -old, -ost'].append(word)
-    if 'aw' in word:
-        if 'AO' in arpabet or 'AH' in arpabet or 'AA' in arpabet:
-            if 'AH W' not in arpabet:
-                categories['aw'].append(word)
-    for key in keys:
-        if key in word: categories[key].append(word)
 
 
 def edCheck(word: str) -> None:
@@ -737,6 +739,7 @@ def getWords(text: str) -> set:
 
 
 def callCategorizationFunctions(word: str, arpabet: str, syllable_count: int, tokens: list) -> None:
+    vowelCheck(word, arpabet, tokens)
     knCheck(word, arpabet)
     hardVsSoftC(word, arpabet, tokens)
     hardVsSoftG(word, arpabet, tokens)
