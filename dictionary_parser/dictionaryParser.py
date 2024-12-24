@@ -561,8 +561,8 @@ def OCECheck(word: str, syllable_count: int, tokens: list) -> None:
         if word[i] in VOWELS and word[i+1] in VOWELS:
             return
     for i, letter in enumerate(word): # No r-controlled syllables
-        if letter in VOWELS:
-            if word[i+1] == 'r':
+        if i < len(word) - 1:
+            if letter in VOWELS and word[i+1] == 'r':
                 return
     # Open syllables: Check if the last sound is a long vowel sound
     if tokens[-1] in ['AY', 'EY', 'IY', 'OW', 'UW'] and word[-1] in VOWELS:
