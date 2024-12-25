@@ -157,15 +157,25 @@ def verificationToAdd(word: str, arpabet: str, letters: str, desired_pho: list, 
     if not (any(pho in arpabet for pho in desired_pho) or any(pho in arpabet for pho in problem_pho)): return True
     matches = False
     mapping = mapChunksToPhonemes(word)
-    for chunk, phoneme in mapping.items():
+    keys = list(mapping.keys())  # for vce edge case
+    for i, (chunk, phoneme) in enumerate(mapping.items()):
         if letters in chunk:
-            if letters == 'c' and 'ch' in chunk and desired_pho == ['K']: # Edge cases
-                continue
-            elif letters == 'g' and 'dge' in chunk and desired_pho == ['JH']: 
+            edge_cases = (
+                (letters == 'c' and 'ch' in chunk and desired_pho == ['K']) or  # hard c edge cases
+                (letters == 'a' and ('ai' in chunk or 'ay' in chunk) and desired_pho == ['EY']) or  # long a edge cases
+                (letters == 'g' and 'dge' in chunk and desired_pho == ['JH'])
+            )
+            if edge_cases:
                 continue
             phonemes = [re.sub(r'\d', '', p) for p in phoneme.split()]
             if any(pho in phonemes for pho in desired_pho):
-               matches = True
+                if not (
+                        letters == 'a' and
+                        desired_pho == ['EY'] and
+                        (i <= len(keys) - 2) and
+                        vceBool(chunk + keys[i + 1])
+                ):  # prevents a vce from being flagged as 'long a'
+                    matches = True
 
     return matches
 
@@ -553,6 +563,13 @@ def vceCheck(word: str) -> None:
         word[-2].lower() in CONSONANTS and
         word[-1].lower() == 'e'):
         categories['vce'].append(word)
+
+def vceBool(word: str) -> bool:  # helper function, returns true if a vce word
+    if len(word) < 3:
+        return False
+    return (word[-3].lower() in VOWELS and
+        word[-2].lower() in CONSONANTS and
+        word[-1].lower() == 'e')
        
 
 def OCECheck(word: str, syllable_count: int, tokens: list) -> None:
@@ -737,8 +754,8 @@ def getWords(text: str) -> set:
     words = re.findall(r'\b[A-Za-z]+\'?[A-Za-z]*\b', text.lower())
     return set(words)
 
-
 def callCategorizationFunctions(word: str, arpabet: str, syllable_count: int, tokens: list) -> None:
+    vceCheck(word)  # placing vceCheck before vowel check for a 'long a' edge case
     vowelCheck(word, arpabet, tokens)
     knCheck(word, arpabet)
     hardVsSoftC(word, arpabet, tokens)
@@ -772,7 +789,6 @@ def callCategorizationFunctions(word: str, arpabet: str, syllable_count: int, to
     yRuleSuffix(word)
     eRuleSuffix(word)
     vrlCheck(word, syllable_count)
-    vceCheck(word)
     xInWordCheck(word, arpabet, tokens)
     ingongangungCheck(word)
     contractionsCheck(word) 
