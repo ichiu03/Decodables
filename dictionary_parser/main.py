@@ -34,7 +34,6 @@ def get_synonyms_dict(story: str, problems: list, maxsyllable: int) -> dict:
 
     for idx, sentence in enumerate(sentences):
         sentence = sentence.strip()
-        next_sentence = sentences[idx + 1].strip() if idx + 1 < len(sentences) else ""
         words = sentence.split(" ")
         for word in words:
             # Remove punctuation and make lowercase
@@ -51,7 +50,6 @@ def get_synonyms_dict(story: str, problems: list, maxsyllable: int) -> dict:
 
                         Return only the 3 words separated by commas, like this: "word1, word2, word3".
                         Order the words so the best fit is first.
-
 
                         **RETURN ONLY THE LIST OF WORDS**
                         """
@@ -74,7 +72,7 @@ def get_synonyms_dict(story: str, problems: list, maxsyllable: int) -> dict:
                         synonyms_dict[clean_word] = " " + filtered_temp_words[0]
                     else:
                         synonyms_dict[clean_word] = " ____"
-        prev_sentence = sentence
+                    break
     return synonyms_dict
 
 
@@ -338,9 +336,9 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
         decodability = categorize_and_validate_words(story, problems, maxsyllable)["decodability"]
         iteration = 0
         while decodability < 0.9 and iteration < 4:
-            print(f"Decodability: {decodability}")
-            print("Checking and categorizing words...")
-            results = categorize_and_validate_words(story, problems, maxsyllable)
+            # print(f"Decodability: {decodability}")
+            # print("Checking and categorizing words...")
+            # results = categorize_and_validate_words(story, problems, maxsyllable)
             print("Replacing problematic words...")
             synonyms_dict = get_synonyms_dict(story, problems, maxsyllable)
             story = replace_words_in_story(story, synonyms_dict)

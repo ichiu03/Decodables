@@ -4,7 +4,7 @@ from pydantic import BaseModel, Field
 from typing import List, Optional
 from main import process_story, generate_story, handle_sight_words, combine, original_decodability
 import re
-from dictionaryParser import parseAndProcessWords, sight_words as parser_sight_words
+from dictionaryParser import parseAndProcessWords
 from collections import Counter
 
 app = FastAPI()
@@ -42,10 +42,10 @@ default_sight_words = "a,at,any,many,and,on,is,are,the,was,were,it,am,be,go,to,o
 @app.post("/api/process-story")
 async def process_story_endpoint(request: ProcessStoryRequest):
     try:
+        global default_sight_words
         # Update both sight word sets
-        updated_sight_words = handle_sight_words(default_sight_words, ','.join(request.unknownSightWords))
-        parser_sight_words.clear()
-        parser_sight_words.update(updated_sight_words)
+        default_sight_words = handle_sight_words(default_sight_words, ','.join(request.unknownSightWords))
+        
        
         problems = request.problemLetters
         readingLevel = request.readingLevel
@@ -176,7 +176,7 @@ async def get_decodability_endpoint(request: DecodabilityRequest):
                 for word in word_dict[problem]:
                     word_lower = word.lower()
                     # if word_lower in story_words and word_lower not in sight_words:
-                    if word_lower not in parser_sight_words:
+                    if word_lower not in default_sight_words:
                         if word_lower not in bad_words_with_categories:
                             bad_words_with_categories[word_lower] = {
                                 "categories": [problem],
