@@ -161,20 +161,27 @@ def verificationToAdd(word: str, arpabet: str, letters: str, desired_pho: list, 
     for i, (chunk, phoneme) in enumerate(mapping.items()):
         if letters in chunk:
             edge_cases = (
-                (letters == 'c' and 'ch' in chunk and desired_pho == ['K']) or  # hard c edge cases
-                (letters == 'a' and ('ai' in chunk or 'ay' in chunk) and desired_pho == ['EY']) or  # long a edge cases
-                (letters == 'g' and 'dge' in chunk and desired_pho == ['JH'])
+                    (letters == 'c' and 'ch' in chunk and desired_pho == ['K']) or  # hard c edge cases
+                    (letters == 'a' and ('ai' in chunk or 'ay' in chunk) and desired_pho == [
+                        'EY']) or  # long a edge cases
+                    (letters == 'g' and 'dge' in chunk and desired_pho == ['JH']) or
+                    (letters == 'a' and ('ar' in chunk or 'wa' in chunk) and desired_pho == ['AA', 'AH', 'AE'])  # short a edge cases
             )
             if edge_cases:
                 continue
             phonemes = [re.sub(r'\d', '', p) for p in phoneme.split()]
             if any(pho in phonemes for pho in desired_pho):
-                if not (
-                        letters == 'a' and
-                        desired_pho == ['EY'] and
-                        (i <= len(keys) - 2) and
-                        vceBool(chunk + keys[i + 1])
-                ):  # prevents a vce from being flagged as 'long a'
+                if not (  # prevent a vce from being flagged as 'long a'
+                    letters == 'a' and
+                    desired_pho == ['EY'] and
+                    (i <= len(keys) - 2) and
+                    vceBool(chunk + keys[i + 1])
+                ) and not (  # prevent an -ank from being flagged as 'short a'
+                    letters == 'a' and
+                    desired_pho == ['AA', 'AH', 'AE'] and
+                    (i <= len(keys) - 2) and
+                    'ank' in chunk + keys[i + 1]
+                ):
                     matches = True
 
     return matches
