@@ -161,11 +161,11 @@ def verificationToAdd(word: str, arpabet: str, letters: str, desired_pho: list, 
     for i, (chunk, phoneme) in enumerate(mapping.items()):
         if letters in chunk:
             edge_cases = (
-                    (letters == 'c' and 'ch' in chunk and desired_pho == ['K']) or  # hard c edge cases
-                    (letters == 'a' and ('ai' in chunk or 'ay' in chunk) and desired_pho == [
-                        'EY']) or  # long a edge cases
-                    (letters == 'g' and 'dge' in chunk and desired_pho == ['JH']) or
-                    (letters == 'a' and ('ar' in chunk or 'wa' in chunk) and desired_pho == ['AA', 'AH', 'AE'])  # short a edge cases
+                (letters == 'c' and 'ch' in chunk and desired_pho == ['K']) or  # hard c edge cases
+                (letters == 'a' and ('ai' in chunk or 'ay' in chunk) and desired_pho == ['EY']) or  # long a edge cases
+                (letters == 'g' and 'dge' in chunk and desired_pho == ['JH']) or
+                (letters == 'a' and ('ar' in chunk or 'wa' in chunk) and desired_pho == ['AA', 'AH', 'AE']) or  # short a edge cases
+                (letters == 'o' and ('or' in chunk or 'tio' in chunk) and desired_pho == ['AH', 'AA', 'AO'])  # short o edge case
             )
             if edge_cases:
                 continue
@@ -186,11 +186,24 @@ def verificationToAdd(word: str, arpabet: str, letters: str, desired_pho: list, 
                     desired_pho == ['AY'] and
                     (i <= len(keys) - 2) and
                     vceBool(chunk + keys[i + 1])
+                ) and not (
+                    letters == 'o' and
+                    desired_pho == ['OW'] and
+                    longOEdgeCase(chunk + keys[i + 1] if i <= len(keys) - 2 else chunk)
+                ) and not (  # prevent a vce from being flagged as long o
+                    letters == 'o' and
+                    desired_pho == ['OW'] and
+                    (i <= len(keys) - 2) and
+                    vceBool(chunk + keys[i + 1])
                 ):
                     matches = True
 
     return matches
 
+
+### Helper function for long o edge cases
+def longOEdgeCase(word: str):
+    return 'ost' in word or 'old' in word or 'ow' in word or 'oll' in word or 'oa' in word
 
 ### The "easier" categories are categorized here
 def xInWordCheck(word: str, arpabet: str, tokens: list) -> None:
