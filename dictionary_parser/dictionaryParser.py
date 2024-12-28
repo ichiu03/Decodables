@@ -171,16 +171,21 @@ def verificationToAdd(word: str, arpabet: str, letters: str, desired_pho: list, 
                 continue
             phonemes = [re.sub(r'\d', '', p) for p in phoneme.split()]
             if any(pho in phonemes for pho in desired_pho):
-                if not (  # prevent a vce from being flagged as 'long a'
+                if not (  # prevent a vce from being flagged as long a
                     letters == 'a' and
                     desired_pho == ['EY'] and
                     (i <= len(keys) - 2) and
                     vceBool(chunk + keys[i + 1])
-                ) and not (  # prevent an -ank from being flagged as 'short a'
+                ) and not (  # prevent an -ank from being flagged as short a
                     letters == 'a' and
                     desired_pho == ['AA', 'AH', 'AE'] and
                     (i <= len(keys) - 2) and
                     'ank' in chunk + keys[i + 1]
+                ) and not (  # prevent a vce from being flagged as long i
+                    letters == 'i' and
+                    desired_pho == ['AY'] and
+                    (i <= len(keys) - 2) and
+                    vceBool(chunk + keys[i + 1])
                 ):
                     matches = True
 
