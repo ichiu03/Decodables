@@ -48,7 +48,7 @@ def get_synonyms_dict(story: str, problems: list, maxsyllable: int) -> dict:
 
                         Sentence to fix: {sentence}
 
-                        Return only the 5 words separated by commas, like this: "word1,word2,word3,word4,word5".
+                        Return only the 5 words separated by commas, like this: "word1, word2, word3".
                         Order the words so the best fit is first.
 
 
