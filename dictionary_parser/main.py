@@ -164,8 +164,7 @@ def rewrite_sentences(story):
         # Form the prompt
         prompt = f"""
             Rewrite this sentence so it is easier to read if necessary. Remember this is for a childrens book: {sentence}
-            
-            If any of the words in this sentence are {sight_words} absolutely make sure they remain in the sentence.
+           
             If no rewrite is needed, return the same sentence.
             If it makes sense to, trim down the sentence so it is not redundant.
 
@@ -189,21 +188,20 @@ def rewrite_sentences(story):
    
     return finaltext.strip()  # Strip trailing whitespace
    
-def find_proper_nouns(story, sight_words):
-    prompt = f""" 
-            Find all of the proper nouns (People, Places, Things) in this {story}.
+def rewrite_paragraph(story):
+    prompt = f"""
+        This paragraph was written by an inferior chatbot: {story}.
 
-            Return all the proper nouns seperated by commas between each word. E.g. word1,word2,word3...
 
-            Return just the list of all the words
-            """
-    propernouns = query(prompt)
-    sight_words += "," + propernouns
-    return 
+        You are a much better writer than this. You have a PHD in English and are very good at writing for children.
+
+
+        Fix all of its flaws and return the entire new story.
+    """
+    fixed = query(prompt)
+    return(fixed)
 
 def process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=False):
-    global sight_words
-    find_proper_nouns(story, sight_words)
     def categorize_and_validate_words(story, problems, maxsyllable):
         # Prepare sight words set
         sight_words_set = set(word.lower().strip() for word in sight_words.split(','))
@@ -350,7 +348,28 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
             decodability = categorize_and_validate_words(story, problems, maxsyllable)["decodability"]
             iteration+=1
         story = rewrite_sentences(story)
+
+
         return story
+
+def combine(story1, story2, problems):
+    prompt = f"""
+    Take the two versions of the story provided below and combine their sentences into one improved version.
+    Retain the original plot and key details.
+    Keep the creative language from both versions.
+    Try to avoid run-on sentences.
+    Ensure the final story maintains the same narrative structure but uses the best phrases from each version.
+    Do not invent new plot elements or diverge from the original stories.
+    **Most Importantly** Try to avoid including these sounds: {problems}.
+
+
+    Version 1: {story1}
+
+
+    Version 2: {story2}
+    """
+    ultstory = query(prompt)
+    return ultstory
 
 def handle_sight_words(default_sight_words: str, problematic_words: str) -> str:
     sight_words_list = default_sight_words.split(",")
@@ -359,12 +378,6 @@ def handle_sight_words(default_sight_words: str, problematic_words: str) -> str:
         if word in sight_words_list:
             sight_words_list.remove(word)
     return ",".join(sight_words_list)
-
-def save_final_story(story, decodability):
-    """Save the final story and its decodability score to final.txt"""
-    with open("final.txt", "w") as f:
-        f.write(f"Final Story (Decodability: {decodability*100:.2f}%):\n\n")
-        f.write(story)
 
 def main():
     global sight_words
@@ -406,7 +419,6 @@ def main():
             print("Decodability is already high enough, no need to process further.")
             print(f'\n\nFinal Story: {story}')
             print(f"Decodability: {original_decodability* 100:.2f}%")
-            save_final_story(story, original_decodability)  
             return original_decodability
         print("Generating story...")
     elif gendec.lower() == "i":
@@ -456,7 +468,6 @@ def main():
     decodability, bad_words = process_story(story4, problems, maxsyllable, apply_correction=True, spellcheck=True, combined=True, decodabilityTest=True)
     print(f'\n\nFinal Story: {story4}')
     print(f"Decodability: {decodability}")
-    save_final_story(story4, decodability)  # Add this line
     return decodability
 
 if __name__ == "__main__":
