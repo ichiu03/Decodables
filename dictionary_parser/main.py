@@ -72,7 +72,7 @@ def get_synonyms_dict(story: str, problems: list, maxsyllable: int) -> dict:
                     if filtered_temp_words:
                         synonyms_dict[clean_word] = " " + filtered_temp_words[0]
                     else:
-                        synonyms_dict[clean_word] = " ____"
+                        synonyms_dict[clean_word] = word
         prev_sentence = sentence
     return synonyms_dict
 
@@ -152,42 +152,7 @@ def correct_text(text: str) -> str:
         print(f"Warning: Grammar correction failed ({str(e)}). Proceeding with original text.")
         return text
 
-def rewrite_sentences(story):
-    sentences = story.split(".")  # Split sentences by period
-    finaltext = ""  # To store the revised story
-   
-    for i, sentence in enumerate(sentences):
-        # Get previous and next sentence for context
-        prev_sentence = sentences[i - 1] if i > 0 else ""
-        next_sentence = sentences[i + 1] if i < len(sentences) - 1 else ""
-       
-        # Form the prompt
-        prompt = f"""
-            Rewrite this sentence so it is easier to read if necessary. Remember this is for a childrens book: {sentence}
-            
-            If any of the words in this sentence are {sight_words} absolutely make sure they remain in the sentence.
-            If no rewrite is needed, return the same sentence.
-            If it makes sense to, trim down the sentence so it is not redundant.
 
-
-            Here is the previous sentence and next sentence for context: Previous: {prev_sentence} Next: {next_sentence}
-
-
-            *** RETURN ONLY THE NEW SENTENCE OR THE SAME SENTENCE IF NO CHANGE IS NEEDED ***
-        """
-       
-        # Call the function to get the rewritten sentence (query function assumed)
-        sentence_rev = query(prompt).strip()
-
-
-        if "return" in sentence_rev and "sentence" in sentence_rev:
-            sentence_rev = query(prompt).strip()
-       
-        # Add the revised sentence to the final text
-        if sentence_rev and sentence != prev_sentence and sentence !=next_sentence:  # Avoid adding empty strings
-            finaltext += sentence_rev + " "
-   
-    return finaltext.strip()  # Strip trailing whitespace
    
 def find_proper_nouns(story, sight_words):
     prompt = f""" 
@@ -200,6 +165,10 @@ def find_proper_nouns(story, sight_words):
     propernouns = query(prompt)
     sight_words += "," + propernouns
     return 
+
+
+    story = query(prompt)
+    return story
 
 def process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=False):
     global sight_words
@@ -250,6 +219,60 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
             "all_bads": all_bads,
         }
     decodability_file = "decodability_measurements.txt"
+    def rewrite_sentences(story):
+        sentences = story.split(".")
+        final_story = []
+        
+        for sentence in sentences:
+            sentence = sentence.strip()
+            if not sentence:  # Skip empty sentences
+                continue
+                
+            current_sentence = sentence
+            attempts = 0
+            max_attempts = 5
+            
+            while True:
+                decodability = categorize_and_validate_words(current_sentence, problems, maxsyllable)["decodability"]
+                
+                if decodability >= 0.9 or attempts >= max_attempts:
+                    break
+                    
+                # Build story context from approved sentences
+                story_so_far = ". ".join(final_story) if final_story else ""
+                
+                prompt = f"""
+                    Story so far:
+                    {story_so_far}
+                    
+                    Write the next sentence to continue this story.
+                    Make sure the story is still related to the subject: {topic}
+                    
+                    Consider ONE of these:
+                    - Add action or dialogue
+                    - Introduce a surprise
+                    - Describe a feeling
+                    - Add a new character
+                    
+                    Must be kid-friendly and easy to read.
+                    Current decodability: {decodability * 100:.2f}%
+                    Target decodability: 90%
+                    
+                    *** RETURN ONLY THE NEW SENTENCE ***
+                """
+                
+                new_sentence = query(prompt).strip().rstrip('.')  # Remove any trailing period
+                
+                if new_sentence and not ("return" in new_sentence.lower() and "sentence" in new_sentence.lower()):
+                    current_sentence = new_sentence
+                
+                attempts += 1
+            
+            final_story.append(current_sentence)
+        
+        # Join with single periods
+        return ". ".join(final_story) + "." if final_story else ""
+
     def save_decodability_metrics(decodability, wordcount, marker, combo, problems):
         global original_decodability
         # Ensure the directory exists
@@ -338,6 +361,7 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
        
         decodability = categorize_and_validate_words(story, problems, maxsyllable)["decodability"]
         iteration = 0
+        story = rewrite_sentences(story)
         while decodability < 0.9 and iteration < 4:
             print(f"Decodability: {decodability}")
             print("Checking and categorizing words...")
@@ -349,7 +373,6 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
             story = ultraformatting(story)
             decodability = categorize_and_validate_words(story, problems, maxsyllable)["decodability"]
             iteration+=1
-        story = rewrite_sentences(story)
         return story
 
 def handle_sight_words(default_sight_words: str, problematic_words: str) -> str:
@@ -370,8 +393,9 @@ def main():
     global sight_words
     global maxsyllable
     global original_decodability
+    global topic
     maxsyllable = 2
-    default_sight_words = "beauty,bouquet,builder,rebuild,doesn't,shoe,shoelace,laughter,laugh,laughed,laughs,roughly,although,thoroughly,throughout,dough,doughnut,sovereighnty,a,at,any,many,and,on,is,are,the,was,were,it,am,be,go,to,out,been,this,come,some,do,does,done,what,who,you,your,both,buy,door,floor,four,none,once,one,only,pull,push,sure,talk,walk,their,there,they're,very,want,again,against,always,among,busy,could,should,would,enough,rough,tough,friend,move,prove,ocean,people,she,other,above,father,usually,special,front,thought,he,we,they,nothing,learned,toward,put,hour,beautiful,beautifully,whole,trouble,of,off,use,have,our,say,make,take,see,think,look,give,how,ask,boy,girl,us,him,his,her,by,where,were,wear,hers,don't,which,just,know,into,good,other,than,then,now,even,also,after,know,because,most,day,these,two,already,through,though,like,said,too,has,in,brother,sister,that,them,from,for,with,doing,well,before,tonight,down,about,but,up,around,goes,gone,build,built,cough,lose,loose,truth,daughter,son"
+    default_sight_words = "back,beauty,bouquet,builder,rebuild,doesn't,shoe,shoelace,laughter,laugh,laughed,laughs,roughly,although,thoroughly,throughout,dough,doughnut,sovereighnty,a,at,any,many,and,on,is,are,the,was,were,it,am,be,go,to,out,been,this,come,some,do,does,done,what,who,you,your,both,buy,door,floor,four,none,once,one,only,pull,push,sure,talk,walk,their,there,they're,very,want,again,against,always,among,busy,could,should,would,enough,rough,tough,friend,move,prove,ocean,people,she,other,above,father,usually,special,front,thought,he,we,they,nothing,learned,toward,put,hour,beautiful,beautifully,whole,trouble,of,off,use,have,our,say,make,take,see,think,look,give,how,ask,boy,girl,us,him,his,her,by,where,were,wear,hers,don't,which,just,know,into,good,other,than,then,now,even,also,after,know,because,most,day,these,two,already,through,though,like,said,too,has,in,brother,sister,that,them,from,for,with,doing,well,before,tonight,down,about,but,up,around,goes,gone,build,built,cough,lose,loose,truth,daughter,son"
     probsight_words = input("What sight words does the student not know (use only words and commas): ")
    
     sight_words = handle_sight_words(default_sight_words, probsight_words)
