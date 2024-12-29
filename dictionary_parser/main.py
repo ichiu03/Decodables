@@ -167,9 +167,6 @@ def find_proper_nouns(story, sight_words):
     return 
 
 
-    story = query(prompt)
-    return story
-
 def process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=False):
     global sight_words
     find_proper_nouns(story, sight_words)

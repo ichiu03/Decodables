@@ -185,6 +185,7 @@ def generate_story(topic, problems, name, readingLevel, api, story_length=500):
     print(story)
     return story
 
+
 def clear_json_file():
     # Clear the contents of the JSON file
     with open(input_data_path, 'w', encoding='utf-8') as file:
