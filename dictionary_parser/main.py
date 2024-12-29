@@ -269,6 +269,18 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
         
         # Join with single periods
         return ". ".join(final_story) + "." if final_story else ""
+    
+    def grade_story(story):
+        sentences = [s.strip() for s in story.split(".") if s.strip()]
+        grades = []
+        
+        for sentence in sentences:
+            prompt = f"""You are a English Teacher. Grade this sentence on a scale of 0-100 base on its readability: {sentence}.
+                        Return only the number grade and nothing else."""
+            grade = query(prompt)
+            grades.append(grade)
+        
+        return "\n".join(grades)
 
     def save_decodability_metrics(decodability, wordcount, marker, combo, problems):
         global original_decodability
@@ -370,6 +382,9 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
             story = ultraformatting(story)
             decodability = categorize_and_validate_words(story, problems, maxsyllable)["decodability"]
             iteration+=1
+        grades = grade_story(story)
+        with open("grades.txt", "w") as grades_file:
+            grades_file.write(grades)
         return story
 
 def handle_sight_words(default_sight_words: str, problematic_words: str) -> str:
@@ -431,6 +446,7 @@ def main():
             return original_decodability
         print("Generating story...")
     elif gendec.lower() == "i":
+        topic = input("What is the text about: ")
         readingLevel = input("Enter the grade level of the reader (Only the grade number): ")
         if int(readingLevel) <= 1:
             maxsyllable = 2
@@ -448,8 +464,7 @@ def main():
         problems.append("too many syllables")
         file = input("Copy and Paste your text here: ")
         story = file
-        maxsyllable = 10
-        original_decodability, _ = process_story(story, problems, 10, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=True)
+        original_decodability, _ = process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=True)
         if original_decodability > 0.95:
             print("Decodability is already high enough, no need to process further.")
             print(f'\n\nFinal Story: {story}')
@@ -457,6 +472,7 @@ def main():
             return original_decodability
     print(story)
 
+    #TODO: Implement a sort of check that adds common words for the topic to see if the student knows them and check overlap with problem sounds emphasizes these words arent allowed.
     # # First Run: Without Grammar Correction
     # print("\n--- Processing Without Grammar Correction ---")
     # story1 = process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False)
