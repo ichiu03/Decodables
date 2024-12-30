@@ -31,7 +31,7 @@ def query_openai(prompt):
         {"role": "system", "content": prompt},
     ]
     response = openai_client.chat.completions.create(
-        model="gpt-4o-mini-2024-07-18",
+        model="gpt-3.5-turbo",
         messages=messages,
     )
     return response.choices[0].message.content
