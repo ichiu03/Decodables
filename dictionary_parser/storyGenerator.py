@@ -117,13 +117,13 @@ def delete_old_file():
 def get_good_words(problems):
     good_words = ""
     with open(os.path.join(path, 'Resources/ChildDiction.txt'), 'r') as file:
-        words = file.read().splitlines()
-    categorized_words = parseAndProcessWords(words)
+        words = file.read()
+    categorized_words = parseAndProcessWords(words, 100)
     for category in categorized_words:
         if category not in problems:
             for word in categorized_words[category]:
                 good_words += word + ", "
-    good_words += ", ".join(sight_words)
+    good_words += sight_words
     return good_words
 
 def generate_chapter(outline, chapter_number, length, story, problems, readingLevel, api):
