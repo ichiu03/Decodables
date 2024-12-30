@@ -153,7 +153,7 @@ def correct_text(text: str) -> str:
         print(f"Warning: Grammar correction failed ({str(e)}). Proceeding with original text.")
         return text
 
-def rewrite_sentences(story):
+def rewrite_sentences(story, problems):
     sentences = story.split(".")  # Split sentences by period
     finaltext = ""  # To store the revised story
    
@@ -168,6 +168,8 @@ def rewrite_sentences(story):
            
             If no rewrite is needed, return the same sentence.
             If it makes sense to, trim down the sentence so it is not redundant.
+            Rewrite sentences that have blanks in them.
+            **Avoid using words that contain these sounds: {', '.join(problems)}.**
 
 
             Here is the previous sentence and next sentence for context: Previous: {prev_sentence} Next: {next_sentence}
@@ -349,7 +351,7 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
             story = ultraformatting(story)
             decodability = categorize_and_validate_words(story, problems, maxsyllable)["decodability"]
             iteration+=1
-        story = rewrite_sentences(story)
+        story = rewrite_sentences(story, problems)
 
 
         return story

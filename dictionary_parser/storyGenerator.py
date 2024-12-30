@@ -152,12 +152,12 @@ def generate_chapter(outline, chapter_number, length, story, problems, readingLe
     # Now, create the prompt including the examples_str
     prompt = f"""
     You are a creative author tasked with writing chapter {chapter_number} of an american children's story for a child at a {readingLevel} grade reading level.
-
+    Avoid using words that contain these sounds: {', '.join(problems)}.
     You are only allowed to use the following words: 
     
     {good_words}
 
-    The above dictionary is all of the words that are allowed to be used in the story.
+    The above dictionary is all of the words that are allowed to be used in the story, they are the only words you know.
 
     Here is the outline:
 
@@ -166,10 +166,6 @@ def generate_chapter(outline, chapter_number, length, story, problems, readingLe
     Here is the story so far:
 
     {story}
-
-    Please avoid using words that contain these sounds: {', '.join(problems)}.
-
-    Some examples of words to avoid are: {examples_str}.
 
     Write a {length} word chapter.
 
