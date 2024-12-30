@@ -1,5 +1,6 @@
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 --- Problem Words Analysis 2024-12-29 18:32:45 ---
 
 All words in story and their sound categories:
@@ -16,6 +17,12 @@ anything: [-ing, -ong, -ang, -ung]
 
 All words in story and their sound categories:
 a: [no problem sounds]
+=======
+--- Problem Words Analysis 2024-12-30 01:09:57 ---
+
+All words in story and their sound categories:
+a: [no problem sounds]
+>>>>>>> Stashed changes
 above: [no problem sounds]
 across: [no problem sounds]
 adrenaline: [vce]
@@ -28,6 +35,7 @@ and: [no problem sounds]
 anything: [-ing, -ong, -ang, -ung]
 appeared: [no problem sounds]
 arms: [no problem sounds]
+<<<<<<< Updated upstream
 >>>>>>> Stashed changes
 as: [no problem sounds]
 ask: [no problem sounds]
@@ -97,6 +105,43 @@ confidence: [no problem sounds]
 continued: [no problem sounds]
 corner: [er]
 could: [no problem sounds]
+=======
+as: [no problem sounds]
+ask: [no problem sounds]
+at: [no problem sounds]
+back: [ck]
+ball: [no problem sounds]
+be: [no problem sounds]
+beam: [no problem sounds]
+beamed: [no problem sounds]
+beat: [no problem sounds]
+bed: [no problem sounds]
+before: [no problem sounds]
+beginning: [no problem sounds]
+beneath: [no problem sounds]
+best: [no problem sounds]
+big: [no problem sounds]
+bonding: [no problem sounds]
+both: [no problem sounds]
+breath: [r blends]
+buddies: [no problem sounds]
+burst: [no problem sounds]
+but: [no problem sounds]
+caleb: [no problem sounds]
+called: [no problem sounds]
+can: [no problem sounds]
+catch: [no problem sounds]
+catching: [no problem sounds]
+cheer: [no problem sounds]
+cheerful: [no problem sounds]
+cheers: [no problem sounds]
+coach: [oa]
+come: [no problem sounds]
+confidence: [no problem sounds]
+continued: [no problem sounds]
+corner: [er]
+could: [no problem sounds]
+>>>>>>> Stashed changes
 couldn: [no problem sounds]
 crowd: [r blends, ow as in plow]
 curved: [no problem sounds]
@@ -130,6 +175,7 @@ feet: [no problem sounds]
 felt: [-sk, -lt, -lk]
 fest: [no problem sounds]
 field: [no problem sounds]
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 first: [no problem sounds]
 football: [oo as in book]
@@ -245,6 +291,59 @@ inspired: [no problem sounds]
 into: [no problem sounds]
 is: [no problem sounds]
 it: [no problem sounds]
+=======
+fierce: [no problem sounds]
+filled: [no problem sounds]
+filling: [no problem sounds]
+find: [no problem sounds]
+finish: [no problem sounds]
+fists: [no problem sounds]
+fixed: [no problem sounds]
+flying: [l blends]
+foot: [oo as in book]
+for: [no problem sounds]
+forward: [no problem sounds]
+friend: [no problem sounds]
+from: [no problem sounds]
+front: [no problem sounds]
+get: [no problem sounds]
+girl: [no problem sounds]
+give: [no problem sounds]
+glance: [l blends]
+gnawed: [no problem sounds]
+go: [no problem sounds]
+goal: [oa]
+goalkeeper: [er, oa]
+got: [no problem sounds]
+great: [r blends]
+guard: [no problem sounds]
+had: [no problem sounds]
+hands: [no problem sounds]
+happiness: [no problem sounds]
+happy: [no problem sounds]
+he: [no problem sounds]
+heart: [no problem sounds]
+held: [no problem sounds]
+help: [no problem sounds]
+her: [no problem sounds]
+hero: [no problem sounds]
+hey: [no problem sounds]
+high: [no problem sounds]
+him: [no problem sounds]
+his: [no problem sounds]
+hit: [no problem sounds]
+hold: [no problem sounds]
+hoping: [no problem sounds]
+how: [no problem sounds]
+hug: [no problem sounds]
+i: [no problem sounds]
+ideal: [no problem sounds]
+in: [no problem sounds]
+inspired: [no problem sounds]
+into: [no problem sounds]
+is: [no problem sounds]
+it: [no problem sounds]
+>>>>>>> Stashed changes
 join: [oi]
 joy: [no problem sounds]
 jumped: [no problem sounds]
@@ -307,6 +406,7 @@ pumping: [no problem sounds]
 quick: [ck]
 quickly: [ck]
 raced: [no problem sounds]
+<<<<<<< Updated upstream
 >>>>>>> Stashed changes
 ran: [no problem sounds]
 re: [no problem sounds]
@@ -375,6 +475,51 @@ tap: [no problem sounds]
 team: [no problem sounds]
 teamwork: [no problem sounds]
 >>>>>>> Stashed changes
+=======
+ran: [no problem sounds]
+re: [no problem sounds]
+ready: [no problem sounds]
+resumed: [no problem sounds]
+right: [no problem sounds]
+rival: [no problem sounds]
+running: [no problem sounds]
+rush: [no problem sounds]
+s: [no problem sounds]
+satisfying: [no problem sounds]
+saw: [no problem sounds]
+scanned: [s blends]
+score: [s blends, vce]
+scored: [s blends]
+scoring: [s blends]
+see: [no problem sounds]
+sending: [no problem sounds]
+sent: [-sp, -nt, -mp]
+session: [no problem sounds]
+she: [no problem sounds]
+shot: [no problem sounds]
+shouted: [no problem sounds]
+shouting: [no problem sounds]
+show: [no problem sounds]
+side: [vce]
+sidelines: [no problem sounds]
+sigh: [no problem sounds]
+signaling: [no problem sounds]
+skillfully: [no problem sounds]
+skills: [no problem sounds]
+smile: [s blends, vce]
+soared: [no problem sounds]
+soaring: [no problem sounds]
+stop: [s blends]
+strong: [-ing, -ong, -ang, -ung, 3-letter beg. blends]
+suddenly: [no problem sounds]
+surprising: [e rule-suffixes]
+suspense: [no problem sounds]
+swift: [s blends]
+t: [no problem sounds]
+tap: [no problem sounds]
+team: [no problem sounds]
+teamwork: [no problem sounds]
+>>>>>>> Stashed changes
 that: [no problem sounds]
 the: [no problem sounds]
 them: [no problem sounds]
@@ -382,6 +527,7 @@ they: [no problem sounds]
 things: [no problem sounds]
 this: [no problem sounds]
 thompson: [no problem sounds]
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 throws: [no problem sounds]
 tired: [no problem sounds]
@@ -420,16 +566,45 @@ victory: [no problem sounds]
 wait: [no problem sounds]
 want: [no problem sounds]
 was: [no problem sounds]
+=======
+thought: [no problem sounds]
+threw: [no problem sounds]
+through: [no problem sounds]
+thud: [no problem sounds]
+thumping: [no problem sounds]
+to: [no problem sounds]
+top: [no problem sounds]
+tough: [no problem sounds]
+toward: [no problem sounds]
+towards: [no problem sounds]
+true: [r blends]
+trusting: [r blends]
+turf: [no problem sounds]
+twist: [no problem sounds]
+unstoppable: [no problem sounds]
+up: [no problem sounds]
+us: [no problem sounds]
+use: [no problem sounds]
+ve: [no problem sounds]
+victory: [no problem sounds]
+wait: [no problem sounds]
+want: [no problem sounds]
+was: [no problem sounds]
+>>>>>>> Stashed changes
 wash: [no problem sounds]
 watch: [no problem sounds]
 watching: [no problem sounds]
 wave: [vce]
 way: [no problem sounds]
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 we: [no problem sounds]
 week: [no problem sounds]
 were: [no problem sounds]
 what: [no problem sounds]
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 will: [no problem sounds]
 win: [no problem sounds]
@@ -487,6 +662,34 @@ r blends: breath, crowd, dreams, great, practice, true, trusting
 -ing, -ong, -ang, -ung: anything, strong
 -sp, -nt, -mp: sent
 -sk, -lt, -lk: felt
+=======
+when: [no problem sounds]
+whistle: [no problem sounds]
+whizzed: [no problem sounds]
+who: [no problem sounds]
+wide: [vce]
+widely: [no problem sounds]
+win: [no problem sounds]
+with: [no problem sounds]
+words: [no problem sounds]
+would: [no problem sounds]
+wrapping: [no problem sounds]
+yes: [no problem sounds]
+you: [no problem sounds]
+your: [no problem sounds]
+zipping: [no problem sounds]
+zoe: [no problem sounds]
+zooming: [oo as in school]
+
+Problem words by sound:
+ck: quick, quickly
+s blends: scanned, score, scored, scoring, smile, stop, swift
+l blends: flying, glance
+r blends: breath, crowd, dreams, great, practice, true, trusting
+-ing, -ong, -ang, -ung: anything, strong
+-sp, -nt, -mp: sent
+-sk, -lt, -lk: felt
+>>>>>>> Stashed changes
 oo as in school: zooming
 oo as in book: foot
 vce: adrenaline, love, more, practice, score, side, smile, wave, wide
@@ -497,4 +700,7 @@ soft g: energy
 oa: coach, goal, goalkeeper
 oi: join
 e rule-suffixes: amazing, surprising
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes

@@ -128,4 +128,7 @@ Original Decodability: 79.31% Processed Decodability: 99.23% 2024-12-30 00:43:14
 Original Decodability: 84.73% Processed Decodability: 98.90% 2024-12-30 00:52:33 Word Count: 818 Decodability Test  Problems: ['ck', 's blends', 'l blends', 'r blends', '-ing, -ong, -ang, -ung', '-sp, -nt, -mp', '-sk, -lt, -lk', '-ct, -pt', 'oo as in school', 'oo as in book', 'vce', 'er', 'ow as in plow', 'vccv', 'ear as in early', 'ea as in bread', '3-letter beg. blends', 'soft g', 'oa', 'oi', 'v v pattern', 'e rule-suffixes', 'tion', 'too many syllables']
 Original Decodability: 81.07% Processed Decodability: 95.27% 2024-12-30 01:02:48 Word Count: 845 Decodability Test  Problems: ['ck', 's blends', 'l blends', 'r blends', '-ing, -ong, -ang, -ung', '-sp, -nt, -mp', '-sk, -lt, -lk', '-ct, -pt', 'oo as in school', 'oo as in book', 'vce', 'er', 'ow as in plow', 'vccv', 'ear as in early', 'ea as in bread', '3-letter beg. blends', 'soft g', 'oa', 'oi', 'v v pattern', 'e rule-suffixes', 'tion', 'too many syllables']
 Original Decodability: 81.28% Processed Decodability: 91.76% 2024-12-30 01:09:57 Word Count: 849 Decodability Test  Problems: ['ck', 's blends', 'l blends', 'r blends', '-ing, -ong, -ang, -ung', '-sp, -nt, -mp', '-sk, -lt, -lk', '-ct, -pt', 'oo as in school', 'oo as in book', 'vce', 'er', 'ow as in plow', 'vccv', 'ear as in early', 'ea as in bread', '3-letter beg. blends', 'soft g', 'oa', 'oi', 'v v pattern', 'e rule-suffixes', 'tion', 'too many syllables']
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
