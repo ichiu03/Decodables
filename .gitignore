@@ -18,3 +18,6 @@ non_decodable_words.json
 updated_story.txt
 updated_story_corrected.txt
 combined.txt
+decodability_measurements.txt
+grades.txt
+problem_words_by_sound.txt
