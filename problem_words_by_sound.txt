@@ -1,96 +1,100 @@
 
---- Problem Words Analysis 2024-12-29 19:46:11 ---
+--- Problem Words Analysis 2024-12-29 19:47:23 ---
 
 All words in story and their sound categories:
-1: [no problem sounds]
+____: [no problem sounds]
 a: [no problem sounds]
+academy: [m, d, hard c]
+accomplished: [m, l, p, hard c]
 after: [no problem sounds]
-all: [l]
+also: [no problem sounds]
 and: [no problem sounds]
-asks: [s, k]
-at: [t]
+anxiety: [t]
+anxious: [no problem sounds]
 best: [s, t, b]
-big: [b, hard g]
-bit: [t, b]
+boy: [no problem sounds]
+breath: [b, r]
 but: [no problem sounds]
 by: [no problem sounds]
-challenge: [l, n]
-chapter: [t, p]
+caregivers: [v, hard c, r]
+coming: [m, hard c]
+curious: [s, hard c, r]
 day: [no problem sounds]
-decides: [d]
-did: [d]
+decided: [d]
+determined: [t, m, d, n]
+diligently: [t, l, d, n]
 do: [no problem sounds]
+during: [d, r]
 each: [no problem sounds]
-excited: [no problem sounds]
+eagerly: [l, hard g]
+educator: [t, hard c]
+ending: [d, n]
+engaging: [n]
+enjoyable: [b, l, n, j, y as in yes]
+event: [t, n, v]
+everything: [v, r]
+excitement: [t, m, n, x]
 explore: [l, p, r, x]
-feels: [s, l, f]
+felt: [t, l, f]
+finishing: [n, f]
+following: [l, f]
 for: [no problem sounds]
 from: [no problem sounds]
-fun: [n, f]
-games: [m, hard g]
-grades: [d, hard g, r]
+guidance: [d, n, hard g]
 happy: [p, h]
-has: [no problem sounds]
 he: [no problem sounds]
-help: [l, p, h]
+held: [l, d, h]
 him: [no problem sounds]
 his: [no problem sounds]
-is: [no problem sounds]
+huge: [h]
+in: [no problem sounds]
+investigate: [s, t, n, v, hard g]
 it: [no problem sounds]
-kid: [d, k]
 learned: [no problem sounds]
-likes: [l, k]
-lots: [s, t, l]
-make: [no problem sounds]
-max: [m, x]
+little: [t, l]
+loved: [l, d, v]
+making: [m, k]
 mix: [m, x]
-nervous: [s, n, v]
+monster: [s, t, m, n]
+more: [m, r]
 of: [no problem sounds]
-offer: [f]
 on: [no problem sounds]
-pals: [s, l, p]
-parents: [s, t, n, p, r]
-playing: [l, p]
-proud: [d, p, r]
+performed: [m, d, p, f, r]
 question: [s, n]
-quizzes: [s, z]
-remembers: [no problem sounds]
-s: [no problem sounds]
-school: [s, l]
-sees: [s]
-smile: [s, m, l]
-soon: [s, n]
-study: [s, t, d]
-takes: [t, k]
-teacher: [t]
-test: [s, t]
+remembered: [b, m, d, r]
+saw: [s]
+see: [no problem sounds]
+suggested: [s, t, d]
+teamwork: [t, m, k, w]
+that: [no problem sounds]
 the: [no problem sounds]
-they: [no problem sounds]
-time: [t, m]
 to: [no problem sounds]
-together: [no problem sounds]
-too: [no problem sounds]
-waits: [s, t, w]
-wants: [s, t, n, w]
+towards: [s, t, d, r, w]
+waited: [t, d, w]
+was: [no problem sounds]
+well: [no problem sounds]
 who: [no problem sounds]
 with: [no problem sounds]
-worried: [d, w]
+word1: [no problem sounds]
+wordplay: [no problem sounds]
 
 Problem words by sound:
-s: asks, best, feels, lots, nervous, pals, parents, question, quizzes, school, sees, smile, soon, study, test, waits, wants
-t: at, best, bit, chapter, lots, parents, study, takes, teacher, test, time, waits, wants
-b: best, big, bit
-m: games, max, mix, smile, time
-l: all, challenge, explore, feels, help, likes, lots, pals, playing, school, smile
-d: decides, did, grades, kid, proud, study, worried
-n: challenge, fun, nervous, parents, question, soon, wants
-p: chapter, explore, happy, help, pals, parents, playing, proud
-k: asks, kid, likes, takes
-v: nervous
-z: quizzes
-f: feels, fun, offer
-hard g: big, games, grades
-r: explore, grades, parents, proud
-h: happy, help
-w: waits, wants, worried
-x: explore, max, mix
+s: best, curious, investigate, monster, question, saw, suggested, towards
+t: anxiety, best, determined, diligently, educator, event, excitement, felt, investigate, little, monster, suggested, teamwork, towards, waited
+b: best, breath, enjoyable, remembered
+m: academy, accomplished, coming, determined, excitement, making, mix, monster, more, performed, remembered, teamwork
+l: accomplished, diligently, eagerly, enjoyable, explore, felt, following, held, little, loved
+d: academy, decided, determined, diligently, during, ending, guidance, held, loved, performed, remembered, suggested, towards, waited
+n: determined, diligently, ending, engaging, enjoyable, event, excitement, finishing, guidance, investigate, monster, question
+p: accomplished, explore, happy, performed
+k: making, teamwork
+j: enjoyable
+v: caregivers, event, everything, investigate, loved
+f: felt, finishing, following, performed
+hard c: academy, accomplished, caregivers, coming, curious, educator
+hard g: eagerly, guidance, investigate
+r: breath, caregivers, curious, during, everything, explore, more, performed, remembered, towards
+h: happy, held, huge
+w: teamwork, towards, waited
+x: excitement, explore, mix
+y as in yes: enjoyable
