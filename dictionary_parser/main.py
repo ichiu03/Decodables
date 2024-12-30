@@ -271,16 +271,29 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
         return ". ".join(final_story) + "." if final_story else ""
     
     def grade_story(story):
+        global readability
+        readabilgrade = 0
         sentences = [s.strip() for s in story.split(".") if s.strip()]
         grades = []
         
+        numsentences = len(sentences)
         for sentence in sentences:
             prompt = f"""You are a English Teacher. Grade this sentence on a scale of 0-100 base on its readability: {sentence}.
                         Return only the number grade and nothing else."""
             grade = query(prompt)
-            grades.append(grade)
-        
-        return "\n".join(grades)
+            # Convert string grade to integer
+            try:
+                grade_int = int(grade.strip())  # Remove whitespace and convert to int
+                grades.append(grade_int)
+                readabilgrade += grade_int
+            except ValueError:
+                print(f"Warning: Could not convert grade '{grade}' to integer")
+                numsentences-=1
+                continue
+
+    
+        readability = readabilgrade/numsentences
+        return "\n".join(str(g) for g in grades) 
 
     def save_decodability_metrics(decodability, wordcount, marker, combo, problems):
         global original_decodability
@@ -398,7 +411,7 @@ def handle_sight_words(default_sight_words: str, problematic_words: str) -> str:
 def save_final_story(story, decodability):
     """Save the final story and its decodability score to final.txt"""
     with open("final.txt", "w") as f:
-        f.write(f"Final Story (Decodability: {decodability*100:.2f}%):\n\n")
+        f.write(f"Final Story (Decodability: {decodability*100:.2f}%):\n\n(Readability: {readability*100:.2f}%)\n\n")
         f.write(story)
 
 def main():
