@@ -6,7 +6,7 @@ import StoryGenerationSection from './components/StoryGenerationSection';
 import StoryChoiceSection from './components/StoryChoiceSection';
 import CharacterNameInput from './components/CharacterNameInput';
 import Login from './components/Login';
-import { processStory, getDecodability } from './services/api';
+import { processStory} from './services/api';
 import StoryDisplay from './components/StoryDisplay';
 
 
