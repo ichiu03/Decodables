@@ -394,6 +394,9 @@ def main():
     if gendec.lower() == "g":
         # Use get_input_and_save to retrieve api_choice
         story_length, topic, problems, name, readingLevel, api_choice = get_input()
+        topic_words = topic.split()
+        for i in range(len(topic_words)):
+            sight_words+=(","+topic_words[i])
         
         # Adjust maxsyllable based on readingLevel
         if int(readingLevel) <= 1:
@@ -415,9 +418,9 @@ def main():
         original_decodability, _ = process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=True)
         if original_decodability > 0.97:
             print("Decodability is already high enough, no need to process further.")
-            print(f'\n\nFinal Story: {story4}')
-            print(f"Decodability: {decodability}")
-            return decodability
+            print(f'\n\nFinal Story: {story}')
+            print(f"Decodability: {original_decodability* 100:.2f}%")
+            return original_decodability
         print("Generating story...")
     elif gendec.lower() == "i":
         readingLevel = input("Enter the grade level of the reader (Only the grade number): ")
@@ -439,11 +442,11 @@ def main():
         story = file
         maxsyllable = 10
         original_decodability, _ = process_story(story, problems, 10, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=True)
-        if original_decodability > 0.97:
+        if original_decodability > 0.95:
             print("Decodability is already high enough, no need to process further.")
-            print(f'\n\nFinal Story: {story4}')
-            print(f"Decodability: {decodability}")
-            return decodability
+            print(f'\n\nFinal Story: {story}')
+            print(f"Decodability: {original_decodability* 100:.2f}%")
+            return original_decodability
     print(story)
 
     # # First Run: Without Grammar Correction
@@ -482,6 +485,7 @@ if __name__ == "__main__":
 #r/v/l/qu/th/ay/ow as in snow/ear as in hear/y as in bumpy  
 
 
+#Caleb: ck/s blends/l blends/r blends/-ing, -ong, -ang, -ung/-sp, -nt, -mp/-sk, -lt, -lk/-ct, -pt/oo as in school/oo as in book/vce/er/ow as in plow/vccv/ear as in early/ea as in bread/3-letter beg. blends/soft g/oa/oi/v v pattern/e rule-suffixes/tion
 #New idea if word appears 2+ times prompt the bot to find alternative words that could work in the context but may be different in their meaning
 #Could reduce decodability
 
