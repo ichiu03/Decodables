@@ -132,6 +132,8 @@ def ultraformatting(text):
    
     # Normalize multiple spaces to a single space
     text = re.sub(r'\s+', ' ', text)
+
+    text = re.sub(r'["""]', '"', text)
    
     # Trim leading and trailing spaces
     text = text.strip()
@@ -290,10 +292,34 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
                 print(f"Warning: Could not convert grade '{grade}' to integer")
                 numsentences-=1
                 continue
-
     
         readability = readabilgrade/numsentences
         return "\n".join(str(g) for g in grades) 
+    
+    def grammar_fix(story):
+        prompt = f"""You are an expert English teacher. Fix the following story by:
+        1. Add missing articles (a, an, the) where needed
+        2. Add appropriate conjunctions (and, but, or, so) where needed  
+        3. Add pronouns (he, she, it, they) where needed for clarity
+        4. Fix any syntax/grammar issues while preserving the original meaning
+        5. Keep ALL existing quotation marks and punctuation
+        6. Do not change any vocabulary or add complex words
+        7. Remove any awkward adjectives
+        8. Return ONLY the corrected story with no other text
+        
+        Story to fix:
+        {story}"""
+
+        try:
+            fixed_story = query(prompt)
+            # Clean up any formatting issues
+            fixed_story = fixed_story.strip()
+            # Remove any "Here's the corrected story:" type prefixes
+            fixed_story = re.sub(r'^(Here\'s |The )?(corrected |fixed )?story:?\s*', '', fixed_story, flags=re.IGNORECASE)
+            return fixed_story
+        except Exception as e:
+            print(f"Error in grammar correction: {e}")
+            return story
 
     def save_decodability_metrics(decodability, wordcount, marker, combo, problems):
         global original_decodability
@@ -396,6 +422,7 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
             decodability = categorize_and_validate_words(story, problems, maxsyllable)["decodability"]
             iteration+=1
         grades = grade_story(story)
+        story = grammar_fix(story)
         with open("grades.txt", "w") as grades_file:
             grades_file.write(grades)
         return story
