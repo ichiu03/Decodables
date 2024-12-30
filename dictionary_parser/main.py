@@ -25,29 +25,11 @@ with open(path + '/Resources/Dictionary.txt', 'r', encoding='utf-8') as file:
 with open(path + '/truncated_dictionary.json') as json_file:
     guidewords = json.load(json_file)
 
-
 def get_synonyms_dict(story: str, problems: list, maxsyllable: int) -> dict:
     word_dict = parseAndProcessWords(story, maxsyllable)
     sentences = story.split(".")
     prev_sentence = ""
     synonyms_dict = {}
-   
-    # Create a mapping from problem sound to example words
-    problem_examples = {}
-    for problem in problems:
-        problem = problem.strip()
-        if problem in guidewords:
-            problem_examples[problem] = guidewords[problem][:5]  # Limit to 5 examples for brevity
-        else:
-            print(f"Warning: Problem '{problem}' not found in guidewords dictionary.")
-   
-    # Format the examples for the prompt
-    examples_str_list = []
-    for problem, examples in problem_examples.items():
-        formatted_examples = ", ".join([f"'{word}'" for word in examples])
-        examples_str = f"The '{problem}' sound in {formatted_examples}"
-        examples_str_list.append(examples_str)
-    examples_str = "; ".join(examples_str_list)
 
 
     for idx, sentence in enumerate(sentences):
@@ -62,19 +44,12 @@ def get_synonyms_dict(story: str, problems: list, maxsyllable: int) -> dict:
                 if problem in word_dict and clean_word in word_dict[problem] and clean_word not in sight_words:
                     # Prepare the prompt
                     prompt = f"""
-                        Give 10 synonyms for the word '{word}' that would fit naturally in the following sentence, and **do not** include any words containing these sounds: {', '.join(problems)}.
+                        Give 3 synonyms for the word '{word}' that would fit naturally in the following sentence, and **do not** include any words containing these sounds: {', '.join(problems)}.
                         A change in tense or form of the word is not acceptable. Maintain tense and form as these words are going to replace the original word in a story.
 
-
-                        Some examples of words to **avoid** are: {examples_str}.
-
-
-                        Previous sentence (for context): {prev_sentence}
                         Sentence to fix: {sentence}
-                        Next sentence (for context): {next_sentence}
 
-
-                        Return only the 10 words separated by commas, like this: "word1, word2, word3, word4, word5".
+                        Return only the 3 words separated by commas, like this: "word1, word2, word3".
                         Order the words so the best fit is first.
 
 
@@ -362,7 +337,8 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
        
         decodability = categorize_and_validate_words(story, problems, maxsyllable)["decodability"]
         iteration = 0
-        while decodability < 0.9 and iteration < 10:
+        while decodability < 0.9 and iteration < 3:
+            print(f"Iteration: {iteration}")
             print(f"Decodability: {decodability}")
             print("Checking and categorizing words...")
             results = categorize_and_validate_words(story, problems, maxsyllable)
@@ -419,6 +395,9 @@ def main():
     if gendec.lower() == "g":
         # Use get_input_and_save to retrieve api_choice
         story_length, topic, problems, name, readingLevel, api_choice = get_input()
+        topic_words = topic.split()
+        for i in range(len(topic_words)):
+            sight_words+=(","+topic_words[i])
         
         # Adjust maxsyllable based on readingLevel
         if int(readingLevel) <= 1:
@@ -440,9 +419,9 @@ def main():
         original_decodability, _ = process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=True)
         if original_decodability > 0.97:
             print("Decodability is already high enough, no need to process further.")
-            print(f'\n\nFinal Story: {story4}')
-            print(f"Decodability: {decodability}")
-            return decodability
+            print(f'\n\nFinal Story: {story}')
+            print(f"Decodability: {original_decodability* 100:.2f}%")
+            return original_decodability
         print("Generating story...")
     elif gendec.lower() == "i":
         readingLevel = input("Enter the grade level of the reader (Only the grade number): ")
@@ -464,28 +443,28 @@ def main():
         story = file
         maxsyllable = 10
         original_decodability, _ = process_story(story, problems, 10, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=True)
-        if original_decodability > 0.97:
+        if original_decodability > 0.95:
             print("Decodability is already high enough, no need to process further.")
-            print(f'\n\nFinal Story: {story4}')
-            print(f"Decodability: {decodability}")
-            return decodability
+            print(f'\n\nFinal Story: {story}')
+            print(f"Decodability: {original_decodability* 100:.2f}%")
+            return original_decodability
     print(story)
 
-    # First Run: Without Grammar Correction
-    print("\n--- Processing Without Grammar Correction ---")
-    story1 = process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False)
+    # # First Run: Without Grammar Correction
+    # print("\n--- Processing Without Grammar Correction ---")
+    # story1 = process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False)
 
 
-    print("\n--- Processing With Grammar Correction and Spell Check ---")
-    story2 = process_story(story, problems, maxsyllable, apply_correction=True, spellcheck=True, combined=False)
+    # print("\n--- Processing With Grammar Correction and Spell Check ---")
+    # story2 = process_story(story, problems, maxsyllable, apply_correction=True, spellcheck=True, combined=False)
 
 
-    # Now, combine the two stories
-    story3 = combine(story1, story2, problems)
+    # # Now, combine the two stories
+    # story3 = combine(story1, story2, problems)
 
 
     # Process the combined story
-    story4 = process_story(story3, problems, maxsyllable, apply_correction=True, spellcheck=True, combined=False)
+    story4 = process_story(story, problems, maxsyllable, apply_correction=True, spellcheck=True, combined=False)
 
 
     decodability, bad_words = process_story(story4, problems, maxsyllable, apply_correction=True, spellcheck=True, combined=True, decodabilityTest=True)
@@ -507,6 +486,7 @@ if __name__ == "__main__":
 #r/v/l/qu/th/ay/ow as in snow/ear as in hear/y as in bumpy  
 
 
+#Caleb: ck/s blends/l blends/r blends/-ing, -ong, -ang, -ung/-sp, -nt, -mp/-sk, -lt, -lk/-ct, -pt/oo as in school/oo as in book/vce/er/ow as in plow/vccv/ear as in early/ea as in bread/3-letter beg. blends/soft g/oa/oi/v v pattern/e rule-suffixes/tion
 #New idea if word appears 2+ times prompt the bot to find alternative words that could work in the context but may be different in their meaning
 #Could reduce decodability
 
