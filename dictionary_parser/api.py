@@ -75,7 +75,7 @@ async def process_story_endpoint(request: ProcessStoryRequest):
                 problems=problems,
                 name=request.characterName,
                 readingLevel=request.readingLevel,
-                api='openai',
+                api='anthropic',
                 story_length=request.storyLength
             )
             
