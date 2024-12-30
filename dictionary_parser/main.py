@@ -337,7 +337,8 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
        
         decodability = categorize_and_validate_words(story, problems, maxsyllable)["decodability"]
         iteration = 0
-        while decodability < 0.9 and iteration < 4:
+        while decodability < 0.9 and iteration < 3:
+            print(f"Iteration: {iteration}")
             print(f"Decodability: {decodability}")
             print("Checking and categorizing words...")
             results = categorize_and_validate_words(story, problems, maxsyllable)

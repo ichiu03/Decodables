@@ -1,10 +1,14 @@
+import { PROBLEM_CATEGORIES } from '../constants/problemCategories';
+
 const API_BASE_URL = process.env.NODE_ENV === 'production' ? 'https://decodables.onrender.com/api' : 'http://localhost:5000/api';
 
 export const processStory = async (formData) => {
   try {
-    // Convert empty strings to null for optional fields
-    const storyLength = formData.storyLength ? parseInt(formData.storyLength) : null;
-    const readingLevel = formData.readingLevel ? parseInt(formData.readingLevel) : null;
+    // Get all possible problems from PROBLEM_CATEGORIES
+    const allProblems = Object.values(PROBLEM_CATEGORIES).flat();
+    
+    // Get the problems the user DOESN'T know (ones that weren't selected)
+    const unknownProblems = allProblems.filter(problem => !formData.problemLetters.has(problem));
 
     const response = await fetch(`${API_BASE_URL}/process-story`, {
       method: 'POST',
@@ -16,10 +20,10 @@ export const processStory = async (formData) => {
           formData.unknownSightWords.split(',').map(word => word.trim()).filter(Boolean) : 
           [],
         storyChoice: formData.storyChoice,
-        problemLetters: Array.from(formData.problemLetters),
+        problemLetters: unknownProblems,  // Send unselected problems instead
         storyInput: formData.storyInput || null,
         storyTopic: formData.storyTopic || null,
-        storyLength: storyLength,
+        storyLength: formData.storyLength ? parseInt(formData.storyLength) : null,
         readingLevel: formData.readingLevel ? parseInt(formData.readingLevel) : null,
         characterName: formData.characterName || 'Max'
       }),
@@ -55,8 +59,14 @@ export const processStory = async (formData) => {
   }
 };
 
-export const getDecodability = async (text, problems) => {
+export const getDecodability = async (text, selectedProblems) => {
   try {
+    // Get all possible problems from PROBLEM_CATEGORIES
+    const allProblems = Object.values(PROBLEM_CATEGORIES).flat();
+    
+    // Get the problems the user DOESN'T know (ones that weren't selected)
+    const unknownProblems = allProblems.filter(problem => !selectedProblems.has(problem));
+
     const response = await fetch(`${API_BASE_URL}/decodability`, {
       method: 'POST',
       headers: {
@@ -64,7 +74,7 @@ export const getDecodability = async (text, problems) => {
       },
       body: JSON.stringify({
         text: text || '',
-        problems: Array.from(problems)
+        problems: unknownProblems  // Send unselected problems instead
       }),
     });
 

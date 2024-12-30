@@ -32,7 +32,7 @@ const ProblemLettersSection = ({ selectedProblems, onChange }) => {
 
   return (
     <div className="form-group problem-letters-section">
-      <label>Select Problem Letters/Sounds:</label>
+      <label>Select Letters/Sounds the Student Knows:</label>
       <div className="categories-container">
         {Object.entries(PROBLEM_CATEGORIES).map(([category, problems]) => (
           <div key={category} className="category-group">
