@@ -44,7 +44,7 @@ categories = {
     'ea as in bread': [], '3-letter beg. blends': [], 'vcv': [], 'vcccv': [], 'tch': [], 'soft c': [],
     '-ble, -cle, -dle, -fle, -gle, -kle, -ple, -tle, -zle': [], 'soft g': [], 'ai': [], 'igh': [], 'ed': [],
     'cle ending': [], 'vowel_team': [], 'r-controlled': [], 'oa': [], 'ir': [], '-ild, -ind, -old, -ost': [],
-    'oi': [], 'double rule-suffixes': [], 'ew as in few/blew': [], 'v/v pattern': [], 'kn': [], 'e rule-suffixes': [],
+    'oi': [], 'double rule-suffixes': [], 'ew as in few/blew': [], 'v v pattern': [], 'kn': [], 'e rule-suffixes': [],
     'ou as in south': [], 'ur': [], 'dge': [], 'y rule suffixes': [], 'tion': [],
     # Column 5
     'au': [], 'war': [], 'ey as in monkey': [], 'ey as in they': [], 'ph': [],
@@ -55,7 +55,7 @@ categories = {
     # Uncategorized
     'failed to categorize': [], 'too many syllables': []
 }
-vv_sounds = { # To add more v/v sounds, add them here AND into COMPOUND_SOUNDS
+vv_sounds = { # To add more v v sounds, add them here AND into COMPOUND_SOUNDS
     'ai': ['AY IY'], 'ia': ['IY EY', 'IY AH', 'IY AE', 'AY AH'], 'ie': ['AY AH', 'AY IH', 'IY AH'],
     'io': ['AY AH', 'IY OW', 'IY AA'], 'ea': ['IY AH', 'IY EH'], 'iu': ['IY AH', 'IY IH', 'IY UW'],
     'eo': ['IY ER', 'IY OW', 'IY AA'], 'ue': ['UW AH', 'UW EH'], 'eu': ['IY AH', 'IY UW'], 'ao': ['EY AA'], 'ei': ['IY AH', 'IY IH'],
@@ -635,7 +635,7 @@ def vrlCheck(word: str, syllable_count: int) -> None:
         index = word.rfind('le')
         if index > 0 and word[index-1] not in VOWELS:
             categories['cle ending'].append(word)
-    for i in range(len(word)-2): # Team Vowels. Only 1 syllable, V/V doesn't apply
+    for i in range(len(word)-2): # Team Vowels. Only 1 syllable, V V doesn't apply
         if word[i] in VOWELS and word[i+1] in VOWELS and word[i+2] != 'r':
             categories['vowel_team'].append(word)
             return
@@ -653,7 +653,7 @@ def vvCheck(word: str, arpabet: str) -> None:
             if word[i:i + len(comp)] == comp:
                 compound = word[i: i+len(comp)]
                 if is_vv(compound, arpabet):
-                    categories['v/v pattern'].append(word)
+                    categories['v v pattern'].append(word)
         i += 1
 
 
