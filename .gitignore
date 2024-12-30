@@ -12,7 +12,6 @@ dictionary_parser/updated_story_transition.txt
 dictionary_parser/combined.txt
 output.json
 dictionary_parser/problemsounds.json
-categorized_words.json
 decodability_measurements.json
 non_decodable_words.json
 updated_story.txt
