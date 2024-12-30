@@ -5,6 +5,8 @@ from nltk.corpus import words
 from main import path
 from query import *
 input_data_path = os.path.join(path, 'problemsounds.json')
+from dictionaryParser import parseAndProcessWords
+from main import sight_words
 
 
 # ====================================
@@ -110,6 +112,20 @@ def delete_old_file():
             os.remove(file_path)
             print(f"Previous file '{file_path}' deleted.")
 
+
+#fucntion to get dictionary of good words from resources/ChildDiction.txt
+def get_good_words(problems):
+    good_words = ""
+    with open(os.path.join(path, 'Resources/ChildDiction.txt'), 'r') as file:
+        words = file.read().splitlines()
+    categorized_words = parseAndProcessWords(words)
+    for category in categorized_words:
+        if category not in problems:
+            for word in categorized_words[category]:
+                good_words += word + ", "
+    good_words += ", ".join(sight_words)
+    return good_words
+
 def generate_chapter(outline, chapter_number, length, story, problems, readingLevel, api):
     # Collect guidewords for all problem sounds
     problem_examples = {}
@@ -131,6 +147,12 @@ def generate_chapter(outline, chapter_number, length, story, problems, readingLe
     # Now, create the prompt including the examples_str
     prompt = f"""
     You are a creative author tasked with writing chapter {chapter_number} of an american children's story for a child at a {readingLevel} grade reading level.
+
+    You are only allowed to use the following words: 
+    
+    {get_good_words(problems)}
+
+    The above dictionary is all of the words that are allowed to be used in the story.
 
     Here is the outline:
 

@@ -374,12 +374,14 @@ def combine(story1, story2, problems):
     return ultstory
 
 def handle_sight_words(default_sight_words: str, problematic_words: str) -> str:
+    global sight_words
     sight_words_list = default_sight_words.split(",")
     probsight_words_list = problematic_words.split(",")
     for word in probsight_words_list:
         if word in sight_words_list:
             sight_words_list.remove(word)
-    return ",".join(sight_words_list)
+    sight_words = ",".join(sight_words_list)
+    return sight_words
 
 def main():
     global sight_words
