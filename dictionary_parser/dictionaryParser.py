@@ -172,6 +172,7 @@ def verificationToAdd(word: str, arpabet: str, letters: str, desired_pho: list, 
             if edge_cases:
                 continue
             phonemes = [re.sub(r'\d', '', p) for p in phoneme.split()]
+            appended_chunk = chunk + keys[i + 1] if i <= len(keys) - 2 else chunk
             if any(pho in phonemes for pho in desired_pho):
                 if not (  # prevent a vce from being flagged as long a
                     letters == 'a' and
@@ -191,7 +192,7 @@ def verificationToAdd(word: str, arpabet: str, letters: str, desired_pho: list, 
                 ) and not (
                     letters == 'o' and
                     desired_pho == ['OW'] and
-                    longOEdgeCase(chunk + keys[i + 1] if i <= len(keys) - 2 else chunk)
+                    longOEdgeCase(appended_chunk)
                 ) and not (  # prevent a vce from being flagged as long u
                     letters == 'u' and
                     desired_pho == ['UW'] and
@@ -202,6 +203,20 @@ def verificationToAdd(word: str, arpabet: str, letters: str, desired_pho: list, 
                     desired_pho == ['OW'] and
                     (i <= len(keys) - 2) and
                     vceBool(chunk + keys[i + 1])
+                ) and not (  # prevent a "-ious" from being flagged as short u
+                    letters == 'u' and
+                    desired_pho == ['AH'] and
+                    (i <= len(keys) - 2) and
+                    (i >= 1) and
+                    'ious' in keys[i - 1] + chunk + keys[i + 1]
+                ) and not (  # prevent a "-ed" or "-es" from being flagged as short e
+                    letters == 'e' and
+                    desired_pho == ['EH', 'IH'] and
+                    (i == len(keys) - 2) and
+                    'ed' in chunk + keys[i + 1] or 'es' in chunk + keys[i + 1]
+                ) and not (  # prevent an "ear"/"ee" from being flagged as long/short e
+                    letters == 'e' and
+                    'ear' in appended_chunk or 'ee' in appended_chunk
                 ):
                     matches = True
 
@@ -332,11 +347,12 @@ def vowelCheck(word: str, arpabet: str, tokens: list) -> None:
             if verificationToAdd(word, arpabet, 'a', ['AA', 'AH', 'AE'], ['EY']):
                 categories['short a'].append(word)
     if 'e' in word:
-        if 'IH' in tokens and verificationToAdd(word, arpabet, 'e', ['IH'], ['EH', 'AH']):
+        if 'IY' in tokens and verificationToAdd(word, arpabet, 'e', ['IY'], ['EH', 'IH']):
+            # desired pho should be IY, problems should be EH and IH
             categories['long e'].append(word)
-        if ('EH' in tokens or 'AH' in tokens):
-            if verificationToAdd(word, arpabet, 'e', ['EH', 'AH'], ['IH']):
-                categories['short e'].append(word)
+        if ('EH' in tokens or 'IH' in tokens) and verificationToAdd(word, arpabet, 'e', ['EH', 'IH'], ['IY']):
+            # desired phos should be EH and IH, problem should be IY
+            categories['short e'].append(word)
     if 'i' in word:
         if 'AY' in tokens and verificationToAdd(word, arpabet, 'i', ['AY'], ['IH']):
             categories['long i'].append(word)
