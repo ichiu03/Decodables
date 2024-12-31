@@ -165,7 +165,9 @@ def verificationToAdd(word: str, arpabet: str, letters: str, desired_pho: list, 
                 (letters == 'a' and ('ai' in chunk or 'ay' in chunk) and desired_pho == ['EY']) or  # long a edge cases
                 (letters == 'g' and 'dge' in chunk and desired_pho == ['JH']) or
                 (letters == 'a' and ('ar' in chunk or 'wa' in chunk) and desired_pho == ['AA', 'AH', 'AE']) or  # short a edge cases
-                (letters == 'o' and ('or' in chunk or 'tio' in chunk) and desired_pho == ['AH', 'AA', 'AO'])  # short o edge case
+                (letters == 'o' and ('or' in chunk or 'tio' in chunk) and desired_pho == ['AH', 'AA', 'AO']) or  # short o edge case
+                (letters == 'u' and 'ue' in chunk and desired_pho == ['UW']) or  # long u edge case
+                (letters == 'u' and 'ur' in chunk and desired_pho == ['AH'])  # short u edge case
             )
             if edge_cases:
                 continue
@@ -190,6 +192,11 @@ def verificationToAdd(word: str, arpabet: str, letters: str, desired_pho: list, 
                     letters == 'o' and
                     desired_pho == ['OW'] and
                     longOEdgeCase(chunk + keys[i + 1] if i <= len(keys) - 2 else chunk)
+                ) and not (  # prevent a vce from being flagged as long u
+                    letters == 'u' and
+                    desired_pho == ['UW'] and
+                    (i <= len(keys) - 2) and
+                    vceBool(chunk + keys[i + 1])
                 ) and not (  # prevent a vce from being flagged as long o
                     letters == 'o' and
                     desired_pho == ['OW'] and
@@ -344,7 +351,9 @@ def vowelCheck(word: str, arpabet: str, tokens: list) -> None:
     if 'u' in word:
         if 'UW' in tokens and verificationToAdd(word, arpabet, 'u', ['UW'], ['AH']):
             categories['long u'].append(word)
-        if 'AH' in tokens and verificationToAdd(word, arpabet, 'u', ['AH'], ['UW']):
+        if 'AH' in tokens and verificationToAdd(word, arpabet, 'u', ['AH'], ['UW']) and word not in {'stimulate', 'population'}:
+            # exceptions to short u... for some reason their arpabet say they have the short u (AH) sound,
+            # but they should be in long u (UW) category
             categories['short u'].append(word)
 
 
