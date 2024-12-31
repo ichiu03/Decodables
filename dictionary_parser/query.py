@@ -110,12 +110,18 @@ def get_good_words(problems,sight_words):
     except FileNotFoundError:
         print("Error: large_categorized_words.json not found")
         return []
+    
+def fine_tune(good_words, bad_words):
+    print(good_words)
+    print(bad_words)
 
 def set_word_lists(problems,sight_words):
     """Set up good and bad word lists for token biasing"""
     global good_words, bad_words
     bad_words = get_bad_words(problems)
     good_words = get_good_words(problems,sight_words)
+    fine_tune(good_words,bad_words)
+    
 
 def get_token_biases():
     token_biases = {}
@@ -137,14 +143,10 @@ def query_openai(prompt):
     messages = [
         {"role": "user", "content": prompt},
     ]
-    
-    # Get and apply token biases
-    logit_bias = get_token_biases()
-    
+    # Get and apply token biases    
     response = openai_client.chat.completions.create(
         model="gpt-4o-mini-2024-07-18",
         messages=messages,
-        logit_bias=logit_bias,
     )
     return response.choices[0].message.content
 
