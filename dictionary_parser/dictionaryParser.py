@@ -818,8 +818,8 @@ def getTopWords(num: int, output_path: str) -> None:
 
 
 def main():
-    input_path = os.path.join(path, 'Resources/ChildDictionmini.txt')
-    output_path = os.path.join(path, 'Resources/categorized_wordsmini.json')
+    input_path = os.path.join(path, 'Resources/LargeChildDiction.txt')
+    output_path = os.path.join(path, 'Resources/large_categorized_words.json')
     with open(input_path, 'r') as f:
         story = f.read()
     dictionary = parseAndProcessWords(story, syllable_limit=1000)
