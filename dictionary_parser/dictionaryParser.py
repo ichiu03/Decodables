@@ -839,6 +839,8 @@ def getTopWords(num: int, output_path: str) -> None:
 
 
 def main():
+    input_path = os.path.join(path, 'Resources/LargeChildDiction.txt')
+    output_path = os.path.join(path, 'Resources/large.json')
     input_path = os.path.join(path, 'Resources/Dictionary.txt')
     output_path = os.path.join(path, 'Resources/categorized_words.json')
     with open(input_path, 'r') as f:

@@ -476,6 +476,10 @@ def main():
         
         problems.append("too many syllables")
         sight_words += name
+        get_bad_words(problems)
+        get_good_words(problems,sight_words)
+        set_word_lists(problems,sight_words)
+        get_token_biases()
         story = generate_story(topic, problems, name, readingLevel, api_choice, story_length)
         original_decodability, _ = process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=True)
         if original_decodability > 0.97:

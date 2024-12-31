@@ -25,8 +25,6 @@ if os.path.exists(os.path.join(path, 'generated_story.txt')):
 story_length = 500
 chapters = 1
 
-good_words = []
-bad_words = []
 
 # Opening JSON file for guidewords
 with open(os.path.join(path, 'truncated_dictionary.json')) as json_file:
