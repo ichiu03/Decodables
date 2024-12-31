@@ -27,15 +27,16 @@ if os.path.exists(os.path.join(path, 'generated_story.txt')):
 story_length = 500
 chapters = 1
 
-good_words = []
-bad_words = []
+global good_words
+global bad_words
+good_words = set()
+bad_words = set()
 
 # Opening JSON file for guidewords
 with open(os.path.join(path, 'truncated_dictionary.json')) as json_file:
     guidewords = json.load(json_file)
 
 
-    
 ### Function to get user input and choose API
 def get_api_choice():
     while True:
@@ -70,6 +71,62 @@ def get_input_and_save():
     # Ask user to choose API
     return topic, problems, api_choice
 
+def get_bad_words(problems):
+    """Get words that contain problem patterns from large_categorized_words.json"""
+    bad_words = []
+    total_words = 0
+    category_counts = {}
+    
+    try:
+        with open('dictionary_parser/Resources/large_categorized_words.json', 'r') as file:
+            categorized_words = json.load(file)
+            
+        # Gather all words from problem categories
+        for problem in problems:
+            problem = problem.strip()
+            if problem in categorized_words:
+                words_in_category = [word.lower() for word in categorized_words[problem]]
+                bad_words.extend(words_in_category)
+                category_counts[problem] = len(words_in_category)
+                total_words += len(words_in_category)
+            else:
+                print(f"Warning: Problem '{problem}' not found in word dictionary.")
+                category_counts[problem] = 0
+        
+        # Remove duplicates and filter out empty strings
+        bad_words = list(set(filter(None, bad_words)))
+        
+        # Print statistics
+        print(f"Total words processed: {total_words}")
+        print(f"Unique bad words after deduplication: {len(bad_words)}")
+        print("\nWords per category:")
+        for category, count in category_counts.items():
+            print(f"{category}: {count}")
+            
+        return bad_words
+        
+    except FileNotFoundError:
+        print("Error: large_categorized_words.json not found")
+        return []
+    
+def get_good_words(problems):
+    good_words = "beauty,bouquet,builder,rebuild,doesn't,shoe,shoelace,laughter,laugh,laughed,laughs,roughly,although,thoroughly,throughout,dough,doughnut,sovereighnty,a,at,any,many,and,on,is,are,the,was,were,it,am,be,go,to,out,been,this,come,some,do,does,done,what,who,you,your,both,buy,door,floor,four,none,once,one,only,pull,push,sure,talk,walk,their,there,they're,very,want,again,against,always,among,busy,could,should,would,enough,rough,tough,friend,move,prove,ocean,people,she,other,above,father,usually,special,front,thought,he,we,they,nothing,learned,toward,put,hour,beautiful,beautifully,whole,trouble,of,off,use,have,our,say,make,take,see,think,look,give,how,ask,boy,girl,us,him,his,her,by,where,were,wear,hers,don't,which,just,know,into,good,other,than,then,now,even,also,after,know,because,most,day,these,two,already,through,though,like,said,too,has,in,brother,sister,that,them,from,for,with,doing,well,before,tonight,down,about,but,up,around,goes,gone,build,built,cough,lose,loose,truth,daughter,son"
+ 
+    num = 0
+    with open(os.path.join(path, 'Resources/ChildDiction.txt'), 'r') as file:
+        words = file.read()
+    categorized_words = parseAndProcessWords(words, 100)
+    for category in categorized_words:
+        if category not in problems:
+            for word in categorized_words[category]:
+                if word not in good_words:
+                    good_words += word + ", "
+                    num += 1
+    
+    print(f"Number of good words: {num}")
+    return good_words
+
+    
 def get_input():
     global sight_words
     global readingLevel
@@ -114,22 +171,7 @@ def delete_old_file():
 
 
 #fucntion to get dictionary of good words from resources/ChildDiction.txt
-def get_good_words(problems):
-    good_words = "beauty,bouquet,builder,rebuild,doesn't,shoe,shoelace,laughter,laugh,laughed,laughs,roughly,although,thoroughly,throughout,dough,doughnut,sovereighnty,a,at,any,many,and,on,is,are,the,was,were,it,am,be,go,to,out,been,this,come,some,do,does,done,what,who,you,your,both,buy,door,floor,four,none,once,one,only,pull,push,sure,talk,walk,their,there,they're,very,want,again,against,always,among,busy,could,should,would,enough,rough,tough,friend,move,prove,ocean,people,she,other,above,father,usually,special,front,thought,he,we,they,nothing,learned,toward,put,hour,beautiful,beautifully,whole,trouble,of,off,use,have,our,say,make,take,see,think,look,give,how,ask,boy,girl,us,him,his,her,by,where,were,wear,hers,don't,which,just,know,into,good,other,than,then,now,even,also,after,know,because,most,day,these,two,already,through,though,like,said,too,has,in,brother,sister,that,them,from,for,with,doing,well,before,tonight,down,about,but,up,around,goes,gone,build,built,cough,lose,loose,truth,daughter,son"
- 
-    num = 0
-    with open(os.path.join(path, 'Resources/ChildDiction.txt'), 'r') as file:
-        words = file.read()
-    categorized_words = parseAndProcessWords(words, 100)
-    for category in categorized_words:
-        if category not in problems:
-            for word in categorized_words[category]:
-                if word not in good_words:
-                    good_words += word + ", "
-                    num += 1
-    
-    print(f"Number of good words: {num}")
-    return good_words
+
 
 def generate_chapter(outline, chapter_number, length, story, problems, readingLevel, api, good_words):
     # Collect guidewords for all problem sounds
