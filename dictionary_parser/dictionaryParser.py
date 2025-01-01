@@ -174,6 +174,9 @@ def verificationToAdd(word: str, arpabet: str, letters: str, desired_pho: list, 
             phonemes = [re.sub(r'\d', '', p) for p in phoneme.split()]
             appended_chunk = chunk + keys[i + 1] if i <= len(keys) - 2 else chunk
             if any(pho in phonemes for pho in desired_pho):
+                print(f'i = {i}')
+                print(f'keys = {keys}')
+                print('So keys[i + 1] = ...')
                 if not (  # prevent a vce from being flagged as long a
                     letters == 'a' and
                     desired_pho == ['EY'] and
@@ -213,10 +216,10 @@ def verificationToAdd(word: str, arpabet: str, letters: str, desired_pho: list, 
                     letters == 'e' and
                     desired_pho == ['EH', 'IH'] and
                     (i == len(keys) - 2) and
-                    'ed' in chunk + keys[i + 1] or 'es' in chunk + keys[i + 1]
+                    ('ed' in chunk + keys[i + 1] or 'es' in chunk + keys[i + 1])
                 ) and not (  # prevent an "ear"/"ee" from being flagged as long/short e
                     letters == 'e' and
-                    'ear' in appended_chunk or 'ee' in appended_chunk
+                    ('ear' in appended_chunk or 'ee' in appended_chunk)
                 ):
                     matches = True
 
