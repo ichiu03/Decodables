@@ -167,7 +167,8 @@ def verificationToAdd(word: str, arpabet: str, letters: str, desired_pho: list, 
                 (letters == 'a' and ('ar' in chunk or 'wa' in chunk) and desired_pho == ['AA', 'AH', 'AE']) or  # short a edge cases
                 (letters == 'o' and ('or' in chunk or 'tio' in chunk) and desired_pho == ['AH', 'AA', 'AO']) or  # short o edge case
                 (letters == 'u' and 'ue' in chunk and desired_pho == ['UW']) or  # long u edge case
-                (letters == 'u' and 'ur' in chunk and desired_pho == ['AH'])  # short u edge case
+                (letters == 'u' and 'ur' in chunk and desired_pho == ['AH']) or  # short u edge case
+                (letters == 'i' and 'ie' in chunk and desired_pho == ['AY'])  # long i edge case
             )
             if edge_cases:
                 continue
