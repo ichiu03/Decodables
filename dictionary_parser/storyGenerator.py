@@ -219,7 +219,8 @@ def generate_chapter(outline, chapter_number, length, story, problems, readingLe
     Return only the new chapter.
     """
     # Generate the chapter using the query function
-    new_chapter = query(prompt, api=api)
+    # new_chapter = query(prompt, api=api)
+    new_chapter = query_openaiplus(prompt)
     return new_chapter
 
 def generate_outline(topic, name, readingLevel, story_length=500, api='openai'):
