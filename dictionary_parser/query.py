@@ -38,6 +38,16 @@ def query_openai(prompt):
     )
     return response.choices[0].message.content
 
+def query_openaiplus(prompt):
+    messages = [
+        {"role": "system", "content": prompt},
+    ]
+    response = openai_client.chat.completions.create(
+        model="o1-2024-12-17",
+        messages=messages,
+    )
+    return response.choices[0].message.content
+
 def query_anthropic(prompt):
     message = anthropic_client.messages.create(
         model="claude-3-5-sonnet-20241022",
