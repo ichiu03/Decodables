@@ -219,59 +219,33 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
         }
     decodability_file = "decodability_measurements.txt"
     def rewrite_sentences(story):
-        sentences = story.split(".")
-        final_story = []
+        # Split story into sentences
+        sentences = [s.strip() for s in story.split(".") if s.strip()]
+        modified = True
+        max_attempts = 10  # Prevent infinite loops
         
-        for sentence in sentences:
-            sentence = sentence.strip()
-            if not sentence:  # Skip empty sentences
-                continue
-                
-            current_sentence = sentence
+        for i, sentence in enumerate(sentences):
+            # Check individual sentence decodability
+            sentence_decodability = categorize_and_validate_words(sentence, problems, maxsyllable)["decodability"]
             attempts = 0
-            max_attempts = 5
             
-            while True:
-                decodability = categorize_and_validate_words(current_sentence, problems, maxsyllable)["decodability"]
+            # Keep trying to improve sentence until it meets threshold or max attempts reached
+            while sentence_decodability < 0.9 and attempts < 5:
+                new_sentence = sentence_openai(sentence)
+                new_decodability = categorize_and_validate_words(new_sentence, problems, maxsyllable)["decodability"]
                 
-                if decodability >= 0.9 or attempts >= max_attempts:
-                    break
-                    
-                # Build story context from approved sentences
-                story_so_far = ". ".join(final_story) if final_story else ""
-                
-                prompt = f"""
-                    Story so far:
-                    {story_so_far}
-                    
-                    Write the next sentence to continue this story.
-                    Make sure the story is still related to the subject: {topic}
-                    
-                    Consider ONE of these:
-                    - Add action or dialogue
-                    - Introduce a surprise
-                    - Describe a feeling
-                    - Add a new character
-                    
-                    Must be kid-friendly and easy to read.
-                    Current decodability: {decodability * 100:.2f}%
-                    Target decodability: 90%
-                    
-                    *** RETURN ONLY THE NEW SENTENCE ***
-                """
-                
-                new_sentence = query(prompt).strip().rstrip('.')  # Remove any trailing period
-                
-                if new_sentence and not ("return" in new_sentence.lower() and "sentence" in new_sentence.lower()):
-                    current_sentence = new_sentence
+                # Only update if new version is better
+                if new_decodability > sentence_decodability:
+                    sentences[i] = new_sentence
+                    sentence_decodability = new_decodability
+                    modified = True
+                    print(f"Sentence {i+1} improved - Decodability: {sentence_decodability:.2f}")
                 
                 attempts += 1
-            
-            final_story.append(current_sentence)
+                
+        # Reconstruct story with improved sentences
+        return ". ".join(sentences) + "."
         
-        # Join with single periods
-        return ". ".join(final_story) + "." if final_story else ""
-    
     def grade_story(story):
         global readability
         readabilgrade = 0
@@ -281,6 +255,7 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
         numsentences = len(sentences)
         for sentence in sentences:
             prompt = f"""You are a English Teacher. Grade this sentence on a scale of 0-100 base on its readability: {sentence}.
+                        A 100 would be a sentence without any awkward words. Every awkward word is -10 points.
                         Return only the number grade and nothing else."""
             grade = query(prompt)
             # Convert string grade to integer
@@ -293,7 +268,7 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
                 numsentences-=1
                 continue
     
-        readability = readabilgrade/numsentences
+        readability = (readabilgrade/numsentences)/100
         return "\n".join(str(g) for g in grades) 
     
     def grammar_fix(story):
@@ -360,7 +335,7 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
                     categories.append(problem)
             word_categories[word] = categories
         
-        with open(problem_words_file, "a") as file:
+        with open(problem_words_file, "a", encoding='utf-8') as file:
             file.write(f"\n--- Problem Words Analysis {current_time} ---\n")
             
             # Write all story words with their categories
@@ -381,6 +356,7 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
                                    if word.lower() not in sight_words.split(',') and word.lower() in story_words]
                     if problem_words:
                         file.write(f"{problem}: {', '.join(sorted(set(problem_words)))}\n")
+
 
     if decodabilityTest:
         print("Decodability Test Mode: Analyzing text without making changes.")
@@ -435,11 +411,26 @@ def handle_sight_words(default_sight_words: str, problematic_words: str) -> str:
             sight_words_list.remove(word)
     return ",".join(sight_words_list)
 
-def save_final_story(story, decodability):
-    """Save the final story and its decodability score to final.txt"""
+def capitalize_problematic_words(story: str, bad_words: dict) -> str:
+    """Capitalize all problematic words in the story."""
+    words = story.split()
+    for i, word in enumerate(words):
+        # Strip punctuation for comparison but keep it for replacement
+        clean_word = re.sub(r'[^\w\s]', '', word.lower())
+        if clean_word in bad_words:
+            # Preserve punctuation while capitalizing the word part
+            punctuation = ''.join(c for c in word if not c.isalnum())
+            capitalized = word.upper()
+            words[i] = capitalized
+    return ' '.join(words)
+
+def save_final_story(story, decodability, bad_words):
+    """Save the final story and its decodability score to final.txt with problematic words capitalized."""
+    capitalized_story = capitalize_problematic_words(story, bad_words)
     with open("final.txt", "w") as f:
-        f.write(f"Final Story (Decodability: {decodability*100:.2f}%):\n\n(Readability: {readability*100:.2f}%)\n\n")
-        f.write(story)
+        f.write(f"Final Story (Decodability: {decodability*100:.2f}%):\n\n")
+        f.write(f"(Readability: {readability*100:.2f}%)\n\n")
+        f.write(capitalized_story)
 
 def main():
     global sight_words
@@ -535,9 +526,11 @@ def main():
 
 
     decodability, bad_words = process_story(story4, problems, maxsyllable, apply_correction=True, spellcheck=True, combined=True, decodabilityTest=True)
-    print(f'\n\nFinal Story: {story4}')
+    print(f'\n\nFinal Story:')
+    capitalized_story = capitalize_problematic_words(story4, bad_words)
+    print(capitalized_story)
     print(f"Decodability: {decodability}")
-    save_final_story(story4, decodability)  # Add this line
+    save_final_story(story4, decodability, bad_words)
     return decodability
 
 if __name__ == "__main__":
@@ -557,7 +550,4 @@ if __name__ == "__main__":
 #Caleb: ck/s blends/l blends/r blends/-ing, -ong, -ang, -ung/-sp, -nt, -mp/-sk, -lt, -lk/-ct, -pt/oo as in school/oo as in book/vce/er/ow as in plow/vccv/ear as in early/ea as in bread/3-letter beg. blends/soft g/oa/oi/v v pattern/e rule-suffixes/tion
 #New idea if word appears 2+ times prompt the bot to find alternative words that could work in the context but may be different in their meaning
 #Could reduce decodability
-
-
-
 

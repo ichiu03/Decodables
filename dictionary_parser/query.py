@@ -112,15 +112,36 @@ def get_good_words(problems,sight_words):
         return []
     
 def fine_tune(good_words, bad_words):
-    print(good_words)
-    print(bad_words)
+    output_file = "Caleb_model.jsonl"
+
+    with open(output_file, "w", encoding="utf-8") as f:
+        for word in bad_words:
+            # Construct a single training example
+            example = {
+                "messages": [
+                    {"role": "system", "content": "You are an Author writing children's story."},
+                    {
+                        "role": "user",
+                        "content": f"Can you use the word '{word}' in a sentence?"
+                    },
+                    {
+                        "role": "assistant",
+                        "content": "I’m sorry, but I cannot use that word."
+                    }
+                ]
+            }
+            # Write as one line of valid JSON
+            f.write(json.dumps(example, ensure_ascii=False) + "\n")
+
+    print(f"Created {output_file} with {len(bad_words)} lines.")
+
 
 def set_word_lists(problems,sight_words):
     """Set up good and bad word lists for token biasing"""
     global good_words, bad_words
     bad_words = get_bad_words(problems)
     good_words = get_good_words(problems,sight_words)
-    fine_tune(good_words,bad_words)
+    #fine_tune(good_words,bad_words)
     
 
 def get_token_biases():
@@ -149,6 +170,35 @@ def query_openai(prompt):
         messages=messages,
     )
     return response.choices[0].message.content
+
+def sentence_openai(sentence):
+    # Split sentence into words
+    words = sentence.lower().split()
+    
+    # Initialize logit bias dictionary
+    logit_bias = {}
+    
+    # Check each word against bad_words
+    for word in words:
+        if word in bad_words:
+            # Encode word directly and add negative bias
+            tokens = encoding.encode(f" {word}")
+            for token in tokens:
+                logit_bias[token] = -100
+    
+    prompt = f"""Rewrite this sentence: {sentence}. """
+    messages = [
+        {"role": "user", "content": prompt},
+    ]
+    
+    # Get and apply token biases    
+    response = openai_client.chat.completions.create(
+        model="gpt-4o-mini-2024-07-18",
+        messages=messages,
+        logit_bias=logit_bias
+    )
+    return response.choices[0].message.content
+
 
 def query_anthropic(prompt):
     message = anthropic_client.messages.create(

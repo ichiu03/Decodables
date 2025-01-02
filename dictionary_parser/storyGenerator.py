@@ -158,6 +158,8 @@ def generate_outline(topic, name, readingLevel, story_length=500, api='openai'):
 
     Create an outline for a children's story about {topic} for an american child at a {readingLevel} grade reading level.
 
+    Have the story be very thorough so that if a line was missing the plot would not be nonsensical.
+
     The story should be about {story_length} words long.
 
     The story should be {chapters} chapter(s) long.
