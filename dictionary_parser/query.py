@@ -43,7 +43,7 @@ def query_openaiplus(prompt):
         {"role": "user", "content": prompt},
     ]
     response = openai_client.chat.completions.create(
-        model="o1-2024-12-17",
+        model="o1-mini-2024-09-12",
         messages=messages,
     )
     return response.choices[0].message.content
