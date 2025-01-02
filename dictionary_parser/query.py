@@ -40,7 +40,7 @@ def query_openai(prompt):
 
 def query_openaiplus(prompt):
     messages = [
-        {"role": "system", "content": prompt},
+        {"role": "user", "content": prompt},
     ]
     response = openai_client.chat.completions.create(
         model="o1-2024-12-17",
