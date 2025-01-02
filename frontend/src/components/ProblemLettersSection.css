@@ -1,11 +1,3 @@
-.problem-letters-section {
-  /* styles */
-}
-
-.categories-container {
-  /* styles */
-}
-
 .category-header {
   display: flex;
   justify-content: space-between;
@@ -54,4 +46,3 @@
 .problem-letters-section .category-header button.select-all-button.selected:hover {
   background-color: #1976d2 !important;
 }
-/* etc */ 

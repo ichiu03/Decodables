@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import List, Optional
-from main import process_story, generate_story, handle_sight_words, combine, original_decodability
+from main import process_story, generate_story, handle_sight_words, original_decodability
 import re
 from dictionaryParser import parseAndProcessWords
 from collections import Counter
@@ -48,6 +48,7 @@ async def process_story_endpoint(request: ProcessStoryRequest):
         sight_words = handle_sight_words(default_sight_words, ','.join(request.unknownSightWords))
        
         problems = request.problemLetters
+        print(f"Problems: {problems}")
         readingLevel = request.readingLevel
         if int(readingLevel) <= 1:
             maxsyllable = 2
@@ -134,8 +135,8 @@ async def process_story_endpoint(request: ProcessStoryRequest):
             story,
             request.problemLetters,
             maxsyllable,
-            apply_correction=True,
-            spellcheck=True,
+            apply_correction=False,
+            spellcheck=False,
             combined=True
         )
        
@@ -172,7 +173,7 @@ async def get_decodability_endpoint(request: DecodabilityRequest):
         for problem in request.problems:
             problem = problem.strip()
             if problem in word_dict:
-                print(word_dict[problem])
+               # print(word_dict[problem])
                 for word in word_dict[problem]:
                     word_lower = word.lower()
                     # if word_lower in story_words and word_lower not in sight_words:
@@ -189,8 +190,8 @@ async def get_decodability_endpoint(request: DecodabilityRequest):
             request.text,
             request.problems,
             10,
-            apply_correction=False,
-            spellcheck=False,
+            apply_correction=True,
+            spellcheck=True,
             combined=False,
             decodabilityTest=True
         )

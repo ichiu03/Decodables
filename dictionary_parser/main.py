@@ -1,7 +1,6 @@
 ### Imports
 import os
 
-
 if os.path.exists('dictionary_parser/'):
     path = "dictionary_parser/"
 else:
@@ -44,12 +43,12 @@ def get_synonyms_dict(story: str, problems: list, maxsyllable: int) -> dict:
                 if problem in word_dict and clean_word in word_dict[problem] and clean_word not in sight_words:
                     # Prepare the prompt
                     prompt = f"""
-                        Give 3 synonyms for the word '{word}' that would fit naturally in the following sentence, and **do not** include any words containing these sounds: {', '.join(problems)}.
+                        Give the 5 best words to replace this word '{word}' that would fit naturally in context to the following sentence, and **do not** include any words containing these sounds: {', '.join(problems)}.
                         A change in tense or form of the word is not acceptable. Maintain tense and form as these words are going to replace the original word in a story.
 
                         Sentence to fix: {sentence}
 
-                        Return only the 3 words separated by commas, like this: "word1, word2, word3".
+                        Return only the 5 words separated by commas, like this: "word1,word2,word3,word4,word5".
                         Order the words so the best fit is first.
 
 
@@ -73,7 +72,7 @@ def get_synonyms_dict(story: str, problems: list, maxsyllable: int) -> dict:
                     if filtered_temp_words:
                         synonyms_dict[clean_word] = " " + filtered_temp_words[0]
                     else:
-                        synonyms_dict[clean_word] = " ____"
+                        synonyms_dict[clean_word] = word
         prev_sentence = sentence
     return synonyms_dict
 
@@ -133,6 +132,8 @@ def ultraformatting(text):
    
     # Normalize multiple spaces to a single space
     text = re.sub(r'\s+', ' ', text)
+
+    text = re.sub(r'["""]', '"', text)
    
     # Trim leading and trailing spaces
     text = text.strip()
@@ -153,56 +154,24 @@ def correct_text(text: str) -> str:
         print(f"Warning: Grammar correction failed ({str(e)}). Proceeding with original text.")
         return text
 
-def rewrite_sentences(story):
-    sentences = story.split(".")  # Split sentences by period
-    finaltext = ""  # To store the revised story
+
    
-    for i, sentence in enumerate(sentences):
-        # Get previous and next sentence for context
-        prev_sentence = sentences[i - 1] if i > 0 else ""
-        next_sentence = sentences[i + 1] if i < len(sentences) - 1 else ""
-       
-        # Form the prompt
-        prompt = f"""
-            Rewrite this sentence so it is easier to read if necessary. Remember this is for a childrens book: {sentence}
-           
-            If no rewrite is needed, return the same sentence.
-            If it makes sense to, trim down the sentence so it is not redundant.
+def find_proper_nouns(story, sight_words):
+    prompt = f""" 
+            Find all of the proper nouns (People, Places, Things) in this {story}.
 
+            Return all the proper nouns seperated by commas between each word. E.g. word1,word2,word3...
 
-            Here is the previous sentence and next sentence for context: Previous: {prev_sentence} Next: {next_sentence}
+            Return just the list of all the words
+            """
+    propernouns = query(prompt)
+    sight_words += "," + propernouns
+    return 
 
-
-            *** RETURN ONLY THE NEW SENTENCE OR THE SAME SENTENCE IF NO CHANGE IS NEEDED ***
-        """
-       
-        # Call the function to get the rewritten sentence (query function assumed)
-        sentence_rev = query(prompt).strip()
-
-
-        if "return" in sentence_rev and "sentence" in sentence_rev:
-            sentence_rev = query(prompt).strip()
-       
-        # Add the revised sentence to the final text
-        if sentence_rev and sentence != prev_sentence and sentence !=next_sentence:  # Avoid adding empty strings
-            finaltext += sentence_rev + " "
-   
-    return finaltext.strip()  # Strip trailing whitespace
-   
-def rewrite_paragraph(story):
-    prompt = f"""
-        This paragraph was written by an inferior chatbot: {story}.
-
-
-        You are a much better writer than this. You have a PHD in English and are very good at writing for children.
-
-
-        Fix all of its flaws and return the entire new story.
-    """
-    fixed = query(prompt)
-    return(fixed)
 
 def process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=False):
+    global sight_words
+    find_proper_nouns(story, sight_words)
     def categorize_and_validate_words(story, problems, maxsyllable):
         # Prepare sight words set
         sight_words_set = set(word.lower().strip() for word in sight_words.split(','))
@@ -249,6 +218,84 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
             "all_bads": all_bads,
         }
     decodability_file = "decodability_measurements.txt"
+    def rewrite_sentences(story):
+        # Split story into sentences
+        sentences = [s.strip() for s in story.split(".") if s.strip()]
+        modified = True
+        max_attempts = 10  # Prevent infinite loops
+        
+        for i, sentence in enumerate(sentences):
+            # Check individual sentence decodability
+            sentence_decodability = categorize_and_validate_words(sentence, problems, maxsyllable)["decodability"]
+            attempts = 0
+            
+            # Keep trying to improve sentence until it meets threshold or max attempts reached
+            while sentence_decodability < 0.9 and attempts < 5:
+                new_sentence = sentence
+                new_decodability = categorize_and_validate_words(new_sentence, problems, maxsyllable)["decodability"]
+                
+                # Only update if new version is better
+                if new_decodability > sentence_decodability:
+                    sentences[i] = new_sentence
+                    sentence_decodability = new_decodability
+                    modified = True
+                    print(f"Sentence {i+1} improved - Decodability: {sentence_decodability:.2f}")
+                
+                attempts += 1
+                
+        # Reconstruct story with improved sentences
+        return ". ".join(sentences) + "."
+        
+    def grade_story(story):
+        global readability
+        readabilgrade = 0
+        sentences = [s.strip() for s in story.split(".") if s.strip()]
+        grades = []
+        
+        numsentences = len(sentences)
+        for sentence in sentences:
+            prompt = f"""You are a English Teacher. Grade this sentence on a scale of 0-100 base on its readability: {sentence}.
+                        A 100 would be a sentence without any awkward words. Every awkward word is -10 points.
+                        Return only the number grade and nothing else."""
+            grade = query(prompt)
+            # Convert string grade to integer
+            try:
+                grade_int = int(grade.strip())  # Remove whitespace and convert to int
+                grades.append(grade_int)
+                readabilgrade += grade_int
+            except ValueError:
+                print(f"Warning: Could not convert grade '{grade}' to integer")
+                numsentences-=1
+                continue
+    
+        readability = (readabilgrade/numsentences)/100
+        return "\n".join(str(g) for g in grades) 
+    
+    def grammar_fix(story):
+        prompt = f"""You are an expert English teacher. Fix the following story by:
+        1. Add missing articles (a, an, the) where needed
+        2. Add appropriate conjunctions (and, but, or, so) where needed  
+        3. Add pronouns (he, she, it, they) where needed for clarity
+        4. Fix any syntax/grammar issues while preserving the original meaning
+        5. Keep ALL existing quotation marks and punctuation
+        6. Do not change any vocabulary or add complex words
+        7. Remove any awkward adjectives
+        8. Return ONLY the corrected story with no other text
+        
+        Story to fix:
+        {story}"""
+
+        try:
+            fixed_story = query(prompt)
+            # Clean up any formatting issues
+            fixed_story = fixed_story.strip()
+            # Remove any "Here's the corrected story:" type prefixes
+            fixed_story = re.sub(r'^(Here\'s |The )?(corrected |fixed )?story:?\s*', '', fixed_story, flags=re.IGNORECASE)
+            return fixed_story
+        except Exception as e:
+            print(f"Error in grammar correction: {e}")
+            return story
+
     def save_decodability_metrics(decodability, wordcount, marker, combo, problems):
         global original_decodability
         # Ensure the directory exists
@@ -288,7 +335,7 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
                     categories.append(problem)
             word_categories[word] = categories
         
-        with open(problem_words_file, "a") as file:
+        with open(problem_words_file, "a", encoding='utf-8') as file:
             file.write(f"\n--- Problem Words Analysis {current_time} ---\n")
             
             # Write all story words with their categories
@@ -309,6 +356,7 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
                                    if word.lower() not in sight_words.split(',') and word.lower() in story_words]
                     if problem_words:
                         file.write(f"{problem}: {', '.join(sorted(set(problem_words)))}\n")
+
 
     if decodabilityTest:
         print("Decodability Test Mode: Analyzing text without making changes.")
@@ -337,8 +385,8 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
        
         decodability = categorize_and_validate_words(story, problems, maxsyllable)["decodability"]
         iteration = 0
-        while decodability < 0.9 and iteration < 3:
-            print(f"Iteration: {iteration}")
+        story = rewrite_sentences(story)
+        while decodability < 0.9 and iteration < 4:
             print(f"Decodability: {decodability}")
             print("Checking and categorizing words...")
             results = categorize_and_validate_words(story, problems, maxsyllable)
@@ -349,29 +397,11 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
             story = ultraformatting(story)
             decodability = categorize_and_validate_words(story, problems, maxsyllable)["decodability"]
             iteration+=1
-        story = rewrite_sentences(story)
-
-
+        grades = grade_story(story)
+        story = grammar_fix(story)
+        with open("grades.txt", "w") as grades_file:
+            grades_file.write(grades)
         return story
-
-def combine(story1, story2, problems):
-    prompt = f"""
-    Take the two versions of the story provided below and combine their sentences into one improved version.
-    Retain the original plot and key details.
-    Keep the creative language from both versions.
-    Try to avoid run-on sentences.
-    Ensure the final story maintains the same narrative structure but uses the best phrases from each version.
-    Do not invent new plot elements or diverge from the original stories.
-    **Most Importantly** Try to avoid including these sounds: {problems}.
-
-
-    Version 1: {story1}
-
-
-    Version 2: {story2}
-    """
-    ultstory = query(prompt)
-    return ultstory
 
 def handle_sight_words(default_sight_words: str, problematic_words: str) -> str:
     sight_words_list = default_sight_words.split(",")
@@ -381,10 +411,32 @@ def handle_sight_words(default_sight_words: str, problematic_words: str) -> str:
             sight_words_list.remove(word)
     return ",".join(sight_words_list)
 
+def capitalize_problematic_words(story: str, bad_words: dict) -> str:
+    """Capitalize all problematic words in the story."""
+    words = story.split()
+    for i, word in enumerate(words):
+        # Strip punctuation for comparison but keep it for replacement
+        clean_word = re.sub(r'[^\w\s]', '', word.lower())
+        if clean_word in bad_words:
+            # Preserve punctuation while capitalizing the word part
+            punctuation = ''.join(c for c in word if not c.isalnum())
+            capitalized = word.upper()
+            words[i] = capitalized
+    return ' '.join(words)
+
+def save_final_story(story, decodability, bad_words):
+    """Save the final story and its decodability score to final.txt with problematic words capitalized."""
+    capitalized_story = capitalize_problematic_words(story, bad_words)
+    with open("final.txt", "w") as f:
+        f.write(f"Final Story (Decodability: {decodability*100:.2f}%):\n\n")
+        f.write(f"(Readability: {readability*100:.2f}%)\n\n")
+        f.write(capitalized_story)
+
 def main():
     global sight_words
     global maxsyllable
     global original_decodability
+    global topic
     maxsyllable = 2
     default_sight_words = "eye,everyone,approve,prove,who's,whom,heart,abroad,beauty,bouquet,building,builds,rebuild,builder,doesn't,shoe,shoelace,laughter,laugh,laughed,laughs,roughly,although,thoroughly,throughout,dough,doughnut,sovereighnty,a,any,many,and,on,is,are,the,was,were,it,am,be,go,to,been,come,some,do,does,done,what,whoever,who,you,your,both,buy,door,floor,four,none,once,one,only,pull,push,sure,talk,walk,their,there,they're,very,want,again,against,always,among,busy,could,should,would,enough,rough,tough,friend,move,prove,ocean,people,she,other,above,father,usually,special,front,thought,he,we,they,nothing,learned,toward,put,hour,beautiful,whole,trouble,of,off,use,have,our,say,make,take,see,think,look,give,how,ask,boy,girl,us,him,his,her,by,where,were,wear,hers,don't,which,just,into,good,other,than,then,now,even,also,after,know,because,most,day,these,two,already,through,though,like,said,too,has,in,brother,sister,that,them,from,for,with,doing,well,before,tonight,down,about,but,up,around,goes,gone,build,built,cough,lose,loose,truth,daughter,son"
     probsight_words = input("What sight words does the student not know (use only words and commas): ")
@@ -415,15 +467,19 @@ def main():
         
         problems.append("too many syllables")
         sight_words += name
+        get_bad_words(problems)
+        get_good_words(problems,sight_words)
         story = generate_story(topic, problems, name, readingLevel, api_choice, story_length)
         original_decodability, _ = process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=True)
         if original_decodability > 0.97:
             print("Decodability is already high enough, no need to process further.")
             print(f'\n\nFinal Story: {story}')
             print(f"Decodability: {original_decodability* 100:.2f}%")
+            save_final_story(story, original_decodability)  
             return original_decodability
         print("Generating story...")
     elif gendec.lower() == "i":
+        topic = input("What is the text about: ")
         readingLevel = input("Enter the grade level of the reader (Only the grade number): ")
         if int(readingLevel) <= 1:
             maxsyllable = 2
@@ -441,8 +497,7 @@ def main():
         problems.append("too many syllables")
         file = input("Copy and Paste your text here: ")
         story = file
-        maxsyllable = 10
-        original_decodability, _ = process_story(story, problems, 10, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=True)
+        original_decodability, _ = process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=True)
         if original_decodability > 0.95:
             print("Decodability is already high enough, no need to process further.")
             print(f'\n\nFinal Story: {story}')
@@ -450,6 +505,7 @@ def main():
             return original_decodability
     print(story)
 
+    #TODO: Implement a sort of check that adds common words for the topic to see if the student knows them and check overlap with problem sounds emphasizes these words arent allowed.
     # # First Run: Without Grammar Correction
     # print("\n--- Processing Without Grammar Correction ---")
     # story1 = process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False)
@@ -468,8 +524,11 @@ def main():
 
 
     decodability, bad_words = process_story(story4, problems, maxsyllable, apply_correction=True, spellcheck=True, combined=True, decodabilityTest=True)
-    print(f'\n\nFinal Story: {story4}')
+    print(f'\n\nFinal Story:')
+    capitalized_story = capitalize_problematic_words(story4, bad_words)
+    print(capitalized_story)
     print(f"Decodability: {decodability}")
+    save_final_story(story4, decodability, bad_words)
     return decodability
 
 if __name__ == "__main__":
@@ -489,7 +548,4 @@ if __name__ == "__main__":
 #Caleb: ck/s blends/l blends/r blends/-ing, -ong, -ang, -ung/-sp, -nt, -mp/-sk, -lt, -lk/-ct, -pt/oo as in school/oo as in book/vce/er/ow as in plow/vccv/ear as in early/ea as in bread/3-letter beg. blends/soft g/oa/oi/v v pattern/e rule-suffixes/tion
 #New idea if word appears 2+ times prompt the bot to find alternative words that could work in the context but may be different in their meaning
 #Could reduce decodability
-
-
-
 

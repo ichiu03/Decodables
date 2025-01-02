@@ -1,7 +1,9 @@
 from openai import OpenAI
 import anthropic
 from dotenv import load_dotenv, dotenv_values
+from storyGenerator import *
 import os
+
 
 # Get absolute path to the root directory and .env file
 parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -28,10 +30,20 @@ anthropic_client = anthropic.Anthropic(
 
 def query_openai(prompt):
     messages = [
-        {"role": "system", "content": prompt},
+        {"role": "user", "content": prompt},
     ]
     response = openai_client.chat.completions.create(
-        model="gpt-3.5-turbo",
+        model="gpt-4o-mini-2024-07-18",
+        messages=messages,
+    )
+    return response.choices[0].message.content
+
+def query_openaiplus(prompt):
+    messages = [
+        {"role": "user", "content": prompt},
+    ]
+    response = openai_client.chat.completions.create(
+        model="o1-mini-2024-09-12",
         messages=messages,
     )
     return response.choices[0].message.content
