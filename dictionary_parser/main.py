@@ -231,7 +231,7 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
             
             # Keep trying to improve sentence until it meets threshold or max attempts reached
             while sentence_decodability < 0.9 and attempts < 5:
-                new_sentence = sentence_openai(sentence)
+                new_sentence = sentence
                 new_decodability = categorize_and_validate_words(new_sentence, problems, maxsyllable)["decodability"]
                 
                 # Only update if new version is better
@@ -469,8 +469,6 @@ def main():
         sight_words += name
         get_bad_words(problems)
         get_good_words(problems,sight_words)
-        set_word_lists(problems,sight_words)
-        get_token_biases()
         story = generate_story(topic, problems, name, readingLevel, api_choice, story_length)
         original_decodability, _ = process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=True)
         if original_decodability > 0.97:
