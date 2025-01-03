@@ -3,11 +3,14 @@ import anthropic
 from dotenv import load_dotenv, dotenv_values
 from storyGenerator import *
 import os
+import tiktoken
 
 
 # Get absolute path to the root directory and .env file
 parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 env_path = os.path.join(parent_dir, '.env')
+encoding = tiktoken.encoding_for_model("gpt-4")
+
 
 # Force load from .env file
 load_dotenv(env_path, override=True)  # override=True will force it to override existing env variables
@@ -27,6 +30,26 @@ anthropic_client = anthropic.Anthropic(
     api_key=anthropic_api_key  # Ensure you have set ANTHROPIC_API_KEY in your .env
 )
 
+def query_openaifirst(prompt, tokens):
+    # Initialize logit bias dictionary
+    logit_bias = {}
+    
+    # Encode and bias each token
+    for token in tokens:
+        encoded_tokens = encoding.encode(f" {token}")
+        for t in encoded_tokens:
+            logit_bias[t] = -100
+    
+    messages = [
+        {"role": "user", "content": prompt},
+    ]
+    
+    response = openai_client.chat.completions.create(
+        model="gpt-4o-mini-2024-07-18",
+        messages=messages,
+        logit_bias=logit_bias
+    )
+    return response.choices[0].message.content
 
 def query_openai(prompt):
     messages = [
@@ -34,16 +57,6 @@ def query_openai(prompt):
     ]
     response = openai_client.chat.completions.create(
         model="gpt-4o-mini-2024-07-18",
-        messages=messages,
-    )
-    return response.choices[0].message.content
-
-def query_openaiplus(prompt):
-    messages = [
-        {"role": "user", "content": prompt},
-    ]
-    response = openai_client.chat.completions.create(
-        model="o1-mini-2024-09-12",
         messages=messages,
     )
     return response.choices[0].message.content

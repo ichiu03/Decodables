@@ -413,6 +413,7 @@ def handle_sight_words(default_sight_words: str, problematic_words: str) -> str:
 
 def capitalize_problematic_words(story: str, bad_words: dict) -> str:
     """Capitalize all problematic words in the story."""
+    problemwords = []
     words = story.split()
     for i, word in enumerate(words):
         # Strip punctuation for comparison but keep it for replacement
@@ -422,6 +423,8 @@ def capitalize_problematic_words(story: str, bad_words: dict) -> str:
             punctuation = ''.join(c for c in word if not c.isalnum())
             capitalized = word.upper()
             words[i] = capitalized
+            problemwords.append(words[i])
+    print(problemwords)
     return ' '.join(words)
 
 def save_final_story(story, decodability, bad_words):
