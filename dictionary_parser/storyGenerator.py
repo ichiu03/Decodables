@@ -110,12 +110,13 @@ def get_bad_words(problems):
         return []
     
 def get_good_words(problems,sight_words):
-    good_words = sight_words
+    good_words = str(sight_words)
  
     num = 0
     with open(os.path.join(path, 'Resources/ChildDiction.txt'), 'r') as file:
         words = file.read()
     categorized_words = parseAndProcessWords(words, 100)
+    print("here")
     for category in categorized_words:
         if category not in problems:
             for word in categorized_words[category]:
