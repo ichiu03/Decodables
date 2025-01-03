@@ -48,7 +48,6 @@ async def process_story_endpoint(request: ProcessStoryRequest):
         global topic_words
         sight_words = handle_sight_words(default_sight_words, ','.join(request.unknownSightWords))
         topic_words = request.storyTopic.split() if request.storyTopic else []
-        print(topic_words)
         for i in range(len(topic_words)):
             sight_words+=(","+topic_words[i])
        
