@@ -109,13 +109,14 @@ def get_bad_words(problems):
         print("Error: large_categorized_words.json not found")
         return []
     
-def get_good_words(problems):
-    good_words = "beauty,bouquet,builder,rebuild,doesn't,shoe,shoelace,laughter,laugh,laughed,laughs,roughly,although,thoroughly,throughout,dough,doughnut,sovereighnty,a,at,any,many,and,on,is,are,the,was,were,it,am,be,go,to,out,been,this,come,some,do,does,done,what,who,you,your,both,buy,door,floor,four,none,once,one,only,pull,push,sure,talk,walk,their,there,they're,very,want,again,against,always,among,busy,could,should,would,enough,rough,tough,friend,move,prove,ocean,people,she,other,above,father,usually,special,front,thought,he,we,they,nothing,learned,toward,put,hour,beautiful,beautifully,whole,trouble,of,off,use,have,our,say,make,take,see,think,look,give,how,ask,boy,girl,us,him,his,her,by,where,were,wear,hers,don't,which,just,know,into,good,other,than,then,now,even,also,after,know,because,most,day,these,two,already,through,though,like,said,too,has,in,brother,sister,that,them,from,for,with,doing,well,before,tonight,down,about,but,up,around,goes,gone,build,built,cough,lose,loose,truth,daughter,son"
+def get_good_words(problems,sight_words):
+    good_words = str(sight_words)
  
     num = 0
     with open(os.path.join(path, 'Resources/ChildDiction.txt'), 'r') as file:
         words = file.read()
     categorized_words = parseAndProcessWords(words, 100)
+    print("here")
     for category in categorized_words:
         if category not in problems:
             for word in categorized_words[category]:
@@ -201,7 +202,7 @@ def generate_chapter(outline, chapter_number, length, story, problems, readingLe
     END OF DICTIONARY
 
     The above dictionary is all of the words that are allowed to be used in the story, they are the only words you know.
-    ONLY USE WORDS FROM THE DICTIONARY OR ELSE YOU WILL BE FIRED.
+    ONLY USE WORDS FROM THE DICTIONARY OR ELSE YOU WILL BE FIRED. YOU ARE WRITING FOR KIDS IF YOU FAIL THIS TASK THEY WILL NEVER GET TO LEARN TO READ.
     You are not allowed to use any words that contain the sounds in the problems list.
     
     Here is the outline:
@@ -243,7 +244,7 @@ def generate_outline(topic, name, readingLevel, story_length=500, api='openai'):
 def generate_story(topic, problems, name, readingLevel, api, story_length=500):
     outline = generate_outline(topic, name, readingLevel, story_length, api)
     story = ""
-    good_words = get_good_words(problems)
+    good_words = get_good_words(problems,sight_words)
     chapter=0
     while len(story.split()) < story_length:
         print(f"Generating chapter {chapter + 1} using {api}...")

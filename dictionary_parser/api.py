@@ -45,7 +45,11 @@ async def process_story_endpoint(request: ProcessStoryRequest):
         # Update sight_words
         global sight_words
         global original_decodability
+        global topic_words
         sight_words = handle_sight_words(default_sight_words, ','.join(request.unknownSightWords))
+        topic_words = request.storyTopic.split() if request.storyTopic else []
+        for i in range(len(topic_words)):
+            sight_words+=(","+topic_words[i])
        
         problems = request.problemLetters
         print(f"Problems: {problems}")
