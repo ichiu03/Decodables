@@ -38,10 +38,11 @@ categories = {
     'l blends': [], 'r blends': [], '-ing, -ong, -ang, -ung': [], 'all': [], 'th': [], 'oy': [],
     '-ink, -ank, -onk, -unk': [], '-ft, -nd, -st': [], '-sp, -nt, -mp': [], '-sk, -lt, -lk': [], '-ct, -pt': [],
     'y as in dry': [], 'ar': [], 'wh': [], 'oo as in school': [], 'oo as in book': [], 'vce': [],
-    'er': [], 'ow as in plow': [], 'ow as in snow': [], 'vccv': [], 'Open syll.': [], 'Closed syll.': [], 'contractions': [],
+    'er': [], 'ow as in plow': [], 'ow as in snow': [], 'Open syll.': [], '1 syll. closed': [], '2 syll. closed (VCV, VCCV, VCCCV)': [],
+    'contractions': [], '3 syll. closed': [],
     # Column 4
     'ear as in hear': [], 'ear as in early': [], 'y as in bumpy': [], 'aw': [], 'ly': [], 'ea as in eat': [],
-    'ea as in bread': [], '3-letter beg. blends': [], 'vcv': [], 'vcccv': [], 'tch': [], 'soft c': [],
+    'ea as in bread': [], '3-letter beg. blends': [], 'tch': [], 'soft c': [],
     '-ble, -cle, -dle, -fle, -gle, -kle, -ple, -tle, -zle': [], 'soft g': [], 'ai': [], 'igh': [], 'ed': [],
     'cle ending': [], 'vowel_team': [], 'r-controlled': [], 'oa': [], 'ir': [], '-ild, -ind, -old, -ost': [],
     'oi': [], 'double rule-suffixes': [], 'ew as in few/blew': [], 'v v pattern': [], 'kn': [], 'e rule-suffixes': [],
@@ -533,19 +534,6 @@ def threelBlends(word: str) -> None:
         categories['3-letter beg. blends'].append(word)
 
 
-def vccvCheck(word: str, syllable_count: int, tokens: list) -> None:
-    if (not (6 <= len(word) <= 7) or syllable_count != 2 or word.endswith('e') or 
-        any(sound in word for sound in COMPOUND_SOUNDS) or word.endswith('ed') or word.endswith('ing')): return
-    if len(tokens) != 6: return
-    if (tokens[0] not in VOWEL_PHONEMES and
-        tokens[1] in VOWEL_PHONEMES and
-        tokens[2] not in VOWEL_PHONEMES and
-        tokens[3] not in VOWEL_PHONEMES and
-        tokens[4] in VOWEL_PHONEMES and
-        tokens[5] not in VOWEL_PHONEMES):
-        categories['vccv'].append(word)
-
-
 def vceCheck(word: str) -> None:
     if len(word) < 3: return
     VCE_SUFFIXES = ['ive', 'age', 'ture']
@@ -569,25 +557,35 @@ def OCECheck(word: str, syllable_count: int, tokens: list) -> None:
         # Check for vowel combinations
         categories['Open syll.'].append(word)
         return
-    # Closed syllables: Check if it has a short vowel sound followed by a consonant sound
-    if word[-1] in CONSONANTS and word[-2] in VOWELS:
 
-        for i in range(len(tokens) - 1):
-            if (tokens[i] in ['AE', 'EH', 'IH', 'AA', 'AH', 'UH'] and
-            tokens[i + 1] not in ['AY', 'EY', 'IY', 'OW', 'UW', 'AE', 'EH', 'IH', 'AA', 'AH', 'UH']):
-                if word[-1] == 's':
-                    root_word = word[:-1]
-                    if root_word in valid_words or root_word[-1] in VOWELS:
-                        return
-                elif word.endswith('ed'):
-                    root_word = word[:-1] # Remove 'd'
-                    if root_word in valid_words or root_word[-1] in VOWELS:
-                        return
-                    root_word = word[:-2] # Remove 'ed'
-                    if root_word in valid_words or root_word[-1] in VOWELS:
-                        return  
-                categories['Closed syll.'].append(word)
-                return
+def closedSyllables(word: str, syllable_count: int, tokens: list) -> None:
+    if syllable_count == 1 and len(tokens) >= 3: # 1 syllable
+        # Closed syllables: Check if it has a short vowel sound followed by a consonant sound
+        if tokens[-1] not in VOWEL_PHONEMES and tokens[-2] in VOWEL_PHONEMES and tokens[-3] not in VOWEL_PHONEMES:
+            if word[-1] == 's':
+                root_word = word[:-1]
+                if root_word in valid_words or root_word[-1] in VOWELS:
+                    return
+            elif word.endswith('ed'):
+                root_word = word[:-2] # Remove 'ed'
+                if root_word in valid_words or root_word[-1] in VOWELS:
+                    return  
+            categories['1 syll. closed'].append(word)
+            return
+    elif syllable_count == 2 and len(tokens) >= 5: # 2 syllables
+        if vcvCheck(word, syllable_count, tokens) or vccvCheck(word, syllable_count, tokens) or vcccvCheck(word, syllable_count, tokens):
+            categories['2 syll. closed'].append(word)
+    elif syllable_count == 3 and len(tokens) >= 9: # 3 syllables
+        if tokens[0] not in VOWEL_PHONEOMES and tokens[1] not in VOWEL_PHONEMES:
+            starting_index = 1
+        else:
+            starting_index = 0
+        if (tokens[starting_index] not in VOWEL_PHONEMES and tokens[starting_index+1] in VOWEL_PHONEMES and
+        tokens[starting_index+2] not in VOWEL_PHONEMES and tokens[starting_index+3] not in VOWEL_PHONEMES and 
+        tokens[starting_index+4] in VOWEL_PHONEMES and tokens[starting_index+5] not in VOWEL_PHONEMES and
+        tokens[starting_index+6] not in VOWEL_PHONEMES and tokens[starting_index+7] in VOWEL_PHONEMES and 
+        tokens[starting_index+8] not in VOWEL_PHONEMES):
+            categories['3 syll. closed'].append(word)
 
 
 def vcvCheck(word: str, syllable_count: int, tokens: list) -> None:
@@ -605,8 +603,21 @@ def vcvCheck(word: str, syllable_count: int, tokens: list) -> None:
         tokens[2] not in VOWEL_PHONEMES and
         tokens[3] in VOWEL_PHONEMES and
         tokens[4] not in VOWEL_PHONEMES):
-        categories['vcv'].append(word)
+        return True
+    return False
 
+def vccvCheck(word: str, syllable_count: int, tokens: list) -> None:
+    if (not (6 <= len(word) <= 7) or syllable_count != 2 or word.endswith('e') or 
+        any(sound in word for sound in COMPOUND_SOUNDS) or word.endswith('ed') or word.endswith('ing')): return
+    if len(tokens) != 6: return
+    if (tokens[0] not in VOWEL_PHONEMES and
+        tokens[1] in VOWEL_PHONEMES and
+        tokens[2] not in VOWEL_PHONEMES and
+        tokens[3] not in VOWEL_PHONEMES and
+        tokens[4] in VOWEL_PHONEMES and
+        tokens[5] not in VOWEL_PHONEMES):
+        return True
+    return False
 
 def vcccvCheck(word: str, syllable_count: int, tokens: list) -> None:
     if (not (7 <= len(word) <= 9) or syllable_count != 2 or word.endswith('e') or 
@@ -618,7 +629,6 @@ def vcccvCheck(word: str, syllable_count: int, tokens: list) -> None:
         second = word[i+1]
         if first == second or first in VOWELS and second in VOWELS:
             return
-    # VCCCV check
     if (tokens[0] not in VOWEL_PHONEMES and
         tokens[1] in VOWEL_PHONEMES and
         tokens[2] not in VOWEL_PHONEMES and
@@ -626,8 +636,8 @@ def vcccvCheck(word: str, syllable_count: int, tokens: list) -> None:
         tokens[4] not in VOWEL_PHONEMES and
         tokens[5] in VOWEL_PHONEMES and
         tokens[6] not in VOWEL_PHONEMES):
-        categories['vcccv'].append(word)
-
+        return True
+    return False
 
 def vrlCheck(word: str, syllable_count: int) -> None:
     if len(word) < 3 or syllable_count != 1: return
@@ -766,9 +776,7 @@ def callCategorizationFunctions(word: str, arpabet: str, syllable_count: int, to
     warCheck(word)
     allCheck(word, arpabet)
     doubleConsonant(word)
-    vcvCheck(word, syllable_count, tokens)
-    vvCheck(word, arpabet)
-    vcccvCheck(word, syllable_count, tokens)
+    closedSyllables(word, syllable_count, tokens)
     yRuleSuffix(word)
     eRuleSuffix(word)
     vrlCheck(word, syllable_count)
