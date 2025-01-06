@@ -6,6 +6,7 @@ from main import process_story, generate_story, handle_sight_words, combine, ori
 import re
 from dictionaryParser import parseAndProcessWords
 from collections import Counter
+from expandStory import expand_story_section, get_expansion_metrics
 
 app = FastAPI()
 
@@ -205,6 +206,43 @@ async def get_decodability_endpoint(request: DecodabilityRequest):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/api/expand-story")
+async def expand_story_endpoint(request: StoryExpansionRequest):
+    try:
+        # Set maxsyllable based on reading level
+        maxsyllable = min(max(request.readingLevel // 2, 2), 10)
+        
+        # Expand the story
+        expanded_story = expand_story_section(
+            request.story,
+            request.startIndex,
+            request.endIndex,
+            request.expansionPrompt,
+            request.problems,
+            maxsyllable
+        )
+        
+        # Get metrics about the expansion
+        metrics = get_expansion_metrics(
+            request.story,
+            expanded_story,
+            request.problems,
+            maxsyllable
+        )
+        
+        return {
+            "success": True,
+            "expandedStory": expanded_story,
+            **metrics  # Include all metrics in the response
+        }
+        
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error expanding story: {str(e)}"
+        )
 
 
 if __name__ == "__main__":

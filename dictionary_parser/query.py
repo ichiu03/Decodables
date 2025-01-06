@@ -14,7 +14,7 @@ load_dotenv(env_path, override=True)  # override=True will force it to override 
 
 # Get API keys from .env file
 config = dotenv_values(env_path)
-openai_api_key = config.get('OPENAI_API_KEY') or os.getenv('OPENAI_API_KEY')
+openai_api_key = config.get('OPEN_AI_API_KEY') or os.getenv('OPEN_AI_API_KEY')
 anthropic_api_key = config.get('ANTHROPIC_API_KEY') or os.getenv('ANTHROPIC_API_KEY')
 
 # Initialize OpenAI client

@@ -14,6 +14,7 @@ from collections import Counter
 from datetime import datetime
 from query import *
 import language_tool_python
+from expandStory import expand_story_section, get_expansion_metrics
 
 original_decodability = None
 sight_words = ""
@@ -474,10 +475,57 @@ def main():
     # Process the combined story
     story4 = process_story(story, problems, maxsyllable, apply_correction=True, spellcheck=True, combined=False)
 
-
     decodability, bad_words = process_story(story4, problems, maxsyllable, apply_correction=True, spellcheck=True, combined=True, decodabilityTest=True)
     print(f'\n\nFinal Story: {story4}')
     print(f"Decodability: {decodability}")
+    
+    # New expansion prompt, can also make this an option (along side (g)enerate and (i)nput)
+    expand_choice = input("\nWould you like to expand the story? (y/n): ")
+    if expand_choice.lower() == 'y':
+        # Print story with line numbers for reference
+        lines = story4.split('\n')
+        for i, line in enumerate(lines, 1):
+            print(f"{i}: {line}")
+        
+        # Get line numbers to expand
+        line_range = input("\nWhich lines would you like to expand? (e.g., 3-5): ")
+        start_line, end_line = map(int, line_range.split('-'))
+        
+        # Convert line numbers to character indices
+        start_idx = sum(len(lines[i]) + 1 for i in range(start_line - 1))
+        end_idx = sum(len(lines[i]) + 1 for i in range(end_line))
+        
+        # Get expansion prompt
+        expansion_prompt = input("\nWhat would you like to add or change about this section? ")
+        
+        # Expand the story
+        expanded_story = expand_story_section(
+            story4,
+            start_idx,
+            end_idx,
+            expansion_prompt,
+            problems,
+            maxsyllable,
+            process_story
+        )
+        
+        # Get metrics about the expansion
+        metrics = get_expansion_metrics(
+            story4,
+            expanded_story,
+            problems,
+            maxsyllable,
+            process_story
+        )
+        
+        print(f"\nExpanded Story:\n{expanded_story}")
+        print(f"\nMetrics:")
+        print(f"Words added: {metrics['wordCountDifference']}")
+        print(f"Original decodability: {metrics['originalDecodability']:.2%}")
+        print(f"New decodability: {metrics['expandedDecodability']:.2%}")
+        
+        return expanded_story
+    
     return decodability
 
 if __name__ == "__main__":
