@@ -543,7 +543,7 @@ def silentECheck(word: str, syllable_count: int) -> None:
             categories['1 syll. vce'].append(word)
         elif syllable_count == 2:
             # Check on first syllable
-            if 
+            # if 
             categories['2 syll. vce'].append(word)
 
 
