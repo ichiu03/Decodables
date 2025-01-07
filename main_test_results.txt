@@ -336,3 +336,132 @@ Run 3:
 ------------------------------
 
 ==================================================
+
+=== Test Results 2025-01-07 17:44:35 ===
+Test Configuration:
+  description: Generate story with these problems w/ openai and limited processing
+  inputs: ['', 'g', '250', 'A day at the park', 'au/war/ey as in monkey/ey as in they/ph/ie as in pie/ie as in thief/-sion as in tension/-sion as in vision/y as in gym/wr/eigh/ue as in blue/ough/wor/ei as in receive/ei as in vein/augh/oe/ui/ch as in echo/wa/eu/gh/mb/mn/que/gn/stle/rh/gue/alk/alt/qua/sc', 'Tom', '7', 'openai']
+
+Aggregate Results:
+  Average Initial Decodability: 98.54%
+  Average Final Decodability: 0.00%
+  Average Runtime: 21.10 seconds
+  Number of Runs: 3
+
+Detailed Results:
+
+Run 1:
+  Initial Decodability: 98.70%
+  Final Decodability: 0.00%
+  Runtime: 18.49 seconds
+  Final Story:
+  **Chapter 1: An Adventure Awaits**
+
+Tom was a bright boy, full of energy and eager to move. Today, his heart felt light. He loved sports, but most of all, he enjoyed exploring. 
+
+Just then, a buzz from his phone made him alert. It was a note from Jake, his best friend. "Hey Tom, let’s meet at the park!" it read. A smile lit up Tom's face. The park was one of his favorite spots, filled with laughter and fun.
+
+He quickly put on his favorite shoes, grabbed a bag, and filled it with snacks, a frisbee, and a bottle of water. His mind raced with thoughts of the fun that lay ahead. 
+
+Once at the park, Tom saw colors all around him. Kids ran, flowers bloomed, and birds chirped in the trees. He felt a thrill as he spotted Jake waving. Tom waved back, eager to join in the fun.
+
+The friends kicked off their day with a frisbee. They laughed and moved, throwing the disk high in the sky. Soon, they made it into a game of tag, running fast, their feet pounding the soft ground. Tom was quick, dodging in and out, full of energy.
+
+In this moment, he knew that adventure awaited, and it was just the beginning. Together, they would build memories that would last a lifetime. 
+**Chapter 2: Nature's Wonders** 
+
+After their fun with the frisbee, Tom and Jake decided to explore a nature path that ran through the park. The sun shone down, making the leaves glimmer above them. 
+
+"Let’s see what we can find!" Tom said, his voice full of excitement. They moved down the narrow trail, surrounded by trees and the rustling of leaves. 
+
+As they walked, Tom looked closely at the ground. There, he noticed tiny ants moving in lines. "Look at these little guys," he pointed out. Jake bent down, peering in awe at the ants’ busy lives.
+
+A bit farther along the path, they found a small pond. Its clear water sparkled like tiny jewels. "Wow, check out that!" Tom exclaimed, pointing to a frog leaping from a rock. 
+
+The boys sat on a flat stone, taking in the beauty around them. Flowers in vivid colors danced in the soft wind, and birds flitted above, chirping happily. Tom pulled out his small notebook, wanting to note down what they had seen. 
+
+"I want to learn more about all this," he said, scribbling down notes. 
+
+Jake grinned, "We should come back more often." 
+
+"Agreed!" Tom said, feeling full of joy. In this moment, it felt like nature held secrets just for them. 
+
+They got up, ready to head back, chatting about the next fun thing they would do. It would be a day they would not forget.
+
+------------------------------
+
+Run 2:
+  Initial Decodability: 99.38%
+  Final Decodability: 0.00%
+  Runtime: 28.41 seconds
+  Final Story:
+  **Chapter 1: Morning Excitement**
+
+Tom woke up with a thrill in his heart. The sun peeked through his window, casting a warm glow on his room. Today was a Saturday, and it promised fun at the park. He leaped from his bed, eager to start the day.
+
+The park was special, filled with bright colors, kids, and laughter. There were swings that moved high, slides that spun, and a pond where ducks played. Tom thought about all the fun he would have, and he couldn't wait.
+
+He pulled on his favorite shoes, grabbed a snack, and dashed down the stairs. His father looked up from the table. "Where are you off to, Tom?" he asked with a smile.
+
+"To the park!" Tom exclaimed. "I want to play and explore!"
+
+"Make sure to take your sister, okay?" his father added.
+
+Tom nodded. He quickly found Sarah, his best friend. "Hey, Sarah! Want to bike to the park?” he asked, hope in his tone.
+
+"Of course!" Sarah grinned, her love for nature shining bright. They grabbed their bikes, the cool morning air rushing past them as they rode.
+
+With laughter and jokes, they rode through the streets until the park came into view. It was alive! Families filled the area, kids ran about, and the sounds of joy filled the air. Tom felt a surge of happiness. Today would be epic; he could already see the joy unfolding.
+**Chapter 2: Arriving at the Park**
+
+Tom and Sarah pedaled swiftly, their hearts racing in sync with their bikes. The park loomed ahead, vibrant and alive. They moved through the entrance, greeted by kids playing, laughter echoing, and the scent of fresh grass all around.
+
+Tom felt a rush of energy as he spotted the swings. "Let's go!" he shouted, pulling Sarah toward the playground. They dashed over, and in no time, they were swinging high. The world dipped and soared beneath them, and with each push, their cheers got louder.
+
+As they took turns on the swings, they noticed a group of kids from school nearby. Tom’s heart did a little flip. “I want them to see us having fun," he thought. He whispered to Sarah, "Let’s show them how high we can go!"
+
+With determination, they pumped their legs. They could feel the wind in their hair and the thrill of movement. Every swing brought them closer to the clouds, and they laughed joyfully, eyes wide with delight.
+
+After a while, they jumped off, landing with soft thuds on the cool grass. Breathing heavily but happily, they looked around. Kids were smiling, their energy infectious. 
+
+“Want to visit the pond next?” Sarah asked, her eyes sparkling with excitement. 
+
+“Yeah!” Tom agreed with a grin. “Let’s find some ducks!” 
+
+Together, they wiped the sweat off their foreheads and dashed off, ready for the next part of their sunny adventure. The day was just getting started!
+
+------------------------------
+
+Run 3:
+  Initial Decodability: 97.55%
+  Final Decodability: 0.00%
+  Runtime: 16.39 seconds
+  Final Story:
+  **A Day at the Park**
+
+Tom woke up, feeling bright and ready for the weekend. The sun was shining, and the sky was blue. He quickly grabbed his shoes, eager to go out. Today, he would meet his friends at Maplewood Park.
+
+Arriving at the park, he spotted his friends, Sarah and Jake, by the entrance. “Hey, guys!” he exclaimed, waving with joy. They waved back, all smiling. “Let’s find a sunny spot!” Tom's heart raced with excitement. Together, they grabbed a picnic blanket and walked toward a large oak tree, which had wide, green leaves.
+
+Upon finding the right spot, they set their blanket down and opened their bags. “Let’s play frisbee!” Sarah said. The trio took turns tossing the disk, laughing each time it spun. They raced to grab it, each thinking they would win. After a few rounds, they felt pumped, so they ran to the swings.
+
+“Look! Who can swing the highest?” shouted Jake, jumping on a swing. They took turns flying as high as the sky, feeling light and full of laughter. After swinging, they wandered to the pond, spotting ducks gliding on the water. “Let’s feed them!” Tom said, pulling out leftover bread. 
+
+As they tossed pieces to the ducks, one duck wiggled up and grabbed a bite right from Tom's hand! Everyone laughed, and this silly moment made their day even brighter. Tom felt happy, knowing these moments would stay in his heart forever.
+Tom and his friends sat on their blanket, enjoying snacks as they chatted. Laughter filled the air as they shared funny stories. “Remember when we tried to bake cookies?” Sarah said, giggling. “We filled the whole floor with dough!” The other kids laughed, remembering the mess they made. 
+
+“I think it was good, even if it didn't look right,” Jake added, his cheeks rosy with joy. “The floor had a bit of sugar, though!” They all laughed again.
+
+After their snacks, they felt ready for more fun. “Let’s go on a walk!” Sarah suggested. They jumped up, excited by the thought of exploring. 
+
+The path at Maplewood Park was lined with trees. Sunlight peeked through the leaves, making the ground look bright and soft. As they walked, they spotted small birds flitting from tree to tree, chirping happily. “Look at those tiny spots!” Tom pointed out. 
+
+The group followed a narrow trail, admiring the beauty all around. Each step took them deeper into the park. They found a pond filled with colorful fish. “Wow, look!” Jake exclaimed. “These fish are beautiful!” 
+
+Tom took a big breath of fresh air. “Nature is awesome!” he said. 
+
+They sat by the water, soaking in the moment. “Days like this make me feel so good,” Tom added, feeling grateful for both nature and his friends. After a bit, they decided it was time to head back, ready to play more before the sun went down.
+
+------------------------------
+
+==================================================

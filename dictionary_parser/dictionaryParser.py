@@ -587,18 +587,19 @@ def closedSyllables(word: str, syllable_count: int, tokens: list) -> None:
             return
     elif syllable_count == 2 and len(tokens) >= 5: # 2 syllables
         if vcvCheck(word, syllable_count, tokens) or vccvCheck(word, syllable_count, tokens) or vcccvCheck(word, syllable_count, tokens):
-            categories['2 syll. closed'].append(word)
+            #categories['2 syll. closed'].append(word)
+            pass
     elif syllable_count == 3 and len(tokens) >= 9: # 3 syllables
         if tokens[0] not in VOWEL_PHONEMES and tokens[1] not in VOWEL_PHONEMES:
             starting_index = 1
         else:
             starting_index = 0
-        if (tokens[starting_index] not in VOWEL_PHONEMES and tokens[starting_index+1] in VOWEL_PHONEMES and
-        tokens[starting_index+2] not in VOWEL_PHONEMES and tokens[starting_index+3] not in VOWEL_PHONEMES and 
-        tokens[starting_index+4] in VOWEL_PHONEMES and tokens[starting_index+5] not in VOWEL_PHONEMES and
-        tokens[starting_index+6] not in VOWEL_PHONEMES and tokens[starting_index+7] in VOWEL_PHONEMES and 
-        tokens[starting_index+8] not in VOWEL_PHONEMES):
-            categories['3 syll. closed'].append(word)
+        # if (tokens[starting_index] not in VOWEL_PHONEMES and tokens[starting_index+1] in VOWEL_PHONEMES and
+        # tokens[starting_index+2] not in VOWEL_PHONEMES and tokens[starting_index+3] not in VOWEL_PHONEMES and 
+        # tokens[starting_index+4] in VOWEL_PHONEMES and tokens[starting_index+5] not in VOWEL_PHONEMES and
+        # tokens[starting_index+6] not in VOWEL_PHONEMES and tokens[starting_index+7] in VOWEL_PHONEMES and 
+        # tokens[starting_index+8] not in VOWEL_PHONEMES):
+        #     categories['3 syll. closed'].append(word)
 
 
 def vcvCheck(word: str, syllable_count: int, tokens: list) -> None:

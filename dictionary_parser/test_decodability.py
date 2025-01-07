@@ -96,9 +96,22 @@ def main():
             'inputs': [
                 "",  # default sight words
                 "g",  # generate story
-                "200",  # story length
+                "250",  # story length
                 "A day at the park",  # topic
-                "b/l/p/j/ck/wh/aw/tch/igh/ir/oi",  # problem sounds
+                "au/war/ey as in monkey/ey as in they/ph/ie as in pie/ie as in thief/-sion as in tension/-sion as in vision/y as in gym/wr/eigh/ue as in blue/ough/wor/ei as in receive/ei as in vein/augh/oe/ui/ch as in echo/wa/eu/gh/mb/mn/que/gn/stle/rh/gue/alk/alt/qua/sc",  # problem sounds
+                "Tom",  # name
+                "7",  # reading level
+                "openai"   # API choice
+            ]
+        },
+        {
+            'description': "Generate story with these problems w/ openai and limited processing",
+            'inputs': [
+                "",  # default sight words
+                "g",  # generate story
+                "250",  # story length
+                "A day at the park",  # topic
+                "au/war/ey as in monkey/ey as in they/ph/ie as in pie/ie as in thief/-sion as in tension/-sion as in vision/y as in gym/wr/eigh/ue as in blue/ough/wor/ei as in receive/ei as in vein/augh/oe/ui/ch as in echo/wa/eu/gh/mb/mn/que/gn/stle/rh/gue/alk/alt/qua/sc/ear as in hear/ear as in early/y as in bumpy/aw/ly/ea as in eat/ea as in bread/3-letter beg. blends/vcv/vcccv/tch/soft c/soft g/ai/igh/ed/-ble, -cle, -dle, -fle, -gle, -kle, -ple, -tle, -zle/vrl syllables/oa/ir/-ild, -ind, -old, -ost/oi/double rule-suffixes/ew as in few/ew as in blew/v/v pattern/kn/e rule-suffixes/ou as in south/ur/dge/y rule suffixes/tion",  # problem sounds
                 "Tom",  # name
                 "7",  # reading level
                 "openai"   # API choice
