@@ -465,3 +465,156 @@ They sat by the water, soaking in the moment. “Days like this make me feel so go
 ------------------------------
 
 ==================================================
+
+=== Test Results 2025-01-07 17:51:10 ===
+Test Configuration:
+  description: Generate story with these problems w/ openai and limited processing
+  inputs: ['', 'g', '250', 'A day at the park', 'au/war/ey as in monkey/ey as in they/ph/ie as in pie/ie as in thief/-sion as in tension/-sion as in vision/y as in gym/wr/eigh/ue as in blue/ough/wor/ei as in receive/ei as in vein/augh/oe/ui/ch as in echo/wa/eu/gh/mb/mn/que/gn/stle/rh/gue/alk/alt/qua/sc', 'Tom', '7', 'openai']
+
+Aggregate Results:
+  Average Initial Decodability: 96.61%
+  Average Final Decodability: 64.30%
+  Average Runtime: 70.40 seconds
+  Number of Runs: 3
+
+Detailed Results:
+
+Run 1:
+  Initial Decodability: 96.36%
+  Final Decodability: 96.86%
+  Runtime: 85.39 seconds
+  Final Story:
+  
+
+------------------------------
+
+Run 2:
+  Initial Decodability: 96.02%
+  Final Decodability: 96.03%
+  Runtime: 95.64 seconds
+  Final Story:
+  
+
+------------------------------
+
+Run 3:
+  Initial Decodability: 97.44%
+  Final Decodability: 0.00%
+  Runtime: 30.18 seconds
+  Final Story:
+  **Chapter 1: A Bright Day at the Park**
+
+Tom woke up with a grin. Today was the day! He had been waiting for it all week. His heart raced at the thought of going to the park. He quickly got dressed, grabbed his favorite cap, and raced down the stairs.
+
+"Have fun!" his mother said, not missing a beat. "Just be back before dark!" 
+
+Tom met his good friends, Sarah and Max, near the entrance of the park. The sun was bright, and the sky was clear. Birds chirped above, and kids laughed all around. "This is it!" Tom said, feeling the thrill of adventure.
+
+The trio decided to split up, wanting to see all the fun things in the park. Tom and Sarah went to the playground first. They climbed onto the jungle gym, working together to reach the top. "Look how high we are!" Sarah yelled, her eyes sparkling. 
+
+Meanwhile, Max joined a group playing soccer. "Pass it here!" he shouted, running toward the ball, feeling the rush of the game. After a while, they met again for a picnic on a soft green patch of grass. 
+
+They pulled out sandwiches and snacks, laughing as they shared stories about their day. "That was awesome!" Tom said, feeling joy swell in his chest. Today was shaping up to be a great adventure, and they were ready for more! 
+**Chapter 2: The Hidden Trail**
+
+After the picnic, Tom, Sarah, and Max felt full of energy. "Let’s look for something new!" Tom suggested, grinning. "I heard there is a trail people talk about." 
+
+Curious, the trio wandered toward a part of the park they hadn’t seen yet. As they walked, they noticed the tall trees swaying gently. The bright sun peeked through the leaves, casting playful shadows on the ground. 
+
+Suddenly, Tom spotted a narrow path hidden behind some bushes. "Look!" he said, pointing at it. "Maybe this leads to something special!" 
+
+Without hesitating, they pushed through the foliage and began exploring the trail. Birds sang all around them, and the smell of fresh grass filled the air. After a few minutes of following the path, they found a small pond. 
+
+"What a nice spot!" Sarah said, her eyes wide with delight. They saw ducks paddling on the water and frogs leaping from one lily pad to another. "Look at those frogs!" Max exclaimed, scooping up a stone to skip across the pond. 
+
+Tom laughed, feeling happy. "This is really cool!" They sat down by the water, sharing their thoughts about nature. They talked and laughed, enjoying the moment together. 
+
+As the sun began to lower in the sky, Tom felt grateful for this day, this spot, and the friends he had by his side. "We should come back here!" he said, already dreaming of their next adventure.
+
+------------------------------
+
+==================================================
+
+=== Test Results 2025-01-07 18:03:07 ===
+Test Configuration:
+  description: Generate story with these problems w/ openai and limited processing
+  inputs: ['', 'g', '250', 'A day at the park', 'au/war/ey as in monkey/ey as in they/ph/ie as in pie/ie as in thief/-sion as in tension/-sion as in vision/y as in gym/wr/eigh/ue as in blue/ough/wor/ei as in receive/ei as in vein/augh/oe/ui/ch as in echo/wa/eu/gh/mb/mn/que/gn/stle/rh/gue/alk/alt/qua/sc/ear as in hear/ear as in early/y as in bumpy/aw/ly/ea as in eat/ea as in bread/3-letter beg. blends/vcv/vcccv/tch/soft c/soft g/ai/igh/ed/-ble, -cle, -dle, -fle, -gle, -kle, -ple, -tle, -zle/vrl syllables/oa/ir/-ild, -ind, -old, -ost/oi/double rule-suffixes/ew as in few/ew as in blew/v/v pattern/kn/e rule-suffixes/ou as in south/ur/dge/y rule suffixes/tion', 'Tom', '7', 'openai']
+
+Aggregate Results:
+  Average Initial Decodability: 78.52%
+  Average Final Decodability: 89.88%
+  Average Runtime: 238.86 seconds
+  Number of Runs: 3
+
+Detailed Results:
+
+Run 1:
+  Initial Decodability: 78.48%
+  Final Decodability: 89.48%
+  Runtime: 269.52 seconds
+  Final Story:
+  
+
+------------------------------
+
+Run 2:
+  Initial Decodability: 77.09%
+  Final Decodability: 87.23%
+  Runtime: 244.37 seconds
+  Final Story:
+  
+
+------------------------------
+
+Run 3:
+  Initial Decodability: 80.00%
+  Final Decodability: 92.93%
+  Runtime: 202.70 seconds
+  Final Story:
+  
+
+------------------------------
+
+==================================================
+
+=== Test Results 2025-01-07 18:18:22 ===
+Test Configuration:
+  description: Kay Test
+  inputs: ['', 'g', '250', 'Magical adventure about a girl and a dog', 's blends/l blends/r blends/-ink/-ct/-pt/oo as in book/ow as in plow/y as in bumpy/ea as in bread/open syllable two-syllable words/silent e two-syllable words/soft c/soft g/consonant -le syllables/oa/ir/ild/ind/oi/doubling rule-suffixes/kn/silent e syllables with suffixes/dge/tion', 'Kay', '3', 'openai']
+
+Aggregate Results:
+  Average Initial Decodability: 86.21%
+  Average Final Decodability: 97.15%
+  Average Runtime: 219.37 seconds
+  Number of Runs: 3
+
+Detailed Results:
+
+Run 1:
+  Initial Decodability: 86.57%
+  Final Decodability: 97.26%
+  Runtime: 171.45 seconds
+  Final Story:
+  
+
+------------------------------
+
+Run 2:
+  Initial Decodability: 86.25%
+  Final Decodability: 98.94%
+  Runtime: 202.60 seconds
+  Final Story:
+  
+
+------------------------------
+
+Run 3:
+  Initial Decodability: 85.81%
+  Final Decodability: 95.24%
+  Runtime: 284.06 seconds
+  Final Story:
+  
+
+------------------------------
+
+==================================================

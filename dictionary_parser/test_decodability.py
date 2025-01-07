@@ -67,7 +67,7 @@ def save_test_results(test_config, run_results, filename="main_test_results.txt"
         f.write("\nAggregate Results:\n")
         f.write(f"  Average Initial Decodability: {mean(run_results['initial_decodabilities']):.2f}%\n")
         f.write(f"  Average Final Decodability: {mean(run_results['final_decodabilities']):.2f}%\n")
-        f.write(f"  Average Runtime: {mean(run_results['runtimes']):.2f} seconds\n")
+        f.write(f"  Average Runtime: {mean([i for i in run_results['runtimes'] if i != 0]):.2f} seconds\n")
         f.write(f"  Number of Runs: {len(run_results['initial_decodabilities'])}\n")
         
         f.write("\nDetailed Results:\n")
@@ -92,31 +92,31 @@ def main():
     
     test_configs = [
         {
-            'description': "Generate story with these problems w/ openai and limited processing",
+            'description': "Kay Test",
             'inputs': [
                 "",  # default sight words
                 "g",  # generate story
                 "250",  # story length
-                "A day at the park",  # topic
-                "au/war/ey as in monkey/ey as in they/ph/ie as in pie/ie as in thief/-sion as in tension/-sion as in vision/y as in gym/wr/eigh/ue as in blue/ough/wor/ei as in receive/ei as in vein/augh/oe/ui/ch as in echo/wa/eu/gh/mb/mn/que/gn/stle/rh/gue/alk/alt/qua/sc",  # problem sounds
-                "Tom",  # name
-                "7",  # reading level
+                "Magical adventure about a girl and a dog",  # topic
+                "s blends/l blends/r blends/-ink/-ct/-pt/oo as in book/ow as in plow/y as in bumpy/ea as in bread/open syllable two-syllable words/silent e two-syllable words/soft c/soft g/consonant -le syllables/oa/ir/ild/ind/oi/doubling rule-suffixes/kn/silent e syllables with suffixes/dge/tion",  # problem sounds
+                "Kay",  # name
+                "3",  # reading level
                 "openai"   # API choice
             ]
         },
-        {
-            'description': "Generate story with these problems w/ openai and limited processing",
-            'inputs': [
-                "",  # default sight words
-                "g",  # generate story
-                "250",  # story length
-                "A day at the park",  # topic
-                "au/war/ey as in monkey/ey as in they/ph/ie as in pie/ie as in thief/-sion as in tension/-sion as in vision/y as in gym/wr/eigh/ue as in blue/ough/wor/ei as in receive/ei as in vein/augh/oe/ui/ch as in echo/wa/eu/gh/mb/mn/que/gn/stle/rh/gue/alk/alt/qua/sc/ear as in hear/ear as in early/y as in bumpy/aw/ly/ea as in eat/ea as in bread/3-letter beg. blends/vcv/vcccv/tch/soft c/soft g/ai/igh/ed/-ble, -cle, -dle, -fle, -gle, -kle, -ple, -tle, -zle/vrl syllables/oa/ir/-ild, -ind, -old, -ost/oi/double rule-suffixes/ew as in few/ew as in blew/v/v pattern/kn/e rule-suffixes/ou as in south/ur/dge/y rule suffixes/tion",  # problem sounds
-                "Tom",  # name
-                "7",  # reading level
-                "openai"   # API choice
-            ]
-        }
+        # {
+        #     'description': "Generate story with these problems w/ openai and limited processing",
+        #     'inputs': [
+        #         "",  # default sight words
+        #         "g",  # generate story
+        #         "250",  # story length
+        #         "A day at the park",  # topic
+        #         "au/war/ey as in monkey/ey as in they/ph/ie as in pie/ie as in thief/-sion as in tension/-sion as in vision/y as in gym/wr/eigh/ue as in blue/ough/wor/ei as in receive/ei as in vein/augh/oe/ui/ch as in echo/wa/eu/gh/mb/mn/que/gn/stle/rh/gue/alk/alt/qua/sc/ear as in hear/ear as in early/y as in bumpy/aw/ly/ea as in eat/ea as in bread/3-letter beg. blends/vcv/vcccv/tch/soft c/soft g/ai/igh/ed/-ble, -cle, -dle, -fle, -gle, -kle, -ple, -tle, -zle/vrl syllables/oa/ir/-ild, -ind, -old, -ost/oi/double rule-suffixes/ew as in few/ew as in blew/v/v pattern/kn/e rule-suffixes/ou as in south/ur/dge/y rule suffixes/tion",  # problem sounds
+        #         "Tom",  # name
+        #         "7",  # reading level
+        #         "openai"   # API choice
+        #     ]
+        # }
         # {
         #     'description': "Generate story with s problems w/ anthropic",
         #     'inputs': [
