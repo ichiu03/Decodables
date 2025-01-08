@@ -3,7 +3,6 @@ import './StoryDisplay.css';
 
 const StoryDisplay = ({ story, badWords, onFoundWords }) => {
 //   console.log('StoryDisplay Props:', { story, badWords });
-
   useEffect(() => {
     if (story && badWords) {
       const foundWords = {};
