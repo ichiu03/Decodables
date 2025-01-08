@@ -1,20 +1,35 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { getWordPronunciation } from '../services/api';
 import './StoryDisplay.css';
 
 const StoryDisplay = ({ story, badWords, onFoundWords }) => {
-//   console.log('StoryDisplay Props:', { story, badWords });
-
   const [audioUrls, setAudioUrls] = useState({});
   const [isPlaying, setIsPlaying] = useState({});
+  const [hoveredWord, setHoveredWord] = useState(null);
 
-  const handlePlayPronunciation = async (word) => {
-    try {
-      if (!audioUrls[word]) {
-        const audioUrl = await getWordPronunciation(word);
-        setAudioUrls(prev => ({ ...prev, [word]: audioUrl }));
+  // Pre-fetch audio for all bad words when story changes
+  useEffect(() => {
+    const fetchAudioForWords = async () => {
+      if (!story || !badWords) return;
+      
+      const words = Object.keys(badWords);
+      for (const word of words) {
+        if (story.toLowerCase().includes(word) && !audioUrls[word]) {
+          try {
+            const audioUrl = await getWordPronunciation(word);
+            setAudioUrls(prev => ({ ...prev, [word]: audioUrl }));
+          } catch (error) {
+            console.error(`Error fetching audio for ${word}:`, error);
+          }
+        }
       }
+    };
+    
+    fetchAudioForWords();
+  }, [story, badWords]); // Remove audioUrls from dependency array
 
+  const handlePlayPronunciation = useCallback((word) => {
+    try {
       const audio = new Audio(audioUrls[word]);
       setIsPlaying(prev => ({ ...prev, [word]: true }));
       
@@ -26,30 +41,9 @@ const StoryDisplay = ({ story, badWords, onFoundWords }) => {
     } catch (error) {
       console.error('Error playing pronunciation:', error);
     }
-  };
+  }, [audioUrls]);
 
-  useEffect(() => {
-    if (story && badWords) {
-      const foundWords = {};
-      const badWordsArray = Object.keys(badWords);
-      
-      badWordsArray.forEach(word => {
-        const regex = new RegExp(`\\b${word}\\b`, 'gi');
-        const matches = story.match(regex);
-        if (matches) {
-          const uniqueCategories = [...new Set(badWords[word].categories)];
-          foundWords[word] = {
-            count: matches.length,
-            categories: uniqueCategories
-          };
-        }
-      });
-      
-      onFoundWords(foundWords);
-    }
-  }, [story, badWords, onFoundWords]);
-
-  const highlightBadWords = (text) => {
+  const highlightBadWords = useCallback((text) => {
     if (!text || !badWords) return text;
     
     const badWordsArray = Object.keys(badWords);
@@ -63,30 +57,40 @@ const StoryDisplay = ({ story, badWords, onFoundWords }) => {
     const parts = text.split(regex);
 
     return parts.map((part, i) => {
-      if (badWords[part.toLowerCase()]) {
-        const uniqueCategories = [...new Set(badWords[part.toLowerCase()].categories)];
+      const lowerPart = part.toLowerCase();
+      if (badWords[lowerPart]) {
+        const uniqueCategories = [...new Set(badWords[lowerPart].categories)];
         const tooltip = `Problem categories: ${uniqueCategories.join(', ')}`;
+        const isHovered = hoveredWord === lowerPart;
+        
         return (
           <span 
             key={i} 
             className="bad-word-container"
+            onMouseEnter={() => setHoveredWord(lowerPart)}
+            onMouseLeave={() => setHoveredWord(null)}
           >
             <span className="bad-word" title={tooltip}>
               {part}
             </span>
-            <button 
-              className="pronunciation-button"
-              onClick={() => handlePlayPronunciation(part.toLowerCase())}
-              disabled={isPlaying[part.toLowerCase()]}
-            >
-              {isPlaying[part.toLowerCase()] ? '🔊' : '🔈'}
-            </button>
+            {isHovered && audioUrls[lowerPart] && (
+              <button 
+                className="pronunciation-button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handlePlayPronunciation(lowerPart);
+                }}
+                disabled={isPlaying[lowerPart]}
+              >
+                {isPlaying[lowerPart] ? '🔊' : '🔈'}
+              </button>
+            )}
           </span>
         );
       }
       return part;
     });
-  };
+  }, [badWords, hoveredWord, audioUrls, isPlaying, handlePlayPronunciation]);
 
   return (
     <div className="story-text">
