@@ -6,7 +6,10 @@ from main import process_story, generate_story, handle_sight_words, original_dec
 import re
 from dictionaryParser import parseAndProcessWords
 from collections import Counter
+from query import *
 
+FRONTEND_DIR = os.path.join(os.path.dirname(__file__), '..', 'frontend', 'public')
+os.makedirs(FRONTEND_DIR, exist_ok=True)
 app = FastAPI()
 
 # Configure CORS
@@ -142,6 +145,19 @@ async def process_story_endpoint(request: ProcessStoryRequest):
             combined=True
         )
        
+        try:
+            audio_path = os.path.join(FRONTEND_DIR, 'story.mp3')
+            os.makedirs(os.path.dirname(audio_path), exist_ok=True)
+            
+            # Clear existing audio file
+            if os.path.exists(audio_path):
+                os.remove(audio_path)
+                
+            # Generate new audio file
+            query_sound(story4, audio_path)
+            
+        except Exception as e:
+            print(f"Error generating audio: {e}")
         # Return appropriate response based on story choice
         if request.storyChoice == 'i':
            
@@ -154,6 +170,7 @@ async def process_story_endpoint(request: ProcessStoryRequest):
                 "success": True,
                 "generatedStory": story4
             }
+
 
 
     except Exception as e:
