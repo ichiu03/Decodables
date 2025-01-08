@@ -74,4 +74,51 @@
 
 .pronunciation-button:disabled {
   cursor: wait;
+}
+
+.story-container {
+  position: relative;
+  margin-top: 45px;
+}
+
+.story-header {
+  position: absolute;
+  left: 50%;
+  top: -35px;
+  transform: translateX(-50%);
+}
+
+.story-header h3 {
+  margin: 0;
+  color: #333;
+  font-family: 'Quicksand', 'Segoe UI', 'Roboto', sans-serif;
+  font-weight: 500;
+}
+
+.story-audio-button {
+  background-color: #2196F3;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 12px;
+  font-family: 'Quicksand', 'Segoe UI', 'Roboto', sans-serif;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.3s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.story-audio-button:hover:not(:disabled) {
+  background-color: #1976D2;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.story-audio-button:disabled {
+  background-color: #90CAF9;
+  cursor: wait;
 } 

@@ -6,6 +6,40 @@ const StoryDisplay = ({ story, badWords, onFoundWords }) => {
   const [audioUrls, setAudioUrls] = useState({});
   const [isPlaying, setIsPlaying] = useState({});
   const [hoveredWord, setHoveredWord] = useState(null);
+  const [isPlayingStory, setIsPlayingStory] = useState(false);
+  const [storyAudio] = useState(new Audio(`${process.env.PUBLIC_URL}/story.mp3`));
+
+  // Add error handling for audio loading
+  useEffect(() => {
+    storyAudio.onerror = () => {
+      console.error('Error loading story audio');
+      setIsPlayingStory(false);
+    };
+  }, [storyAudio]);
+
+  const handlePlayStory = useCallback(() => {
+    if (isPlayingStory) {
+      storyAudio.pause();
+      storyAudio.currentTime = 0;
+      setIsPlayingStory(false);
+    } else {
+      // Reload the audio source when playing
+      storyAudio.src = `${process.env.PUBLIC_URL}/story.mp3?t=${Date.now()}`;
+      storyAudio.play().catch(error => {
+        console.error('Error playing story:', error);
+        setIsPlayingStory(false);
+      });
+      setIsPlayingStory(true);
+    }
+  }, [storyAudio, isPlayingStory]);
+
+  useEffect(() => {
+    storyAudio.onended = () => setIsPlayingStory(false);
+    return () => {
+      storyAudio.pause();
+      storyAudio.currentTime = 0;
+    };
+  }, [storyAudio]);
 
   // Pre-fetch audio for all bad words when story changes
   useEffect(() => {
@@ -14,7 +48,9 @@ const StoryDisplay = ({ story, badWords, onFoundWords }) => {
       
       const words = Object.keys(badWords);
       for (const word of words) {
-        if (story.toLowerCase().includes(word) && !audioUrls[word]) {
+        // Create a regex to match whole words only
+        const wordRegex = new RegExp(`\\b${word}\\b`, 'i');
+        if (wordRegex.test(story) && !audioUrls[word]) {
           try {
             const audioUrl = await getWordPronunciation(word);
             setAudioUrls(prev => ({ ...prev, [word]: audioUrl }));
@@ -93,8 +129,18 @@ const StoryDisplay = ({ story, badWords, onFoundWords }) => {
   }, [badWords, hoveredWord, audioUrls, isPlaying, handlePlayPronunciation]);
 
   return (
-    <div className="story-text">
-      {highlightBadWords(story)}
+    <div className="story-container">
+      <div className="story-header">
+        <button 
+          className="story-audio-button"
+          onClick={handlePlayStory}
+        >
+          {isPlayingStory ? '🔊 Playing...' : '🔊'}
+        </button>
+      </div>
+      <div className="story-text">
+        {highlightBadWords(story)}
+      </div>
     </div>
   );
 };

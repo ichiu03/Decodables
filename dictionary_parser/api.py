@@ -147,7 +147,8 @@ async def process_story_endpoint(request: ProcessStoryRequest):
         )
        
         try:
-            audio_path = os.path.join(FRONTEND_DIR, 'story.mp3')
+            audio_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 
+                                     'frontend', 'public', 'story.mp3')
             os.makedirs(os.path.dirname(audio_path), exist_ok=True)
             
             # Clear existing audio file
