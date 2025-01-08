@@ -76,18 +76,6 @@
   cursor: wait;
 }
 
-.story-container {
-  position: relative;
-  margin-top: 45px;
-}
-
-.story-header {
-  position: absolute;
-  left: 50%;
-  top: -35px;
-  transform: translateX(-50%);
-}
-
 .story-header h3 {
   margin: 0;
   color: #333;
