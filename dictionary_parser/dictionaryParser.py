@@ -46,7 +46,7 @@ categories = {
     'ea as in bread': [], '3-letter beg. blends': [], 'tch': [], 'soft c': [],
     '-ble, -cle, -dle, -fle, -gle, -kle, -ple, -tle, -zle': [], 'soft g': [], 'ai': [], 'igh': [], 'ed': [],
     'cle ending': [], 'vowel_team': [], 'r-controlled': [], 'oa': [], 'ir': [], '-ild, -ind, -old, -ost': [],
-    'oi': [], 'double rule-suffixes': [], 'ew as in few/blew': [], 'v v pattern': [], 'kn': [], 'e rule-suffixes': [],
+    'oi': [], 'double rule-suffixes': [], 'ew as in few/blew': [], 'v/v pattern': [], 'kn': [], 'e rule-suffixes': [],
     'ou as in south': [], 'ur': [], 'dge': [], 'y rule suffixes': [], 'tion': [],
     # Column 5
     'au': [], 'war': [], 'ey as in monkey': [], 'ey as in they': [], 'ph': [],
@@ -543,7 +543,7 @@ def silentECheck(word: str, syllable_count: int) -> None:
             categories['1 syll. vce'].append(word)
         elif syllable_count == 2:
             # Check on first syllable
-            if 
+            #if 
             categories['2 syll. vce'].append(word)
 
 
@@ -701,7 +701,7 @@ def vvCheck(word: str, arpabet: str) -> None:
             if word[i:i + len(comp)] == comp:
                 compound = word[i: i+len(comp)]
                 if is_vv(compound, arpabet):
-                    categories['v v pattern'].append(word)
+                    categories['v/v pattern'].append(word)
         i += 1
 
 
