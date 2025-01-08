@@ -61,6 +61,16 @@ def query_openai(prompt):
     )
     return response.choices[0].message.content
 
+def query_sound(text, soundfile):
+
+    response = openai_client.audio.speech.create(
+        model="tts-1",
+        voice="alloy",
+        input=text,
+    )
+    return response.stream_to_file(soundfile)
+
+
 def query_anthropic(prompt):
     message = anthropic_client.messages.create(
         model="claude-3-5-sonnet-20241022",

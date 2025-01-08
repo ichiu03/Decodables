@@ -58,12 +58,10 @@ async def process_story_endpoint(request: ProcessStoryRequest):
             maxsyllable = 2
         elif int(readingLevel) <= 3:
             maxsyllable = 3
-        elif int(readingLevel) <= 5:
-            maxsyllable = 4
         elif int(readingLevel) <= 7:
-            maxsyllable = 5
+            maxsyllable = 4
         elif int(readingLevel) <= 9:
-            maxsyllable = 6
+            maxsyllable = 5
         else:
             maxsyllable = 10
 

@@ -459,12 +459,10 @@ def main():
             maxsyllable = 2
         elif int(readingLevel) <= 3:
             maxsyllable = 3
-        elif int(readingLevel) <= 5:
-            maxsyllable = 4
         elif int(readingLevel) <= 7:
-            maxsyllable = 5
+            maxsyllable = 4
         elif int(readingLevel) <= 9:
-            maxsyllable = 6
+            maxsyllable = 5
         else:
             maxsyllable = 10
         
@@ -488,12 +486,10 @@ def main():
             maxsyllable = 2
         elif int(readingLevel) <= 3:
             maxsyllable = 3
-        elif int(readingLevel) <= 5:
-            maxsyllable = 4
         elif int(readingLevel) <= 7:
-            maxsyllable = 5
+            maxsyllable = 4
         elif int(readingLevel) <= 9:
-            maxsyllable = 6
+            maxsyllable = 5
         else:
             maxsyllable = 10
         problems = input("Enter the problem letters separated by /: ").split("/")
