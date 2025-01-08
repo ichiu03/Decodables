@@ -63,7 +63,6 @@ def query_openai(prompt):
     return response.choices[0].message.content
 
 def query_sound(text, soundfile):
-
     response = openai_client.audio.speech.create(
         model="tts-1",
         voice="alloy",
