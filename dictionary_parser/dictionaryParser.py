@@ -543,11 +543,7 @@ def silentECheck(word: str, syllable_count: int) -> None:
             categories['1 syll. vce'].append(word)
         elif syllable_count == 2:
             # Check on first syllable
-<<<<<<< HEAD
             #if 
-=======
-            # if 
->>>>>>> aebb5d60fa007f35ef55571b3933e6375f797267
             categories['2 syll. vce'].append(word)
 
 
