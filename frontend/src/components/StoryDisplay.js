@@ -1,8 +1,32 @@
 import React, { useState, useEffect } from 'react';
+import { getWordPronunciation } from '../services/api';
 import './StoryDisplay.css';
 
 const StoryDisplay = ({ story, badWords, onFoundWords }) => {
 //   console.log('StoryDisplay Props:', { story, badWords });
+
+  const [audioUrls, setAudioUrls] = useState({});
+  const [isPlaying, setIsPlaying] = useState({});
+
+  const handlePlayPronunciation = async (word) => {
+    try {
+      if (!audioUrls[word]) {
+        const audioUrl = await getWordPronunciation(word);
+        setAudioUrls(prev => ({ ...prev, [word]: audioUrl }));
+      }
+
+      const audio = new Audio(audioUrls[word]);
+      setIsPlaying(prev => ({ ...prev, [word]: true }));
+      
+      audio.onended = () => {
+        setIsPlaying(prev => ({ ...prev, [word]: false }));
+      };
+      
+      audio.play();
+    } catch (error) {
+      console.error('Error playing pronunciation:', error);
+    }
+  };
 
   useEffect(() => {
     if (story && badWords) {
@@ -45,10 +69,18 @@ const StoryDisplay = ({ story, badWords, onFoundWords }) => {
         return (
           <span 
             key={i} 
-            className="bad-word" 
-            title={tooltip}
+            className="bad-word-container"
           >
-            {part}
+            <span className="bad-word" title={tooltip}>
+              {part}
+            </span>
+            <button 
+              className="pronunciation-button"
+              onClick={() => handlePlayPronunciation(part.toLowerCase())}
+              disabled={isPlaying[part.toLowerCase()]}
+            >
+              {isPlaying[part.toLowerCase()] ? '🔊' : '🔈'}
+            </button>
           </span>
         );
       }

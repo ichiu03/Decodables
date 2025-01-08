@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Response
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import List, Optional
@@ -6,6 +6,8 @@ from main import process_story, generate_story, handle_sight_words, original_dec
 import re
 from dictionaryParser import parseAndProcessWords
 from collections import Counter
+from query import query_sound
+import os
 
 app = FastAPI()
 
@@ -205,6 +207,31 @@ async def get_decodability_endpoint(request: DecodabilityRequest):
         }
 
 
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/api/pronounce")
+async def pronounce_word(word: str):
+    try:
+        # Create a temporary file path for the audio
+        temp_file = f"temp_{word}.mp3"
+        
+        # Generate audio using OpenAI TTS
+        query_sound(word, temp_file)
+        
+        # Read the audio file and return it
+        with open(temp_file, "rb") as audio_file:
+            audio_content = audio_file.read()
+            
+        # Clean up the temporary file
+        os.remove(temp_file)
+        
+        # Return the audio content
+        return Response(
+            content=audio_content,
+            media_type="audio/mpeg"
+        )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

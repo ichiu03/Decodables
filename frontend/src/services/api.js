@@ -89,4 +89,22 @@ export const getDecodability = async (text, selectedProblems) => {
     console.error('Error getting decodability:', error);
     throw error;
   }
+};
+
+export const getWordPronunciation = async (word) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/pronounce?word=${encodeURIComponent(word)}`, {
+      method: 'POST'
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const audioBlob = await response.blob();
+    return URL.createObjectURL(audioBlob);
+  } catch (error) {
+    console.error('Error getting pronunciation:', error);
+    throw error;
+  }
 }; 
