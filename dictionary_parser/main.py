@@ -134,7 +134,7 @@ def ultraformatting(text):
     text = re.sub(r'\s+', ' ', text)
 
     text = re.sub(r'["""]', '"', text)
-   
+
     # Trim leading and trailing spaces
     text = text.strip()
    
