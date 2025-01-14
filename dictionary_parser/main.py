@@ -385,7 +385,7 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
        
         decodability = categorize_and_validate_words(story, problems, maxsyllable)["decodability"]
         iteration = 0
-        story = rewrite_sentences(story)
+        
         while decodability < 0.92 and iteration < 4:
             print(f"Decodability: {decodability}")
             print("Checking and categorizing words...")
@@ -397,6 +397,9 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
             story = ultraformatting(story)
             decodability = categorize_and_validate_words(story, problems, maxsyllable)["decodability"]
             iteration+=1
+        story = rewrite_sentences(story)
+        decodability = categorize_and_validate_words(story, problems, maxsyllable)["decodability"]
+        print(f"Decodability: {decodability}")
         grades = grade_story(story)
         story = grammar_fix(story)
         with open("grades.txt", "w") as grades_file:
