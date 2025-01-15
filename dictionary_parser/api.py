@@ -12,7 +12,7 @@ import os
 FRONTEND_DIR = os.path.join(os.path.dirname(__file__), '..', 'frontend', 'public')
 os.makedirs(FRONTEND_DIR, exist_ok=True)
 app = FastAPI()
-
+topic = None
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
@@ -40,7 +40,7 @@ class DecodabilityRequest(BaseModel):
 
 
 # Default sight words (moved from main.py)
-default_sight_words = "a,at,any,many,and,on,is,are,the,was,were,it,am,be,go,to,out,been,this,come,some,do,does,done,what,who,you,your,both,buy,door,floor,four,none,once,one,only,pull,push,sure,talk,walk,their,there,they're,very,want,again,against,always,among,busy,could,should,would,enough,rough,tough,friend,move,prove,ocean,people,she,other,above,father,usually,special,front,thought,he,we,they,nothing,learned,toward,put,hour,beautiful,whole,trouble,of,off,use,have,our,say,make,take,see,think,look,give,how,ask,boy,girl,us,him,his,her,by,where,were,wear,hers,don't,which,just,know,into,good,other,than,then,now,even,also,after,know,because,most,day,these,two,already,through,though,like,said,too,has,in,brother,sister,that,them,from,for,with,doing,well,before,tonight,down,about,but,up,around,goes,gone,build,built,cough,lose,loose,truth,daughter,son"
+sight_words = "a,at,any,many,and,on,is,are,the,was,were,it,am,be,go,to,out,been,this,come,some,do,does,done,what,who,you,your,both,buy,door,floor,four,none,once,one,only,pull,push,sure,talk,walk,their,there,they're,very,want,again,against,always,among,busy,could,should,would,enough,rough,tough,friend,move,prove,ocean,people,she,other,above,father,usually,special,front,thought,he,we,they,nothing,learned,toward,put,hour,beautiful,whole,trouble,of,off,use,have,our,say,make,take,see,think,look,give,how,ask,boy,girl,us,him,his,her,by,where,were,wear,hers,don't,which,just,know,into,good,other,than,then,now,even,also,after,know,because,most,day,these,two,already,through,though,like,said,too,has,in,brother,sister,that,them,from,for,with,doing,well,before,tonight,down,about,but,up,around,goes,gone,build,built,cough,lose,loose,truth,daughter,son"
 
 
 @app.post("/api/process-story")
@@ -49,11 +49,12 @@ async def process_story_endpoint(request: ProcessStoryRequest):
         # Update sight_words
         global sight_words
         global original_decodability
-        global topic_words
-        sight_words = handle_sight_words(default_sight_words, ','.join(request.unknownSightWords))
-        topic_words = request.storyTopic.split() if request.storyTopic else []
-        for i in range(len(topic_words)):
-            sight_words+=(","+topic_words[i])
+        global topic
+        topic = request.storyTopic
+        sight_words = handle_sight_words(sight_words, ','.join(request.unknownSightWords))
+        # topic_words = request.storyTopic.split() if request.storyTopic else []
+        # for i in range(len(topic_words)):
+        #     sight_words+=(","+topic_words[i])
        
         problems = request.problemLetters
         print(f"Problems: {problems}")
@@ -86,7 +87,7 @@ async def process_story_endpoint(request: ProcessStoryRequest):
                 story_length=request.storyLength
             )
             
-            original_decodability, _ = process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=True)
+            original_decodability, _ = process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=True, topic=request.storyTopic)
             if original_decodability > 0.97:
                 return {
                     "success": True,
@@ -99,7 +100,7 @@ async def process_story_endpoint(request: ProcessStoryRequest):
                     detail="Story input required for processing"
                 )
             story = request.storyInput
-            original_decodability, _ = process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=True)
+            original_decodability, _ = process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=True, topic=request.storyTopic)
             if original_decodability > 0.97:
                 return {
                     "success": True,
@@ -143,7 +144,8 @@ async def process_story_endpoint(request: ProcessStoryRequest):
             maxsyllable,
             apply_correction=False,
             spellcheck=False,
-            combined=True
+            combined=True,
+            topic=request.storyTopic
         )
        
         try:
@@ -181,6 +183,7 @@ async def process_story_endpoint(request: ProcessStoryRequest):
 
 @app.post("/api/decodability")
 async def get_decodability_endpoint(request: DecodabilityRequest):
+    global sight_words
     try:
         # Process the text and get word categories
         word_dict = parseAndProcessWords(request.text, 10)
@@ -190,6 +193,9 @@ async def get_decodability_endpoint(request: DecodabilityRequest):
         story_words = re.findall(r'\b\w+\b', request.text.lower())
         word_counts = Counter(story_words)
 
+        topic_words = topic.split()
+        for i in range(len(topic_words)):
+            sight_words+=(","+topic_words[i])
 
         for problem in request.problems:
             problem = problem.strip()
@@ -214,8 +220,10 @@ async def get_decodability_endpoint(request: DecodabilityRequest):
             apply_correction=True,
             spellcheck=True,
             combined=False,
-            decodabilityTest=True
+            decodabilityTest=True,
+            topic=topic
         )
+        print(f"topic: {topic}")
        
         return {
             "success": True,

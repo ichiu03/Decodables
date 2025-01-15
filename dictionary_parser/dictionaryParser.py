@@ -849,7 +849,7 @@ def callCategorizationFunctions(word: str, arpabet: str, syllable_count: int, to
     ingongangungCheck(word, append_word)
     contractionsCheck(word, append_word) 
     vccvCheck(word, syllable_count, tokens, append_word)
-    OCECheck(word, syllable_count, tokens, append_word)
+   # OCECheck(word, syllable_count, tokens, append_word)
     fszlCheck(word, syllable_count, tokens, append_word)
 
 ### PROBLEM
