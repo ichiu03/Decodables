@@ -45,8 +45,15 @@ categories = {
     # Column 4
     'ear as in hear': [], 'ear as in early': [], 'y as in bumpy': [], 'aw': [], 'ly': [], 'ea as in eat': [],
     'ea as in bread': [], '3-letter beg. blends': [], 'tch': [], 'soft c': [],
-    '-ble, -cle, -dle, -fle, -gle, -kle, -ple, -tle, -zle': [], 'soft g': [], 'ai': [], 'igh': [], 'ed': [],
-    'cle ending': [], 'vowel_team': [], 'r-controlled': [], 'oa': [], 'ir': [], '-ild, -ind, -old, -ost': [],
+    '2 syllable -cle syllable words with closed syllable': [], '2 syllable -cle syllable words with open syllable':[], 'soft g': [], 'ai': [], 'igh': [], 'ed': [],
+    'cle ending': [], '1 syllable vowel team syllable words': [], '2 syllable vowel team syllable words': [], '2 syllable vowel team syllable words with closed syllable': [],
+    '2 syllable vowel team syllable words with silent e syllable': [], '2 syllable vowel team syllable words with open syllable': [],
+    '2 syllable vowel team syllable words with -cle syllable': [], '2 syllable vowel team syllable words with r-control syllable': [],
+    'multisyllable mixed with vowel team, closed, silent e, open, -cle, and r-control': [],
+    '1 syllable r-control syllable words': [], '2 syllable r-control syllable words':[], '2 syllable r-control syllable words with silent e syllable':[], 
+    '2 syllable r-control syllable words with open syllables':[], '2 syllable r-control syllable words with -cle syllables':[], 
+    'multisyllable mixed with closed, silent e, open, -cle, and r-control':[],
+    'oa': [], 'ir': [], '-ild, -ind, -old, -ost': [],
     'oi': [], 'double rule-suffixes': [], 'ew as in few/blew': [], 'v/v pattern': [], 'kn': [], 'e rule-suffixes': [],
     'ou as in south': [], 'ur': [], 'dge': [], 'y rule suffixes': [], 'tion': [],
     # Column 5
