@@ -561,7 +561,7 @@ def threelBlends(word: str, append_word: str) -> None:
         categories['3-letter beg. blends'].append(append_word)
 
 
-def silentECheck(word: str, syllable_count: int, append_word: str) -> None:
+def silentECheck(word: str, syllable_count: int, append_word: str, tokens: list) -> None:
     if len(word) < 3: return
     if vceCheck(word, append_word):
         short_vowels = shortVowelCounter(tokens)
@@ -844,7 +844,7 @@ def callCategorizationFunctions(word: str, arpabet: str, syllable_count: int, to
     yRuleSuffix(word, append_word)
     eRuleSuffix(word, append_word)
     vrlCheck(word, syllable_count, append_word)
-    silentECheck(word, syllable_count, append_word)
+    silentECheck(word, syllable_count, append_word, tokens)
     xInWordCheck(word, arpabet, tokens, append_word)
     ingongangungCheck(word, append_word)
     contractionsCheck(word, append_word) 
