@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException, Response
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import List, Optional
-from main import process_story, generate_story, handle_sight_words, original_decodability
+from main import process_story, generate_story, handle_sight_words, original_decodability, find_commons
 import re
 from dictionaryParser import parseAndProcessWords
 from collections import Counter
