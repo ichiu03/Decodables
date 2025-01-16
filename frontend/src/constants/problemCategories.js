@@ -38,8 +38,5 @@ export const PROBLEM_CATEGORIES = {
   'y as in gym', 'wr', 'eigh', 'ue as in blue', 'ough', 'wor', 'ei as in receive',
   'ei as in vein', 'augh', 'oe', 'ui', 'ch as in echo', 'wa', 'eu', 'gh', 'mb',
   'mn', 'que', 'gn', 'stle','rh', 'gue', 'alk', 'alt', 'qua', 'sc',
-  ],
-  'Uncategorized':[
-  'failed to categorize', 'too many syllables'
   ]
   };
