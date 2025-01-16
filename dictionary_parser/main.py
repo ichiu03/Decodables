@@ -168,6 +168,14 @@ def find_proper_nouns(story, sight_words):
     sight_words += "," + propernouns
     return 
 
+def find_commons(topic):
+    prompt = f"""What are 15 common words that are not in this prompt that could be found in a story with this prompt: {topic}
+                
+                Return only the words in this format: word1,word2,word3,...
+                 """
+    words = query(prompt)
+    wordlist = words.split(',')
+    return wordlist
 
 def process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=False, topic=None):
     global sight_words
@@ -318,13 +326,6 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
         for word, count in sorted(bad_occurrences.items()):
             print(f"{word}: {count}")
     
-    def find_commons(topic):
-        prompt = f"""What are 15 common words that are not in this prompt that could be found in a story with this prompt: {topic}
-                    
-                    Return only the words in this format: word1,word2,word3,...
-                     """
-        words = query(prompt)
-        wordlist = words.split(',')
 
     def save_problem_words_by_sound(word_dict, problems, story):
         problem_words_file = "problem_words_by_sound.txt"
@@ -414,7 +415,6 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
         print(f"Decodability: {decodability}")
         grades = grade_story(story)
         story = grammar_fix(story)
-        commons = find_commons(story)
         with open("grades.txt", "w") as grades_file:
             grades_file.write(grades)
         return story
@@ -536,6 +536,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
