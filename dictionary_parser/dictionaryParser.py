@@ -94,6 +94,7 @@ def shortVowelCounter(tokens: list) -> tuple:
             else:
                 vow.append('l')
     return counter, vow
+    ### number of short vowel, ['s', 'l', 's']
 
 #word = 'splendidly'
 #arp = pronouncing.phones_for_word(word)[0]
@@ -568,7 +569,7 @@ def silentECheck(word: str, syllable_count: int, append_word: str) -> None:
         if syllable_count == 1:
             categories['1 syll. vce'].append(append_word)
         elif syllable_count == 2:
-            if short_vowels[0] == 1:
+            if short_vowels[0] == 1: 
                 categories['2 syll. vce w/ closed syllable'].append(append_word)
             else:
                 categories['2 syll. vce'].append(append_word)
