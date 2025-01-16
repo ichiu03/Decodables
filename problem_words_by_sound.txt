@@ -1,92 +1,92 @@
 
---- Problem Words Analysis 2025-01-16 13:01:13 ---
+--- Problem Words Analysis 2025-01-16 13:03:22 ---
 
 All words in story and their sound categories:
+1: [no problem sounds]
 a: [no problem sounds]
-all: [all]
+about: [no problem sounds]
 and: [no problem sounds]
-at: [no problem sounds]
+any: [no problem sounds]
+anything: [-ing, -ong, -ang, -ung, th]
+as: [no problem sounds]
 ball: [all]
+be: [no problem sounds]
+beam: [no problem sounds]
+became: [2 syll. vce]
 big: [no problem sounds]
+bold: [no problem sounds]
+bout: [no problem sounds]
 boy: [no problem sounds]
-brought: [r blends, ough]
-came: [1 syll. vce]
-catch: [ch]
-caught: [augh]
-cheered: [ee, ch]
-cups: [no problem sounds]
+by: [no problem sounds]
+could: [no problem sounds]
 day: [no problem sounds]
-end: [-ft, -nd, -st]
-everyone: [no problem sounds]
-felt: [-sk, -lt, -lk]
-footballs: [all, oo as in book]
-for: [no problem sounds]
-friends: [r blends, -ft, -nd, -st]
+do: [no problem sounds]
+entry: [no problem sounds]
+fit: [no problem sounds]
+football: [all, oo as in book]
 fun: [no problem sounds]
-gave: [1 syll. vce]
-grin: [r blends]
+go: [no problem sounds]
+goal: [no problem sounds]
+good: [no problem sounds]
 had: [no problem sounds]
 happy: [no problem sounds]
-hard: [ar]
-have: [no problem sounds]
 he: [no problem sounds]
-help: [no problem sounds]
-how: [no problem sounds]
-i: [no problem sounds]
+his: [no problem sounds]
 in: [no problem sounds]
-joy: [oy]
+join: [no problem sounds]
 kid: [no problem sounds]
-kids: [no problem sounds]
+knew: [no problem sounds]
 laughed: [no problem sounds]
 learn: [no problem sounds]
-let: [no problem sounds]
-liked: [no problem sounds]
-many: [no problem sounds]
-mini: [no problem sounds]
+light: [no problem sounds]
+lively: [no problem sounds]
+loved: [no problem sounds]
+magic: [no problem sounds]
+max: [no problem sounds]
+me: [no problem sounds]
+met: [no problem sounds]
+most: [no problem sounds]
+next: [no problem sounds]
+of: [no problem sounds]
 on: [no problem sounds]
 one: [no problem sounds]
-park: [ar]
-plan: [l blends]
+pals: [no problem sounds]
 play: [ay, l blends]
-proud: [r blends]
-ready: [no problem sounds]
-s: [no problem sounds]
 said: [no problem sounds]
-showed: [sh, ow as in snow]
-shy: [sh, y as in dry]
+shared: [sh]
+single: [no problem sounds]
+soared: [no problem sounds]
+special: [no problem sounds]
 steves: [s blends, 1 syll. vce]
 sunny: [no problem sounds]
+team: [no problem sounds]
+that: [no problem sounds]
 the: [no problem sounds]
 their: [no problem sounds]
-them: [no problem sounds]
 they: [no problem sounds]
+thought: [no problem sounds]
 throw: [th, ow as in snow]
+timid: [no problem sounds]
+tips: [no problem sounds]
 to: [no problem sounds]
-tried: [r blends]
+union: [no problem sounds]
+united: [no problem sounds]
+uniting: [no problem sounds]
 was: [no problem sounds]
-welcomed: [no problem sounds]
-were: [no problem sounds]
-what: [no problem sounds]
+where: [no problem sounds]
 who: [no problem sounds]
-will: [fszl]
 with: [no problem sounds]
+would: [no problem sounds]
+yard: [ar]
+yearned: [no problem sounds]
 
 Problem words by sound:
-fszl: will
-sh: showed, shy
+sh: shared
 ay: play
-ee: cheered
-ch: catch, cheered
-l blends: plan, play
-r blends: brought, friends, grin, proud, tried
-all: all, ball
-th: throw
-oy: joy
--ft, -nd, -st: end, friends
--sk, -lt, -lk: felt
-y as in dry: shy
-ar: hard, park
-1 syll. vce: came, gave
-ow as in snow: showed, throw
-ough: brought
-augh: caught
+l blends: play
+-ing, -ong, -ang, -ung: anything
+all: ball
+th: anything, throw
+ar: yard
+2 syll. vce: became
+ow as in snow: throw
