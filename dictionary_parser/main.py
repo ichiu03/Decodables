@@ -169,8 +169,12 @@ def find_proper_nouns(story, sight_words):
     return 
 
 
-def process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=False):
+def process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=False, topic=None):
     global sight_words
+    if topic:
+        topic_words = topic.split()
+        for i in range(len(topic_words)):
+            sight_words+=(","+topic_words[i])
     find_proper_nouns(story, sight_words)
     def categorize_and_validate_words(story, problems, maxsyllable):
         # Prepare sight words set

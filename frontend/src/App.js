@@ -8,6 +8,8 @@ import CharacterNameInput from './components/CharacterNameInput';
 import Login from './components/Login';
 import { processStory} from './services/api';
 import StoryDisplay from './components/StoryDisplay';
+import { Document, Packer, Paragraph } from 'docx';
+import { jsPDF } from 'jspdf';
 
 
 function App() {
@@ -101,6 +103,65 @@ function App() {
 
   const handleFoundWords = (words) => {
     setFoundBadWords(words);
+  };
+
+
+  const handleDownload = async (format) => {
+    try {
+      const content = result.processedStory || result.generatedStory;
+      if (!content) return;
+
+      if (format === 'docx') {
+        // Create DOCX document
+        const doc = new Document({
+          sections: [{
+            properties: {},
+            children: [
+              new Paragraph({
+                text: content
+              })
+            ],
+          }],
+        });
+
+        // Generate and download the DOCX file
+        const blob = await Packer.toBlob(doc);
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'story.docx';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      } 
+      else if (format === 'pdf') {
+        // Create PDF document
+        const pdf = new jsPDF();
+        
+        // Split content into lines that fit the page width
+        const lines = pdf.splitTextToSize(content, 180);
+        
+        // Add text to PDF
+        pdf.setFontSize(12);
+        let yPosition = 20;
+        
+        // Add lines page by page
+        for (let i = 0; i < lines.length; i++) {
+          if (yPosition > 280) {
+            pdf.addPage();
+            yPosition = 20;
+          }
+          pdf.text(lines[i], 15, yPosition);
+          yPosition += 7;
+        }
+        
+        // Download the PDF
+        pdf.save('story.pdf');
+      }
+    } catch (err) {
+      setError(`Error downloading ${format} file: ${err.message}`);
+    }
   };
 
 
@@ -243,6 +304,22 @@ function App() {
                     </div>
                   </div>
                 )}
+              </div>
+            )}
+            {(result.processedStory || result.generatedStory) && (
+              <div className="download-buttons">
+                <button
+                  className="download-button docx"
+                  onClick={() => handleDownload('docx')}
+                >
+                  Download as DOCX
+                </button>
+                <button
+                  className="download-button pdf"
+                  onClick={() => handleDownload('pdf')}
+                >
+                  Download as PDF
+                </button>
               </div>
             )}
           </div>

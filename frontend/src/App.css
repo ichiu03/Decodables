@@ -375,3 +375,68 @@ textarea {
   border-radius: 3px;
   font-size: 0.8em;
 }
+
+.download-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin: 20px 0;
+  padding: 15px;
+  background-color: #f8f8f8;
+  border-radius: 10px;
+}
+
+.download-button {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 0.3s;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.download-button::before {
+  content: "📥";
+  font-size: 1.2em;
+}
+
+.download-button.docx {
+  background-color: #4285f4;
+  color: white;
+}
+
+.download-button.pdf {
+  background-color: #db4437;
+  color: white;
+}
+
+.download-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+}
+
+.download-button.docx:hover {
+  background-color: #3367d6;
+}
+
+.download-button.pdf:hover {
+  background-color: #c31c0d;
+}
+
+@media (max-width: 600px) {
+  .download-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .download-button {
+    justify-content: center;
+  }
+}

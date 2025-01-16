@@ -45,8 +45,15 @@ categories = {
     # Column 4
     'ear as in hear': [], 'ear as in early': [], 'y as in bumpy': [], 'aw': [], 'ly': [], 'ea as in eat': [],
     'ea as in bread': [], '3-letter beg. blends': [], 'tch': [], 'soft c': [],
-    '-ble, -cle, -dle, -fle, -gle, -kle, -ple, -tle, -zle': [], 'soft g': [], 'ai': [], 'igh': [], 'ed': [],
-    'cle ending': [], 'vowel_team': [], 'r-controlled': [], 'oa': [], 'ir': [], '-ild, -ind, -old, -ost': [],
+    '2 syllable -cle syllable words with closed syllable': [], '2 syllable -cle syllable words with open syllable':[], 'soft g': [], 'ai': [], 'igh': [], 'ed': [],
+    'cle ending': [], '1 syllable vowel team syllable words': [], '2 syllable vowel team syllable words': [], '2 syllable vowel team syllable words with closed syllable': [],
+    '2 syllable vowel team syllable words with silent e syllable': [], '2 syllable vowel team syllable words with open syllable': [],
+    '2 syllable vowel team syllable words with -cle syllable': [], '2 syllable vowel team syllable words with r-control syllable': [],
+    'multisyllable mixed with vowel team, closed, silent e, open, -cle, and r-control': [],
+    '1 syllable r-control syllable words': [], '2 syllable r-control syllable words':[], '2 syllable r-control syllable words with silent e syllable':[], 
+    '2 syllable r-control syllable words with open syllables':[], '2 syllable r-control syllable words with -cle syllables':[], 
+    'multisyllable mixed with closed, silent e, open, -cle, and r-control':[],
+    'oa': [], 'ir': [], '-ild, -ind, -old, -ost': [],
     'oi': [], 'double rule-suffixes': [], 'ew as in few/blew': [], 'v/v pattern': [], 'kn': [], 'e rule-suffixes': [],
     'ou as in south': [], 'ur': [], 'dge': [], 'y rule suffixes': [], 'tion': [],
     # Column 5
@@ -562,7 +569,7 @@ def threelBlends(word: str, append_word: str) -> None:
         categories['3-letter beg. blends'].append(append_word)
 
 
-def silentECheck(word: str, syllable_count: int, append_word: str) -> None:
+def silentECheck(word: str, syllable_count: int, append_word: str, tokens: list) -> None:
     if len(word) < 3: return
     if vceCheck(word, append_word):
         short_vowels = shortVowelCounter(tokens)
@@ -845,12 +852,12 @@ def callCategorizationFunctions(word: str, arpabet: str, syllable_count: int, to
     yRuleSuffix(word, append_word)
     eRuleSuffix(word, append_word)
     vrlCheck(word, syllable_count, append_word)
-    silentECheck(word, syllable_count, append_word)
+    silentECheck(word, syllable_count, append_word, tokens)
     xInWordCheck(word, arpabet, tokens, append_word)
     ingongangungCheck(word, append_word)
     contractionsCheck(word, append_word) 
     vccvCheck(word, syllable_count, tokens, append_word)
-    OCECheck(word, syllable_count, tokens, append_word)
+   # OCECheck(word, syllable_count, tokens, append_word)
     fszlCheck(word, syllable_count, tokens, append_word)
 
 ### PROBLEM
