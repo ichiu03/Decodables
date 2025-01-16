@@ -492,7 +492,7 @@ def main():
             print("Decodability is already high enough, no need to process further.")
             print(f'\n\nFinal Story: {story}')
             print(f"Decodability: {original_decodability* 100:.2f}%")
-            save_final_story(story, original_decodability)  
+            save_final_story(story, original_decodability, bad_words)  
             return original_decodability
         print("Generating story...")
     elif gendec.lower() == "i":
