@@ -714,16 +714,19 @@ def doubleLettersAndVowelsCheck(word: str) -> bool:
     return False
 
 
-def rControlCheck(word: str, append_word: str) -> None:
+def cleCheck(word: str, append_word: str) -> None:
     if len(word) < 3: return
     if word.endswith('le'):
         index = word.rfind('le')
         if index > 0 and word[index-1] not in VOWELS:
             categories['cle ending'].append(append_word)
-    for r_sound in ['ar', 'er', 'ir', 'or', 'ur']: # R-controlled
-        if r_sound in word:
-            categories['r-controlled'].append(append_word)
-            return  
+
+
+def rControlCheck(word: str, append_word: str, syllable_count: int) -> None:
+    if len(word) < 3: return
+    if syllable_count == 1 or not any(word[i] in VOWELS and word[i+1] == 'r' for i in range(len(word)-1)): 
+        categories['1 syllable r-control syllable words'].append(append_word)
+    
 
 
 def teamVowelCheck(word: str, append_word: str) -> None:
@@ -760,7 +763,7 @@ def fszlCheck(word: str, syllable_count: int, tokens: list, append_word: str) ->
         if vowel in tokens[-2]:
             categories['fszl'].append(append_word)
 
-### Chris did this one. May want to redo one day
+### Chris did this one. Doesn't cover all words, may want to rethink. But it's a tough category.
 def yRuleSuffix(word: str, append_word: str) -> bool:
     EXCEPTIONS = {'frontier', 'glacier', 'soldier', 'barrier', 'carrier', 'pier', 'priest', 'series', 'species', 'lies'}
     if word in EXCEPTIONS:
@@ -857,7 +860,9 @@ def callCategorizationFunctions(word: str, arpabet: str, syllable_count: int, to
     closedSyllables(word, syllable_count, tokens, append_word)
     yRuleSuffix(word, append_word)
     eRuleSuffix(word, append_word)
-    vrlCheck(word, syllable_count, append_word)
+    rControlCheck(word, append_word, syllable_count)
+    cleCheck(word, append_word)
+    teamVowelCheck(word, append_word)
     silentECheck(word, syllable_count, append_word, tokens)
     xInWordCheck(word, arpabet, tokens, append_word)
     ingongangungCheck(word, append_word)
