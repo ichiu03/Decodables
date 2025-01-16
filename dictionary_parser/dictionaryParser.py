@@ -612,6 +612,10 @@ def openSyllables(word: str, syllable_count: int, tokens: list, append_word: str
         categories['2 syll. open w/ silent e'].append(append_word)
     elif syllable_count == 2 and vceCheck(word, syllable_count, tokens, append_word) and short_vowels[0] == 0:
         categories['2 syll. open w/ v/v pattern'].append(append_word)
+    elif vvCheck(word, arpabet, append_word):
+        categories['2 syll. open w/ v/v pattern'].append(append_word)
+    else:
+        categories['multisyllable mixed with closed, silent e, open, -cle, and r-control'].append(append_word)
 
 
 def closedSyllables(word: str, syllable_count: int, tokens: list, append_word: str) -> None:
@@ -710,24 +714,25 @@ def doubleLettersAndVowelsCheck(word: str) -> bool:
     return False
 
 
-
-def vrlCheck(word: str, syllable_count: int, append_word: str) -> None:
-    if len(word) < 3 or syllable_count != 1: return
+def rControlCheck(word: str, append_word: str) -> None:
+    if len(word) < 3: return
     if word.endswith('le'):
         index = word.rfind('le')
         if index > 0 and word[index-1] not in VOWELS:
             categories['cle ending'].append(append_word)
-    for i in range(len(word)-2): # Team Vowels. Only 1 syllable, V V doesn't apply
-        if word[i] in VOWELS and word[i+1] in VOWELS and word[i+2] != 'r':
-            categories['vowel_team'].append(append_word)
-            return
     for r_sound in ['ar', 'er', 'ir', 'or', 'ur']: # R-controlled
         if r_sound in word:
             categories['r-controlled'].append(append_word)
             return  
 
 
-def vvCheck(word: str, arpabet: str, append_word: str) -> None:
+def teamVowelCheck(word: str, append_word: str) -> None:
+    for i in range(len(word)-2): # Team Vowels. Only 1 syllable, V V doesn't apply
+        if word[i] in VOWELS and word[i+1] in VOWELS and word[i+2] != 'r':
+            categories['vowel_team'].append(append_word)
+            return
+
+def vvCheck(word: str, arpabet: str, append_word: str) -> bool:
     if len(word) < 3 or word == 'theatre': return
     i = 0
     while i < len(word):
@@ -735,8 +740,9 @@ def vvCheck(word: str, arpabet: str, append_word: str) -> None:
             if word[i:i + len(comp)] == comp:
                 compound = word[i: i+len(comp)]
                 if is_vv(compound, arpabet):
-                    categories['v/v pattern'].append(append_word)
+                    return True
         i += 1
+    return False
 
 
 def doubleConsonant(word: str, append_word: str) -> None:
@@ -857,7 +863,7 @@ def callCategorizationFunctions(word: str, arpabet: str, syllable_count: int, to
     ingongangungCheck(word, append_word)
     contractionsCheck(word, append_word) 
     vccvCheck(word, syllable_count, tokens, append_word)
-   # OCECheck(word, syllable_count, tokens, append_word)
+    openSyllables(word, syllable_count, tokens, append_word)
     fszlCheck(word, syllable_count, tokens, append_word)
 
 ### PROBLEM
