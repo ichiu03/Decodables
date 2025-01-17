@@ -214,9 +214,6 @@ def xInWordCheck(word: str, arpabet: str, tokens: list, append_word: str) -> Non
     if 'er' in word and 'ER' in tokens: categories['er'].append(append_word)
     if 'oy' in word and 'OY' in tokens: categories['oy'].append(append_word)
     if 'oa' in word and verificationToAdd(word, arpabet, 'oa', ['OW'], ['AO']): categories['oa'].append(append_word)
-    if (word.endswith('ble') or word.endswith('cle') or word.endswith('dle') or word.endswith('fle') or
-        word.endswith('gle') or word.endswith('ple') or word.endswith('tle') or word.endswith('zle') or word.endswith('kle')):
-        categories['-ble, -cle, -dle, -fle, -gle, -kle, -ple, -tle, -zle'].append(append_word)
     if 'k' in word and 'K' in tokens: categories['k'].append(append_word)
     if 'j' in word and 'JH' in tokens: categories['j'].append(append_word)
     if 'oi' in word and 'OY' in tokens: categories['oi'].append(append_word)
@@ -581,10 +578,11 @@ def silentECheck(word: str, syllable_count: int, append_word: str, tokens: list)
             else:
                 categories['2 syll. vce'].append(append_word)
         elif syllable_count == 3 and short_vowels[0] == 3:
-            categories['3 syll. vce w/ closed syllable'].append(append_word)
+            categories['3 syll. vce w/ closed syllables'].append(append_word)
 
 
 def vceCheck(word: str, append_word: str) -> bool:
+    if len(word) < 3: return
     if (word[-3].lower() in VOWELS and
         word[-2].lower() in CONSONANTS and
         word[-1].lower() == 'e'):
@@ -592,7 +590,7 @@ def vceCheck(word: str, append_word: str) -> bool:
     return False
        
 
-def openSyllables(word: str, syllable_count: int, tokens: list, append_word: str) -> None:
+def openSyllables(word: str, syllable_count: int, arpabet: str, tokens: list, append_word: str) -> None:
     for i in range(len(word)-1): # No team vowels
         if word[i] in VOWELS and word[i+1] in VOWELS:
             return
@@ -610,8 +608,12 @@ def openSyllables(word: str, syllable_count: int, tokens: list, append_word: str
         categories['2 syll. open'].append(append_word)
     elif syllable_count == 2 and short_vowels[0] == 1:
         categories['2 syll. open w/ silent e'].append(append_word)
-    elif syllable_count == 2 and vceCheck(word, syllable_count, tokens, append_word) and short_vowels[0] == 0:
+    elif syllable_count == 2 and vceCheck(word, syllable_count) and short_vowels[0] == 0:
         categories['2 syll. open w/ v/v pattern'].append(append_word)
+    elif vvCheck(word, arpabet, append_word):
+        categories['2 syll. open w/ v/v pattern'].append(append_word)
+    else:
+        categories['multisyllable mixed with closed, silent e, open, -cle, and r-control'].append(append_word)
 
 
 def closedSyllables(word: str, syllable_count: int, tokens: list, append_word: str) -> None:
@@ -710,24 +712,27 @@ def doubleLettersAndVowelsCheck(word: str) -> bool:
     return False
 
 
-
-def vrlCheck(word: str, syllable_count: int, append_word: str) -> None:
-    if len(word) < 3 or syllable_count != 1: return
+def cleCheck(word: str, append_word: str) -> None:
+    if len(word) < 3: return
     if word.endswith('le'):
         index = word.rfind('le')
         if index > 0 and word[index-1] not in VOWELS:
             categories['cle ending'].append(append_word)
+
+
+def rControlCheck(word: str, append_word: str, syllable_count: int) -> None:
+    if len(word) < 3: return
+    if syllable_count == 1 or not any(word[i] in VOWELS and word[i+1] == 'r' for i in range(len(word)-1)): 
+        categories['1 syllable r-control syllable words'].append(append_word)
+    
+
+def teamVowelCheck(word: str, append_word: str) -> None:
     for i in range(len(word)-2): # Team Vowels. Only 1 syllable, V V doesn't apply
         if word[i] in VOWELS and word[i+1] in VOWELS and word[i+2] != 'r':
-            categories['vowel_team'].append(append_word)
+            #categories['vowel_team'].append(append_word)
             return
-    for r_sound in ['ar', 'er', 'ir', 'or', 'ur']: # R-controlled
-        if r_sound in word:
-            categories['r-controlled'].append(append_word)
-            return  
 
-
-def vvCheck(word: str, arpabet: str, append_word: str) -> None:
+def vvCheck(word: str, arpabet: str, append_word: str) -> bool:
     if len(word) < 3 or word == 'theatre': return
     i = 0
     while i < len(word):
@@ -735,8 +740,9 @@ def vvCheck(word: str, arpabet: str, append_word: str) -> None:
             if word[i:i + len(comp)] == comp:
                 compound = word[i: i+len(comp)]
                 if is_vv(compound, arpabet):
-                    categories['v/v pattern'].append(append_word)
+                    return True
         i += 1
+    return False
 
 
 def doubleConsonant(word: str, append_word: str) -> None:
@@ -754,7 +760,7 @@ def fszlCheck(word: str, syllable_count: int, tokens: list, append_word: str) ->
         if vowel in tokens[-2]:
             categories['fszl'].append(append_word)
 
-### Chris did this one. May want to redo one day
+### Chris did this one. Doesn't cover all words, may want to rethink. But it's a tough category.
 def yRuleSuffix(word: str, append_word: str) -> bool:
     EXCEPTIONS = {'frontier', 'glacier', 'soldier', 'barrier', 'carrier', 'pier', 'priest', 'series', 'species', 'lies'}
     if word in EXCEPTIONS:
@@ -851,13 +857,15 @@ def callCategorizationFunctions(word: str, arpabet: str, syllable_count: int, to
     closedSyllables(word, syllable_count, tokens, append_word)
     yRuleSuffix(word, append_word)
     eRuleSuffix(word, append_word)
-    vrlCheck(word, syllable_count, append_word)
+    rControlCheck(word, append_word, syllable_count)
+    cleCheck(word, append_word)
+    teamVowelCheck(word, append_word)
     silentECheck(word, syllable_count, append_word, tokens)
     xInWordCheck(word, arpabet, tokens, append_word)
     ingongangungCheck(word, append_word)
     contractionsCheck(word, append_word) 
     vccvCheck(word, syllable_count, tokens, append_word)
-   # OCECheck(word, syllable_count, tokens, append_word)
+    openSyllables(word, syllable_count, arpabet, tokens, append_word)
     fszlCheck(word, syllable_count, tokens, append_word)
 
 ### PROBLEM
@@ -943,7 +951,6 @@ def main():
     with open(output_path, 'w') as f:
         json.dump(dictionary, f, indent=4)
     
-#if __name__ == "__main__":
-    #main()
+if __name__ == "__main__":
+    main()
 
-print(mapChunksToPhonemes('hypothetical'))

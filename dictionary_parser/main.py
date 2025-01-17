@@ -168,6 +168,14 @@ def find_proper_nouns(story, sight_words):
     sight_words += "," + propernouns
     return 
 
+def find_commons(topic):
+    prompt = f"""What are 15 common words that are not in this prompt that could be found in a story with this prompt: {topic}
+                
+                Return only the words in this format: word1,word2,word3,...
+                 """
+    words = query(prompt)
+    wordlist = words.split(',')
+    return wordlist
 
 def process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False, decodabilityTest=False, topic=None):
     global sight_words
@@ -317,6 +325,7 @@ def process_story(story, problems, maxsyllable, apply_correction=False, spellche
         print("Bad Word Occurrences:")
         for word, count in sorted(bad_occurrences.items()):
             print(f"{word}: {count}")
+    
 
     def save_problem_words_by_sound(word_dict, problems, story):
         problem_words_file = "problem_words_by_sound.txt"
@@ -483,7 +492,7 @@ def main():
             print("Decodability is already high enough, no need to process further.")
             print(f'\n\nFinal Story: {story}')
             print(f"Decodability: {original_decodability* 100:.2f}%")
-            save_final_story(story, original_decodability)  
+            save_final_story(story, original_decodability, bad_words)  
             return original_decodability
         print("Generating story...")
     elif gendec.lower() == "i":
@@ -512,18 +521,6 @@ def main():
     print(story)
 
     #TODO: Implement a sort of check that adds common words for the topic to see if the student knows them and check overlap with problem sounds emphasizes these words arent allowed.
-    # # First Run: Without Grammar Correction
-    # print("\n--- Processing Without Grammar Correction ---")
-    # story1 = process_story(story, problems, maxsyllable, apply_correction=False, spellcheck=False, combined=False)
-
-
-    # print("\n--- Processing With Grammar Correction and Spell Check ---")
-    # story2 = process_story(story, problems, maxsyllable, apply_correction=True, spellcheck=True, combined=False)
-
-
-    # # Now, combine the two stories
-    # story3 = combine(story1, story2, problems)
-
 
     # Process the combined story
     story4 = process_story(story, problems, maxsyllable, apply_correction=True, spellcheck=True, combined=False)
@@ -542,16 +539,4 @@ if __name__ == "__main__":
 
 
 
-
-#b/l/p/j/ck/wh/aw/tch/igh/ir/oi  
-#wh/aw/tch/igh/ir/oi/kn/ur/dge/tion/war/ph/eigh/wor/ough  
-#s/l/r/b/sh/ar/ai/-ing, -ong, -ang, -ung/ea as in eat  
-#t/p/n/m/th/ch/oo as in school/ow as in plow/y as in dry  
-#d/w/z/h/ck/s blends/l blends/er/ea as in bread/igh  
-#r/v/l/qu/th/ay/ow as in snow/ear as in hear/y as in bumpy  
-
-
-#Caleb: ck/s blends/l blends/r blends/-ing, -ong, -ang, -ung/-sp, -nt, -mp/-sk, -lt, -lk/-ct, -pt/oo as in school/oo as in book/vce/er/ow as in plow/vccv/ear as in early/ea as in bread/3-letter beg. blends/soft g/oa/oi/v v pattern/e rule-suffixes/tion
-#New idea if word appears 2+ times prompt the bot to find alternative words that could work in the context but may be different in their meaning
-#Could reduce decodability
 
