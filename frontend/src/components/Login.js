@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { GoogleLogin } from 'react-google-login';
 import './Login.css';
 
 const Login = ({ onLogin }) => {
@@ -23,6 +24,16 @@ const Login = ({ onLogin }) => {
       ...prev,
       [name]: value
     }));
+  };
+
+  const handleGoogleLoginSuccess = (response) => {
+    console.log('Google login success:', response);
+    onLogin();
+  };
+
+  const handleGoogleLoginFailure = (response) => {
+    console.log('Google login failure:', response);
+    setError('Google login failed. Please try again.');
   };
 
   return (
@@ -55,9 +66,16 @@ const Login = ({ onLogin }) => {
           {error && <div className="error-message">{error}</div>}
           <button type="submit" className="login-button">Login</button>
         </form>
+        <GoogleLogin
+          clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+          buttonText="Log in with Google"
+          onSuccess={handleGoogleLoginSuccess}
+          onFailure={handleGoogleLoginFailure}
+          cookiePolicy={'single_host_origin'}
+        />
       </div>
     </div>
   );
 };
 
-export default Login; 
+export default Login;
